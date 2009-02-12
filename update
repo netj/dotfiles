@@ -20,6 +20,7 @@ if type git >/dev/null; then
         git remote add $rn ${!r}/.git
     done
     git pull $Repo master
+    git fetch $Repo
 else
     # or just download everything with wget
     mkdir -p .dotfiles
