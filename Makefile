@@ -9,6 +9,10 @@ INDEX:
 	    sed 's:^\./::' | \
 	    sort >$@ 
 
+HEADER.html: README
+	bood <$< >$@
+
+
 # TODO: rewrite in Make
 install:
 	./install
