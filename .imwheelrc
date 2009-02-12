@@ -1,0 +1,20 @@
+# ~/.imwheel rc
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2006-04-23
+
+# run `imwheel -k -b "6 7"` in each gnome-session
+
+# back/forward for nautilus
+# See: https://wiki.ubuntu.com/IntellimouseMousemanBackForwardButtons
+"nautilus|Gecko|Galeon"
+None, Up, Alt_L|Left
+None, Down, Alt_L|Right
+
+"eog"
+None, Up, Control_L|Prior
+None, Down, Control_L|Next
+
+"(null)"
+None, Up, Alt_L|Left
+None, Down, Alt_L|Right
+

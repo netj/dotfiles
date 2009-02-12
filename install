@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+# netj's dotfiles installer
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2006-05-21
+
+set -e
+
+cd ~/.dotfiles || . update
+
+# install symlinks
+install() {
+    local d=$1
+    local n=${d#.}
+    run ${n}_before
+    if [ "`readlink ~/$d`" = .dotfiles/$d ]; then
+        echo "$d installed"
+        run ${n}_after
+    else
+        if read -p "install $d? " -n1; then
+            echo
+            case "$REPLY" in
+                [Yy])
+                # rsync everything in
+                if [ -e ~/$d ]; then
+                    rsync -aHv ~/$d .
+                    mv -iv ~/$d ~/$d~
+                fi
+                # create a symlink
+                ln -sfnv .dotfiles/$d ~/$d
+                run ${n}_after
+                ;;
+            esac
+        fi
+    fi
+}
+run() { [ "`type -t $1 2>/dev/null`" != function ] || "$@"; }
+
+bash_after() {
+    # .bash{rc,_profile} symlinks
+    (cd
+    safeln() {
+        local src=$1; shift
+        local tgt=
+        for tgt in "$@"; do
+            if [ -e "$tgt" ]; then
+                [ "`readlink "$tgt"`" != "$src" ] || continue
+                mv -iv "$tgt" "$tgt~"
+            fi
+            [ -e "$tgt" ] || ln -sfnv "$src" "$tgt"
+        done
+    }
+    safeln .bash/.profile .bash{rc,_profile}
+    safeln .bash/.logout .bash_logout
+    )
+}
+
+core="
+.bash
+.inputrc
+.vimrc
+.screenrc
+.toprc
+.emacs
+"
+
+gui="
+.fonts.conf
+.imwheelrc
+"
+
+for d in $core $gui; do install $d; done

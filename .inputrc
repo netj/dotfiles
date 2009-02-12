@@ -1,0 +1,16 @@
+# netj's READLINE configuration
+# Author: Jaeho Shin <netj@sparcs.org>
+
+# enhanced options
+set show-all-if-ambiguous On
+set visible-stats On
+set completion-ignore-case On
+set mark-symlinked-directories On
+
+# better search
+"\ep": history-search-backward
+"\en": history-search-forward
+#  save forward search from the usually-screened-by-terminal-STOP C-s
+"\C-]": forward-search-history
+
+$include ~/.input_local

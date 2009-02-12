@@ -1,0 +1,48 @@
+Subject: netj's Bash Modules
+Author: Jaeho Shin <netj@sparcs.org>
+Created: 2005-06-08
+
+= Overview =
+This directory contains netj's bash modules.
+
+Modules here can be loaded by source'ing the `.loader` file from either
+your .bashrc or .bash_profile.  For example,
+-->8--
+# load local settings and modules
+for REPLY in ~/.bash_local ~/.bash/.loader; do
+    [ -f $REPLY ] && . $REPLY
+done
+--8<--
+
+Each module is loaded on startup of shell if either
+* `bash_autoload=true` is set in the module itself, or
+* `${module_name}_enable=true` was set before source'ing `.loader`,
+  e.g. in `.bash_local`.
+
+
+= Structure of Module =
+Each module may contain definition of the following commands:
+* `bash_import`:
+  This command is run before running `bash_login` or `bash_load`.
+* `bash_login`:
+  This command is run when the module is loading inside a login shell.
+* `bash_load`:
+  This command is run to load the module.
+
+Definition of any of the previous commands may be omitted.
+
+A module may set variable `bash_autoload` to `true`, in order to
+automatically enable itself.
+
+
+= Module Loader =
+`.loader` is the module loader.  It provides several useful commands to
+be used within modules.
+
+* `bash_default name value`
+* `bash_default_env name value`
+* `bash_default_alias alias command`
+* `bash_add_unloader command`
+* `bash_insert_prompt command`
+* `bash_add_prompt command`
+

@@ -1,0 +1,111 @@
+#!/usr/bin/env bash
+# netj's bash module: prompt
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2002-07-18
+
+bash_autoload=true
+
+bash_import() {
+    # ANSI color codes
+    bash_default           red $'\E[0;31m'
+    bash_default         green $'\E[0;32m'
+    bash_default          blue $'\E[0;34m'
+    bash_default          cyan $'\E[0;36m'
+    bash_default       magenta $'\E[0;35m'
+    bash_default        yellow $'\E[0;33m'
+    bash_default         black $'\E[0;30m'
+    bash_default          gray $'\E[0;37m'
+    bash_default         white $'\E[0;38m'
+    bash_default     light_red $'\E[1;31m'
+    bash_default   light_green $'\E[1;32m'
+    bash_default    light_blue $'\E[1;34m'
+    bash_default    light_cyan $'\E[1;36m'
+    bash_default light_magenta $'\E[1;35m'
+    bash_default  light_yellow $'\E[1;33m'
+    bash_default   light_white $'\E[1;37m'
+    bash_default      no_color $'\E[0m'
+
+    # frequently used values
+    bash_default prompt_fill ""
+    bash_default prompt_pwd ""
+    bash_default prompt_columns "$COLUMNS"
+    bash_default prompt_user "${LOGNAME:-$USER}"
+    [ x"$prompt_user" != x"netj" ] || prompt_user=
+
+    # set prompt_date if not set
+    if [ ${BASH_VERSINFO[0]} -gt 2 \
+        -o ${BASH_VERSINFO[0]} == 2 -a ! "${BASH_VERSINFO[1]}" \< "05b" ]; then
+        # from 2.05b, bash supports custom date formats with \D{...}
+        bash_default prompt_date "`date '+%Y-%m-%d%a%T'`"
+        bash_default prompt_datefmt "\D{$cyan%Y-%m-%d$magenta%a}$light_yellow\t"
+    else
+        bash_default prompt_date "DDD mmm dd HH:MM:SS"
+        bash_default prompt_datefmt "$cyan\d $white\t"
+    fi
+}
+
+bash_load() {
+    # prompt update codes
+    prompt_update() {
+        local columns=$COLUMNS
+        # detect columns with tput if needed
+        if [ -z "$columns" ] && type tput &>/dev/null; then
+            columns=`tput cols`
+        fi
+        # update prompt
+        if ! [ "$PWD" = "$prompt_pwd" -a "$columns" = "$prompt_columns" ]; then
+            # only when PWD or the terminal size changes
+            prompt_columns=$columns prompt_pwd=$PWD
+            local pwd=${PWD/#$HOME/\~}
+            local user_part=${prompt_user:+$prompt_user@}
+            local prompt="($user_part$HOSTNAME:$pwd)-($prompt_date)"
+            if [ ${BASH_VERSINFO[0]} -ge 3 ]; then
+                # double the length of non-ASCII (perhaps wide) chars
+                # FIXME: should filter non-wide chars
+                prompt="$prompt${prompt//[[:ascii:]]/}"
+            fi
+            local fillsize=$(($columns-${#prompt}))
+            if [ $fillsize -lt 0 ]; then
+                # terminal is too narrow :( try to trim pwd
+                prompt_fill=""
+                local abbrev="**"
+                local dir=${pwd%/*} name=/${pwd##*/}
+                local room=$((${#pwd} + $fillsize))
+                # check if there's room for basename
+                local withname="$abbrev${dir:$((${#abbrev}-$fillsize))}$name"
+                if [ ${#withname} -le $room ]; then
+                    pwd=$withname
+                    # check there's room for prefix
+                    local prefix=${dir:2} # (the root part better than ~/ or /)
+                    prefix="${dir:0:2}${prefix%%/*}/$abbrev"
+                    withprefix="$prefix${dir:$((${#prefix}-$fillsize))}$name"
+                    if [ ${#withprefix} -le $room ]; then
+                        pwd=$withprefix
+                    fi
+                fi
+            elif [ $fillsize -ge 0 ]; then
+                # terminal is wide enough, fill it up!
+                while [ ${#prompt_fill} -lt $fillsize ]; do
+                    prompt_fill="${prompt_fill:--}$prompt_fill"
+                done
+                prompt_fill="${prompt_fill:0:$fillsize}"
+            fi
+            # set prompt
+            user_part=${user_part:+"\[$blue\]$prompt_user\[$no_color\]@"}
+            PS1="\
+\[$no_color\]($user_part\[$red\]$HOSTNAME\[$no_color\]:\
+\[$yellow\]$pwd\[$no_color\])-$prompt_fill\
+($prompt_datefmt\[$no_color\])\n\[$no_color\](\
+&\[$green\]\j\[$no_color\]?\[$cyan\]\$?\[$no_color\]!\[$white\]\#\
+\[$no_color\])\[$no_color\]\\$ "
+        fi
+    }
+
+    # register prompt_update
+    bash_insert_prompt prompt_update
+
+    # set window size dectection
+    shopt -s checkwinsize
+}
+
+# vim:et:ts=8:sw=4:sts=4

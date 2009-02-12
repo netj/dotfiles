@@ -1,0 +1,45 @@
+# netj's screen settings
+# Author: Jaeho Shin <netj@sparcs.kaist.ac.kr>
+# Created: 2002/07/13
+
+### behaviors
+
+startup_message off
+vbell           off
+defscrollback   8192
+hardstatus      on
+hardstatus      string "%H: %h [%n%? %t%?]"
+shelltitle      ""
+msgwait         2
+password        ""
+aclumask        +rwx
+
+### keys
+
+escape ^tt  # not bad
+bind K
+bind .
+bind ^\
+bind \\
+bind x
+bind o screen bash -i -c screen_only
+
+### termcapinfo
+
+## advertise hardstatus support to $TERMCAP
+termcapinfo  * '' 'hs:ts=\E_:fs=\E\\:ds=\E_\E\\'
+
+## xterm tweaks
+# xterm scroll buffer
+termcapinfo xterm*|dtterm|screen	'ti@:te@'
+# use the xterm window title as hardstatus
+termcapinfo xterm*|dtterm|screen 'hs:ts=\E]2;:fs=\007:ds=\E]2;screen\007'
+# make the output buffer large for (fast) xterms.
+termcapinfo xterm*|dtterm|screen OL=1024
+# xterm-52 tweaks - use background color for delete operations
+termcapinfo xterm*|dtterm|screen be
+
+## Matthias Kopfermann <matthias_kopfermann@gmx.de> [020222]:
+termcapinfo linux "ve=\E[?25h\E[?17;0;64c" # red
+termcapinfo linux C8
+

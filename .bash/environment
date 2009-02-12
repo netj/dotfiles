@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+# netj's bash module: common environment
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2002-07-15
+
+bash_autoload=true
+
+bash_load() {
+    # environment variables
+    bash_default_env EDITOR vim
+    bash_default_env PAGER less
+    bash_default_env LESSBINFMT "*n%c"
+    #  Korean
+    bash_default_env LANG ko_KR.UTF-8
+    bash_default_env LC_ALL $LANG
+    bash_default_env LANGUAGE $LANG
+    #  TeX
+    bash_default_env TEXINPUTS .:$HOME/.tex:
+    [ -n "$LS_COLORS" ] || eval `dircolors 2>/dev/null`
+    # add ~/bin to PATH
+    if [ -d ~/bin ] && ! expr "$PATH" : "$HOME/bin:" >/dev/null; then
+        PATH=~/bin:"$PATH"
+    fi
+    # some usability options
+    shopt -s nocaseglob
+    shopt -s cdspell
+    shopt -s cmdhist
+    # ls on several platforms
+    local ls_o=
+    case "`uname`" in
+        Linux) ls_o="-F --color=auto" ;;
+        *BSD) ls_o="-FG" ;;
+        CYGWIN*) ls_o="-F --color=auto --show-control-chars" ;;
+        *)
+        if ls --version 2>&1 | grep 'Free Software Foundation' >/dev/null; then
+            ls_o="-F --color=auto"
+        fi
+        ;;
+    esac
+    bash_default_alias ls "ls $ls_o"
+    # ls idioms
+    bash_default_alias ll "ls -l"
+    bash_default_alias la "ls -A"
+    bash_default_alias lal "la -l"
+    bash_default_alias lt "ls -t"
+    bash_default_alias llt "ll -t"
+    bash_default_alias lalt "lal -t"
+    # frequently used abbreviations
+    bash_default_alias cp "cp -i"
+    bash_default_alias mv "mv -i"
+    bash_default_alias rm "rm -i"
+    # keep history clean
+    HISTIGNORE="&:l[salt]:lal:llt:lalt:[bf]g:cd"
+}
+
+# vim:et:ts=8:sw=4:sts=4

@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# netj's bash module: bash_completion
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2002-07-15
+# See: http://www.caliban.org/bash/
+
+bash_autoload=true
+
+bash_load() {
+    # $Id: bash_completion.sh,v 1.2 2006/02/25 01:21:33 ianmacd Exp $
+
+    ## Check for bash (and that we haven't already been sourced).
+    #[ -z "$BASH_VERSION" -o -n "$BASH_COMPLETION" ] && return
+    [ -z "$BASH_COMPLETION" ] || return
+
+    # Check for recent enough version of bash.
+    local bash bmajor bminor
+    bash=${BASH_VERSION%.*}; bmajor=${bash%.*}; bminor=${bash#*.}
+
+    ## Check for interactive shell.
+    #if [ -n "$PS1" ]; then
+      if [ $bmajor -eq 2 -a $bminor '>' 04 ] || [ $bmajor -gt 2 ]; then
+        #if [ -r /etc/bash_completion ]; then
+        #  # Source completion code.
+        #  . /etc/bash_completion
+        #fi
+        local f=
+        for f in {/etc,/usr/local/etc,/opt/local/etc,~/.bash/contrib}/bash_completion; do
+            if [ -r "$f" ]; then
+                BASH_COMPLETION=$f
+                . "$f"
+                break
+            fi
+        done
+      fi
+    #fi
+    #unset bash bminor bmajor
+}
+
+# vim:et:ts=8:sw=4:sts=4

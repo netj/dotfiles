@@ -1,0 +1,64 @@
+# netj's .Xdefaults configuration for Korean Cygwin
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2008-10-24
+
+# Cygwin rxvt (See: http://netj.org/2005/04/rxvt)
+Rxvt*title: Wizard's rxvt
+Rxvt*iconName: rxvt
+Rxvt*visualBell: false
+Rxvt*loginShell: true
+Rxvt*saveLines: 8192
+Rxvt*scrollLines: 65536
+Rxvt*scrollBar: false
+Rxvt*scrollBar_right: true
+Rxvt*scrollBar_floating: false
+Rxvt*scrollTtyKeypress: true
+Rxvt*scrollTtyOutput: false
+
+Rxvt*font: Andale Mono-13
+Rxvt*mfont: Batangche-13
+Rxvt*multichar_encoding: kr
+
+! default colors
+Rxvt*background: #230031
+Rxvt*foreground: #EEDDFF
+Rxvt*borderColor: #000000
+Rxvt*cursorColor: #CC99FF
+rxvt*pointerColor: #FF99CC
+
+!black
+Rxvt*color0: #000000
+!red
+Rxvt*color1: #CC6666
+!green
+Rxvt*color2: #33CC66
+!yellow
+Rxvt*color3: #CCCC66
+!blue
+Rxvt*color4: #3366CC
+!magenta
+Rxvt*color5: #CC3366
+!cyan
+Rxvt*color6: #66CCCC
+!gray
+Rxvt*color7: #808080
+!white
+Rxvt*color8: #EEDDFF
+!brightred
+Rxvt*color9: #FF9966
+!brightgreen
+Rxvt*color10: #66FF99
+!brightyellow
+Rxvt*color11: #FFFF99
+!brightblue
+Rxvt*color12: #6699FF
+!brightmagenta
+Rxvt*color13: #FF6699
+!brightcyan
+Rxvt*color14: #99FFFF
+!brightwhite
+Rxvt*color15: #FFFFFF
+!etc
+Rxvt*colorBD: #B0B0FF
+Rxvt*colorUL: #C7BD7A
+

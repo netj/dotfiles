@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# netj's bash module: ssh-agent launcher
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2004-05-28
+
+bash_login() {
+    # launch ssh-agent if no agent is there
+    if [ ! -n "$SSH_AUTH_SOCK" ]; then
+        eval $(ssh-agent -s)
+        ssh_agent_ppid=$$
+        ssh_agent_cleanup() {
+            # kill ssh agent if exists
+            if [ "$ssh_agent_ppid" = "$$" -a \
+                \( -n "$SSH_AGENT_PID" -o -n "$SSH2_AGENT_PID" \) ]; then
+                if [ -n "$SSH_AGENT_PID" ]; then
+                    # kill ssh-agent from OpenSSH
+                    eval $(ssh-agent -k)
+                else
+                    # kill ssh-agent from ssh.com
+                    kill $SSH2_AGENT_PID
+                    echo Agent pid $SSH2_AGENT_PID killed
+                    unset SSH2_AGENT_PID
+                    unset SSH2_AUTH_SOCK
+                fi
+            fi
+        }
+        bash_add_unloader ssh_agent_cleanup
+    fi
+    # add keys if ssh-agent is on
+    if [ -n "$SSH_AUTH_SOCK" ]; then
+        # and not already there
+        local ssh_key_fingerprint=$(echo | ssh-keygen -t rsa -l 2>/dev/null | cut -b1-52)
+        if [ "$(ssh-add -l | grep "$ssh_key_fingerprint")" = "" ]; then
+            ssh-add ~/.ssh/id_dsa
+        fi
+    fi
+}
+
+# vim:et:ts=8:sw=4:sts=4

@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# netj's bash module: trash can
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2004-05-28
+
+bash_import() {
+    bash_default trash ~/tmp/recycled
+}
+
+bash_load() {
+    # TODO: add recovery + source tracking feature
+    if [ -n "$trash" -a -d "$trash" ]; then
+        move_to_trash() {
+            mv "$@" "$trash"
+        }
+        empty_trash() {
+            echo -n "Empty trash? "
+            read
+            if [ "$REPLY" = "y" -o "$REPLY" = "Y" ]; then
+                    rm -rf "$trash"
+            fi
+            if [ ! -d "$trash" ]; then
+                mkdir "$trash"; chmod go= "$trash"
+            fi
+        }
+        alias rm='move_to_trash'
+    fi
+}
+
+# vim:et:ts=8:sw=4:sts=4

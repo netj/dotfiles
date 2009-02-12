@@ -1,0 +1,9 @@
+# netj's READLINE configuration for Korean Cygwin
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2008-10-24
+# See: http://netj.org/2004/07/cygwin
+
+# 한글 입력을 위해
+set convert-meta Off
+set output-meta On
+

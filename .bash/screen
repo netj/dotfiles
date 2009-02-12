@@ -1,0 +1,154 @@
+#!/usr/bin/env bash
+# netj's bash module: screen auto loader
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2004-05-28
+
+bash_autoload=true
+
+bash_import() {
+    bash_default screen_env_root /tmp/${SUDO_USER:-$LOGNAME}.screens
+    bash_default screen_name main
+    screen_load() {
+        [ -f "$screen_env" ] || return
+        . "$screen_env"
+    }
+    screen_save() {
+        [ -f "$screen_env" ] || return
+        chmod +w "$screen_env"
+        local n=
+        for n in SSH_CLIENT SSH_CONNECTION SSH_TTY \
+            SSH_AUTH_SOCK SSH_AGENT_PID XAUTHORITY DISPLAY SESSION_MANAGER
+        do  local v=${!n}
+        screen -xR $STY -X setenv "$n" "$v" >/dev/null 2>&1
+        if [ -n "$v" ]; then
+            echo "export $n='${v//"'"/"'\\''"}'"
+        else
+            echo "unset $n"
+        fi
+    done >"$screen_env" 2>/dev/null
+    chmod a-w "$screen_env"
+}
+}
+
+bash_login() {
+    # check whether we can use screen
+    if ! type screen >/dev/null 2>&1; then
+        if ! $bash_autoload; then
+            echo "screen: no screen found from PATH" >&2
+        fi
+    else
+        # determine STY, the screen session id
+        local STY=$(screen -ls | grep "(Attached\|Detached)" \
+            | grep "\\.$screen_name" | head -1 | cut -f 2)
+        [ -n "$STY" ] || STY=$screen_name
+        # create a screen environment snapshot
+        if ! [ -d "$screen_env_root" ]; then
+            mkdir -p "$screen_env_root"
+            chmod a=,u=rwx "$screen_env_root"
+        fi
+        local conn=$$
+        local screen_env="$screen_env_root/$conn"
+        rm -f "$screen_env"
+        touch "$screen_env"
+        chmod a=,u=rw "$screen_env"
+        screen_save
+        
+        echo "screen: connection #$conn"
+        local attach=true
+        REPLY=
+        trap "attach=false" INT
+        read -n 1 -t 1
+        trap - INT
+        [ "${REPLY#[ 	]}" = "" ] || attach=false
+        $attach || return
+        
+        # finally, attach to the session
+        screen -xR $STY
+        
+        # before exiting, clean up the screen environment snapshot
+        rm -f "$screen_env"
+        exit
+    fi
+}
+
+bash_load() {
+    # if screen is enabled
+    if [ -n "$STY" ]; then
+        # set useful screen related commands
+        screen_all() {
+            # all connections
+            (cd "$screen_env_root" && \ls -t) 2>/dev/null
+        }
+        screen_alive() {
+            # live connections
+            (cd "$screen_env_root" &&
+            \ls -t $(ps -o pid -p `screen_all` | tail -n +2)) 2>/dev/null
+        }
+        screen_current() {
+            # current connection
+            readlink "$screen_env"
+        }
+        screen_ok() {
+            [ -e "$screen_env" ]
+        }
+        screen_poll() {
+            screen_ok || screen_select
+        }
+        screen_list() {
+            local c=
+            for c in `screen_alive`; do
+                echo "= $([ $c = `screen_current` ] && echo \#)$c ="
+                cat "$screen_env_root/$c"
+            done
+        }
+        screen_select() {
+            local conn=$1
+            # determine $conn unless given
+            if [ -z "$conn" ]; then
+                if screen_ok; then
+                    # cycle through connections
+                    conn=$(screen_alive |
+                        grep -A1 ^`screen_current`$ | tail -n +2)
+                    [ -n "$conn" ] || conn=`screen_alive | head -1`
+                else
+                    # use the most recent one
+                    conn=`screen_alive | head -1`
+                fi
+            fi
+            # attach to $conn
+            if [ -n "$conn" ]; then
+                if { (cd "$screen_env_root" && ln -sf $conn "$screen_env") &&
+                    screen_load; } 2>/dev/null; then
+                    echo "screen: attached to #$conn"
+                else
+                    echo "screen: cannot attach to $conn"
+                fi
+            else
+                echo "screen: no connection available"
+                return 1
+            fi
+        }
+        screen_only() {
+            screen_poll || return 1
+            local pids=$(screen_all | grep -v ^`screen_current`$)
+            if [ -n "$pids" ]; then
+                local t=
+                for t in $(ps -o tty -p $pids | tail -n +2); do
+                    pkill -HUP -t $t screen
+                done
+                (cd "$screen_env_root" && rm -f $pids) 2>/dev/null
+            fi
+        }
+        
+        # prepare variables and hooks for prompt, cleanup
+        screen_env="$screen_env_root/.$STY-$$"
+        bash_insert_prompt screen_poll
+        screen_cleanup() { rm -f "$screen_env"; }
+        bash_add_unloader screen_cleanup
+        
+        # show Message Of ToDay
+        [ ! -e ~/.hushlogin -a -f /etc/motd ] && cat /etc/motd 2>/dev/null
+    fi
+}
+
+# vim:et:ts=8:sw=4:sts=4

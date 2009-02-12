@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+# netj's bash module: useful vocabularies
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2006-06-14
+
+bash_autoload=true
+
+bash_load() {
+    try() {
+        local delay=$1
+        if expr "$delay" : "[0-9]*" >/dev/null; then
+            shift
+        else
+            delay=1
+        fi
+        while ! "$@"; do
+            sleep $delay
+        done
+    }
+
+    repeat() {
+        local delay=$1
+        if expr "$delay" : "[0-9]*" >/dev/null; then
+            shift
+        else
+            delay=1
+        fi
+        while true; do
+            "$@"
+            sleep $delay
+        done
+    }
+
+    abst() {
+        local idfy=$1 comb=$2; shift 2
+        if ! [ -n "$idfy" -a -n "$comb" ]; then
+            echo "abst: (a -> k) -> ([a] -> v) -> [a] -> [(k,v)]"
+            return 2
+        fi
+        (
+        set -e
+        local tmp=`mktemp -d /tmp/bash.abst.XXXXXX`
+        cleanup() { r=$?; rm -rf $tmp; exit $r; }
+        trap cleanup EXIT ERR INT HUP TERM
+        local id= idf=
+        while read; do
+            id=`$idfy "$REPLY"`
+            idf="$tmp/$(set `md5sum <<<"$id"`; echo "$1")"
+            [ -f "$idf" ] || echo "$id" >"$idf"
+            echo "$REPLY" >>"$idf"
+        done
+        cd $tmp
+        for idf in *; do
+            id=`head -1 "$idf"`
+            echo "$id	`tail -n +2 "$idf" | eval "$comb"`"
+        done
+        )
+    }
+}
+
+# vim:et:ts=8:sw=4:sts=4

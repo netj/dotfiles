@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# netj's bash logout configuration
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2007-03-11
+
+# clear screen
+clear
+
+# vim:et:ts=8:sw=4:sts=4

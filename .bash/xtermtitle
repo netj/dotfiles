@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# netj's bash module: xterm dynamic title
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2004-05-28
+
+bash_autoload=true
+
+bash_import() {
+    bash_default xtermtitle_tty `tty` && xtermtitle_tty=${xtermtitle_tty#/dev/}
+    bash_default xtermtitle_user "${LOGNAME:-$USER}"
+}
+
+bash_load() {
+    # xterm's dynamic title for some terminal types
+    case $TERM in
+        xterm* | cygwin* | screen* | dtterm)
+        # xterm title updater
+        if [ -n "$STY" ]; then
+            # in screen (hostname will be shown by screen's hardstatus)
+            xterm_title() {
+                local title="\033]0;$xtermtitle_tty"
+                [ ! -e "$screen_env" ] || title="$title#`screen_current`"
+                title="$title\007"
+                echo -ne "$title"
+            }
+        else
+            # plain terminal
+            xterm_title() {
+                echo -ne "\033]0;"
+                [ "$xtermtitle_user" = "netj" ] || echo -n "$xtermtitle_user@"
+                echo -n "$HOSTNAME^$xtermtitle_tty"
+                echo -ne "\007"
+            }
+        fi
+        # register it
+        bash_add_prompt xterm_title
+        ;;
+    esac
+}
+
+# vim:et:ts=8:sw=4:sts=4

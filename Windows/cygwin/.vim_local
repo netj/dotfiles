@@ -1,0 +1,11 @@
+" netj's vim configuration for Korean Cygwin
+" Author: Jaeho Shin <netj@sparcs.org>
+" Created: 2008-10-24
+" See: http://netj.org/2004/07/cygwin
+
+" 한글 지원을 위해
+set encoding=korea
+set fileencodings=ucs-bom,utf-8,korea,iso-2022-kr
+set termencoding=korea
+
+" vim:ft=vim

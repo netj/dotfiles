@@ -1,0 +1,35 @@
+The following copyright notices apply to most of the files.
+Some parts may be under different license, or in the public domain.
+This is actually a zlib/libpng style, open source license.
+(See http://www.opensource.org/licenses/zlib-license.php)
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+  Copyright (c) 2006 Jaeho Shin <netj@sparcs.org>.
+  
+  These files are provided 'as-is', without any express or implied
+  warranty.  In no event will the authors be held liable for any damages
+  arising from the use of these files.
+  
+  Permission is granted to anyone to use these files for any purpose,
+  including commercial applications, and to alter it and redistribute it
+  freely, subject to the following restrictions:
+  
+  1. The origin of these files must not be misrepresented; you must not
+     claim that you wrote the original files.  If you use these files in a
+     product, an acknowledgment in the product documentation would be
+     appreciated but is not required.
+  
+  2. Altered versions must be plainly marked as such, and must not be
+     misrepresented as being the original files.
+  
+  3. This notice may not be removed or altered from any distribution.
+  
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.3 (GNU/Linux)
+
+iD8DBQFEhEQ+eGASkZ411HcRArKpAJ9CAJoJP7Sj2Ly273oPqXDAk1OAnwCfUvKf
+DH82cRL153gYwkxGohKwEfo=
+=9oXo
+-----END PGP SIGNATURE-----

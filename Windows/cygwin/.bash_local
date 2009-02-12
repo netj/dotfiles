@@ -1,0 +1,8 @@
+# netj's bash configuration for Korean Cygwin
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2008-10-24
+# See: http://netj.org/2004/07/cygwin
+
+# 한글 출력을 위해
+alias ls="ls -F --color=auto --show-control-chars"
+
