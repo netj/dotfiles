@@ -41,16 +41,19 @@ bash_load() {
     fi
     # ls on several platforms
     local ls_o=
-    case "`uname`" in
-        Linux) ls_o="-F --color=auto" ;;
-        *BSD) ls_o="-FG" ;;
-        CYGWIN*) ls_o="-F --color=auto --show-control-chars" ;;
-        *)
-        if ls --version 2>&1 | grep 'Free Software Foundation' >/dev/null; then
-            ls_o="-F --color=auto"
-        fi
-        ;;
-    esac
+    if ls --version 2>&1 | grep 'Free Software Foundation' >/dev/null; then
+        # GNU ls
+        ls_o="-F --color=auto"
+        # platform specific configs
+        case "`uname`" in
+            CYGWIN*) ls_o="$ls_o --show-control-chars" ;;
+        esac
+    else
+        # platform specific ls
+        case "`uname`" in
+            *BSD|Darwin) ls_o="-FG" ;;
+        esac
+    fi
     bash_default_alias ls "ls $ls_o"
     # ls idioms
     bash_default_alias ll "ls -l"
