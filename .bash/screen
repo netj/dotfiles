@@ -19,15 +19,15 @@ bash_import() {
         for n in SSH_CLIENT SSH_CONNECTION SSH_TTY \
             SSH_AUTH_SOCK SSH_AGENT_PID XAUTHORITY DISPLAY SESSION_MANAGER
         do  local v=${!n}
-        screen -xR $STY -X setenv "$n" "$v" >/dev/null 2>&1
-        if [ -n "$v" ]; then
-            echo "export $n='${v//"'"/"'\\''"}'"
-        else
-            echo "unset $n"
-        fi
-    done >"$screen_env" 2>/dev/null
-    chmod a-w "$screen_env"
-}
+            screen -xR $STY -X setenv "$n" "$v" >/dev/null 2>&1
+            if [ -n "$v" ]; then
+                echo "export $n='${v//"'"/"'\\''"}'"
+            else
+                echo "unset $n"
+            fi
+        done >"$screen_env" 2>/dev/null
+        chmod a-w "$screen_env"
+    }
 }
 
 bash_login() {
@@ -36,6 +36,9 @@ bash_login() {
         if ! $bash_autoload; then
             echo "screen: no screen found from PATH" >&2
         fi
+    elif [ -z "$SSH_CONNECTION" -a -z "$screen_enable" ]; then
+        # local shell, but screen wasn't enabled
+        : # skip attaching to the screen session
     else
         # determine STY, the screen session id
         local STY=$(screen -ls | grep "(Attached\|Detached)" \
