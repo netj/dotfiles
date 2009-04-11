@@ -82,7 +82,8 @@ else
 fi
 
 # now, load everything
-bash_foreach_modules eval "bash_import;${bash_login_or_not}bash_load"
+bash_foreach_modules eval "bash_import"
+bash_foreach_modules eval "${bash_login_or_not}bash_load"
 
 # clean up what should not be left
 unset bash_noop bash_prepare_fallback \
