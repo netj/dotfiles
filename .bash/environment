@@ -25,6 +25,20 @@ bash_load() {
     shopt -s nocaseglob
     shopt -s cdspell
     shopt -s cmdhist
+    # Mac OS X specific settings
+    if [ x"Mac OS X" = x"`sw_vers -productName 2>/dev/null`" ]; then
+        # some packages install stuffs on /usr/local
+        export PATH=/usr/local/bin:$PATH
+        export MANPATH=/usr/local/man:$MANPATH
+
+        # Setting paths for MacPorts
+        export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+        export MANPATH=/opt/local/man:$MANPATH
+
+        # Setting PATH for MacPython 2.5
+        # The orginal version is saved in .bash_profile.pysave
+        export PATH="/Library/Frameworks/Python.framework/Versions/Current/bin:${PATH}"
+    fi
     # ls on several platforms
     local ls_o=
     case "`uname`" in
