@@ -26,7 +26,17 @@ install() {
                     mv -iv ~/$d ~/$d~
                 fi
                 # create a symlink
-                ln -sfnv .dotfiles/$d ~/$d
+                local rel=
+                case $d in
+                    */*) # need relative path to .dotfiles if path has depth
+                    local dd=`dirname $d` 
+                    mkdir -p ~/$dd
+                    rel=$(tr / '\n' <<<$dd |
+                        sed -n '/^$/d; s/.*/../p' |
+                        tr '\n' /)
+                    ;;
+                esac
+                ln -sfnv $rel.dotfiles/$d ~/$d
                 run ${n}_after
                 ;;
             esac
@@ -65,6 +75,7 @@ core="
 
 gui="
 .fonts.conf
+.fonts/Makefile
 .imwheelrc
 "
 
