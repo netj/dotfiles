@@ -6,6 +6,8 @@ NanumFonts := 나눔고딕.ttf 나눔고딕Bold.ttf
 
 .PHONY: all clean distclean
 all: $(NanumFonts)
+	# installing free Microsoft fonts
+	! type apt-get || sudo apt-get install msttcorefonts
 clean:
 	rm -f NanumFont_TTF.zip
 distclean: clean
