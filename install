@@ -20,11 +20,8 @@ install() {
             echo
             case "$REPLY" in
                 [Yy])
-                # rsync everything in
-                if [ -e ~/$d ]; then
-                    rsync -aHv ~/$d .
-                    mv -iv ~/$d ~/$d~
-                fi
+                # backup previous one
+                ! [ -e ~/$d ] || mv -iv ~/$d ~/$d~
                 # create a symlink
                 local rel=
                 case $d in
