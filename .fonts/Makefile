@@ -2,12 +2,21 @@
 # Author: Jaeho Shin <netj@sparcs.org>
 # Created: 2009-03-20
 
-NanumFonts := 나눔고딕.ttf 나눔고딕Bold.ttf
+NanumFontURL := http://static.campaign.naver.com/0/hangeul/renew/download/NanumFont_TTF.zip
+NanumFonts := \
+    나눔고딕.ttf           \
+    나눔고딕Bold.ttf       \
+    나눔고딕ExtraBold.ttf  \
+    나눔명조.ttf           \
+    나눔명조Bold.ttf       \
+    나눔명조ExtraBold.ttf  \
+    #
 
-.PHONY: all clean distclean
+.PHONY: all clean distclean NanumFont_TTF.zip
 all: $(NanumFonts)
 	# installing free Microsoft fonts
-	! type apt-get || sudo apt-get install msttcorefonts
+	! type apt-get &>/dev/null || dpkg -l msttcorefonts &>/dev/null || \
+	sudo apt-get install msttcorefonts
 clean:
 	rm -f NanumFont_TTF.zip
 distclean: clean
@@ -16,4 +25,4 @@ distclean: clean
 $(NanumFonts): NanumFont_TTF.zip
 	unzip -o -O cp949 NanumFont_TTF.zip $@
 NanumFont_TTF.zip:
-	wget -N http://static.campaign.naver.com/nfs1/file/2008/11/hangeul2715/NanumFont_TTF.zip
+	wget -N $(NanumFontURL)
