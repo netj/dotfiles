@@ -73,7 +73,6 @@ core="
 gui="
 .fonts.conf
 .fonts/Makefile
-.imwheelrc
 "
 
 for d in $core $gui; do install $d; done
