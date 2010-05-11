@@ -3,31 +3,30 @@ netj's dotfiles
 
 How to use (for the first time)
 -------------------------------
-1. Run `wget -O- http://sparcs.org/~netj/dotfiles/update | bash` to retrieve
-   these files into `~/.dotfiles/`.
-2. Run `~/.dotfiles/install` and and enter `y` for those you want to install.
+1. Make sure you have [Git][].
+2. Run `git clone git://github.com/netj/dotfiles.git ~/.dotfiles`,
+   or `git clone https://github.com/netj/dotfiles.git ~/.dotfiles` if you are
+   behind a stupid firewall.
+3. Run `~/.dotfiles/install` and press `y` for the files you want to install.
+
 
 Notes
 -----
-* Having [Git][] installed is recommended.
-* You can run `~/.dotfiles/update` later to merge new stuffs here if Git is
-  installed.
-* Update still works without Git (if you have wget), but your precious
-  modifications will be overwritten. :(
-* Simply use `cd ~/.dotfiles; git format-patch sparcs/master` to send me your
-  modifications if you want to.
-* I use a [zlib/libpng style license][]. See [COPYRIGHT](COPYRIGHT) for more
-  information about using these files.
+* You can run `cd ~/.dotfiles; git pull` later to stay up-to-date.
+* If you want to send me your modifications, please put them up in [github][]
+  and send me a pull request at [my repo](http://github.com/netj/dotfiles).
+* I use a [zlib/libpng style license][license]. Consult the `COPYRIGHT` file
+  for more information on using these files.
 
 [git]: http://git-scm.com/
-[zlib/libpng style license]: http://www.opensource.org/licenses/zlib-license.php
+[github]: http://github.com/
+[license]: http://www.opensource.org/licenses/zlib-license.php
+
 
 Warning
 -------
 * Use entirely at your own risk -- no warranty is expressed or implied.
-* Playing with your dotfiles is a very time consuming activity.
+* Playing around with your dotfiles is a very time consuming activity.
 
 
-<address>
-Comments to Jaeho Shin &lt;netj@sparcs.org>.
-</address>
+Jaeho Shin &lt;netj@sparcs.org>
