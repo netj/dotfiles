@@ -16,7 +16,6 @@ bash_load() {
     bash_default_env LANGUAGE $LANG
     #  TeX
     bash_default_env TEXINPUTS .:$HOME/.tex:
-    [ -n "$LS_COLORS" ] || eval `dircolors 2>/dev/null`
     # add ~/bin to PATH
     if [ -d ~/bin ] && ! expr "$PATH" : "$HOME/bin:" >/dev/null; then
         PATH=~/bin:"$PATH"
@@ -44,6 +43,7 @@ bash_load() {
     if ls --version 2>&1 | grep 'Free Software Foundation' >/dev/null; then
         # GNU ls
         ls_o="-F --color=auto"
+        [ -n "$LS_COLORS" ] || eval "`dircolors 2>/dev/null`"
         # platform specific configs
         case "`uname`" in
             CYGWIN*) ls_o="$ls_o --show-control-chars" ;;
