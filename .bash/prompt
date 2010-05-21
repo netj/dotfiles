@@ -25,49 +25,66 @@ bash_import() {
     bash_default   light_white $'\E[1;37m'
     bash_default      no_color $'\E[0m'
 
-    # frequently used values
-    bash_default prompt_fill ""
-    bash_default prompt_pwd ""
-    bash_default prompt_columns "$COLUMNS"
-    bash_default prompt_user "${LOGNAME:-$USER}"
-    [ x"$prompt_user" != x"netj" ] || prompt_user=
-
-    # set prompt_date if not set
-    if [ ${BASH_VERSINFO[0]} -gt 2 \
-        -o ${BASH_VERSINFO[0]} == 2 -a ! "${BASH_VERSINFO[1]}" \< "05b" ]; then
-        # from 2.05b, bash supports custom date formats with \D{...}
-        bash_default prompt_date "`date '+%Y-%m-%d%a%T'`"
-        bash_default prompt_datefmt "\D{$cyan%Y-%m-%d$magenta%a}$light_yellow\t"
-    else
-        bash_default prompt_date "DDD mmm dd HH:MM:SS"
-        bash_default prompt_datefmt "$cyan\d $white\t"
-    fi
+    bash_default prompt_filler "---"
 }
 
 bash_load() {
-    # prompt update codes
-    prompt_update() {
-        local columns=$COLUMNS
-        # detect columns with tput if needed
-        if [ -z "$columns" ] && type tput &>/dev/null; then
-            columns=`tput cols`
+    # a hack to measure how many columns given string takes
+    prompt_takes_width() {
+        local s=$1
+        if [ ${BASH_VERSINFO[0]} -ge 3 ]; then
+            # double the length of non-ASCII (perhaps wide) chars
+            # FIXME: should filter all non-wide chars
+            s="$s${s//[[:ascii:]]/}"
         fi
-        # update prompt
-        if ! [ "$PWD" = "$prompt_pwd" -a "$columns" = "$prompt_columns" ]; then
-            # only when PWD or the terminal size changes
-            prompt_columns=$columns prompt_pwd=$PWD
+        echo ${#s}
+    }
+
+    # user part
+    local user=${LOGNAME:-$USER}
+    [ x"$user" != x"netj" ] || user=
+    local user_plain=${user:+$user@}
+    local user_part=${user:+"\[$blue\]$user\[$no_color\]@"}
+
+    # date part
+    local date_plain="`date '+%Y-%m-%d%a%T'`"
+    local date_part="\D{$blue%Y-%m-%d$magenta%a}$light_yellow\t"
+    if ! [ ${BASH_VERSINFO[0]} -gt 2 \
+        -o ${BASH_VERSINFO[0]} == 2 -a ! "${BASH_VERSINFO[1]}" \< "05b" ]; then
+        # prior to 2.05b, bash didn't handle custom date formats with \D{...}
+        date_plain="DDD mmm dd HH:MM:SS"
+        date_part="$blue\d $white\t"
+    fi
+
+    # sketch PS1
+    local PS1_plain="($user_plain$HOSTNAME:"")""--(?0&"")($date_plain)"
+    prompt_min_width=`prompt_takes_width "$PS1_plain"`
+
+    # prompt_flexible_part update codes
+    prompt_fill_part=
+    prompt_pwd_part=
+    prompt_pwd=
+    prompt_jobs_part=
+    prompt_jobs=
+    prompt_columns=
+    prompt_update() {
+        # gather some values
+        local nrcolumns=${COLUMNS:-tput cols 2>/dev/null || true}
+        local nrjobs=`jobs | wc -l`
+        if ! [ "$prompt_pwd"        = "$PWD"        \
+            -a "$prompt_jobs"       = "$nrjobs"     \
+            -a "$prompt_columns"    = "$nrcolumns"  \
+            ]; then
+            # be lazy; work hard only when something changed
+            prompt_columns=$nrcolumns
+            prompt_pwd=$PWD
+            prompt_jobs=$nrjobs
             local pwd=${PWD/#$HOME/\~}
-            local user_part=${prompt_user:+$prompt_user@}
-            local prompt="($user_part$HOSTNAME:$pwd)-($prompt_date)"
-            if [ ${BASH_VERSINFO[0]} -ge 3 ]; then
-                # double the length of non-ASCII (perhaps wide) chars
-                # FIXME: should filter non-wide chars
-                prompt="$prompt${prompt//[[:ascii:]]/}"
-            fi
-            local fillsize=$(($columns-${#prompt}))
+            local changing="$pwd$nrjobs"
+            local fillsize=$(($nrcolumns-$prompt_min_width-`prompt_takes_width "$changing"`))
             if [ $fillsize -lt 0 ]; then
                 # terminal is too narrow :( try to trim pwd
-                prompt_fill=""
+                prompt_fill_part=
                 local abbrev="**"
                 local dir=${pwd%/*} name=/${pwd##*/}
                 local room=$((${#pwd} + $fillsize))
@@ -85,27 +102,34 @@ bash_load() {
                 fi
             elif [ $fillsize -ge 0 ]; then
                 # terminal is wide enough, fill it up!
-                while [ ${#prompt_fill} -lt $fillsize ]; do
-                    prompt_fill="${prompt_fill:--}$prompt_fill"
+                while [ ${#prompt_fill_part} -lt $fillsize ]; do
+                    prompt_fill_part="${prompt_fill_part:-$prompt_filler}$prompt_fill_part"
                 done
-                prompt_fill="${prompt_fill:0:$fillsize}"
+                prompt_fill_part="${prompt_fill_part:0:$fillsize}"
             fi
-            # set prompt
-            user_part=${user_part:+"\[$blue\]$prompt_user\[$no_color\]@"}
-            PS1="\
-\[$no_color\]($user_part\[$red\]$HOSTNAME\[$no_color\]:\
-\[$yellow\]$pwd\[$no_color\])-$prompt_fill\
-($prompt_datefmt\[$no_color\])\n\[$no_color\](\
-&\[$green\]\j\[$no_color\]?\[$cyan\]\$?\[$no_color\]!\[$white\]\#\
-\[$no_color\])\[$no_color\]\\$ "
+            prompt_pwd_part=$pwd
+            prompt_jobs_part=$nrjobs
         fi
     }
-
-    # register prompt_update
+    # let prompt_update get regularly called by adding to $PROMPT_COMMAND
     bash_insert_prompt prompt_update
 
-    # set window size dectection
+    # set window size dectection for $COLUMNS
     shopt -s checkwinsize
+
+    # finally, replace PS1
+    PS1="\
+\[$no_color\](\
+$user_part\
+\[$red\]$HOSTNAME\[$no_color\]\
+:\
+\[$yellow\]"'$prompt_pwd_part'"\[$no_color\]\
+)"'$prompt_fill_part''${prompt_filler:0:$((3-${#?}))}'"(\
+?\[$cyan\]"'$?'"\[$no_color\]\
+&\[$green\]"'$prompt_jobs_part'"\[$no_color\]\
+)(\
+$date_part\[$no_color\]\
+)\n\\$ "
 }
 
 # vim:et:ts=8:sw=4:sts=4
