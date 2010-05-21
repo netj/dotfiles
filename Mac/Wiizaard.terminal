@@ -4,46 +4,52 @@
 <dict>
 	<key>BackgroundColor</key>
 	<data>
-	YnBsaXN0MDDUAQIDBAUGCQpYJHZlcnNpb25UJHRvcFkkYXJjaGl2ZXJYJG9iamVjdHMS
-	AAGGoNEHCFRyb290gAFfEA9OU0tleWVkQXJjaGl2ZXKjCwwTVSRudWxs0w0ODxARElYk
-	Y2xhc3NcTlNDb2xvclNwYWNlVU5TUkdCgAIQAU8QGDAuMTM3MjU0OTEgMCAwLjE5MjE1
-	Njg3ANIUFRYXWCRjbGFzc2VzWiRjbGFzc25hbWWiFxhXTlNDb2xvclhOU09iamVjdAgR
-	Gh8pMjc6P0FTV11ka3h+gIKdoqu2ucEAAAAAAAABAQAAAAAAAAAZAAAAAAAAAAAAAAAA
+	YnBsaXN0MDDUAQIDBAUGFRZYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3AS
+	AAGGoKMHCA9VJG51bGzTCQoLDA0OViRjbGFzc1xOU0NvbG9yU3BhY2VVTlNSR0KAAhAB
+	TxAYMC4xMzcyNTQ5MSAwIDAuMTkyMTU2ODcA0hAREhNaJGNsYXNzbmFtZVgkY2xhc3Nl
+	c1dOU0NvbG9yohIUWE5TT2JqZWN0XxAPTlNLZXllZEFyY2hpdmVy0RcYVHJvb3SAAQgR
+	GiMtMjc7QUhPXGJkZoGGkZqipa7Aw8gAAAAAAAABAQAAAAAAAAAZAAAAAAAAAAAAAAAA
 	AAAAyg==
 	</data>
+	<key>CommandString</key>
+	<string></string>
 	<key>CursorBlink</key>
 	<integer>1</integer>
 	<key>CursorColor</key>
 	<data>
-	YnBsaXN0MDDUAQIDBAUGCQpYJHZlcnNpb25UJHRvcFkkYXJjaGl2ZXJYJG9iamVjdHMS
-	AAGGoNEHCFRyb290gAFfEA9OU0tleWVkQXJjaGl2ZXKjCwwTVSRudWxs0w0ODxARElYk
-	Y2xhc3NcTlNDb2xvclNwYWNlVU5TUkdCgAIQAU8QITAuODk3OTAxODkgMC43OTM5NzI2
-	NyAwLjk5OTM1OTEzANIUFRYXWCRjbGFzc2VzWiRjbGFzc25hbWWiFxhXTlNDb2xvclhO
-	U09iamVjdAgRGh8pMjc6P0FTV11ka3h+gIKmq7S/wsoAAAAAAAABAQAAAAAAAAAZAAAA
+	YnBsaXN0MDDUAQIDBAUGFRZYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3AS
+	AAGGoKMHCA9VJG51bGzTCQoLDA0OViRjbGFzc1xOU0NvbG9yU3BhY2VVTlNSR0KAAhAB
+	TxAhMC44OTc5MDE4OSAwLjc5Mzk3MjY3IDAuOTk5MzU5MTMA0hAREhNaJGNsYXNzbmFt
+	ZVgkY2xhc3Nlc1dOU0NvbG9yohIUWE5TT2JqZWN0XxAPTlNLZXllZEFyY2hpdmVy0RcY
+	VHJvb3SAAQgRGiMtMjc7QUhPXGJkZoqPmqOrrrfJzNEAAAAAAAABAQAAAAAAAAAZAAAA
 	AAAAAAAAAAAAAAAA0w==
 	</data>
 	<key>DisableANSIColor</key>
-	<integer>0</integer>
+	<false/>
 	<key>Font</key>
 	<data>
-	YnBsaXN0MDDUAQIDBAUGCQpYJHZlcnNpb25UJHRvcFkkYXJjaGl2ZXJYJG9iamVjdHMS
-	AAGGoNEHCFRyb290gAFfEA9OU0tleWVkQXJjaGl2ZXKkCwwVFlUkbnVsbNQNDg8QERIT
-	FFYkY2xhc3NWTlNTaXplVk5TTmFtZVhOU2ZGbGFnc4ADI0AyAAAAAAAAgAIQEFZNb25h
-	Y2/SFxgZGlgkY2xhc3Nlc1okY2xhc3NuYW1lohobVk5TRm9udFhOU09iamVjdAgRGh8p
-	Mjc6P0FTWF5nbnV8hYeQkpSboKm0t74AAAAAAAABAQAAAAAAAAAcAAAAAAAAAAAAAAAA
+	YnBsaXN0MDDUAQIDBAUGGBlYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3AS
+	AAGGoKQHCBESVSRudWxs1AkKCwwNDg8QViRjbGFzc1ZOU05hbWVWTlNTaXplWE5TZkZs
+	YWdzgAOAAiNAOAAAAAAAABAQVk1vbmFjb9ITFBUWWiRjbGFzc25hbWVYJGNsYXNzZXNW
+	TlNGb250ohUXWE5TT2JqZWN0XxAPTlNLZXllZEFyY2hpdmVy0RobVHJvb3SAAQgRGiMt
+	Mjc8QktSWWBpa212eH+Ej5ifoqu9wMUAAAAAAAABAQAAAAAAAAAcAAAAAAAAAAAAAAAA
 	AAAAxw==
 	</data>
 	<key>FontAntialias</key>
-	<integer>1</integer>
+	<true/>
 	<key>Linewrap</key>
+	<true/>
+	<key>ProfileCurrentVersion</key>
+	<real>2.0099999999999998</real>
+	<key>RunCommandAsShell</key>
 	<true/>
 	<key>SelectionColor</key>
 	<data>
-	YnBsaXN0MDDUAQIDBAUGCQpYJHZlcnNpb25UJHRvcFkkYXJjaGl2ZXJYJG9iamVjdHMS
-	AAGGoNEHCFRyb290gAFfEA9OU0tleWVkQXJjaGl2ZXKjCwwTVSRudWxs0w0ODxARElYk
-	Y2xhc3NcTlNDb2xvclNwYWNlVU5TUkdCgAIQAU8QITAuODgyNTk3MDkgMC43NjI5NjYz
-	MyAwLjk5OTI2NzU4ANIUFRYXWCRjbGFzc2VzWiRjbGFzc25hbWWiFxhXTlNDb2xvclhO
-	U09iamVjdAgRGh8pMjc6P0FTV11ka3h+gIKmq7S/wsoAAAAAAAABAQAAAAAAAAAZAAAA
+	YnBsaXN0MDDUAQIDBAUGFRZYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3AS
+	AAGGoKMHCA9VJG51bGzTCQoLDA0OViRjbGFzc1xOU0NvbG9yU3BhY2VVTlNSR0KAAhAB
+	TxAhMC44ODI1OTcwOSAwLjc2Mjk2NjMzIDAuOTk5MjY3NTgA0hAREhNaJGNsYXNzbmFt
+	ZVgkY2xhc3Nlc1dOU0NvbG9yohIUWE5TT2JqZWN0XxAPTlNLZXllZEFyY2hpdmVy0RcY
+	VHJvb3SAAQgRGiMtMjc7QUhPXGJkZoqPmqOrrrfJzNEAAAAAAAABAQAAAAAAAAAZAAAA
 	AAAAAAAAAAAAAAAA0w==
 	</data>
 	<key>ShowActiveProcessInTitle</key>
@@ -62,24 +68,26 @@
 	<string>dtterm</string>
 	<key>TextBoldColor</key>
 	<data>
-	YnBsaXN0MDDUAQIDBAUGCQpYJHZlcnNpb25UJHRvcFkkYXJjaGl2ZXJYJG9iamVjdHMS
-	AAGGoNEHCFRyb290gAFfEA9OU0tleWVkQXJjaGl2ZXKjCwwTVSRudWxs0w0ODxARElYk
-	Y2xhc3NcTlNDb2xvclNwYWNlVU5TUkdCgAIQAU8QITAuODgyNTk3MDkgMC43NjI5NjYz
-	MyAwLjk5OTI2NzU4ANIUFRYXWCRjbGFzc2VzWiRjbGFzc25hbWWiFxhXTlNDb2xvclhO
-	U09iamVjdAgRGh8pMjc6P0FTV11ka3h+gIKmq7S/wsoAAAAAAAABAQAAAAAAAAAZAAAA
+	YnBsaXN0MDDUAQIDBAUGFRZYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3AS
+	AAGGoKMHCA9VJG51bGzTCQoLDA0OViRjbGFzc1xOU0NvbG9yU3BhY2VVTlNSR0KAAhAB
+	TxAhMC44ODI1OTcwOSAwLjc2Mjk2NjMzIDAuOTk5MjY3NTgA0hAREhNaJGNsYXNzbmFt
+	ZVgkY2xhc3Nlc1dOU0NvbG9yohIUWE5TT2JqZWN0XxAPTlNLZXllZEFyY2hpdmVy0RcY
+	VHJvb3SAAQgRGiMtMjc7QUhPXGJkZoqPmqOrrrfJzNEAAAAAAAABAQAAAAAAAAAZAAAA
 	AAAAAAAAAAAAAAAA0w==
 	</data>
 	<key>TextColor</key>
 	<data>
-	YnBsaXN0MDDUAQIDBAUGCQpYJHZlcnNpb25UJHRvcFkkYXJjaGl2ZXJYJG9iamVjdHMS
-	AAGGoNEHCFRyb290gAFfEA9OU0tleWVkQXJjaGl2ZXKjCwwTVSRudWxs0w0ODxARElYk
-	Y2xhc3NcTlNDb2xvclNwYWNlVU5TUkdCgAIQAU8QGDAuOTMzMzMzMzQgMC44NjY2NjY2
-	NyAxANIUFRYXWCRjbGFzc2VzWiRjbGFzc25hbWWiFxhXTlNDb2xvclhOU09iamVjdAgR
-	Gh8pMjc6P0FTV11ka3h+gIKdoqu2ucEAAAAAAAABAQAAAAAAAAAZAAAAAAAAAAAAAAAA
+	YnBsaXN0MDDUAQIDBAUGFRZYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3AS
+	AAGGoKMHCA9VJG51bGzTCQoLDA0OViRjbGFzc1xOU0NvbG9yU3BhY2VVTlNSR0KAAhAB
+	TxAYMC45MzMzMzMzNCAwLjg2NjY2NjY3IDEA0hAREhNaJGNsYXNzbmFtZVgkY2xhc3Nl
+	c1dOU0NvbG9yohIUWE5TT2JqZWN0XxAPTlNLZXllZEFyY2hpdmVy0RcYVHJvb3SAAQgR
+	GiMtMjc7QUhPXGJkZoGGkZqipa7Aw8gAAAAAAAABAQAAAAAAAAAZAAAAAAAAAAAAAAAA
 	AAAAyg==
 	</data>
+	<key>UseBoldFonts</key>
+	<true/>
 	<key>UseBrightBold</key>
-	<integer>0</integer>
+	<false/>
 	<key>WindowTitle</key>
 	<string></string>
 	<key>blackColour</key>
@@ -144,6 +152,67 @@
 	BAtzdHJlYW10eXBlZIHoA4QBQISEhAdOU0NvbG9yAISECE5TT2JqZWN0AIWEAWMChARm
 	ZmZmg83MTD6DzcxMP4PNzEw+AYY=
 	</data>
+	<key>keyMapBoundKeys</key>
+	<dict>
+		<key>$F729</key>
+		<string>[H</string>
+		<key>$F72B</key>
+		<string>[F</string>
+		<key>F704</key>
+		<string>[11~</string>
+		<key>F705</key>
+		<string>[12~</string>
+		<key>F706</key>
+		<string>[13~</string>
+		<key>F707</key>
+		<string>[14~</string>
+		<key>F708</key>
+		<string>[15~</string>
+		<key>F709</key>
+		<string>[17~</string>
+		<key>F70A</key>
+		<string>[18~</string>
+		<key>F70B</key>
+		<string>[19~</string>
+		<key>F70C</key>
+		<string>[20~</string>
+		<key>F70D</key>
+		<string>[21~</string>
+		<key>F70E</key>
+		<string>[23~</string>
+		<key>F70F</key>
+		<string>[24~</string>
+		<key>F710</key>
+		<string>[25~</string>
+		<key>F711</key>
+		<string>[26~</string>
+		<key>F712</key>
+		<string>[28~</string>
+		<key>F713</key>
+		<string>[29~</string>
+		<key>F714</key>
+		<string>[31~</string>
+		<key>F715</key>
+		<string>[32~</string>
+		<key>F716</key>
+		<string>[33~</string>
+		<key>F717</key>
+		<string>[34~</string>
+		<key>F728</key>
+		<string>[3~</string>
+		<key>F729</key>
+		<string>scrollToBeginningOfDocument:</string>
+		<key>F72B</key>
+		<string>scrollToEndOfDocument:</string>
+		<key>F72C</key>
+		<string>scrollPageUp:</string>
+		<key>F72D</key>
+		<string>scrollPageDown:</string>
+		<key>^F702</key>
+		<string>b</string>
+		<key>^F703</key>
+		<string>f</string>
+	</dict>
 	<key>magentaColour</key>
 	<data>
 	BAtzdHJlYW10eXBlZIHoA4QBQISEhAdOU0NvbG9yAISECE5TT2JqZWN0AIWEAWMChARm
