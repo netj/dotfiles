@@ -25,7 +25,7 @@ bash_import() {
     bash_default   light_white $'\E[1;37m'
     bash_default      no_color $'\E[0m'
 
-    bash_default prompt_filler "---"
+    bash_default prompt_filler "----------------------------------------"
 }
 
 bash_load() {
@@ -57,7 +57,7 @@ bash_load() {
     fi
 
     # sketch PS1
-    local PS1_plain="($user_plain$HOSTNAME:"")""--(?0&"")($date_plain)"
+    local PS1_plain="($user_plain$HOSTNAME:""?0)--""(""&$date_plain)"
     prompt_min_width=`prompt_takes_width "$PS1_plain"`
 
     # prompt_flexible_part update codes
@@ -94,7 +94,7 @@ bash_load() {
                     pwd=$withname
                     # check there's room for prefix
                     local prefix=${dir:2} # (the root part better than ~/ or /)
-                    prefix="${dir:0:2}${prefix%%/*}/$abbrev"
+                    prefix="${dir:0:2}${prefix%%/*}$abbrev"
                     withprefix="$prefix${dir:$((${#prefix}-$fillsize))}$name"
                     if [ ${#withprefix} -le $room ]; then
                         pwd=$withprefix
@@ -124,10 +124,9 @@ $user_part\
 \[$red\]$HOSTNAME\[$no_color\]\
 :\
 \[$yellow\]"'$prompt_pwd_part'"\[$no_color\]\
-)"'$prompt_fill_part''${prompt_filler:0:$((3-${#?}))}'"(\
 ?\[$cyan\]"'$?'"\[$no_color\]\
-&\[$green\]"'$prompt_jobs_part'"\[$no_color\]\
-)(\
+)"'$prompt_fill_part''${prompt_filler:0:$((3-${#?}))}'"(\
+\[$green\]"'$prompt_jobs_part'"\[$no_color\]&\
 $date_part\[$no_color\]\
 )\n\\$ "
 }
