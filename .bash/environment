@@ -6,6 +6,9 @@
 bash_autoload=true
 
 bash_load() {
+    # variables
+    hostnickname=${HOSTNAME%%.*}
+    hostdomain=${HOSTNAME#*.}
     # environment variables
     bash_default_env EDITOR vim
     bash_default_env PAGER less

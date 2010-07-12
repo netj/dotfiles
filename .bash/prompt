@@ -2,6 +2,7 @@
 # netj's bash module: prompt
 # Author: Jaeho Shin <netj@sparcs.org>
 # Created: 2002-07-18
+# Requires: environment
 
 bash_autoload=true
 
@@ -57,7 +58,7 @@ bash_load() {
     fi
 
     # sketch PS1
-    local PS1_plain="($user_plain$HOSTNAME:""?0)--""(""&$date_plain)"
+    local PS1_plain="($user_plain$hostnickname:""?0)--""(""&$date_plain)"
     prompt_min_width=`prompt_takes_width "$PS1_plain"`
 
     # prompt_flexible_part update codes
@@ -121,7 +122,7 @@ bash_load() {
     PS1="\
 \[$no_color\](\
 $user_part\
-\[$red\]$HOSTNAME\[$no_color\]\
+\[$red\]$hostnickname\[$no_color\]\
 :\
 \[$yellow\]"'$prompt_pwd_part'"\[$no_color\]\
 ?\[$cyan\]"'$?'"\[$no_color\]\

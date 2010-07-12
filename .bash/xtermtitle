@@ -2,12 +2,14 @@
 # netj's bash module: xterm dynamic title
 # Author: Jaeho Shin <netj@sparcs.org>
 # Created: 2004-05-28
+# Requires: environment screen
 
 bash_autoload=true
 
 bash_import() {
     bash_default xtermtitle_tty `tty` && xtermtitle_tty=${xtermtitle_tty#/dev/}
     bash_default xtermtitle_user "${LOGNAME:-$USER}"
+    bash_default xtermtitle_label ""
 }
 
 bash_load() {
@@ -18,20 +20,27 @@ bash_load() {
         if [ -n "$STY" ]; then
             # in screen (hostname will be shown by screen's hardstatus)
             xterm_title() {
-                local title="\033]0;$xtermtitle_tty"
-                [ ! -e "$screen_env" ] || title="$title#`screen_current`"
-                title="$title\007"
+                local title="\033]0;"
+                title+="${xtermtitle_label:+$xtermtitle_label - }"
+                title+="$xtermtitle_tty"
+                [ ! -e "$screen_env" ] || title+="#`screen_current`"
+                title+="\007"
                 echo -ne "$title"
             }
         else
             # plain terminal
             xterm_title() {
-                echo -ne "\033]0;"
-                [ "$xtermtitle_user" = "netj" ] || echo -n "$xtermtitle_user@"
-                echo -n "$HOSTNAME^$xtermtitle_tty"
-                echo -ne "\007"
+                local title="\033]0;"
+                title+="${xtermtitle_label:+$xtermtitle_label - }"
+                [ "$xtermtitle_user" = "netj" ] || title+="$xtermtitle_user@"
+                title+="$hostnickname^$xtermtitle_tty"
+                title+="\007"
+                echo -ne "$title"
             }
         fi
+        title() {
+            xtermtitle_label=$1
+        }
         # register it
         bash_add_prompt xterm_title
         ;;

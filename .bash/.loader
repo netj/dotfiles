@@ -32,6 +32,7 @@ bash_load_module_end() {
 shopt -s extglob
 bash_foreach_modules() {
     local m=
+    # TODO order by dependency
     for m in ~/.bash/!(.loader|.profile|.logout|README); do
         [ -f "$m" ] || continue
         m=${m#~/.bash/}
