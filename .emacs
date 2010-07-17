@@ -2,23 +2,12 @@
 ;; Author: Jaeho Shin <netj@sparcs.org>
 ;; Created: 2006-01-03
 
-;; Hangul
-(set-language-environment "Korean")   
-(set-default-coding-systems 'utf-8)
-(add-hook
- 'input-method-activate-hook
- (function (lambda ()
-	     (cond ((string= current-input-method "korean-hangul")
-		    (setq input-method-verbose-flag nil
-			  input-method-highlight-flag nil))))))
-(add-hook
- 'input-method-inactive-hook
- (function (lambda ()
-	     (if (string= current-input-method "korean-hangul")
-		 (setq input-method-inactive-hook 'default
-		       input-method-highlight-flag t)))))
-
 ;; behavior
+(set-language-environment-input-method "Korean")
+(setq shell-command-switch "-ic")
+
+(push "~/.emacs.d/elisp" load-path)
+
 (setq inhibit-startup-message t)
 (defalias 'yes-or-no-p 'y-or-n-p)
 (icomplete-mode)
@@ -33,30 +22,52 @@
 (global-set-key "\C-x\C-o" 'other-window-reverse)
 
 ;; looks
-;(create-fontset-from-fontset-spec
-;  "-*-lucidatypewriter-*-*-*-*-14-*-*-*-*-*-fontset-lucida14,
-;          ascii:-*-lucidatypewriter-*-*-*-*-14-*-*-*-*-*-*-1, 
-; korean-ksc5601:-*-gulim-bold-*-*-*-14-*-*-*-*-140-ksx1001.1998-*")
-(set-face-font 'default "8x13")
 (defun frame-attr (attr) (add-to-list 'default-frame-alist attr))
-;(frame-attr '(font . "*-medium-r-*-14-*-iso10646-1"))
-(frame-attr '(font . "8x13"))
 (frame-attr '(cursor-color . "blue violet"))
 (frame-attr '(background-color . "thistle"))
-(frame-attr '(vertical-scroll-bars . right))
+(create-fontset-from-fontset-spec
+ "-*-*-*-*-*-*-16-160-*-*-*-*-fontset-monaco,
+    latin:-apple-monaco-*-*-*-*-*-*-*-*-m-*-iso10646-1,
+   hangul:-apple-nanumgothic-*-*-*-*-*-*-*-*-p-*-iso10646-1")
+;; ;(frame-attr '(font . "*-Palatino-medium-r-*-160-*-iso10646-1"))
+(frame-attr '(font . "-*-16-*-fontset-monaco"))
+
 (tool-bar-mode 0)
 (menu-bar-mode 0)
 (column-number-mode t)
 (transient-mark-mode t)
 (global-font-lock-mode t) 
+(show-paren-mode t)
 (setq font-lock-maximum-decoration t)
 (setq font-lock-maximum-size nil)
 (setq display-time-24hr-format t)
 
-;; AucTeX
-(require 'tex-site)
+
+;; AUCTeX
+(load "auctex.el" nil t t)
+(load "preview-latex.el" nil t t)
+(setq TeX-shell shell-file-name)
+(setq TeX-shell-command-option shell-command-switch)
 (setq TeX-auto-save t)
 (setq TeX-parse-self t)
+(setq TeX-PDF-mode t)
+;; for Mac
+(setq-default TeX-view-program-list nil
+	      ;; TeX-view-predicate-list nil
+	      ;; TeX-view-program-selection nil
+	      )
+(push '("Evince" "open %o") TeX-view-program-list)
+;; (push '(open-pdf "Open") TeX-view-predicate-list)
+;; (push '(open-pdf "Open") TeX-view-program-selection)
+;; (push TeX-view-program-selection '(open-pdf "Open"))
+
+
+
+;; Markdown mode
+;; http://jblevins.org/projects/markdown-mode/
+(autoload 'markdown-mode "markdown-mode.el"
+   "Major mode for editing Markdown files" t)
+(push '("\\.geul" . markdown-mode) auto-mode-alist)
+(push '("\\.markdown" . markdown-mode) auto-mode-alist)
 
 ;; END OF .emacs
-
