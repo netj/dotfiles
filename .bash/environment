@@ -12,6 +12,7 @@ bash_load() {
     # environment variables
     bash_default_env EDITOR vim
     bash_default_env PAGER less
+    bash_default_env LESS "--ignore-case"
     bash_default_env LESSBINFMT "*n%c"
     #  Korean
     bash_default_env LANG ko_KR.UTF-8
