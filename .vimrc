@@ -64,7 +64,7 @@ if has("gui_running")
     colorscheme darkblue
     set guioptions+=T
     set guioptions-=m
-    set guifont="Andale Mono:h9"
+    set guifont=Monaco:h16
 endif
 
 
