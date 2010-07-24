@@ -139,6 +139,13 @@ if has("autocmd")
 endif " has("autocmd")
 
 
+" let netrw use &suffixes for better file listings
+let g:netrw_sort_sequence = '[\/]$,*'
+for sfx in split(&suffixes, ',')
+    let g:netrw_sort_sequence .= ',' . substitute(sfx, "\\.", "\\\\\\0", "") . '$'
+endfor
+
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Local settings                                                              "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
