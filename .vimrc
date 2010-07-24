@@ -73,7 +73,11 @@ endif
 "------------------------------------------------------------------------------
 
 " My name + email address.
-iab jshin Jaeho Shin <netj@sparcs.org>
+iab netj    Jaeho Shin <netj@sparcs.org>
+iab jshin   Jaeho Shin <netj@ropas.snu.ac.kr>
+
+" Frequently typed lines.
+iab Created:    Created: <C-R>=system("date +%Y-%m-%d")
 
 " Toggle list (display unprintable characters).
 nnoremap <F2> :set list!<CR>
