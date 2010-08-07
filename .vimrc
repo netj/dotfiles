@@ -79,8 +79,8 @@ endif
 "------------------------------------------------------------------------------
 
 " My name + email address.
-iab netj    Jaeho Shin <netj@sparcs.org>
-iab jshin   Jaeho Shin <netj@ropas.snu.ac.kr>
+iab netj>    Jaeho Shin <netj@sparcs.org>
+iab jshin>   Jaeho Shin <netj@ropas.snu.ac.kr>
 
 " Frequently typed lines.
 iab Created:    Created: <C-R>=system("date +%Y-%m-%d")
