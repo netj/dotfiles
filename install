@@ -10,7 +10,9 @@ cd ~/.dotfiles || . update
 # install symlinks
 install() {
     local d=$1
-    local n=${d#.}
+    local n=$d
+    n=${n#.}
+    n=${n//[\/]/_}
     run ${n}_before
     if [ "`readlink ~/$d`" = .dotfiles/$d ]; then
         echo "$d installed"
@@ -40,40 +42,40 @@ install() {
         fi
     fi
 }
-run() { [ "`type -t $1 2>/dev/null`" != function ] || "$@"; }
+run() { [ "`type -t $1 2>/dev/null`" != function ] || (cd; "$@"); }
+safeln() {
+    local src=$1; shift
+    local tgt=
+    for tgt in "$@"; do
+        if [ -e "$tgt" ]; then
+            [ "`readlink "$tgt"`" != "$src" ] || continue
+            mv -iv "$tgt" "$tgt~"
+        fi
+        [ -e "$tgt" ] || ln -sfnv "$src" "$tgt"
+    done
+}
 
+# core
 bash_after() {
     # .bash{rc,_profile} symlinks
     (cd
-    safeln() {
-        local src=$1; shift
-        local tgt=
-        for tgt in "$@"; do
-            if [ -e "$tgt" ]; then
-                [ "`readlink "$tgt"`" != "$src" ] || continue
-                mv -iv "$tgt" "$tgt~"
-            fi
-            [ -e "$tgt" ] || ln -sfnv "$src" "$tgt"
-        done
-    }
     safeln .bash/.profile .bash{rc,_profile}
     safeln .bash/.logout .bash_logout
     )
 }
+install .bash
+install .inputrc
 
-core="
-.bash
-.inputrc
-.vimrc
-.vim
-.screenrc
-.toprc
-.emacs
-"
+vim_after() { make -C .vim; }
+install .vimrc
+install .vim
 
-gui="
-.fonts.conf
-.fonts/Makefile
-"
+install .screenrc
+install .toprc
+install .emacs
 
-for d in $core $gui; do install $d; done
+
+# GUI
+fonts_Makefile_after() { make -C .fonts; }
+install .fonts.conf
+install .fonts/Makefile
