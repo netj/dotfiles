@@ -65,6 +65,7 @@ core="
 .bash
 .inputrc
 .vimrc
+.vim
 .screenrc
 .toprc
 .emacs
