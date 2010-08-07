@@ -47,8 +47,14 @@ set listchars=tab:>.,eol:$
 " expansions
 set wildmode=full,list:full
 set wildchar=<TAB>
+
 "  some by-product files
-set suffixes+=.hi,.cmi,.cmo,.cmx,.cma,.cmxa,.class,.nty,#,.blg,.a
+set suffixes+=.o,.a     " object and archive files
+set suffixes+=.class    " Java classes
+set suffixes+=.aux      " TeX auxiliary logs
+set suffixes+=#         " Emacs auto backups
+set suffixes+=.hi       " Haskell intermediates
+set suffixes+=.cmi,.cmo,.cmx,.cma,.cmxa,.blg,.annot " OCaml intermediates
 
 
 " Switch syntax highlighting on, when the terminal has colors
@@ -157,4 +163,3 @@ endfor
 if filereadable(expand("~/.vim_local"))
     source ~/.vim_local
 endif
-
