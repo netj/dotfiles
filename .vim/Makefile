@@ -18,6 +18,7 @@ xmledit.vba: #
 
 mkd: syntax/mkd.vim ##
 syntax/mkd.vim: #
+	mkdir -p $(@D)
 	wget -qNO $@ \
 	    http://github.com/plasticboy/vim-markdown/raw/master/mkd.vim
 
