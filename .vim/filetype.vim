@@ -7,3 +7,6 @@ augroup markdown
  au! BufRead,BufNewFile *.{mkd,markdown}   setfiletype mkd
  autocmd BufRead *.{mkd,markdown}          set ai formatoptions=tcroqn2 comments=n:&gt;
 augroup END
+
+" json
+au! BufRead,BufNewFile *.json setfiletype json

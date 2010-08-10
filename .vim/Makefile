@@ -22,3 +22,9 @@ syntax/mkd.vim: #
 	wget -qNO $@ \
 	    http://github.com/plasticboy/vim-markdown/raw/master/mkd.vim
 
+json: syntax/json.vim ##
+syntax/json.vim: #
+	mkdir -p $(@D)
+	wget -qNO $@ \
+	    http://www.vim.org/scripts/download_script.php?src_id=10853
+
