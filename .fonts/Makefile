@@ -2,27 +2,31 @@
 # Author: Jaeho Shin <netj@sparcs.org>
 # Created: 2009-03-20
 
-NanumFontURL := http://static.campaign.naver.com/0/hangeul/renew/download/NanumFont_TTF.zip
+NanumFontURL := http://cdn.naver.com/naver/NanumFont/fontfiles/NanumFont_TTF_ALL.zip
+NanumFontsZip := $(shell basename $(NanumFontURL))
 NanumFonts := \
-    나눔고딕.ttf           \
-    나눔고딕Bold.ttf       \
-    나눔고딕ExtraBold.ttf  \
-    나눔명조.ttf           \
-    나눔명조Bold.ttf       \
-    나눔명조ExtraBold.ttf  \
+    NanumGothic.ttf             \
+    NanumGothicBold.ttf         \
+    NanumGothicExtraBold.ttf    \
+    NanumMyeongjo.ttf           \
+    NanumMyeongjoBold.ttf       \
+    NanumMyeongjoExtraBold.ttf  \
+    NanumBrush.ttf              \
+    NanumPen.ttf                \
     #
 
-.PHONY: all clean distclean NanumFont_TTF.zip
+.PHONY: all clean distclean $(NanumFontsZip)
 all: $(NanumFonts)
 	# installing free Microsoft fonts
 	! type apt-get &>/dev/null || dpkg -l msttcorefonts &>/dev/null || \
 	sudo apt-get install msttcorefonts
 clean:
-	rm -f NanumFont_TTF.zip
+	rm -f $(NanumFontsZip)
 distclean: clean
-	rm -f *.ttf
+	rm -f $(NanumFonts)
 
-$(NanumFonts): NanumFont_TTF.zip
-	unzip -o -O cp949 NanumFont_TTF.zip $@
-NanumFont_TTF.zip:
+$(NanumFonts): $(NanumFontsZip)
+	unzip -o $< $@
+$(NanumFontsZip):
 	wget -N $(NanumFontURL)
+
