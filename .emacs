@@ -83,4 +83,8 @@
 (push '("\\.geul" . markdown-mode) auto-mode-alist)
 (push '("\\.markdown" . markdown-mode) auto-mode-alist)
 
+
+;; respect local config
+(load "~/.emacs_local" t)
+
 ;; END OF .emacs
