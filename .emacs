@@ -34,7 +34,16 @@
 
 ;; color-theme
 (load "color-theme.el")
-(color-theme-pok-wog)
+;; ;; greenish
+;; (color-theme-subtle-hacker)
+;; (color-theme-gnome2)
+;; (color-theme-pok-wog)
+;; (color-theme-bharadwaj-slate)
+;; (color-theme-jonadabian-slate)
+;; ;; blueish
+(color-theme-dark-blue2)
+;; (color-theme-deep-blue)
+;; (color-theme-sitaramv-solaris)
 
 (tool-bar-mode 0)
 (menu-bar-mode 0)
