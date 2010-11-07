@@ -9,6 +9,8 @@ else
     FONTSDIR := .
 endif
 
+UNZIP = unzip -o $< $(@F) -d $(@D)
+
 .PHONY: all install uninstall clean
 all: install
 # end of prologue
@@ -35,7 +37,7 @@ NanumFonts := $(NanumFontNames:%=$(FONTSDIR)/%)
 NanumFontsURL := http://cdn.naver.com/naver/NanumFont/fontfiles/NanumFont_TTF_ALL.zip
 NanumFontsZip := $(shell basename $(NanumFontsURL))
 $(NanumFonts): $(NanumFontsZip)
-	unzip -o $< $(@F) -d $(@D)
+	$(UNZIP)
 $(NanumFontsZip):
 	wget -N $(NanumFontsURL)
 IntermediateFiles += $(NanumFontsZip)
@@ -57,11 +59,26 @@ SeoulFontNames := \
 SeoulFonts := $(SeoulFontNames:%=$(FONTSDIR)/%)
 SeoulFontsZip := SeoulFonts_TTF.zip
 $(SeoulFonts): $(SeoulFontsZip)
-	unzip -o $< $(@F) -d $(@D)
+	$(UNZIP)
 $(SeoulFontsZip):
 	wget -NO $@ 'http://design.seoul.go.kr/js/boardFileDown.php?model=PolicyData&id=251&field_path=file_path&field_name=file_name1&no=1&is_crypt=false'
 IntermediateFiles += $(SeoulFontsZip)
 InstalledFiles += $(SeoulFonts)
+
+
+## Dijkstra
+DijkstraFontNames := \
+    dijkstra.ttf	\
+    #
+DijkstraFonts := $(DijkstraFontNames:%=$(FONTSDIR)/%)
+DijkstraFontsZip := Dijkstra.zip
+$(DijkstraFonts): $(DijkstraFontsZip)
+	$(UNZIP)
+$(DijkstraFontsZip):
+	wget -NO $@ http://www.fonts101.com/download/34398/Dijkstra/A5922C74E09F7630B830C8BDB36343B0.aspx
+IntermediateFiles += $(DijkstraFontsZip)
+InstalledFiles += $(DijkstraFonts)
+
 
 
 
