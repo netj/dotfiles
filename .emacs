@@ -23,14 +23,18 @@
 
 ;; looks
 (defun frame-attr (attr) (add-to-list 'default-frame-alist attr))
-(frame-attr '(cursor-color . "blue violet"))
-(frame-attr '(background-color . "thistle"))
+;(frame-attr '(cursor-color . "blue violet"))
+;(frame-attr '(background-color . "thistle"))
 (create-fontset-from-fontset-spec
  "-*-*-*-*-*-*-16-160-*-*-*-*-fontset-monaco,
     latin:-apple-monaco-*-*-*-*-*-*-*-*-m-*-iso10646-1,
    hangul:-apple-nanumgothic-*-*-*-*-*-*-*-*-p-*-iso10646-1")
 ;; ;(frame-attr '(font . "*-Palatino-medium-r-*-160-*-iso10646-1"))
 (frame-attr '(font . "-*-16-*-fontset-monaco"))
+
+;; color-theme
+(load "color-theme.el")
+(color-theme-pok-wog)
 
 (tool-bar-mode 0)
 (menu-bar-mode 0)

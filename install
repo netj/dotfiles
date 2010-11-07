@@ -11,10 +11,22 @@ cd ~/.dotfiles || . update
 install() {
     local d=$1
     local n=$d
+    # sanitize name
     n=${n#.}
-    n=${n//[\/]/_}
+    n=${n//[\/.-]/_}
+    # compute relative path
+    local rel=
+    case $d in
+        */*) # need relative path to .dotfiles if path has depth
+        local dd=`dirname $d` 
+        mkdir -p ~/$dd
+        rel=$(tr / '\n' <<<$dd |
+            sed -n '/^$/d; s/.*/../p' |
+            tr '\n' /)
+        ;;
+    esac
     run ${n}_before
-    if [ "`readlink ~/$d`" = .dotfiles/$d ]; then
+    if [ x"`readlink ~/$d`" = x"$rel.dotfiles/$d" ]; then
         echo "$d installed"
         run ${n}_after
     else
@@ -25,16 +37,6 @@ install() {
                 # backup previous one
                 ! [ -e ~/$d ] || mv -iv ~/$d ~/$d~
                 # create a symlink
-                local rel=
-                case $d in
-                    */*) # need relative path to .dotfiles if path has depth
-                    local dd=`dirname $d` 
-                    mkdir -p ~/$dd
-                    rel=$(tr / '\n' <<<$dd |
-                        sed -n '/^$/d; s/.*/../p' |
-                        tr '\n' /)
-                    ;;
-                esac
                 ln -sfnv $rel.dotfiles/$d ~/$d
                 run ${n}_after
                 ;;
@@ -72,7 +74,10 @@ install .vim
 
 install .screenrc
 install .toprc
+
+emacs_d_elisp_Makefile_after() { make -C .emacs.d/elisp; }
 install .emacs
+install .emacs.d/elisp/Makefile
 
 
 # GUI
