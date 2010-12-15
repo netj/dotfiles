@@ -28,8 +28,10 @@ bash_load() {
     shopt -s nocaseglob
     shopt -s cdspell
     shopt -s cmdhist
-    # Mac OS X specific settings
-    if [ x"Mac OS X" = x"`sw_vers -productName 2>/dev/null`" ]; then
+    local uname=`uname`
+    # platform specific settings
+    case $uname in
+        Darwin) # Mac OS X
         # some packages install stuffs on /usr/local
         export PATH=/usr/local/bin:/usr/local/sbin:$PATH
         export MANPATH=/usr/local/man:$MANPATH
@@ -41,7 +43,8 @@ bash_load() {
         # Setting PATH for MacPython 2.5
         # The orginal version is saved in .bash_profile.pysave
         export PATH="/Library/Frameworks/Python.framework/Versions/Current/bin:${PATH}"
-    fi
+        ;;
+    esac
     # ls on several platforms
     local ls_o=
     if ls --version 2>&1 | grep 'Free Software Foundation' >/dev/null; then
@@ -49,12 +52,12 @@ bash_load() {
         ls_o="-F --color=auto"
         [ -n "$LS_COLORS" ] || eval "`dircolors 2>/dev/null`"
         # platform specific configs
-        case "`uname`" in
+        case $uname in
             CYGWIN*) ls_o="$ls_o --show-control-chars" ;;
         esac
     else
         # platform specific ls
-        case "`uname`" in
+        case $uname in
             *BSD|Darwin) ls_o="-FG" ;;
         esac
     fi
