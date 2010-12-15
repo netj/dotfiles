@@ -31,11 +31,11 @@ bash_load() {
     # Mac OS X specific settings
     if [ x"Mac OS X" = x"`sw_vers -productName 2>/dev/null`" ]; then
         # some packages install stuffs on /usr/local
-        export PATH=/usr/local/bin:$PATH
+        export PATH=/usr/local/bin:/usr/local/sbin:$PATH
         export MANPATH=/usr/local/man:$MANPATH
 
         # Setting paths for MacPorts
-        export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+        export PATH=/opt/local/libexec/gnubin:/opt/local/bin:/opt/local/sbin:$PATH
         export MANPATH=/opt/local/man:$MANPATH
 
         # Setting PATH for MacPython 2.5
