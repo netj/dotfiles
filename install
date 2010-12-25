@@ -72,6 +72,7 @@ vim_after() { make -C .vim; }
 install .vimrc
 install .vim
 
+install .tmux.conf
 install .screenrc
 install .toprc
 
