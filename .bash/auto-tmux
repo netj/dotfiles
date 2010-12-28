@@ -1,0 +1,153 @@
+#!/usr/bin/env bash
+# netj's bash module: automatic tmux session support
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2010-12-16
+
+bash_autoload=true
+
+bash_import() {
+    bash_default auto_tmux_env_root /tmp/auto-tmux.${SUDO_USER:-$LOGNAME}
+    # load values from tmux environment snapshot
+    a-tmux-load() {
+        [ -f "$auto_tmux_link" ] || return
+        . "$auto_tmux_link"
+    }
+    # save current environment to tmux snapshot
+    a-tmux-save() {
+        [ -f "$auto_tmux_link" ] || return
+        chmod +w "$auto_tmux_link"
+        local n=
+        for n in SSH_CLIENT SSH_CONNECTION SSH_TTY \
+            SSH_AUTH_SOCK SSH_AGENT_PID \
+            XAUTHORITY DISPLAY SESSION_MANAGER
+        do  local v=${!n}
+            if [ -n "$v" ]; then
+                echo "export $n='${v//"'"/"'\\''"}'"
+            else
+                echo "unset $n"
+            fi
+        done >"$auto_tmux_link" 2>/dev/null
+        chmod a-w "$auto_tmux_link"
+    }
+}
+
+bash_login() {
+    if ! type tmux &>/dev/null; then
+        # we can't do much if tmux is not available
+        if ! $bash_autoload; then
+            echo "auto-tmux: not found from PATH" >&2
+        fi
+    elif [ -z "$SSH_CONNECTION" -a -z "$auto_tmux_enable" ]; then
+        # local shell, but tmux wasn't enabled
+        # skip attaching to the tmux session
+        unset -v auto_tmux_env_root
+        unset -f a-tmux-{load,save}
+    elif [ -n "$TMUX" ]; then
+        # working inside tmux, prepare stuffs
+        auto_tmux_link="$auto_tmux_env_root/.$$"
+
+        # set useful tmux related commands
+        a-tmux-all() {
+            # all connections
+            (cd "$auto_tmux_env_root" && \ls -t) 2>/dev/null
+        }
+        a-tmux-alive() {
+            # live connections
+            (cd "$auto_tmux_env_root" &&
+            \ls -t $(ps -o pid= -p `a-tmux-all`)) 2>/dev/null
+        }
+        a-tmux-current() {
+            # current connection
+            readlink "$auto_tmux_link"
+        }
+        a-tmux-ok() {
+            [ -e "$auto_tmux_link" ]
+        }
+        a-tmux-poll() {
+            a-tmux-ok || a-tmux-select
+        }
+        a-tmux-ls() {
+            local c=
+            for c in `a-tmux-alive`; do
+                echo "= $([ $c = `a-tmux-current` ] && echo \#)$c ="
+                cat "$auto_tmux_env_root/$c"
+            done
+        }
+        a-tmux-select() {
+            local conn=$1
+            # determine $conn unless given
+            if [ -z "$conn" ]; then
+                if a-tmux-ok; then
+                    # cycle through connections
+                    conn=$(a-tmux-alive |
+                        grep -A1 ^`a-tmux-current`$ | tail -n +2)
+                    [ -n "$conn" ] || conn=`a-tmux-alive | head -1`
+                else
+                    # use the most recent one
+                    conn=`a-tmux-alive | head -1`
+                fi
+            fi
+            # attach to $conn
+            if [ -n "$conn" ]; then
+                if { (cd "$auto_tmux_env_root" && ln -sf $conn "$auto_tmux_link") &&
+                    a-tmux-load; } 2>/dev/null; then
+                    echo "auto-tmux: attached to #$conn"
+                else
+                    echo "auto-tmux: cannot attach to $conn"
+                fi
+            else
+                echo "auto-tmux: no connection available"
+                return 1
+            fi
+        }
+        a-tmux-only() {
+            a-tmux-poll || return 1
+            local pids=$(a-tmux-alive | grep -v ^`a-tmux-current`$)
+            if [ -n "$pids" ]; then
+                kill -HUP $pids
+                (cd "$auto_tmux_env_root" && rm -f $pids)
+            fi 2>/dev/null
+        }
+        
+        # prepare hooks for prompt, cleanup
+        bash_insert_prompt a-tmux-poll
+        a-tmux-cleanup() { rm -f "$auto_tmux_link"; }
+        bash_add_unloader a-tmux-cleanup
+    else
+        # working outside tmux,
+        # create a environment snapshot for shells inside tmux
+        if ! [ -d "$auto_tmux_env_root" ]; then
+            mkdir -p "$auto_tmux_env_root"
+            chmod a=,u=rwx "$auto_tmux_env_root"
+        fi
+        local conn=$$
+        local auto_tmux_env="$auto_tmux_env_root/$conn"
+        rm -f "$auto_tmux_env"
+        touch "$auto_tmux_env"
+        chmod a=,u=rw "$auto_tmux_env"
+        auto_tmux_link=$auto_tmux_env a-tmux-save
+        
+        echo "auto-tmux: connection #$conn"
+        local attach=true
+        trap "attach=false" INT
+        local key=
+        read -n 1 -t 1 key
+        trap - INT
+        [ x"${key#[ 	]}" = x"" ] || attach=false
+        $attach || return
+        
+        # attach to a session with no clients
+        if tmux list-sessions 2>/dev/null | grep -qv '(attached)'; then
+            tmux attach-session
+        else
+            # or, just start a new one
+            tmux new-session
+        fi
+        
+        # before exiting, clean up the environment snapshot
+        rm -f "$auto_tmux_env"
+        exit
+    fi
+}
+
+# vim:et:ts=8:sw=4:sts=4

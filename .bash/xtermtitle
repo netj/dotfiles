@@ -2,12 +2,12 @@
 # netj's bash module: xterm dynamic title
 # Author: Jaeho Shin <netj@sparcs.org>
 # Created: 2004-05-28
-# Requires: environment screen
+# Requires: environment prompt
 
 bash_autoload=true
 
 bash_import() {
-    xtermtitle_label_default=
+    xtermtitle_postfix=
     bash_default xtermtitle_label ""
 }
 
@@ -15,29 +15,33 @@ bash_load() {
     # xterm's dynamic title for some terminal types
     case $TERM in
         xterm* | cygwin* | screen* | dtterm)
-        local tty=`tty`
-        tty=${tty#/dev/}
         if [ -n "$TMUX" -o -n "$STY" ]; then
-            # in tmux or screen (hostname will be shown by it)
-            local t=$tty
-            [ ! -e "$screen_env" ] || t+="#`screen_current`"
-            xtermtitle_label_default=$t
+            # in tmux or screen we need not much details
+            xtermtitle_postfix=
         else
             # plain terminal
-            local t=
-            local u=${LOGNAME:-$USER}
-            [ "$u" = "netj" ] || t+="$u@"
-            t+="$hostnickname^$tty"
-            xtermtitle_label_default=$t
+            local tty=`tty`
+            tty=${tty#/dev/}
+            xtermtitle_postfix="$tty^$hostnickname"
         fi
         # xterm title controller
         title() {
-            xtermtitle_label=${*:-$xtermtitle_label_default}
+            xtermtitle_label=$*
         }
         # xterm title updater
         xterm_title() {
             local title="\033]0;"
-            title+=$xtermtitle_label
+            case $xtermtitle_label in
+                "")
+                local path=$PWD
+                local name=${path##*/}
+                local dir=${prompt_pwd_part:-${PWD/#$HOME/~}}
+                dir=${dir%/$name}
+                title+="$name - ($dir)"
+                ;;
+                *) title+=`eval echo "$xtermtitle_label"` ;;
+            esac
+            title+="${xtermtitle_postfix:+ - $xtermtitle_postfix}"
             title+="\007"
             echo -ne "$title"
         }
