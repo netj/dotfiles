@@ -31,6 +31,12 @@ bash_import() {
 }
 
 bash_login() {
+    # use auto-tmux instead of screen if possible
+    if type tmux &>/dev/null; then
+        unset -v screen_env_root screen_name
+        unset -f screen_load screen_save
+        return
+    fi
     # check whether we can use screen
     if ! type screen >/dev/null 2>&1; then
         if ! $bash_autoload; then
