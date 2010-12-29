@@ -35,9 +35,9 @@ bash_load() {
                 "")
                 local path=$PWD
                 local name=${path##*/}
-                local dir=${prompt_pwd_part:-${PWD/#$HOME/~}}
+                local dir=${PWD/#$HOME/"~"}
                 dir=${dir%/$name}
-                title+="$name - ($dir)"
+                title+="${name:-/} - (${dir:-/})"
                 ;;
                 *) title+=`eval echo "$xtermtitle_label"` ;;
             esac
