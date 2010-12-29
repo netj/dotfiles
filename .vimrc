@@ -73,6 +73,12 @@ if has("gui_running")
     set guifont=Monaco:h16
 endif
 
+" let xterm title work even in screen or tmux
+" From http://vim.wikia.com/wiki/Automatically_set_screen_title
+if &term == "screen"
+    set t_ts=]0;
+    set t_fs=
+endif
 
 "------------------------------------------------------------------------------
 " Key bindings                                                                -
