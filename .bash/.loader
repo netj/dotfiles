@@ -18,7 +18,7 @@ bash_load_module_begin() {
         bash_prepare_fallback
         . ~/.bash/"$bash_module"
         # disable module if neither enabled nor autoloaded
-        local switch="${bash_module}_enable"
+        local switch="${bash_module//[^A-Za-z0-9]/_}_enable"
         if ! ${!switch:-${bash_autoload:-false}}; then
             bash_prepare_fallback
         fi
