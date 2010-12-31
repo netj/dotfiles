@@ -6,7 +6,7 @@
 
 bash_autoload=true
 
-bash_import() {
+bash_login() {
     # ANSI color codes
     bash_default           red $'\E[0;31m'
     bash_default         green $'\E[0;32m'
@@ -27,9 +27,7 @@ bash_import() {
     bash_default      no_color $'\E[0m'
 
     bash_default prompt_filler "----------------------------------------"
-}
 
-bash_load() {
     # a hack to measure how many columns given string takes
     prompt_takes_width() {
         local s=$1

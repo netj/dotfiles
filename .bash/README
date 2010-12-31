@@ -21,15 +21,14 @@ Each module is loaded on startup of shell if either
 
 
 = Structure of Module =
-Each module may contain definition of the following commands:
+Each module may define the following functions:
 * `bash_import`:
-  This command is run before running `bash_login` or `bash_load`.
-* `bash_login`:
-  This command is run when the module is loading inside a login shell.
+  This function is called before any `bash_load` steps are run.  Define
+  things here if you want them to be usable by other modules' `bash_load`.
 * `bash_load`:
-  This command is run to load the module.
-
-Definition of any of the previous commands may be omitted.
+  This function will be the part where you load stuffs of the module.
+* `bash_login`:
+  This function is only called when it is a login shell after `bash_load`.
 
 A module may set variable `bash_autoload` to `true`, in order to
 automatically enable itself.

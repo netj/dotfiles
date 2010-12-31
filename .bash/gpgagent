@@ -3,7 +3,7 @@
 # Author: Jaeho Shin <netj@sparcs.org>
 # Created: 2007-08-23
 
-bash_load() {
+bash_login() {
     if [ -z "$GPG_AGENT_INFO" ]; then
         # gpg-agent for Debian has a nice script, try it first
         for x in /etc/X11/Xsession.d/*gpg-agent; do

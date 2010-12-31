@@ -5,7 +5,7 @@
 
 bash_autoload=true
 
-bash_load() {
+bash_login() {
     ## netj's abreviations
     j() {
         if [ $# -eq 0 ]; then

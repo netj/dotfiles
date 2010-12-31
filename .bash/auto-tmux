@@ -5,7 +5,7 @@
 
 bash_autoload=true
 
-bash_import() {
+bash_login() {
     bash_default auto_tmux_env_root /tmp/auto-tmux.${SUDO_USER:-$LOGNAME}
     # load values from tmux environment snapshot
     a-tmux-load() {
@@ -29,9 +29,6 @@ bash_import() {
         done >"$auto_tmux_link" 2>/dev/null
         chmod a-w "$auto_tmux_link"
     }
-}
-
-bash_login() {
     if ! type tmux &>/dev/null; then
         # we can't do much if tmux is not available
         if ! $bash_autoload; then

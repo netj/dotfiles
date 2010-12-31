@@ -6,12 +6,9 @@
 
 bash_autoload=true
 
-bash_import() {
+bash_login() {
     xtermtitle_postfix=
     bash_default xtermtitle_label ""
-}
-
-bash_load() {
     # xterm's dynamic title for some terminal types
     case $TERM in
         xterm* | cygwin* | screen* | dtterm)

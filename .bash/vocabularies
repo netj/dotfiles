@@ -5,7 +5,7 @@
 
 bash_autoload=true
 
-bash_load() {
+bash_login() {
     try() {
         local delay=$1
         if expr "$delay" : "[0-9]*" >/dev/null; then

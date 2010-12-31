@@ -75,21 +75,16 @@ bash_add_prompt() {
     PROMPT_COMMAND="$PROMPT_COMMAND$1;"
 }
 
-# detect login shells
-if shopt -q login_shell; then
-    bash_login_or_not="bash_login;"
-else
-    bash_login_or_not=""
-fi
-
 # now, load everything
 bash_foreach_modules eval "bash_import"
-bash_foreach_modules eval "${bash_login_or_not}bash_load"
+bash_foreach_modules eval "bash_load"
+# detect login shells
+! shopt -q login_shell || bash_foreach_modules eval "bash_login"
 
 # clean up what should not be left
 unset bash_noop bash_prepare_fallback \
     bash_load_module_begin bash_load_module_end bash_foreach_modules \
-    bash_default bash_default_env bash_default_alias bash_login_or_not \
+    bash_default bash_default_env bash_default_alias \
     bash_add_unloader bash_insert_prompt bash_add_prompt
 
 # vim:et:ts=8:sw=4:sts=4

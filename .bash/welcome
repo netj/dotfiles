@@ -5,7 +5,7 @@
 
 bash_autoload=true
 
-bash_load() {
+bash_login() {
     # start the welcome script
     [ -t 0 -a -x ~/.welcome ] && ~/.welcome
 }

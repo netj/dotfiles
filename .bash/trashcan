@@ -3,11 +3,8 @@
 # Author: Jaeho Shin <netj@sparcs.org>
 # Created: 2004-05-28
 
-bash_import() {
+bash_login() {
     bash_default trash ~/tmp/recycled
-}
-
-bash_load() {
     # TODO: add recovery + source tracking feature
     if [ -n "$trash" -a -d "$trash" ]; then
         move_to_trash() {
