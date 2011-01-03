@@ -65,7 +65,7 @@
 	<key>ShowWindowSettingsNameInTitle</key>
 	<false/>
 	<key>TerminalType</key>
-	<string>dtterm</string>
+	<string>xterm-color</string>
 	<key>TextBoldColor</key>
 	<data>
 	YnBsaXN0MDDUAQIDBAUGFRZYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3AS
@@ -146,7 +146,7 @@
 	ZmZmg5mZWT6DmZlZP4OZmVk/AYY=
 	</data>
 	<key>deleteSendsBackspace</key>
-	<integer>1</integer>
+	<false/>
 	<key>greenColour</key>
 	<data>
 	BAtzdHJlYW10eXBlZIHoA4QBQISEhAdOU0NvbG9yAISECE5TT2JqZWN0AIWEAWMChARm
