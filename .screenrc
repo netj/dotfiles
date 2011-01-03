@@ -8,7 +8,8 @@ startup_message off
 vbell           off
 defscrollback   8192
 hardstatus      on
-hardstatus      string "%H: %h [%n%? %t%?]"
+hardstatus      string "%h - %n%?:%t%?\^\^%H"
+shell           -bash
 shelltitle      ""
 msgwait         2
 password        ""
@@ -22,7 +23,7 @@ bind .
 bind ^\
 bind \\
 bind x
-bind o screen bash -i -c screen_only
+bind o screen bash -li -c screen_only
 
 ### termcapinfo
 
@@ -33,7 +34,7 @@ termcapinfo  * '' 'hs:ts=\E_:fs=\E\\:ds=\E_\E\\'
 # xterm scroll buffer
 termcapinfo xterm*|dtterm|screen	'ti@:te@'
 # use the xterm window title as hardstatus
-termcapinfo xterm*|dtterm|screen 'hs:ts=\E]2;:fs=\007:ds=\E]2;screen\007'
+termcapinfo xterm*|dtterm|screen 'hs:ts=\E]0;:fs=\007:ds=\E]2;screen\007'
 # make the output buffer large for (fast) xterms.
 termcapinfo xterm*|dtterm|screen OL=1024
 # xterm-52 tweaks - use background color for delete operations

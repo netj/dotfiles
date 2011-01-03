@@ -5,7 +5,26 @@
 
 bash_autoload=true
 
-bash_load() {
+bash_login() {
+    # use auto-tmux instead of screen if possible
+    if ${auto_tmux_enable:-true} && type tmux &>/dev/null; then
+        unset -v screen_env_root screen_name
+        unset -f screen_load screen_save
+        return
+    fi
+    # check whether we can use screen
+    if ! type screen >/dev/null 2>&1; then
+        if ! $bash_autoload; then
+            echo "screen: no screen found from PATH" >&2
+            return 1
+        fi
+    elif [ -z "$SSH_CONNECTION" -a -z "$screen_enable" ]; then
+        # local shell, but screen wasn't enabled
+        # skip attaching to the screen session
+        return 1
+    fi
+    
+    # OK, screen is enabled
     bash_default screen_env_root /tmp/${SUDO_USER:-$LOGNAME}.screens
     bash_default screen_name main
     screen_load() {
@@ -28,8 +47,39 @@ bash_load() {
         done >"$screen_env" 2>/dev/null
         chmod a-w "$screen_env"
     }
-    # if screen is enabled
-    if [ -n "$STY" ]; then
+    if [ -z "$STY" ]; then # outside screen
+        # determine STY, the screen session id
+        local STY=$(screen -ls | grep "(Attached\|Detached)" \
+            | grep "\\.$screen_name" | head -1 | cut -f 2)
+        [ -n "$STY" ] || STY=$screen_name
+        # create a screen environment snapshot
+        if ! [ -d "$screen_env_root" ]; then
+            mkdir -p "$screen_env_root"
+            chmod a=,u=rwx "$screen_env_root"
+        fi
+        local conn=$$
+        local screen_env="$screen_env_root/$conn"
+        rm -f "$screen_env"
+        touch "$screen_env"
+        chmod a=,u=rw "$screen_env"
+        screen_save
+        
+        echo "screen: connection #$conn"
+        local attach=true
+        REPLY=
+        trap "attach=false" INT
+        read -n 1 -t 1
+        trap - INT
+        [ "${REPLY#[ 	]}" = "" ] || attach=false
+        $attach || return
+        
+        # finally, attach to the session
+        screen -xR $STY
+        
+        # before exiting, clean up the screen environment snapshot
+        rm -f "$screen_env"
+        exit
+    else # inside screen
         # set useful screen related commands
         screen_all() {
             # all connections
@@ -101,59 +151,6 @@ bash_load() {
         bash_insert_prompt screen_poll
         screen_cleanup() { rm -f "$screen_env"; }
         bash_add_unloader screen_cleanup
-        
-        # show Message Of ToDay
-        [ ! -e ~/.hushlogin -a -f /etc/motd ] && cat /etc/motd 2>/dev/null
-    fi
-}
-
-bash_login() {
-    # use auto-tmux instead of screen if possible
-    if ${auto_tmux_enable:-true} && type tmux &>/dev/null; then
-        unset -v screen_env_root screen_name
-        unset -f screen_load screen_save
-        return
-    fi
-    # check whether we can use screen
-    if ! type screen >/dev/null 2>&1; then
-        if ! $bash_autoload; then
-            echo "screen: no screen found from PATH" >&2
-        fi
-    elif [ -z "$SSH_CONNECTION" -a -z "$screen_enable" ]; then
-        # local shell, but screen wasn't enabled
-        : # skip attaching to the screen session
-    else
-        # determine STY, the screen session id
-        local STY=$(screen -ls | grep "(Attached\|Detached)" \
-            | grep "\\.$screen_name" | head -1 | cut -f 2)
-        [ -n "$STY" ] || STY=$screen_name
-        # create a screen environment snapshot
-        if ! [ -d "$screen_env_root" ]; then
-            mkdir -p "$screen_env_root"
-            chmod a=,u=rwx "$screen_env_root"
-        fi
-        local conn=$$
-        local screen_env="$screen_env_root/$conn"
-        rm -f "$screen_env"
-        touch "$screen_env"
-        chmod a=,u=rw "$screen_env"
-        screen_save
-        
-        echo "screen: connection #$conn"
-        local attach=true
-        REPLY=
-        trap "attach=false" INT
-        read -n 1 -t 1
-        trap - INT
-        [ "${REPLY#[ 	]}" = "" ] || attach=false
-        $attach || return
-        
-        # finally, attach to the session
-        screen -xR $STY
-        
-        # before exiting, clean up the screen environment snapshot
-        rm -f "$screen_env"
-        exit
     fi
 }
 
