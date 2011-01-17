@@ -40,7 +40,7 @@ bash_login() {
             esac
             title+="${xtermtitle_postfix:+ - $xtermtitle_postfix}"
             title+="\007"
-            echo -ne "$title"
+            echo -ne "${title//[^[:alnum:][:punct:][:space:]]/?}"
         }
         # use default if necessary
         title "$xtermtitle_label"
