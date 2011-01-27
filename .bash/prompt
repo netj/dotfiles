@@ -70,6 +70,7 @@ bash_login() {
         # gather some values
         local nrcolumns=${COLUMNS:-tput cols 2>/dev/null || true}
         local nrjobs=`jobs | wc -l`
+        nrjobs=${nrjobs// /}
         if ! [ "$prompt_pwd"        = "$PWD"        \
             -a "$prompt_jobs"       = "$nrjobs"     \
             -a "$prompt_columns"    = "$nrcolumns"  \
