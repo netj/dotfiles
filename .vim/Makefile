@@ -28,3 +28,9 @@ syntax/json.vim:
 	wget -nv -NO $@ \
 	    http://www.vim.org/scripts/download_script.php?src_id=10853
 
+applescript: syntax/applescript.vim ##
+syntax/applescript.vim:
+	mkdir -p $(@D)
+	wget -nv -NO $@ \
+	    http://www.vim.org/scripts/download_script.php?src_id=12658
+

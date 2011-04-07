@@ -11,3 +11,6 @@ augroup END
 
 " json
 au! BufRead,BufNewFile *.json setfiletype json
+
+" applescript
+au! BufNewFile,BufRead *.{applescript,scpt} setfiletype applescript
