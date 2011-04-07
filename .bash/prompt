@@ -7,7 +7,31 @@
 bash_autoload=true
 
 bash_login() {
-    # ANSI color codes
+    ###############################################################################
+    # ANSI color codes                                                            #
+    ###############################################################################
+    #         -foreground- ----bold---- -underline-- --reverse---   -background-  #
+    # black         \e[30m     \e[30;1m     \e[30;4m     \e[30;7m    \e[40;fg;1m  #
+    # red           \e[31m     \e[31;1m     \e[31;4m     \e[31;7m    \e[41;fg;1m  #
+    # green         \e[32m     \e[32;1m     \e[32;4m     \e[32;7m    \e[42;fg;1m  #
+    # yellow        \e[33m     \e[33;1m     \e[33;4m     \e[33;7m    \e[43;fg;1m  #
+    # blue          \e[34m     \e[34;1m     \e[34;4m     \e[34;7m    \e[44;fg;1m  #
+    # magenta       \e[35m     \e[35;1m     \e[35;4m     \e[35;7m    \e[45;fg;1m  #
+    # cyan          \e[36m     \e[36;1m     \e[36;4m     \e[36;7m    \e[46;fg;1m  #
+    # White         \e[37m     \e[37;1m     \e[37;4m     \e[37;7m    \e[47;fg;1m  #
+    #                                                                             #
+    # light black   \e[90m     \e[90;1m     \e[90;4m     \e[90;7m    \e[100;fg;1m #
+    # light red     \e[91m     \e[91;1m     \e[91;4m     \e[91;7m    \e[101;fg;1m #
+    # light green   \e[92m     \e[92;1m     \e[92;4m     \e[92;7m    \e[102;fg;1m #
+    # light yellow  \e[93m     \e[93;1m     \e[93;4m     \e[93;7m    \e[103;fg;1m #
+    # light blue    \e[94m     \e[94;1m     \e[94;4m     \e[94;7m    \e[104;fg;1m #
+    # light magenta \e[95m     \e[95;1m     \e[95;4m     \e[95;7m    \e[105;fg;1m #
+    # light cyan    \e[96m     \e[96;1m     \e[96;4m     \e[96;7m    \e[106;fg;1m #
+    # light White   \e[97m     \e[97;1m     \e[97;4m     \e[97;7m    \e[107;fg;1m #
+    #                                                                             #
+    # Reset         \e[0m                                                         #
+    ###############################################################################
+    # (nice table from http://discussions.apple.com/message.jspa?messageID=12193195#12193508)
     bash_default           red $'\E[0;31m'
     bash_default         green $'\E[0;32m'
     bash_default          blue $'\E[0;34m'
