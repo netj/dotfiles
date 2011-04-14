@@ -26,12 +26,8 @@ bash_import() {
         export MANPATH=/usr/local/man:$MANPATH
 
         # Setting paths for MacPorts
-        export PATH=/opt/local/libexec/gnubin:/opt/local/bin:/opt/local/sbin:$PATH
+        export PATH=/opt/local/bin:/opt/local/libexec/gnubin:/opt/local/sbin:$PATH
         export MANPATH=/opt/local/man:$MANPATH
-
-        # Setting PATH for MacPython 2.5
-        # The orginal version is saved in .bash_profile.pysave
-        export PATH="/Library/Frameworks/Python.framework/Versions/Current/bin:${PATH}"
         ;;
     esac
 }
@@ -42,11 +38,9 @@ bash_login() {
     bash_default_env PAGER less
     bash_default_env LESS "-XFRiMW" # --no-init --quit-if-one-screen --RAW-CONTROL-CHARS --ignore-case --LONG-PROMPT --HILITE_UNREAD
     #  TeX
-    bash_default_env TEXINPUTS .:$HOME/.tex:
+    bash_default_env TEXINPUTS ".:$HOME/.tex:"
     # some usability options
-    shopt -s nocaseglob
-    shopt -s cdspell
-    shopt -s cmdhist
+    shopt -s nocaseglob cdspell cmdhist
     local uname=`uname`
     # ls on several platforms
     local ls_o=
