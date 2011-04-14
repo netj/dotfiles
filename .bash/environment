@@ -40,8 +40,7 @@ bash_login() {
     # environment variables
     bash_default_env EDITOR vim
     bash_default_env PAGER less
-    bash_default_env LESS "--raw-control-chars --ignore-case"
-    bash_default_env LESSBINFMT "*n%c"
+    bash_default_env LESS "-XFRiMW" # --no-init --quit-if-one-screen --RAW-CONTROL-CHARS --ignore-case --LONG-PROMPT --HILITE_UNREAD
     #  TeX
     bash_default_env TEXINPUTS .:$HOME/.tex:
     # some usability options
