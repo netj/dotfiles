@@ -3,6 +3,7 @@
 ;; Created: 2006-01-03
 
 ;; behavior
+(set-language-environment "UTF-8")
 (set-language-environment-input-method "Korean")
 (setq shell-command-switch "-ic")
 
@@ -26,11 +27,11 @@
 ;(frame-attr '(cursor-color . "blue violet"))
 ;(frame-attr '(background-color . "thistle"))
 (create-fontset-from-fontset-spec
- "-*-*-*-*-*-*-16-160-*-*-*-*-fontset-monaco,
-    latin:-apple-monaco-*-*-*-*-*-*-*-*-m-*-iso10646-1,
-   hangul:-apple-nanumgothic-*-*-*-*-*-*-*-*-p-*-iso10646-1")
+ "-*-*-*-*-*-*-16-160-*-*-*-*-fontset-j,
+    latin:-apple-menlo-*-*-*-*-*-*-*-*-m-*-iso10646-1,
+   hangul:-apple-HCR Dotum-*-*-*-*-*-*-*-*-p-*-iso10646-1")
 ;; ;(frame-attr '(font . "*-Palatino-medium-r-*-160-*-iso10646-1"))
-(frame-attr '(font . "-*-16-*-fontset-monaco"))
+(frame-attr '(font . "-*-16-*-fontset-j"))
 
 ;; color-theme
 (load "color-theme.el")
@@ -46,7 +47,7 @@
 ;; (color-theme-sitaramv-solaris)
 
 (tool-bar-mode 0)
-(menu-bar-mode 0)
+(menu-bar-mode 1)
 (column-number-mode t)
 (transient-mark-mode t)
 (global-font-lock-mode t) 
@@ -82,7 +83,7 @@
    "Major mode for editing Markdown files" t)
 (push '("\\.geul" . markdown-mode) auto-mode-alist)
 (push '("\\.markdown" . markdown-mode) auto-mode-alist)
-
+(push '("\\.mkd" . markdown-mode) auto-mode-alist)
 
 ;; respect local config
 (load "~/.emacs_local" t)
