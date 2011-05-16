@@ -155,6 +155,13 @@ if has("autocmd")
 endif " has("autocmd")
 
 
+" http://www.vim.org/scripts/script.php?script_id=2332
+" https://github.com/kchmck/vim-coffee-script/issues/8
+filetype off
+call pathogen#runtime_append_all_bundles()
+filetype plugin indent on
+
+
 " let netrw use &suffixes for better file listings
 let g:netrw_sort_sequence = '[\/]$,*'
 for sfx in split(&suffixes, ',')

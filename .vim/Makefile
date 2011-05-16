@@ -34,3 +34,11 @@ syntax/applescript.vim:
 	wget -nv -NO $@ \
 	    http://www.vim.org/scripts/download_script.php?src_id=12658
 
+coffee-script: bundle/vim-coffee-script ##
+bundle/vim-coffee-script: autoload/pathogen.vim
+	mkdir -p $(@D)
+	cd $(@D) && git clone git://github.com/kchmck/vim-coffee-script.git
+autoload/pathogen.vim:
+	mkdir -p $(@D)
+	wget -nv -NO $@ \
+	    http://www.vim.org/scripts/download_script.php?src_id=15192

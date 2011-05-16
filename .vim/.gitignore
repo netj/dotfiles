@@ -1,5 +1,7 @@
 /ftplugin
 /syntax
+/autoload
+/bundle
 /doc
 /*.vba
 
