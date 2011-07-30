@@ -9,9 +9,10 @@ bash_autoload=true
 bash_login() {
     xtermtitle_postfix=
     bash_default xtermtitle_label ""
+    bash_default xtermtitle_mac_terminal false
     # xterm's dynamic title for some terminal types
     case $TERM in
-        xterm* | cygwin* | screen* | dtterm)
+        xterm* | cygwin* | screen*)
         if [ -n "$TMUX" -o -n "$STY" ]; then
             # in tmux or screen we need not much details
             xtermtitle_postfix=
@@ -21,31 +22,48 @@ bash_login() {
             tty=${tty#/dev/}
             xtermtitle_postfix="$tty^$hostnickname"
         fi
+        # Mac OS X Terminal.app's enhanced DnD support since Lion
+        # See: http://www.macosxautomation.com/lion/terminal.html
+        # See also: /private/etc/bashrc's update_terminal_cwd
+        if [ x"$TERM_PROGRAM" = x"Apple_Terminal" -a "$TERM_PROGRAM_VERSION" -ge 297 ]; then
+            xtermtitle_mac_terminal=true
+            xtermtitle_mac_terminal_last_pwd=
+            xtermtitle_mac_terminal_update() {
+                ! [ x"$xtermtitle_mac_terminal_last_pwd" = x"$PWD" ] || return
+                local pwd_url="file://$HOSTNAME$PWD";
+                # URL escaping from command-line: http://stackoverflow.com/questions/296536/urlencode-from-a-bash-script
+                pwd_url=$(perl -MURI::Escape -e '
+                print uri_escape($ARGV[0],"^[:alpha:][:digit:]\-\._~:/");' "$pwd_url")
+                printf '\e]7;%s\a' "$pwd_url"
+                xtermtitle_mac_terminal_last_pwd=$PWD
+            }
+            bash_add_prompt xtermtitle_mac_terminal_update
+        fi
         # xterm title controller
         title() {
             xtermtitle_label=$*
         }
         # xterm title updater
-        xterm_title() {
-            local title="\033]0;"
+        xtermtitle() {
+            local title=
             case $xtermtitle_label in
                 "")
                 local path=$PWD
                 local name=${path##*/}
                 local dir=${PWD/#$HOME/"~"}
                 dir=${dir%/$name}
-                title+="${name:-/} - (${dir:-/})"
+                title+="${name:-/} - "
+                title+="(${dir:-/})"
                 ;;
                 *) title+=`eval echo "$xtermtitle_label"` ;;
             esac
             title+="${xtermtitle_postfix:+ - $xtermtitle_postfix}"
-            title+="\007"
-            echo -ne "${title//[^[:alnum:][:punct:][:space:]]/?}"
+            printf '\e]0;%s\a' "$title"
         }
         # use default if necessary
         title "$xtermtitle_label"
         # register it
-        bash_add_prompt xterm_title
+        bash_add_prompt xtermtitle
         ;;
     esac
 }
