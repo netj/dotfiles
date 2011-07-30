@@ -55,11 +55,16 @@ bash_login() {
     # a hack to measure how many columns given string takes
     prompt_takes_width() {
         local s=$1
-        if [ ${BASH_VERSINFO[0]} -ge 3 ]; then
-            # double the length of non-ASCII (perhaps wide) chars
-            # FIXME: should filter all non-wide chars
-            s="$s${s//[[:ascii:]]/}"
-        fi
+        # adjust the length of some characters
+        # Most CJK characters are double the length of western/Latin ones.
+        # TODO However, I would like to know how to avoid listing all the
+        # Unicode block names here:
+        s=$(perl -MUnicode::Normalize -MEncode -e '
+        # Some Hangul (LVT) need normalization (decompose+canonical compose)
+        $a = NFC(Encode::decode_utf8($ARGV[0]));
+        $a =~ s/[\p{Han}\p{Hiragana}\p{Katakana}\p{Hangul}]/../g;
+        print Encode::encode_utf8($a);
+        ' "$s")
         echo ${#s}
     }
 
