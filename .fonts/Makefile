@@ -41,7 +41,7 @@ $(NanumFonts): $(NanumFontsZip)
 $(NanumFontsZip):
 	wget -N $(NanumFontsURL)
 IntermediateFiles += $(NanumFontsZip)
-InstalledFiles += $(NanumFonts)
+#InstalledFiles += $(NanumFonts)
 
 
 ## Seoul Fonts
