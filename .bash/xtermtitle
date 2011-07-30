@@ -28,14 +28,17 @@ bash_login() {
         if [ x"$TERM_PROGRAM" = x"Apple_Terminal" -a "$TERM_PROGRAM_VERSION" -ge 297 ]; then
             xtermtitle_mac_terminal=true
             xtermtitle_mac_terminal_last_pwd=
+            xtermtitle_mac_terminal_pwd_url=
             xtermtitle_mac_terminal_update() {
-                ! [ x"$xtermtitle_mac_terminal_last_pwd" = x"$PWD" ] || return
-                local pwd_url="file://$HOSTNAME$PWD";
-                # URL escaping from command-line: http://stackoverflow.com/questions/296536/urlencode-from-a-bash-script
-                pwd_url=$(perl -MURI::Escape -e '
-                print uri_escape($ARGV[0],"^[:alpha:][:digit:]\-\._~:/");' "$pwd_url")
-                printf '\e]7;%s\a' "$pwd_url"
-                xtermtitle_mac_terminal_last_pwd=$PWD
+                if [ x"$xtermtitle_mac_terminal_last_pwd" != x"$PWD" ]; then
+                    local pwd_url="file://$HOSTNAME$PWD";
+                    # URL escaping from command-line: http://stackoverflow.com/questions/296536/urlencode-from-a-bash-script
+                    pwd_url=$(perl -MURI::Escape -e '
+                    print uri_escape($ARGV[0],"^[:alpha:][:digit:]\-\._~:/");' "$pwd_url")
+                    xtermtitle_mac_terminal_last_pwd=$PWD
+                    xtermtitle_mac_terminal_pwd_url=$pwd_url
+                fi
+                printf '\e]7;%s\a' "$xtermtitle_mac_terminal_pwd_url"
             }
             bash_add_prompt xtermtitle_mac_terminal_update
         fi
