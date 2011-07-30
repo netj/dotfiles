@@ -17,10 +17,13 @@ xmledit.vba:
 
 
 mkd: syntax/mkd.vim ##
-syntax/mkd.vim:
+syntax/mkd.vim: vim-markdown.zip
+	unzip -o $<
+vim-markdown.zip:
 	mkdir -p $(@D)
 	wget -nv -NO $@ --no-check-certificate \
-	    https://github.com/plasticboy/vim-markdown/raw/master/mkd.vim
+	    http://plasticboy.com/dox/vim-markdown.zip #https://github.com/plasticboy/vim-markdown/zipball/master
+
 
 json: syntax/json.vim ##
 syntax/json.vim:

@@ -161,9 +161,14 @@ endif " has("autocmd")
 
 " http://www.vim.org/scripts/script.php?script_id=2332
 " https://github.com/kchmck/vim-coffee-script/issues/8
-filetype off
-call pathogen#runtime_append_all_bundles()
-filetype plugin indent on
+if exists("*pathogen#runtime_append_all_bundles")
+    filetype off
+    call pathogen#runtime_append_all_bundles()
+    filetype plugin indent on
+endif
+
+" coffee script autocompiling
+autocmd BufWritePost *.coffee silent CoffeeMake! -b | cwindow
 
 
 " let netrw use &suffixes for better file listings

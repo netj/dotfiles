@@ -1,9 +1,11 @@
 /ftplugin
+/ftdetect
 /syntax
 /autoload
 /bundle
 /doc
 /*.vba
+/*.zip
 
 /.netrwhist
 /.VimballRecord
