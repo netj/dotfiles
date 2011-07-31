@@ -81,7 +81,7 @@ if &term == "screen"
 endif
 
 " Mac OS X Terminal.app's Drag & Drop support
-set icon iconstring=%{&t_fs}]7;file://%{hostname()}%{expand(\"%:p\")}%{&t_fs}
+set icon iconstring=%{&t_fs}]7;file://%{hostname()}%{expand(\"%:p\")}
 
 
 "------------------------------------------------------------------------------
