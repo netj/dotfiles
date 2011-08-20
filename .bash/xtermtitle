@@ -25,7 +25,7 @@ bash_login() {
         # Mac OS X Terminal.app's enhanced DnD support since Lion
         # See: http://www.macosxautomation.com/lion/terminal.html
         # See also: /private/etc/bashrc's update_terminal_cwd
-        if [ x"$TERM_PROGRAM" = x"Apple_Terminal" -a "$TERM_PROGRAM_VERSION" -ge 297 ]; then
+        if [ x"$TERM_PROGRAM" = x"Apple_Terminal" -a "${TERM_PROGRAM_VERSION:-0}" -ge 297 ]; then
             xtermtitle_mac_terminal=true
             xtermtitle_mac_terminal_last_pwd=
             xtermtitle_mac_terminal_pwd_url=
