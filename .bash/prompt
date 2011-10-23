@@ -139,6 +139,10 @@ bash_login() {
             fi
             prompt_pwd_part=$pwd
             prompt_jobs_part=$nrjobs
+            # hostname seldomly changes
+            HOSTNAME=`hostname -f`
+            hostnickname=${HOSTNAME%%.*}
+            hostdomain=${HOSTNAME#*.}
         fi
     }
     # let prompt_update get regularly called by adding to $PROMPT_COMMAND
@@ -151,7 +155,7 @@ bash_login() {
     PS1="\
 \[$no_color\](\
 $user_part\
-\[$red\]$hostnickname\[$no_color\]\
+\[$red\]"'$hostnickname'"\[$no_color\]\
 :\
 \[$yellow\]"'$prompt_pwd_part'"\[$no_color\]\
 ?\[$cyan\]"'$?'"\[$no_color\]\
