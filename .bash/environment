@@ -47,7 +47,7 @@ bash_login() {
     if ls --version 2>&1 | grep 'Free Software Foundation' >/dev/null; then
         # GNU ls
         ls_o="-F --color=auto"
-        [ -n "$LS_COLORS" ] || eval "`dircolors 2>/dev/null`"
+        [ -n "$LS_COLORS" ] || eval "`dircolors -b 2>/dev/null`"
         # platform specific configs
         case $uname in
             CYGWIN*) ls_o="$ls_o --show-control-chars" ;;
