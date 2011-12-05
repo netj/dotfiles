@@ -51,6 +51,7 @@ autoload/pathogen.vim:
 ColorSamplerPack: plugin/color_sample_pack.vim ##
 plugin/color_sample_pack.vim: ColorSamplerPack.zip
 	unzip -o $<
+	patch -p0 <jellybeans.vim.patch
 ColorSamplerPack.zip:
 	wget -nv -NO $@ \
 	    http://www.vim.org/scripts/download_script.php?src_id=12179
