@@ -67,8 +67,12 @@ endif
 
 " Some GUI options
 if has("gui_running")
-    set guioptions+=T
     set guioptions-=m
+    set guioptions-=r
+    set guioptions-=L
+    set guioptions-=b
+    set guioptions-=t
+    set guioptions-=T
     set guifont=Consolas:h16,Menlo:h16,Monaco:h16
     set t_Co=256
     " See for more available schemes in ColorSamplerPack: http://www.vi-improved.org/color_sampler_pack/
