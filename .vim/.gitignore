@@ -9,3 +9,5 @@
 
 /.netrwhist
 /.VimballRecord
+/colors
+/plugin/*.vim

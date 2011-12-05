@@ -45,3 +45,11 @@ autoload/pathogen.vim:
 	mkdir -p $(@D)
 	wget -nv -NO $@ \
 	    http://www.vim.org/scripts/download_script.php?src_id=15192
+
+# See: http://www.vi-improved.org/color_sampler_pack/
+ColorSamplerPack: plugin/color_sample_pack.vim ##
+plugin/color_sample_pack.vim: ColorSamplerPack.zip
+	unzip -o $<
+ColorSamplerPack.zip:
+	wget -nv -NO $@ \
+	    http://www.vim.org/scripts/download_script.php?src_id=12179
