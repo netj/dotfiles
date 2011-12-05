@@ -99,16 +99,26 @@ set icon iconstring=%{&t_fs}]7;file://%{hostname()}%{expand(\"%:p\")}
 
 " My name + email address.
 iab netj>    Jaeho Shin <netj@sparcs.org>
-iab jshin>   Jaeho Shin <netj@ropas.snu.ac.kr>
+iab jshin>   Jaeho.Shin@Stanford.EDU
 
 " Frequently typed lines.
 iab Created:    Created: <C-R>=system("date +%Y-%m-%d")
 
 " Toggle list (display unprintable characters).
 nnoremap <F2> :set list!<CR>
+inoremap <F2> <C-o>:set list!<CR>
 
 " Toggle hlsearch (highlight search matches).
 nmap <F3> :set hlsearch!<CR>
+
+" Fix syntax highlighting by doing it from start of file
+" See: http://vim.wikia.com/wiki/Fix_syntax_highlighting
+noremap <F4> :syntax sync fromstart<CR>
+inoremap <F4> <C-o>:syntax sync fromstart<CR>
+
+" Toggle wrapping
+noremap <F5> :set wrap!<CR>
+inoremap <F5> <C-o>:set wrap!<CR>
 
 " Spellcheck.
 map <F7> :!ispell -x %<CR>:e!<CR><CR>
@@ -151,7 +161,7 @@ if has("autocmd")
   au! BufRead,BufNewFile *.{s,}html.*		set filetype=html
 
   au! BufRead,BufNewFile *.tex
-    \ map <F5> :!paper %<CR> |
+    \ map <F6> :!latexmk -pdf %<CR> |
     \ set textwidth=76
 
   " When editing a file, always jump to the last known cursor position.
