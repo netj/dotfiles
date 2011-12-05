@@ -67,16 +67,19 @@ endif
 
 " Some GUI options
 if has("gui_running")
-    " See for more available schemes in ColorSamplerPack: http://www.vi-improved.org/color_sampler_pack/
-    colorscheme desertEx
-    " dark-lo: desertEx darkZ inkpot wombat256 freya xoria256 darkslategray darkblue2 dante
-    " dark-hi: asu1dark fruity candycode jellybeans darkspectrum desert256 leo vibrantink vividchalk
-    " light-hi: eclipse nuvola fruit
-    " light-lo: spring autumn autumn2
-    " fun: matrix borland golden camo
     set guioptions+=T
     set guioptions-=m
-    set guifont=Monaco:h16
+    set guifont=Consolas:h16,Menlo:h16,Monaco:h16
+    set t_Co=256
+    " See for more available schemes in ColorSamplerPack: http://www.vi-improved.org/color_sampler_pack/
+    " dark-lo: desertEx anotherdark darkZ inkpot jellybeans herald railscasts fruity dante wombat256 chocolateliquor clarity freya xoria256 twilight darkslategray darkblue2
+    " dark-hi: candycode asu1dark jammy lettuce darkspectrum desert256 leo vibrantink vividchalk guardian torte darkbone
+    " light-hi: eclipse nuvola fruit
+    " light-lo: spring autumn autumn2 siena
+    " fun: matrix borland golden camo
+    colorscheme jellybeans
+    " will choose among my favorites with VimTip341
+    let g:mySetColors = split('jellybeans desertEx inkpot darkZ')
 endif
 
 " let xterm title work even in screen or tmux

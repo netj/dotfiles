@@ -46,6 +46,7 @@ autoload/pathogen.vim:
 	wget -nv -NO $@ \
 	    http://www.vim.org/scripts/download_script.php?src_id=15192
 
+# http://www.vim.org/scripts/script.php?script_id=625
 # See: http://www.vi-improved.org/color_sampler_pack/
 ColorSamplerPack: plugin/color_sample_pack.vim ##
 plugin/color_sample_pack.vim: ColorSamplerPack.zip
@@ -53,3 +54,26 @@ plugin/color_sample_pack.vim: ColorSamplerPack.zip
 ColorSamplerPack.zip:
 	wget -nv -NO $@ \
 	    http://www.vim.org/scripts/download_script.php?src_id=12179
+
+# http://www.vim.org/scripts/script.php?script_id=1488
+ScrollColor: plugin/ScrollColor.vim ##
+plugin/ScrollColor.vim:
+	mkdir -p $(@D)
+	wget -nv -NO $@ \
+	    http://www.vim.org/scripts/download_script.php?src_id=5966
+
+# Switch color schemes: http://vim.wikia.com/wiki/VimTip341
+SwitchColorSchemes: plugin/setcolors.vim ##
+plugin/setcolors.vim:
+	mkdir -p $(@D)
+	wget -nv -NO $@ --no-check-certificate \
+	    https://raw.github.com/gist/1432015/setcolors.vim
+
+## http://www.vim.org/scripts/script.php?script_id=2390
+#CSApprox: plugin/CSApprox.vim #x#
+#plugin/CSApprox.vim: CSApprox.zip
+#	unzip -o $<
+#CSApprox.zip:
+#	wget -nv -NO $@ \
+#	    http://www.vim.org/scripts/download_script.php?src_id=10336
+
