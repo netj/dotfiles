@@ -40,11 +40,11 @@ syntax/applescript.vim:
 coffee-script: bundle/vim-coffee-script ##
 bundle/vim-coffee-script: autoload/pathogen.vim
 	mkdir -p $(@D)
-	cd $(@D) && git clone git://github.com/kchmck/vim-coffee-script.git
+	cd $(@D) && git clone git://github.com/kchmck/vim-coffee-script.git || git pull
 autoload/pathogen.vim:
 	mkdir -p $(@D)
 	wget -nv -NO $@ \
-	    http://www.vim.org/scripts/download_script.php?src_id=15192
+	    http://www.vim.org/scripts/download_script.php?src_id=16224
 
 # http://www.vim.org/scripts/script.php?script_id=625
 # See: http://www.vi-improved.org/color_sampler_pack/

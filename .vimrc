@@ -158,6 +158,12 @@ vmap <F2> :!tr A-Za-z N-ZA-Mn-za-m<CR>
 " File-type specific settings.
 "------------------------------------------------------------------------------
 if has("autocmd")
+  " http://www.vim.org/scripts/script.php?script_id=2332
+  " https://github.com/kchmck/vim-coffee-script/issues/8
+  try
+    call pathogen#infect()
+  catch /.*/
+  endtry
 
   " Enable file type detection.
   " Use the default filetype settings, so that mail gets 'tw' set to 72,
@@ -167,6 +173,10 @@ if has("autocmd")
 
   " For all text files set 'textwidth' to 78 characters.
   autocmd FileType text setlocal textwidth=78
+
+  " coffee script autocompiling
+  autocmd BufWritePost *.coffee silent CoffeeMake! -b | cwindow
+
   " For files like *.shtml or *.html.ko
   au! BufRead,BufNewFile *.{s,}html.*		set filetype=html
 
@@ -186,18 +196,6 @@ if has("autocmd")
   autocmd BufRead */tmp/mutt* normal :g/^> -- $/,/^$/-1d<CR>:set nomodified
 
 endif " has("autocmd")
-
-
-" http://www.vim.org/scripts/script.php?script_id=2332
-" https://github.com/kchmck/vim-coffee-script/issues/8
-if exists("*pathogen#runtime_append_all_bundles")
-    filetype off
-    call pathogen#runtime_append_all_bundles()
-    filetype plugin indent on
-endif
-
-" coffee script autocompiling
-autocmd BufWritePost *.coffee silent CoffeeMake! -b | cwindow
 
 
 " let netrw use &suffixes for better file listings
