@@ -77,6 +77,7 @@ if has("gui_running")
   set guioptions-=T
   set guifont=Consolas:h16,Menlo:h16,Monaco:h16
   set t_Co=256
+  set transparency=10
 endif
 
 " Switch syntax highlighting on, when the terminal has colors

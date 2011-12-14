@@ -57,6 +57,17 @@
 (setq display-time-24hr-format t)
 
 
+;; for detecting operating system
+(defun system-type-is-mac ()
+  (interactive)
+  "Return true if system is darwin-based (Mac OS X)"
+  (string-equal system-type "darwin"))
+(defun system-type-is-gnu ()
+  (interactive)
+  "Return true if system is GNU/Linux-based"
+  (string-equal system-type "gnu/linux"))
+
+
 ;; AUCTeX
 (load "auctex.el" nil t t)
 (load "preview-latex.el" nil t t)
@@ -65,16 +76,30 @@
 (setq TeX-auto-save t)
 (setq TeX-parse-self t)
 (setq TeX-PDF-mode t)
-;; for Mac
-(setq-default TeX-view-program-list nil
-	      ;; TeX-view-predicate-list nil
-	      ;; TeX-view-program-selection nil
-	      )
-(push '("Evince" "open %o") TeX-view-program-list)
-;; (push '(open-pdf "Open") TeX-view-predicate-list)
-;; (push '(open-pdf "Open") TeX-view-program-selection)
-;; (push TeX-view-program-selection '(open-pdf "Open"))
-
+;; See-Also: http://www.bleedingmind.com/index.php/2010/06/17/synctex-on-linux-and-mac-os-x-with-emacs/
+(add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
+(setq TeX-source-correlate-method 'synctex)
+(server-start)
+(when (system-type-is-mac)
+    ;; for Mac, add the "open" command for viewing pdf
+    (setq TeX-view-program-list '(("Open" "open %o")))
+    (setq TeX-view-program-selection '((output-pdf "Open")))
+    ;;; See-Also: http://tex.stackexchange.com/questions/11613/launching-an-external-pdf-viewer-from-emacs-auctex-on-a-mac-osx-fails
+    (add-hook 'LaTeX-mode-hook
+          (lambda()
+            (add-to-list 'TeX-expand-list
+                 '("%q" skim-make-url))))
+    (defun skim-make-url () (concat
+            (TeX-current-line)
+            " "
+            (expand-file-name (funcall file (TeX-output-extension) t)
+                (file-name-directory (TeX-master-file)))
+            " "
+            (buffer-file-name)))
+    (setq TeX-view-program-list
+          '(("Skim" "/Applications/Skim.app/Contents/SharedSupport/displayline %q")))
+    (setq TeX-view-program-selection '((output-pdf "Skim")))
+)
 
 
 ;; Markdown mode
