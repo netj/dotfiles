@@ -2,6 +2,18 @@
 ;; Author: Jaeho Shin <netj@sparcs.org>
 ;; Created: 2006-01-03
 
+
+;; for detecting operating system
+(defun system-type-is-mac ()
+  (interactive)
+  "Return true if system is darwin-based (Mac OS X)"
+  (string-equal system-type "darwin"))
+(defun system-type-is-gnu ()
+  (interactive)
+  "Return true if system is GNU/Linux-based"
+  (string-equal system-type "gnu/linux"))
+
+
 ;; behavior
 (set-language-environment "UTF-8")
 (set-language-environment-input-method "Korean")
@@ -26,12 +38,14 @@
 (defun frame-attr (attr) (add-to-list 'default-frame-alist attr))
 ;(frame-attr '(cursor-color . "blue violet"))
 ;(frame-attr '(background-color . "thistle"))
-(create-fontset-from-fontset-spec
- "-*-*-*-*-*-*-16-160-*-*-*-*-fontset-j,
-    latin:-apple-menlo-*-*-*-*-*-*-*-*-m-*-iso10646-1,
-   hangul:-apple-HCR Dotum-*-*-*-*-*-*-*-*-p-*-iso10646-1")
-;; ;(frame-attr '(font . "*-Palatino-medium-r-*-160-*-iso10646-1"))
-(frame-attr '(font . "-*-16-*-fontset-j"))
+(when (system-type-is-mac)
+    (create-fontset-from-fontset-spec
+     "-*-*-*-*-*-*-16-160-*-*-*-*-fontset-j,
+        latin:-apple-consolas-*-*-*-*-*-*-*-*-m-*-iso10646-1,
+       hangul:-apple-HCR Dotum LVT-*-*-*-*-*-*-*-*-p-*-iso10646-1")
+    ;; ;(frame-attr '(font . "*-Palatino-medium-r-*-160-*-iso10646-1"))
+    (frame-attr '(font . "-*-16-*-fontset-j"))
+)
 
 ;; color-theme
 (load "color-theme.el")
@@ -55,17 +69,6 @@
 (setq font-lock-maximum-decoration t)
 (setq font-lock-maximum-size nil)
 (setq display-time-24hr-format t)
-
-
-;; for detecting operating system
-(defun system-type-is-mac ()
-  (interactive)
-  "Return true if system is darwin-based (Mac OS X)"
-  (string-equal system-type "darwin"))
-(defun system-type-is-gnu ()
-  (interactive)
-  "Return true if system is GNU/Linux-based"
-  (string-equal system-type "gnu/linux"))
 
 
 ;; AUCTeX
