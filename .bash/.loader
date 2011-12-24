@@ -5,11 +5,10 @@
 
 # prepare
 # module loader/unloader
-bash_noop() { false; }
 bash_prepare_fallback() {
-    bash_import() { bash_noop; }
-    bash_login() { bash_noop; }
-    bash_load() { bash_noop; }
+    bash_import() { false; }
+    bash_login() { false; }
+    bash_load() { false; }
 }
 bash_load_module_begin() {
     if [ "$bash_module" != "$1" ]; then
@@ -33,7 +32,7 @@ shopt -s extglob
 bash_foreach_modules() {
     local m=
     # TODO order by dependency
-    for m in ~/.bash/!(.loader|.profile|.logout|README); do
+    for m in ~/.bash/!(.loader|.vocabularies|.profile|.logout|README); do
         [ -f "$m" ] || continue
         m=${m#~/.bash/}
         bash_load_module_begin "$m"
@@ -61,20 +60,6 @@ bash_default_alias() {
     alias "$1" 2>/dev/null >&2 || alias "$1"="$2"
 }
 
-# registering handlers
-PROMPT_COMMAND=""
-bash_unload_command=""
-trap 'eval $bash_unload_command' EXIT
-bash_add_unloader() {
-    bash_unload_command="$bash_unload_command$1;"
-}
-bash_insert_prompt() {
-    PROMPT_COMMAND="$1;$PROMPT_COMMAND"
-}
-bash_add_prompt() {
-    PROMPT_COMMAND="$PROMPT_COMMAND$1;"
-}
-
 # now, load everything
 bash_foreach_modules eval "bash_import"
 bash_foreach_modules eval "bash_load"
@@ -82,9 +67,9 @@ bash_foreach_modules eval "bash_load"
 ! shopt -q login_shell || bash_foreach_modules eval "bash_login"
 
 # clean up what should not be left
-unset bash_noop bash_prepare_fallback \
+unset bash_prepare_fallback \
     bash_load_module_begin bash_load_module_end bash_foreach_modules \
     bash_default bash_default_env bash_default_alias \
-    bash_add_unloader bash_insert_prompt bash_add_prompt
+    #
 
 # vim:et:ts=8:sw=4:sts=4
