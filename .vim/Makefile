@@ -78,3 +78,11 @@ plugin/setcolors.vim:
 #	wget -nv -NO $@ \
 #	    http://www.vim.org/scripts/download_script.php?src_id=10336
 
+# Scala support
+# http://www.schmitztech.com/tech/archives/3
+Scala: ftdetect/scala.vim indent/scala.vim plugin/31-create-scala.vim syntax/scala.vim ##
+%scala.vim:
+	mkdir -p $(@D)
+	wget -nv -NO $@ --no-check-certificate \
+	    https://raw.github.com/scala/scala-dist/master/tool-support/src/vim/$@
+

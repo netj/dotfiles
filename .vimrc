@@ -176,7 +176,10 @@ if has("autocmd")
   autocmd FileType text setlocal textwidth=78
 
   " coffee script autocompiling
-  autocmd BufWritePost *.coffee silent CoffeeMake! -b | cwindow
+  autocmd BufWritePost *.coffee silent CoffeeMake! | cwindow
+
+  " Scala (See: http://mdr.github.com/scalariform/)
+  au BufEnter *.scala setl formatprg=scalariform\ --forceOutput
 
   " For files like *.shtml or *.html.ko
   au! BufRead,BufNewFile *.{s,}html.*		set filetype=html
