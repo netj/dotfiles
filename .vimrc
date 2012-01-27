@@ -114,6 +114,7 @@ set icon iconstring=%{&t_fs}]7;file://%{hostname()}%{expand(\"%:p\")}
 
 " My name + email address.
 iab netj>    Jaeho Shin <netj@sparcs.org>
+iab netj@cs> Jaeho Shin <netj@cs.stanford.edu>
 iab jshin>   Jaeho.Shin@Stanford.EDU
 
 " Frequently typed lines.
