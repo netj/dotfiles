@@ -62,7 +62,6 @@ set suffixes+=.cmi,.cmo,.cmx,.cma,.cmxa,.blg,.annot " OCaml intermediates
 if &term == "screen"
   set t_ts=]0;
   set t_fs=
-  set t_Co=256
 elseif &term == "xterm-color" || &term == "xterm-256color"
   set t_Co=256
 endif
@@ -88,20 +87,23 @@ if &t_Co > 2
   highlight Search term=reverse ctermbg=3 ctermfg=1
 endif
 
-if &t_Co >= 256
+if &t_Co >= 8
   " See for more available schemes in ColorSamplerPack: http://www.vi-improved.org/color_sampler_pack/
   " dark-lo: desertEx anotherdark darkZ inkpot jellybeans herald railscasts fruity dante wombat256 chocolateliquor clarity freya xoria256 twilight darkslategray darkblue2
   " dark-hi: candycode asu1dark jammy lettuce darkspectrum desert256 leo vibrantink vividchalk guardian torte darkbone
   " light-hi: eclipse nuvola fruit
   " light-lo: spring autumn autumn2 siena
   " fun: matrix borland golden camo
-  if has("gui_running")
+  if &t_Co >= 256
+    " scroll among my favorites with VimTip341
+    let g:mySetColors = split('jellybeans inkpot desertEx darkZ chocolateliquor')
     colorscheme jellybeans
-  else
-    colorscheme desertEx
+  else " &term == "screen"
+    " e.g. screen's color support isn't so good
+    let g:mySetColors = split('default chocolateliquor')
+    colorscheme default
   endif
-  " will choose among my favorites with VimTip341
-  let g:mySetColors = split('jellybeans desertEx inkpot darkZ')
+  " let g:mySetColors=split('desertEx anotherdark darkZ inkpot jellybeans herald railscasts fruity dante wombat256 chocolateliquor clarity freya xoria256 twilight darkslategray darkblue2  candycode asu1dark jammy lettuce darkspectrum desert256 leo vibrantink vividchalk guardian torte darkbone  eclipse nuvola fruit  spring autumn autumn2 siena  matrix borland golden camo')
 endif
 
 " Mac OS X Terminal.app's Drag & Drop support
