@@ -95,7 +95,11 @@ if &t_Co >= 256
   " light-hi: eclipse nuvola fruit
   " light-lo: spring autumn autumn2 siena
   " fun: matrix borland golden camo
-  colorscheme jellybeans
+  if has("gui_running")
+    colorscheme jellybeans
+  else
+    colorscheme desertEx
+  endif
   " will choose among my favorites with VimTip341
   let g:mySetColors = split('jellybeans desertEx inkpot darkZ')
 endif
