@@ -13,23 +13,28 @@ bash_import() {
     bash_default_env LANG ko_KR.UTF-8
     bash_default_env LC_ALL $LANG
     bash_default_env LANGUAGE $LANG
-    # add ~/bin to PATH
-    if [ -d ~/bin ] && ! expr "$PATH" : "$HOME/bin:" >/dev/null; then
-        PATH=~/bin:"$PATH"
-    fi
     local uname=`uname`
     # platform specific settings
     case $uname in
         Darwin) # Mac OS X
-        # some packages install stuffs on /usr/local
-        export PATH=/usr/local/bin:/usr/local/sbin:$PATH
-        export MANPATH=/usr/local/man:$MANPATH
-
-        # Setting paths for MacPorts
-        export PATH=/opt/local/bin:/opt/local/libexec/gnubin:/opt/local/sbin:$PATH
-        export MANPATH=/opt/local/man:$MANPATH
+            # some stuffs get installed on /usr/local
+            bash_insert_path PATH /usr/local/sbin /usr/local/bin
+            bash_insert_path MANPATH /usr/local/man /usr/local/share/man
+            PATH=/usr/local/bin:$PATH  # XXX We need to force /usr/local/bin in front of /usr/bin since the default path_helper(8) keeps it after /usr/bin
+            if type brew &>/dev/null; then
+                # Prefer Homebrew (http://mxcl.github.com/homebrew/)
+                local brewPrefix=`brew --prefix`
+                bash_insert_path PATH "$brewPrefix"/sbin "$brewPrefix"/bin
+                bash_insert_path MANPATH "$brewPrefix"/man "$brewPrefix"/share/man
+            elif [ -x /opt/local/bin/port ]; then
+                # Paths for MacPorts (http://www.macports.org/)
+                bash_insert_path PATH /opt/local/sbin /opt/local/libexec/gnubin /opt/local/bin
+                bash_insert_path MANPATH /opt/local/man /opt/local/share/man
+            fi
         ;;
     esac
+    # add ~/bin to PATH
+    bash_insert_path PATH ~/bin
 }
 
 bash_login() {
@@ -47,7 +52,7 @@ bash_login() {
     if ls --version 2>&1 | grep 'Free Software Foundation' >/dev/null; then
         # GNU ls
         ls_o="-F --color=auto"
-        [ -n "$LS_COLORS" ] || eval "`dircolors 2>/dev/null`"
+        [ -n "$LS_COLORS" ] || eval "`dircolors -b 2>/dev/null`"
         # platform specific configs
         case $uname in
             CYGWIN*) ls_o="$ls_o --show-control-chars" ;;

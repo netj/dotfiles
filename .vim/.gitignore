@@ -1,5 +1,6 @@
 /ftplugin
 /ftdetect
+/indent
 /syntax
 /autoload
 /bundle
@@ -9,3 +10,5 @@
 
 /.netrwhist
 /.VimballRecord
+/colors
+/plugin/*.vim

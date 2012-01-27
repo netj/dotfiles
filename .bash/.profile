@@ -5,7 +5,7 @@
 # Reformed: 2004-05-28
 
 # load local settings and modules
-for REPLY in ~/.bash_local ~/.bash/.loader; do
+for REPLY in ~/.bash/.vocabularies ~/.bash_local ~/.bash/.loader; do
     [ -f $REPLY ] && . $REPLY
 done
 
