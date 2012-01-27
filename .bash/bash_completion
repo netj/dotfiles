@@ -32,6 +32,11 @@ bash_login() {
                 break
             fi
         done
+        # load completion for Homebrew
+        if type brew &>/dev/null; then
+            local brewcomp=`brew --repository`/Library/Contributions/brew_bash_completion.sh
+            [ ! -r "$brewcomp" ] || . "$brewcomp"
+        fi
       fi
     #fi
     #unset bash bminor bmajor
