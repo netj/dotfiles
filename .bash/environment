@@ -17,6 +17,12 @@ bash_import() {
     # platform specific settings
     case $uname in
         Darwin) # Mac OS X
+            # XXX path_helper does not set MANPATH unless it was already in the env
+            # XXX some say MANPATH in MacOS X >= 10.2 became deprecated, but
+            # XXX you need it anyway to search for non-standrad places.
+            : ${MANPATH:=}
+            export MANPATH
+            eval `/usr/libexec/path_helper -s`
             # some stuffs get installed on /usr/local
             bash_insert_path PATH /usr/local/sbin /usr/local/bin
             bash_insert_path MANPATH /usr/local/man /usr/local/share/man
