@@ -32,6 +32,10 @@ bash_import() {
                 local brewPrefix=`brew --prefix`
                 bash_insert_path PATH "$brewPrefix"/sbin "$brewPrefix"/bin
                 bash_insert_path MANPATH "$brewPrefix"/man "$brewPrefix"/share/man
+                # prefer GNU coreutils to BSD ones
+                if local coreutils_Cellar=$(brew --prefix coreutils 2>/dev/null); then
+                    bash_insert_path PATH "$coreutils_Cellar/libexec/gnubin"
+                fi
             elif [ -x /opt/local/bin/port ]; then
                 # Paths for MacPorts (http://www.macports.org/)
                 bash_insert_path PATH /opt/local/sbin /opt/local/libexec/gnubin /opt/local/bin
