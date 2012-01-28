@@ -97,7 +97,7 @@ bash_login() {
     prompt_columns=
     prompt_update() {
         # gather some values
-        local nrcolumns=${COLUMNS:-tput cols 2>/dev/null || true}
+        local nrcolumns=${COLUMNS:-$(tput cols 2>/dev/null || true)}
         local nrjobs=`jobs -p`
         case $nrjobs in "") ;; *) nrjobs=" ${nrjobs//[0-9]/}" ;; esac
         nrjobs=${#nrjobs}
