@@ -18,9 +18,37 @@ bash_add_prompt() {
 }
 
 
-# bash_add_path will avoid duplicate paths ending up in the variable
+# bash_remove_path will remove all the paths in the variable separated by :
+#  Usage: bash_remove_path PATH /usr/local/bin
+bash_remove_path() {
+    local v=$1; shift
+    local p=
+    for p in "$@"; do
+        if [[ "${!v}" =~ :$p:|^$p(:|$)|:$p$ ]]; then
+            export $v=${!v//:$p:/:}
+            export $v=${!v//#$p:/}
+            export $v=${!v//%:$p/}
+        fi
+    done
+}
+# bash_add_path will put given paths at the end of the variable avoiding duplicates
 #  Usage: bash_add_path PATH /usr/local/bin
 bash_add_path() {
+    local v=$1; shift
+    bash_remove_path "$v" "$@"
+    local p=
+    for p in "$@"; do
+        [[ -d "$p" ]] || continue
+        if [[ -n "${!v}" ]]; then
+            export $v="${!v}:$p"
+        else
+            export $v="$p"
+        fi
+    done
+}
+# bash_add_path_if_not will avoid duplicate paths ending up in the variable
+#  Usage: bash_add_path_if_not PATH /usr/local/bin
+bash_add_path_if_not() {
     local v=$1; shift
     local p=
     for p in "$@"; do
@@ -33,9 +61,24 @@ bash_add_path() {
         fi
     done
 }
-# bash_insert_path will avoid duplicate paths ending up in the variable
+# bash_insert_path will put given paths at the beginning of the variable avoiding duplicates
 #  Usage: bash_insert_path PATH /usr/local/bin
 bash_insert_path() {
+    local v=$1; shift
+    bash_remove_path "$v" "$@"
+    local p=
+    for p in "$@"; do
+        [[ -d "$p" ]] || continue
+        if [[ -n "${!v}" ]]; then
+            export $v="$p:${!v}"
+        else
+            export $v="$p"
+        fi
+    done
+}
+# bash_insert_path_if_not will avoid duplicate paths ending up in the variable
+#  Usage: bash_insert_path_if_not PATH /usr/local/bin
+bash_insert_path_if_not() {
     local v=$1; shift
     local p=
     for p in "$@"; do

@@ -22,11 +22,13 @@ bash_import() {
             # XXX you need it anyway to search for non-standrad places.
             : ${MANPATH:=}
             export MANPATH
+            # XXX and since path_helper messes up with your PATH, let's preserve it
+            local PATH_orig=$PATH
             eval `/usr/libexec/path_helper -s`
+            PATH=$PATH_orig
             # some stuffs get installed on /usr/local
             bash_insert_path PATH /usr/local/sbin /usr/local/bin
             bash_insert_path MANPATH /usr/local/man /usr/local/share/man
-            PATH=/usr/local/bin:$PATH  # XXX We need to force /usr/local/bin in front of /usr/bin since the default path_helper(8) keeps it after /usr/bin
             if type brew &>/dev/null; then
                 # Prefer Homebrew (http://mxcl.github.com/homebrew/)
                 local brewPrefix=`brew --prefix`
