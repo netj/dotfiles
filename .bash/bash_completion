@@ -7,8 +7,6 @@
 bash_autoload=true
 
 bash_login() {
-    # $Id: bash_completion.sh,v 1.2 2006/02/25 01:21:33 ianmacd Exp $
-
     ## Check for bash (and that we haven't already been sourced).
     #[ -z "$BASH_VERSION" -o -n "$BASH_COMPLETION" ] && return
     [ -z "$BASH_COMPLETION" ] || return
@@ -16,30 +14,34 @@ bash_login() {
     # Check for recent enough version of bash.
     local bash bmajor bminor
     bash=${BASH_VERSION%.*}; bmajor=${bash%.*}; bminor=${bash#*.}
-
-    ## Check for interactive shell.
-    #if [ -n "$PS1" ]; then
-      if [ $bmajor -eq 2 -a $bminor '>' 04 ] || [ $bmajor -gt 2 ]; then
-        #if [ -r /etc/bash_completion ]; then
-        #  # Source completion code.
-        #  . /etc/bash_completion
-        #fi
+    if [ $bmajor -eq 2 -a $bminor '>' 04 ] || [ $bmajor -gt 2 ]; then
+        local bash_completions=
+        bash_completions=()
+        local bash_completions_more=
+        bash_completions_more=()
+        # load completion for Homebrew
+        if type brew &>/dev/null; then
+            local brewbashcomp=$(brew --prefix)/etc/bash_completion
+            [ ! -r "$brewbashcomp" ] || bash_completions+=("$brewbashcomp")
+            local brewcomp=$(brew --repository)/Library/Contributions/brew_bash_completion.sh
+            [ ! -r "$brewcomp" ] || bash_completions_more+=("$brewcomp")
+        fi
+        # look for other standard places
+        bash_completions+=({/opt/local/etc,/usr/local/etc,/etc}/bash_completion)
         local f=
-        for f in {/etc,/usr/local/etc,/opt/local/etc,~/.bash/contrib}/bash_completion; do
+        for f in "${bash_completions[@]}"; do
             if [ -r "$f" ]; then
                 BASH_COMPLETION=$f
                 . "$f"
                 break
             fi
         done
-        # load completion for Homebrew
-        if type brew &>/dev/null; then
-            local brewcomp=`brew --repository`/Library/Contributions/brew_bash_completion.sh
-            [ ! -r "$brewcomp" ] || . "$brewcomp"
-        fi
-      fi
-    #fi
-    #unset bash bminor bmajor
+        # once BASH_COMPLETION is available, source more
+        [ -n "$BASH_COMPLETION" ] || return
+        for f in "${bash_completions_more[@]}"; do
+            . "$f"
+        done
+    fi
 }
 
 # vim:et:ts=8:sw=4:sts=4
