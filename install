@@ -82,6 +82,6 @@ install .emacs.d/elisp/Makefile
 
 
 # GUI
-fonts_Makefile_after() { make -C .fonts; }
+fonts_after() { make -C .fonts; }
 install .fonts.conf
 install .fonts
