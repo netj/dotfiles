@@ -55,7 +55,7 @@ bash_login() {
                 local name=${path##*/}
                 local dir=${PWD/#$HOME/"~"}
                 dir=${dir%/$name}
-                title+="${name:-/} - "
+                $xtermtitle_mac_terminal || title+="${name:-/} - "
                 title+="(${dir:-/})"
                 ;;
                 *) title+=`eval echo "$xtermtitle_label"` ;;
