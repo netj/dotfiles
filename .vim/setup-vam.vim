@@ -30,7 +30,6 @@ fun SetupVAM()
   ActivateAddons fugitive
   ActivateAddons xmledit
   ActivateAddons vim-ft-markdown_fold
-  ActivateAddons github-pangloss-vim-javascript
   ActivateAddons JSON
   ActivateAddons vim-coffee-script
   ActivateAddons applescript
