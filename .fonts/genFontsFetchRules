@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -eu
+
+Prefix=$1; shift
+
+cat <<EOF
+${Prefix}FontsFiles   := \$(${Prefix}Fonts:%=\$(FONTSDIR)/%)
+${Prefix}FontsArchive ?= \$(shell basename \$(${Prefix}FontsURL))
+
+\$(${Prefix}FontsFiles): \$(${Prefix}FontsArchive)
+	@./extract "$<" "\$(@D)" "\$(@F)"
+
+\$(${Prefix}FontsArchive):
+	curl -# -C- -LRo \$@ \$(${Prefix}FontsURL)
+
+InstalledFiles    += \$(${Prefix}FontsFiles)
+IntermediateFiles += \$(${Prefix}FontsArchive)
+IntermediateDirs  += \$(${Prefix}FontsArchive:%.zip=%)
+EOF

@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# extract files from a zip archive by names
+# Usage: extractFiles ARCHIVE DESTDIR FILENAME...
+set -eu
+
+Archive=$1; shift
+DestDir=$1; shift
+DestDir=$(cd "$DestDir" && echo "$PWD")
+
+case "$Archive" in
+    *.zip)
+        case `uname` in
+            Darwin)
+                tmp=${Archive%.zip}
+                if ! [ -d $tmp ]; then
+                    mkdir -p $tmp
+                    ditto -xk "$Archive" $tmp || true # XXX ditto sometimes fails
+                fi
+                findopts=(-name "$1"); shift
+                for FileName; do
+                    findopts+=(-o -name "$FileName")
+                done
+                find $tmp \( "${findopts[@]}" \) \
+                    -exec chmod -x {} \; \
+                    \( -exec ln -vf  {} "$DestDir/" \; \
+                    -o -exec cp -vpf {} "$DestDir/" \; \)
+                ;;
+
+            *)
+                unzip -o "$Archive" "$@" -d "$DestDir"
+                (
+                    cd "$DestDir"
+                    chmod -x "$@"
+                )
+                ;;
+        esac
+        ;;
+
+    *)
+        echo $Archive: Unsupported archive type >&2
+        exit 2
+        ;;
+esac

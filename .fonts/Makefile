@@ -1,29 +1,30 @@
-# Makefile for setting up netj's fonts
+# Makefile for installing fine fonts
 # Author: Jaeho Shin <netj@sparcs.org>
 # Created: 2009-03-20
 
-ifeq ($(shell uname),Darwin)
+uname := $(shell uname)
+ifeq ($(uname),Darwin)
     # Mac
+    uname_version := $(uname)-$(shell sw_vers -productVersion 2>/dev/null)
     FONTSDIR := ~/Library/Fonts
 else
+    uname_version := $(uname)
     FONTSDIR := .
 endif
 
-UNZIP = unzip -o $< $(@F) -d $(@D)
 
 .PHONY: all install uninstall clean
 all: install
-# end of prologue
 
-
-# Microsoft free fonts
-msttcorefonts:
-	! type apt-get &>/dev/null || dpkg -l msttcorefonts &>/dev/null || \
-	sudo apt-get install msttcorefonts
+# we'd like to generate a pattern of Makefile rules implicitly when including
+%Fonts.mk: genFontsFetchRules Makefile; @./$< $* >$@
 
 
 ## Nanum Fonts
-NanumFontNames := \
+ifeq (,$(filter Darwin-10.7 Darwin-10.7.%,$(uname_version)))
+# Mac OS X Lion includes Nanum Fonts
+NanumFontsURL := http://cdn.naver.com/naver/NanumFont/fontfiles/NanumFont_TTF_ALL.zip
+NanumFonts := \
     NanumGothic.ttf             \
     NanumGothicBold.ttf         \
     NanumGothicExtraBold.ttf    \
@@ -33,60 +34,82 @@ NanumFontNames := \
     NanumBrush.ttf              \
     NanumPen.ttf                \
     #
-NanumFonts := $(NanumFontNames:%=$(FONTSDIR)/%)
-NanumFontsURL := http://cdn.naver.com/naver/NanumFont/fontfiles/NanumFont_TTF_ALL.zip
-NanumFontsZip := $(shell basename $(NanumFontsURL))
-$(NanumFonts): $(NanumFontsZip)
-	$(UNZIP)
-$(NanumFontsZip):
-	wget -N $(NanumFontsURL)
-IntermediateFiles += $(NanumFontsZip)
-#InstalledFiles += $(NanumFonts)
+include NanumFonts.mk
+endif
+
+## Nanum Eco Fonts
+NanumGothicEcoFontsURL := http://cdn.naver.com/naver/NanumFont/fontfiles/NanumFontSetup_TTF_GOTHICECO.zip
+NanumGothicEcoFonts := \
+    NanumGothicEco.ttf \
+    NanumGothicEcoBold.ttf \
+    NanumGothicEcoExtraBold.ttf \
+    #
+include NanumGothicEcoFonts.mk
+NanumMyeongjoEcoFontsURL := http://cdn.naver.com/naver/NanumFont/fontfiles/NanumFontSetup_TTF_MYUNGJOECO.zip
+NanumMyeongjoEcoFonts := \
+    NanumMyeongjoEco.ttf \
+    NanumMyeongjoEcoBold.ttf \
+    NanumMyeongjoEcoExtraBold.ttf \
+    #
+include NanumMyeongjoEcoFonts.mk
+
+## Nanum Gothic Coding Font
+NanumGothicCodingFontsURL := http://dev.naver.com/frs/download.php/441/NanumGothicCoding-2.0.zip
+NanumGothicCodingFonts := \
+    나눔고딕코딩-Bold.ttf 나눔고딕코딩-Bold.ttf \
+    나눔고딕코딩.ttf 나눔고딕코딩.ttf \
+    #
+include NanumGothicCodingFonts.mk
+
+## Nanum Gothic Light Font
+NanumGothicLightFontsURL := http://cdn.naver.com/naver/NanumFont/fontfiles/NanumFontSetup_TTF_GOTHICLIGHT.zip
+NanumGothicLightFonts := \
+    NanumGothicLight.ttf \
+    #
+include NanumGothicLightFonts.mk
 
 
 ## Seoul Fonts
-SeoulFontNames := \
-    SeoulHangangB.ttf	\
-    SeoulHangangEB.ttf	\
-    SeoulHangangL.ttf	\
-    SeoulHangangM.ttf	\
-    SeoulNamsanB.ttf	\
-    SeoulNamsanEB.ttf	\
-    SeoulNamsanL.ttf	\
-    SeoulNamsanM.ttf	\
-    SeoulNamsanvert.ttf	\
+SeoulFontsURL := http://design.seoul.go.kr/ds_soft/fileDown.php?f=L2ZpbGVzX3VwbG9hZC9wb2xpY3kvZGF0YXMvMjAxMS8xMi8yMC8wLzA5NmM3ZDA5OWJiY2YxOTUyMzU4MTk3ZjUyZGRjZWI4LnppcA==&f2=VjJsdVpHOTNjMSs4OXJXL3ZMUEVvUzU2YVhBPQ==
+SeoulFontsArchive := SeoulFonts_TTF.zip
+SeoulFonts := \
+    SeoulHangangB.ttf   \
+    SeoulHangangEB.ttf  \
+    SeoulHangangL.ttf   \
+    SeoulHangangM.ttf   \
+    SeoulNamsanB.ttf    \
+    SeoulNamsanEB.ttf   \
+    SeoulNamsanL.ttf    \
+    SeoulNamsanM.ttf    \
+    SeoulNamsanvert.ttf \
     #
-SeoulFonts := $(SeoulFontNames:%=$(FONTSDIR)/%)
-SeoulFontsZip := SeoulFonts_TTF.zip
-$(SeoulFonts): $(SeoulFontsZip)
-	$(UNZIP)
-$(SeoulFontsZip):
-	wget -NO $@ 'http://design.seoul.go.kr/js/boardFileDown.php?model=PolicyData&id=251&field_path=file_path&field_name=file_name1&no=1&is_crypt=false'
-IntermediateFiles += $(SeoulFontsZip)
-InstalledFiles += $(SeoulFonts)
+include SeoulFonts.mk
 
 
 ## Dijkstra
-DijkstraFontNames := \
-    dijkstra.ttf	\
+DijkstraFontsURL := http://www.fonts101.com/download/34398/Dijkstra/A5922C74E09F7630B830C8BDB36343B0.aspx
+DijkstraFontsArchive := Dijkstra.zip
+DijkstraFonts := \
+    dijkstra.ttf \
     #
-DijkstraFonts := $(DijkstraFontNames:%=$(FONTSDIR)/%)
-DijkstraFontsZip := Dijkstra.zip
-$(DijkstraFonts): $(DijkstraFontsZip)
-	$(UNZIP)
-$(DijkstraFontsZip):
-	wget -NO $@ http://www.fonts101.com/download/34398/Dijkstra/A5922C74E09F7630B830C8BDB36343B0.aspx
-IntermediateFiles += $(DijkstraFontsZip)
-InstalledFiles += $(DijkstraFonts)
+include DijkstraFonts.mk
 
 
+## Microsoft free fonts
+msttcorefonts:
+ifneq ($(uname),Darwin)
+	! type apt-get &>/dev/null || dpkg -l msttcorefonts &>/dev/null || sudo apt-get install msttcorefonts
+endif
 
 
-# begin of epilogue
 install: $(InstalledFiles) \
-    msttcorefonts	\
+    msttcorefonts          \
     #
 uninstall:
 	rm -f $(InstalledFiles)
+
 clean:
-	rm -f $(IntermediateFiles)
+	rm -rf *.mk $(IntermediateDirs)
+cleaner: clean
+	rm -f $(IntermediateFiles) 
+

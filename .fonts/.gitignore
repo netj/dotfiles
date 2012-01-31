@@ -1,2 +1,5 @@
-*.ttf
-NanumFont_TTF.zip
+/*
+!/.gitignore
+!/Makefile
+!/extract
+!/genFontsFetchRules
