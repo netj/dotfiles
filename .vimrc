@@ -118,8 +118,11 @@ if &t_Co >= 8
   endtry
 endif
 
-" Mac OS X Terminal.app's Drag & Drop support
-set icon iconstring=%{&t_fs}]7;file://%{hostname()}%{expand(\"%:p\")}
+" Mac OS X (>=10.7) Terminal.app's Title Icon and Drag & Drop support
+if $TERM_PROGRAM == "Apple_Terminal" && $TERM_PROGRAM_VERSION >= 297
+  set icon iconstring=%{&t_fs}]7;file://%{hostname()}%{expand(\"%:p\")}
+  set title titlestring=%M%(\ (%{expand(\"%:~:h\")})%)%(\ %a%)
+endif
 
 
 "------------------------------------------------------------------------------
