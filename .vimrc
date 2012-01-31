@@ -7,11 +7,20 @@
 " Derived many parts from
 " Uwe Hermann <uwe@hermann-uwe.de>'s vimrc at 2005-11-20
 
-version 6.4
+version 7.0
 
 if v:progname =~? "evim" | finish | endif
 
 set nocompatible        " This is Vi IMproved, not Vi :^)
+
+" source optional files
+fun SourceOptional(files)
+    for f in a:files | if filereadable(expand(f)) | exec 'source '.f | endif | endfor
+endfun
+command! -nargs=* SourceOptional :call SourceOptional([<f-args>])
+
+" setup vim-addon-manager aka VAM
+SourceOptional ~/.vim/setup-vam.vim
 
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
@@ -94,16 +103,19 @@ if &t_Co >= 8
   " light-hi: eclipse nuvola fruit
   " light-lo: spring autumn autumn2 siena
   " fun: matrix borland golden camo
-  if &t_Co >= 256
-    " scroll among my favorites with VimTip341
-    let g:mySetColors = split('jellybeans inkpot desertEx darkZ chocolateliquor')
-    colorscheme jellybeans
-  else " &term == "screen"
-    " e.g. screen's color support isn't so good
-    let g:mySetColors = split('default chocolateliquor')
-    colorscheme default
-  endif
-  " let g:mySetColors=split('desertEx anotherdark darkZ inkpot jellybeans herald railscasts fruity dante wombat256 chocolateliquor clarity freya xoria256 twilight darkslategray darkblue2  candycode asu1dark jammy lettuce darkspectrum desert256 leo vibrantink vividchalk guardian torte darkbone  eclipse nuvola fruit  spring autumn autumn2 siena  matrix borland golden camo')
+  try
+    if &t_Co >= 256
+      " scroll among my favorites with VimTip341
+      let g:mySetColors = split('jellybeans inkpot desertEx darkZ chocolateliquor')
+      colorscheme jellybeans
+    else " &term == "screen"
+      " e.g. screen's color support isn't so good
+      let g:mySetColors = split('default chocolateliquor')
+      colorscheme default
+    endif
+    " let g:mySetColors=split('desertEx anotherdark darkZ inkpot jellybeans herald railscasts fruity dante wombat256 chocolateliquor clarity freya xoria256 twilight darkslategray darkblue2  candycode asu1dark jammy lettuce darkspectrum desert256 leo vibrantink vividchalk guardian torte darkbone  eclipse nuvola fruit  spring autumn autumn2 siena  matrix borland golden camo')
+  catch /.*/
+  endtry
 endif
 
 " Mac OS X Terminal.app's Drag & Drop support
@@ -170,13 +182,6 @@ vmap <F2> :!tr A-Za-z N-ZA-Mn-za-m<CR>
 " File-type specific settings.
 "------------------------------------------------------------------------------
 if has("autocmd")
-  " http://www.vim.org/scripts/script.php?script_id=2332
-  " https://github.com/kchmck/vim-coffee-script/issues/8
-  try
-    call pathogen#infect()
-  catch /.*/
-  endtry
-
   " Enable file type detection.
   " Use the default filetype settings, so that mail gets 'tw' set to 72,
   " 'cindent' is on in C files, etc.
@@ -186,19 +191,6 @@ if has("autocmd")
   " For all text files set 'textwidth' to 78 characters.
   autocmd FileType text setlocal textwidth=78
 
-  " coffee script autocompiling
-  autocmd BufWritePost *.coffee silent CoffeeMake! | cwindow
-
-  " Scala (See: http://mdr.github.com/scalariform/)
-  au BufEnter *.scala setl formatprg=scalariform\ --forceOutput
-
-  " For files like *.shtml or *.html.ko
-  au! BufRead,BufNewFile *.{s,}html.*		set filetype=html
-
-  au! BufRead,BufNewFile *.tex
-    \ map <F6> :!latexmk -pdf %<CR> |
-    \ set textwidth=76
-
   " When editing a file, always jump to the last known cursor position.
   " Don't do it when the position is invalid or when inside an event handler
   " (happens when dropping a file on gvim).
@@ -206,9 +198,6 @@ if has("autocmd")
     \ if line("'\"") > 0 && line("'\"") <= line("$") |
     \   exe "normal g`\"" |
     \ endif
-
-  " Mutt bindings
-  autocmd BufRead */tmp/mutt* normal :g/^> -- $/,/^$/-1d<CR>:set nomodified
 
 endif " has("autocmd")
 
@@ -224,8 +213,9 @@ endfor
 " Local settings                                                              "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Source a local configuration file if available.
-if filereadable(expand("~/.vim_local"))
-    source ~/.vim_local
-endif
+SourceOptional ~/.vim_local
+
+
+delcommand SourceOptional
 
 " vim:sw=2:sts=2:ts=8
