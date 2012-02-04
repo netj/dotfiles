@@ -1,3 +1,4 @@
+if ! exists("*SetupVAM")
 fun SetupVAM()
   " YES, you can customize this vam_install_path path and everything still works!
   let vam_install_path = expand('$HOME') . '/.vim/vim-addons'
@@ -20,7 +21,7 @@ fun SetupVAM()
   " be installed form www.vim.org. Lookup MergeSources to get more control
   " let g:vim_addon_manager['drop_git_sources'] = !executable('git')
 
-  let addons=[] | command -nargs=* ActivateAddons let addons+=[<f-args>]
+  let addons=[] | command! -nargs=* ActivateAddons let addons+=[<f-args>]
   """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
   " See Also: http://www.quora.com/Which-are-the-best-vim-plugins
   ActivateAddons Color_Sampler_Pack
@@ -50,3 +51,4 @@ call SetupVAM()
 " option2:  au GUIEnter * call SetupVAM()
 " See BUGS sections below [*]
 " Vim 7.0 users see BUGS section [3]
+endif

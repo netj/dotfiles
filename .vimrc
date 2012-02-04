@@ -14,7 +14,7 @@ if v:progname =~? "evim" | finish | endif
 set nocompatible        " This is Vi IMproved, not Vi :^)
 
 " source optional files
-fun SourceOptional(files)
+fun! SourceOptional(files)
     for f in a:files | if filereadable(expand(f)) | exec 'source '.f | endif | endfor
 endfun
 command! -nargs=* SourceOptional :call SourceOptional([<f-args>])
@@ -120,8 +120,9 @@ endif
 
 " Mac OS X (>=10.7) Terminal.app's Title Icon and Drag & Drop support
 if $TERM_PROGRAM == "Apple_Terminal" && $TERM_PROGRAM_VERSION >= 297
-  set icon iconstring=%{&t_fs}]7;file://%{hostname()}%{expand(\"%:p\")}
   set title titlestring=%M%(\ (%{expand(\"%:~:h\")})%)%(\ %a%)
+  set titlestring+=%{&t_fs}]7;file://%{hostname()}%{expand(\"%:p\")}
+  set icon iconstring=%t%(\ %M%)%(\ (%{expand(\"%:~:h\")})%)%(\ %a%)
 endif
 
 
@@ -219,6 +220,6 @@ endfor
 SourceOptional ~/.vim_local
 
 
-delcommand SourceOptional
+delcommand SourceOptional | delfunction SourceOptional
 
 " vim:sw=2:sts=2:ts=8

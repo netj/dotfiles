@@ -38,6 +38,7 @@ bash_login() {
                     xtermtitle_mac_terminal_last_pwd=$PWD
                     xtermtitle_mac_terminal_pwd_url=$pwd_url
                 fi
+                # display URL for the title bar icon
                 printf '\e]7;%s\a' "$xtermtitle_mac_terminal_pwd_url"
             }
             bash_add_prompt xtermtitle_mac_terminal_update
@@ -45,23 +46,44 @@ bash_login() {
         # xterm title controller
         title() {
             xtermtitle_label=$*
+            case $xtermtitle_label in
+                "")
+                    if $xtermtitle_mac_terminal; then
+                        xtermtitle_update_title_icon() {
+                            local path=$PWD
+                            local name=${path##*/}
+                            local dir=${PWD/#$HOME/"~"}
+                            dir=${dir%/$name}
+                            title="(${dir:-/})"
+                            icon="${name:-/} - ${title}"
+                        }
+                    else
+                        xtermtitle_update_title_icon() {
+                            local path=$PWD
+                            local name=${path##*/}
+                            local dir=${PWD/#$HOME/"~"}
+                            dir=${dir%/$name}
+                            title+="${name:-/} - "
+                            title+="(${dir:-/})"
+                        }
+                    fi
+                    ;;
+                *)
+                    xtermtitle_update_title_icon() {
+                        title+=`eval echo "$xtermtitle_label"`
+                    }
+                    ;;
+            esac
         }
         # xterm title updater
         xtermtitle() {
-            local title=
-            case $xtermtitle_label in
-                "")
-                local path=$PWD
-                local name=${path##*/}
-                local dir=${PWD/#$HOME/"~"}
-                dir=${dir%/$name}
-                $xtermtitle_mac_terminal || title+="${name:-/} - "
-                title+="(${dir:-/})"
-                ;;
-                *) title+=`eval echo "$xtermtitle_label"` ;;
-            esac
-            title+="${xtermtitle_postfix:+ - $xtermtitle_postfix}"
-            printf '\e]0;%s\a' "$title"
+            local title= icon=
+            local postfix="${xtermtitle_postfix:+ - $xtermtitle_postfix}"
+            xtermtitle_update_title_icon
+            # display both: title and icon string
+            printf '\e]0;%s\a' "$title$postfix"
+            # then override icon string if necessary
+            [ -z "$icon" ] || printf '\e]1;%s\a' "$icon$postfix"
         }
         # use default if necessary
         title "$xtermtitle_label"
