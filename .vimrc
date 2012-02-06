@@ -119,10 +119,12 @@ if &t_Co >= 8
 endif
 
 " Mac OS X (>=10.7) Terminal.app's Title Icon and Drag & Drop support
+"  See: http://www.macosxautomation.com/lion/terminal.html
+"  See: /private/etc/bashrc's update_terminal_cwd
 if $TERM_PROGRAM == "Apple_Terminal" && $TERM_PROGRAM_VERSION >= 297
-  set title titlestring=%M%(\ (%{expand(\"%:~:h\")})%)%(\ %a%)
-  set titlestring+=%{&t_fs}]7;file://%{hostname()}%{expand(\"%:p\")}
-  set icon iconstring=%t%(\ %M%)%(\ (%{expand(\"%:~:h\")})%)%(\ %a%)
+  set title titlestring=%(%m\ %)%((%{expand(\"%:~:h\")})%)%a
+  set icon iconstring=%{&t_IE}]7;file://%{hostname()}%{expand(\"%:p\")}%{&t_IS}
+  set iconstring+=VIM
 endif
 
 
