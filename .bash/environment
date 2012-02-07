@@ -54,8 +54,6 @@ bash_login() {
     bash_default_env EDITOR vim
     bash_default_env PAGER less
     bash_default_env LESS "-XFRiMW" # --no-init --quit-if-one-screen --RAW-CONTROL-CHARS --ignore-case --LONG-PROMPT --HILITE_UNREAD
-    #  TeX
-    bash_default_env TEXINPUTS ".:$HOME/.tex:"
     # some usability options
     shopt -s nocaseglob cdspell cmdhist
     local uname=`uname`
