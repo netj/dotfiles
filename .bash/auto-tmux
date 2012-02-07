@@ -42,6 +42,7 @@ bash_login() {
     elif [ -n "$TMUX" ]; then
         # working inside tmux, prepare stuffs
         auto_tmux_link="$auto_tmux_env_root/.$$"
+        unset TERM_PROGRAM TERM_PROGRAM_VERSION
 
         # set useful tmux related commands
         a-tmux-all() {
