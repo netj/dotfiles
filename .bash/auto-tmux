@@ -124,26 +124,48 @@ bash_login() {
         touch "$auto_tmux_env"
         chmod a=,u=rw "$auto_tmux_env"
         auto_tmux_link=$auto_tmux_env a-tmux-save
+        # before exiting, clean it up
+        bash_add_unloader 'rm -f "$auto_tmux_env"'
         
         echo "auto-tmux: connection #$conn"
-        local attach=true
-        trap "attach=false" INT
         local key=
-        read -n 1 -t 1 key
-        trap - INT
-        [ x"${key#[ 	]}" = x"" ] || attach=false
-        $attach || return
+        getkey() {
+            key=
+            local intr=false
+            trap "intr=true" INT
+            read -n 1 -t 1 -s key
+            key=${key#[ 	]}
+            trap - INT
+            ! $intr || key=q
+        }
         
-        # attach to a session with no clients
-        if tmux list-sessions 2>/dev/null | grep -qv '(attached)'; then
-            tmux attach-session
-        else
-            # or, just start a new one
-            tmux new-session
+        getkey
+        # new session should be started if there are no sessions yet
+        [ -n "$key" ] || tmux list-sessions 2>/dev/null || key=n
+        # take action depending on user input
+        case $key in
+            [nN]) # start a new one per request
+                echo "auto-tmux: starting new session"
+                tmux new-session
+                ;;
+            "") # otherwise, default is to resume
+                echo "auto-tmux: resuming previous session"
+                tmux attach-session
+                ;;
+            *) # if any other key was pressed, abort
+                echo "auto-tmux: aborted"
+                return
+                ;;
+        esac
+        
+        # after tmux session, give a chance to visit the shell
+        getkey
+        if [ -n "$key" ]; then
+            echo "auto-tmux: finished"
+            return
         fi
         
-        # before exiting, clean up the environment snapshot
-        rm -f "$auto_tmux_env"
+        # exit the shell
         exit
     fi
 }
