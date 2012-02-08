@@ -62,7 +62,7 @@ bash_login() {
             [ -e "$auto_tmux_link" ]
         }
         a-tmux-poll() {
-            a-tmux-ok || a-tmux-select
+            a-tmux-ok || a-tmux-use
         }
         a-tmux-ls() {
             local c=
@@ -71,7 +71,7 @@ bash_login() {
                 cat "$auto_tmux_env_root/$c"
             done
         }
-        a-tmux-select() {
+        a-tmux-use() {
             local conn=$1
             # determine $conn unless given
             if [ -z "$conn" ]; then
@@ -85,13 +85,13 @@ bash_login() {
                     conn=`a-tmux-alive | head -1`
                 fi
             fi
-            # attach to $conn
+            # use $conn
             if [ -n "$conn" ]; then
                 if { (cd "$auto_tmux_env_root" && ln -sf $conn "$auto_tmux_link") &&
                     a-tmux-load; } 2>/dev/null; then
-                    echo "auto-tmux: attached to #$conn"
+                    echo "auto-tmux: using connection #$conn"
                 else
-                    echo "auto-tmux: cannot attach to $conn"
+                    echo "auto-tmux: cannot use $conn"
                 fi
             else
                 echo "auto-tmux: no connection available"
@@ -106,11 +106,19 @@ bash_login() {
                 (cd "$auto_tmux_env_root" && rm -f $pids)
             fi 2>/dev/null
         }
+        a-tmux-cleanup() {
+            # remove stale connections
+            local patt= pid=
+            for pid in $(a-tmux-alive); do patt+="${patt:+\\|}$pid"; done
+            local stalePids=$(a-tmux-all | grep -v "^\\($patt\\)$")
+            (cd "$auto_tmux_env_root" && rm -f $stalePids)
+            # remove stale links
+            find -L "$auto_tmux_env_root" -type l -exec rm -f {} \;
+        }
         
         # prepare hooks for prompt, cleanup
         bash_insert_prompt a-tmux-poll
-        a-tmux-cleanup() { rm -f "$auto_tmux_link"; }
-        bash_add_unloader a-tmux-cleanup
+        bash_add_unloader "rm -f \"$auto_tmux_link\""
     else
         # working outside tmux,
         # create a environment snapshot for shells inside tmux
@@ -125,7 +133,7 @@ bash_login() {
         chmod a=,u=rw "$auto_tmux_env"
         auto_tmux_link=$auto_tmux_env a-tmux-save
         # before exiting, clean it up
-        bash_add_unloader 'rm -f "$auto_tmux_env"'
+        bash_add_unloader "rm -f \"$auto_tmux_env\""
         
         echo "auto-tmux: connection #$conn"
         local key=
