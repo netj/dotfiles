@@ -51,6 +51,8 @@ bash_login() {
     bash_default      no_color $'\E[0m'
 
     bash_default prompt_filler "----------------------------------------"
+    bash_default prompt_host "${HOSTNAME%%.*}"
+    bash_default prompt_domain "${HOSTNAME#*.}"
 
     # a hack to measure how many columns given string takes
     prompt_takes_width() {
@@ -85,7 +87,7 @@ bash_login() {
     fi
 
     # sketch PS1
-    local PS1_plain="($user_plain$hostnickname:""?0)--""(""&$date_plain)"
+    local PS1_plain="($user_plain:""?0)--""(""&$date_plain)"
     prompt_min_width=`prompt_takes_width "$PS1_plain"`
 
     # prompt_flexible_part update codes
@@ -109,8 +111,12 @@ bash_login() {
             prompt_columns=$nrcolumns
             prompt_pwd=$PWD
             prompt_jobs=$nrjobs
+            # hostname seldomly changes
+            HOSTNAME=`hostname -f`
+            prompt_host=${HOSTNAME%%.*}
+            prompt_domain=${HOSTNAME#*.}
             local pwd=${PWD/#$HOME/\~}
-            local changing="$pwd$nrjobs"
+            local changing="$prompt_host$pwd$nrjobs"
             local fillsize=$(($nrcolumns-$prompt_min_width-`prompt_takes_width "$changing"`))
             if [ $fillsize -lt 0 ]; then
                 # terminal is too narrow :( try to trim pwd
@@ -139,10 +145,6 @@ bash_login() {
             fi
             prompt_pwd_part=$pwd
             prompt_jobs_part=$nrjobs
-            # hostname seldomly changes
-            HOSTNAME=`hostname -f`
-            hostnickname=${HOSTNAME%%.*}
-            hostdomain=${HOSTNAME#*.}
         fi
     }
     # let prompt_update get regularly called by adding to $PROMPT_COMMAND
@@ -155,7 +157,7 @@ bash_login() {
     PS1="\
 \[$no_color\](\
 $user_part\
-\[$red\]"'$hostnickname'"\[$no_color\]\
+\[$red\]"'$prompt_host'"\[$no_color\]\
 :\
 \[$yellow\]"'$prompt_pwd_part'"\[$no_color\]\
 ?\[$cyan\]"'$?'"\[$no_color\]\
