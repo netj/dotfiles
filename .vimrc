@@ -36,6 +36,7 @@ set title		" set xterm title
 set clipboard=exclude:.*
 set nowrap              " no line wrapping
 set scrolloff=2
+set modeline modelines=5
 
 " searching
 set incsearch		" do incremental searching
