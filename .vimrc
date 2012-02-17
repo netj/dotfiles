@@ -86,7 +86,9 @@ if has("gui_running")
   set guioptions-=T
   set guifont=Consolas:h16,Menlo:h16,Monaco:h16
   set t_Co=256
-  set transparency=10
+  if has("gui_macvim")
+    set transparency=5
+  endif
 endif
 
 " Switch syntax highlighting on, when the terminal has colors
@@ -122,7 +124,7 @@ endif
 " Mac OS X (>=10.7) Terminal.app's Title Icon and Drag & Drop support
 "  See: http://www.macosxautomation.com/lion/terminal.html
 "  See: /private/etc/bashrc's update_terminal_cwd
-if $TERM_PROGRAM == "Apple_Terminal" && $TERM_PROGRAM_VERSION >= 297
+if !has("gui_running") && $TERM_PROGRAM == "Apple_Terminal" && $TERM_PROGRAM_VERSION >= 297
   set title titlestring=%(%m\ %)%((%{expand(\"%:~:h\")})%)%a
   set icon iconstring=%{&t_IE}]7;file://%{hostname()}%{expand(\"%:p\")}%{&t_IS}
   set iconstring+=VIM
