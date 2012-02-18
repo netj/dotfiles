@@ -141,7 +141,7 @@
 	<key>BackgroundAlphaInactive</key>
 	<real>0.81557049418604655</real>
 	<key>BackgroundBlur</key>
-	<real>0.20347020348837208</real>
+	<real>0.20000000000000001</real>
 	<key>BackgroundBlurInactive</key>
 	<real>0.096729651162790697</real>
 	<key>BackgroundColor</key>
@@ -154,7 +154,7 @@
 	AAAAAAAAAAAAAAAAAADV
 	</data>
 	<key>BackgroundSettingsForInactiveWindows</key>
-	<true/>
+	<false/>
 	<key>CommandString</key>
 	<string></string>
 	<key>CursorBlink</key>
