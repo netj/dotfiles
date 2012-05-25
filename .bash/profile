@@ -3,10 +3,15 @@
 # Author: Jaeho Shin <netj@sparcs.kaist.ac.kr>
 # Created: 2000-10-20
 # Reformed: 2004-05-28
+# Second-Reform: 2012-02-24
+
+. ~/.bash/plugins/bpm.sh vocabularies
 
 # load local settings and modules
-for REPLY in ~/.bash/.vocabularies ~/.bash_local ~/.bash/.loader; do
-    [ -f $REPLY ] && . $REPLY
+for REPLY in ~/.bash_local
+do [ -f $REPLY ] && . $REPLY
 done
+
+. ~/.bash/plugins/bpm.sh load
 
 # vim:et:ts=4:sw=4:sts=4

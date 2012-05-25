@@ -1,3 +1,6 @@
 [submodule "Mac/DefaultFontFallbacksChanger"]
 	path = Mac/DefaultFontFallbacksChanger
 	url = git://github.com/netj/MacOSXDefaultFontFallbacksChanger.git
+[submodule ".bash/plugins"]
+	path = .bash/plugins
+	url = git://github.com/netj/bpm

@@ -61,8 +61,9 @@ safeln() {
 bash_after() {
     # .bash{rc,_profile} symlinks
     (cd
-    safeln .bash/.profile .bash{rc,_profile}
-    safeln .bash/.logout .bash_logout
+    safeln .bash/profile .bash{rc,_profile}
+    safeln .bash/logout .bash_logout
+    . .bash/plugins/bpm.sh enable bash_completion environment prompt xtermtitle try+repeat auto-tmux
     )
 }
 install .bash
