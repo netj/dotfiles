@@ -19,6 +19,11 @@
 (set-language-environment-input-method "Korean")
 (setq shell-command-switch "-ic")
 
+
+;; respect local config
+(load "~/.emacs_local" t)
+
+
 (push "~/.emacs.d/elisp" load-path)
 
 (setq inhibit-startup-message t)
@@ -112,8 +117,5 @@
 (push '("\\.geul" . markdown-mode) auto-mode-alist)
 (push '("\\.markdown" . markdown-mode) auto-mode-alist)
 (push '("\\.mkd" . markdown-mode) auto-mode-alist)
-
-;; respect local config
-(load "~/.emacs_local" t)
 
 ;; END OF .emacs
