@@ -30,7 +30,8 @@ fun SetupVAM()
   ActivateAddons snipmate
   ActivateAddons fugitive
   ActivateAddons xmledit
-  ActivateAddons vim-ft-markdown_fold
+  ActivateAddons Markdown
+  "ActivateAddons vim-ft-markdown_fold
   ActivateAddons JSON
   ActivateAddons vim-less
   ActivateAddons vim-coffee-script
