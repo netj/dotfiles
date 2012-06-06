@@ -38,6 +38,7 @@ fun SetupVAM()
   ActivateAddons applescript
   ActivateAddons vim-addon-scala
   ActivateAddons Gist
+  ActivateAddons LaTeX-Suite_aka_Vim-LaTeX
   """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
   call vam#ActivateAddons(addons, {'auto_install' : 1})
   " sample: call vam#ActivateAddons(['pluginA','pluginB', ...], {'auto_install' : 0})

@@ -61,7 +61,6 @@ set wildchar=<TAB>
 "  some by-product files
 set suffixes+=.o,.a     " object and archive files
 set suffixes+=.class    " Java classes
-set suffixes+=.aux,.bbl,.blg,.ent,.fdb_latexmk,.log,.out " TeX auxiliary logs
 set suffixes+=#         " Emacs auto backups
 set suffixes+=.hi       " Haskell intermediates
 set suffixes+=.cmi,.cmo,.cmx,.cma,.cmxa,.blg,.annot " OCaml intermediates
