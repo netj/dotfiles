@@ -26,7 +26,7 @@ fun SetupVAM()
   " See Also: http://www.quora.com/Which-are-the-best-vim-plugins
   ActivateAddons Color_Sampler_Pack
   ActivateAddons ScrollColors
-  ActivateAddons The_NERD_tree
+  "ActivateAddons The_NERD_tree
   ActivateAddons snipmate
   ActivateAddons fugitive
   ActivateAddons xmledit
