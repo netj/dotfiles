@@ -162,8 +162,6 @@ inoremap <F5> <C-o>:set wrap!<CR>
 nnoremap <F6> :set paste!<CR>
 inoremap <F6> <C-o>:set paste!<CR>
 
-" Spellcheck.
-map <F7> :!aspell -x %<CR>:e!<CR><CR>
 
 " Don't use Ex mode, use Q for formatting
 map Q gq

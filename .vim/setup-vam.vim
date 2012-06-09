@@ -23,22 +23,88 @@ fun SetupVAM()
 
   let addons=[] | command! -nargs=* ActivateAddons let addons+=[<f-args>]
   """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
+
+  """ Look and Feels
   " See Also: http://www.quora.com/Which-are-the-best-vim-plugins
+  " See Also: http://stevelosh.com/blog/2010/09/coming-home-to-vim/
   ActivateAddons Color_Sampler_Pack
   ActivateAddons ScrollColors
+
+  """ Productivity boosters
+  ActivateAddons surround
+  ActivateAddons rainbow_parentheses
+    nnoremap <F7> :RainbowParenthesesToggle<CR>
+    inoremap <F7> <C-o>:RainbowParenthesesToggle<CR>
+
+  """ CamelCase stuff
+  " Shougo's NeoComplCache is really nice!
+  ActivateAddons neocomplcache vimproc
+    let g:acp_enableAtStartup = 0 
+    " XXX Rather than enabling at startup, I use special key combo Cmd-Shift-D to turn it on
+    "let g:neocomplcache_enable_at_startup = 1
+    map <D-D> :NeoComplCacheEnable<CR>:NeoComplCacheCachingBuffer<CR>:NeoComplCacheCachingInclude<CR>
+    let g:neocomplcache_enable_smart_case = 1
+    let g:neocomplcache_enable_camel_case_completion = 1 
+    let g:neocomplcache_enable_underbar_completion = 1
+    " Enable omni completion.
+    autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+    autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+    autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+    autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+    autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+  ActivateAddons CamelCaseComplete CompleteHelper " less convenient: CTRL-X CTRL-C, yet lightweight
+  ActivateAddons camelcasemotion
+
+  "ActivateAddons ack
+  "ActivateAddons slime
   "ActivateAddons The_NERD_tree
   ActivateAddons snipmate
+
+  """ Git, Github
   ActivateAddons fugitive
+  ActivateAddons Gist
+
+
+  """ Some file types
+  ActivateAddons sparkup
+  ActivateAddons vim-less
   ActivateAddons xmledit
+
   ActivateAddons Markdown
   "ActivateAddons vim-ft-markdown_fold
+    " Marked
+    au! FileType markdown
+      \ setlocal spell |
+      \ map <D-e> :!open -a Marked '%'<CR><CR>
   ActivateAddons JSON
-  ActivateAddons vim-less
+    au! BufRead,BufNewFile *.json setfiletype json
+
   ActivateAddons vim-coffee-script
+    " CoffeeScript autocompilation
+    "autocmd BufWritePost *.coffee silent CoffeeMake! | cwindow
   ActivateAddons applescript
   ActivateAddons vim-addon-scala
-  ActivateAddons Gist
-  ActivateAddons LaTeX-Suite_aka_Vim-LaTeX
+    " Scala (See: http://mdr.github.com/scalariform/)
+    au BufEnter *.scala setl formatprg=scalariform\ --forceOutput
+
+  " Vim-LaTeX
+  " See-Also: http://michaelgoerz.net/refcards/vimlatexqrc.pdf
+  ActivateAddons vim-latex
+    au! FileType tex
+      \ setlocal spell textwidth=76 |
+      \ map  <D-e>   <F5>| map! <D-e>   <F5>|
+      \ map  <D-E> <S-F5>| map! <D-E> <S-F5>|
+      \ map  <D-r>   <F7>| map! <D-r>   <F7>|
+      \ map  <D-R> <S-F7>| map! <D-R> <S-F7>|
+      \ map  <D-®>   <F9>| map! <D-®>   <F9>|
+      \ imap <D-j> <Plug>IMAP_JumpBack|
+      \ set suffixes+=.pdf,.dvi,.ps,.ps.gz,.aux,.bbl,.blg,.log,.out,.ent,.fdb_latexmk,.brf " TeX by-products
+
+
+
+
   """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
   call vam#ActivateAddons(addons, {'auto_install' : 1})
   " sample: call vam#ActivateAddons(['pluginA','pluginB', ...], {'auto_install' : 0})
@@ -56,3 +122,4 @@ call SetupVAM()
 " See BUGS sections below [*]
 " Vim 7.0 users see BUGS section [3]
 endif
+" vim:sw=2
