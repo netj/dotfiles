@@ -167,7 +167,7 @@
 	<data>
 	YnBsaXN0MDDUAQIDBAUGGBlYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3AS
 	AAGGoKQHCBESVSRudWxs1AkKCwwNDg8QViRjbGFzc1ZOU05hbWVWTlNTaXplWE5TZkZs
-	YWdzgAOAAiNAMAAAAAAAABAQWENvbnNvbGFz0hMUFRZaJGNsYXNzbmFtZVgkY2xhc3Nl
+	YWdzgAOAAiNAMgAAAAAAABAQWENvbnNvbGFz0hMUFRZaJGNsYXNzbmFtZVgkY2xhc3Nl
 	c1ZOU0ZvbnSiFRdYTlNPYmplY3RfEA9OU0tleWVkQXJjaGl2ZXLRGhtUcm9vdIABCBEa
 	Iy0yNzxCS1JZYGlrbXZ4gYaRmqGkrb/CxwAAAAAAAAEBAAAAAAAAABwAAAAAAAAAAAAA
 	AAAAAADJ
@@ -189,6 +189,8 @@
 	CBEaIy0yNztBSE9cYmRmg4iTnKSnsMLFygAAAAAAAAEBAAAAAAAAABkAAAAAAAAAAAAA
 	AAAAAADM
 	</data>
+	<key>ShouldLimitScrollback</key>
+	<integer>0</integer>
 	<key>ShowActiveProcessInTitle</key>
 	<false/>
 	<key>ShowCommandKeyInTitle</key>
@@ -390,7 +392,7 @@
 	ZmZmg83MTD+DzcxMPgABhg==
 	</data>
 	<key>rowCount</key>
-	<integer>25</integer>
+	<integer>40</integer>
 	<key>shellExitAction</key>
 	<integer>0</integer>
 	<key>type</key>
