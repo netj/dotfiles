@@ -54,7 +54,8 @@ fun SetupVAM()
     autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
     autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
     autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-  ActivateAddons CamelCaseComplete CompleteHelper " less convenient: CTRL-X CTRL-C, yet lightweight
+  " CamelCaseComplete is less convenient (CTRL-X CTRL-C), yet lightweight
+  ActivateAddons CamelCaseComplete CompleteHelper
   ActivateAddons camelcasemotion
 
   "ActivateAddons ack
