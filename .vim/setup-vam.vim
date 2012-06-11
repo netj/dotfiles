@@ -23,7 +23,7 @@ fun SetupVAM()
 
   let addons=[] | command! -nargs=* ActivateAddons let addons+=[<f-args>]
   """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
+  ActivateAddons vim-addon-manager
 
 
   """ Look and Feels
