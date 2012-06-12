@@ -10,23 +10,24 @@ cd ~/.dotfiles || . update
 # install symlinks
 install() {
     local d=$1
-    local n=$d
+    local src=${2:-$d}
+    local n=$src
     # sanitize name
     n=${n#.}
-    n=${n//[\/.-]/_}
+    n=${n//[\/.- ]/_}
     # compute relative path
     local rel=
     case $d in
         */*) # need relative path to .dotfiles if path has depth
-        local dd=`dirname $d` 
-        mkdir -p ~/$dd
-        rel=$(tr / '\n' <<<$dd |
+        local dd=$(dirname "$d")
+        mkdir -p ~/"$dd"
+        rel=$(tr / '\n' <<<"$dd" |
             sed -n '/^$/d; s/.*/../p' |
             tr '\n' /)
         ;;
     esac
     run ${n}_before
-    if [ x"`readlink ~/$d`" = x"$rel.dotfiles/$d" ]; then
+    if [ x"$(readlink ~/"$d")" = x"$rel.dotfiles/$src" ]; then
         echo "$d installed"
         run ${n}_after
     else
@@ -35,9 +36,9 @@ install() {
             case "$REPLY" in
                 [Yy])
                 # backup previous one
-                ! [ -e ~/$d ] || mv -iv ~/$d ~/$d~
+                ! [ -e ~/"$d" ] || mv -iv ~/"$d" ~/"$d"~
                 # create a symlink
-                ln -sfnv $rel.dotfiles/$d ~/$d
+                ln -sfnv "$rel.dotfiles/$src" ~/"$d"
                 run ${n}_after
                 ;;
             esac
@@ -86,3 +87,10 @@ install .emacs.d/elisp/Makefile
 fonts_after() { make -C .fonts; }
 install .fonts.conf
 install .fonts
+
+case $(uname) in Darwin)
+    for s in Mac/Optimize*.{applescript,sh}; do
+        [ -e "$s" ] || continue
+        install Library/Scripts/"${s#Mac/}" "$s"
+    done
+;; esac
