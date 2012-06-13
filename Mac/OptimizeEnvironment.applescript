@@ -1,4 +1,4 @@
-# AppleScript for optimizing my Mac to Gates Office environment
+# AppleScript for organizing position and size of windows automatically in my Mac
 # Author: Jaeho Shin <netj@sparcs.org>
 # Created: 2012-06-09
 
