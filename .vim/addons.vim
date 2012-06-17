@@ -1,30 +1,7 @@
-if ! exists("*SetupVAM")
-fun SetupVAM()
-  " YES, you can customize this vam_install_path path and everything still works!
-  let vam_install_path = expand('$HOME') . '/.vim/vim-addons'
-  exec 'set runtimepath+='.vam_install_path.'/vim-addon-manager'
+if ! exists("*SetupVAMAddons")
 
-  " * unix based os users may want to use this code checking out VAM
-  " * windows users want to use http://mawercer.de/~marc/vam/index.php
-  "   to fetch VAM, VAM-known-repositories and the listed plugins
-  "   without having to install curl, unzip, git tool chain first
-  " -> BUG [4] (git-less installation)
-  if !filereadable(vam_install_path.'/vim-addon-manager/.git/config') && 1 == confirm("git clone VAM into ".vam_install_path."?","&Y\n&N")
-    " I'm sorry having to add this reminder. Eventually it'll pay off.
-    call confirm("Remind yourself that most plugins ship with documentation (README*, doc/*.txt). Its your first source of knowledge. If you can't find the info you're looking for in reasonable time ask maintainers to improve documentation")
-    exec '!p='.shellescape(vam_install_path).'; mkdir -p "$p" && cd "$p" && git clone --depth 1 git://github.com/MarcWeber/vim-addon-manager.git'
-    " VAM run helptags automatically if you install or update plugins
-    exec 'helptags '.fnameescape(vam_install_path.'/vim-addon-manager/doc')
-  endif
-
-  " Example drop git sources unless git is in PATH. Same plugins can
-  " be installed form www.vim.org. Lookup MergeSources to get more control
-  " let g:vim_addon_manager['drop_git_sources'] = !executable('git')
-
+fun! SetupVAMAddons()
   let addons=[] | command! -nargs=* ActivateAddons let addons+=[<f-args>]
-  """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-  ActivateAddons vim-addon-manager
-
 
   """ Look and Feels
   " See Also: http://www.quora.com/Which-are-the-best-vim-plugins
@@ -35,18 +12,18 @@ fun SetupVAM()
   """ Productivity boosters
   ActivateAddons surround
   ActivateAddons rainbow_parentheses
-    nnoremap <F7> :RainbowParenthesesToggle<CR>
-    inoremap <F7> <C-o>:RainbowParenthesesToggle<CR>
+    nnoremap <F7> :RainbowParenthesesToggleAll<CR>
+    inoremap <F7> <C-o>:RainbowParenthesesToggleAll<CR>
 
   """ CamelCase stuff
   " Shougo's NeoComplCache is really nice!
   ActivateAddons neocomplcache vimproc
-    let g:acp_enableAtStartup = 0 
+    let g:acp_enableAtStartup = 0
     " XXX Rather than enabling at startup, I use special key combo Cmd-Shift-D to turn it on
     "let g:neocomplcache_enable_at_startup = 1
     map <D-D> :NeoComplCacheEnable<CR>:NeoComplCacheCachingBuffer<CR>:NeoComplCacheCachingInclude<CR>
-    let g:neocomplcache_enable_smart_case = 1
-    let g:neocomplcache_enable_camel_case_completion = 1 
+    "let g:neocomplcache_enable_smart_case = 1
+    let g:neocomplcache_enable_camel_case_completion = 1
     let g:neocomplcache_enable_underbar_completion = 1
     " Enable omni completion.
     autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
@@ -60,8 +37,13 @@ fun SetupVAM()
 
   "ActivateAddons ack
   "ActivateAddons slime
-  "ActivateAddons The_NERD_tree
+  ActivateAddons The_NERD_tree
   ActivateAddons snipmate
+  "ActivateAddons vmark.vim_Visual_Bookmarking " XXX beware: <F2>/<F3> is overrided
+  " TODO let b:vm_guibg = yellow
+  "if has("ruby")
+  "  ActivateAddons tips
+  "end
 
   """ Git, Github
   ActivateAddons fugitive
@@ -103,24 +85,78 @@ fun SetupVAM()
       \ imap <D-j> <Plug>IMAP_JumpBack|
       \ set suffixes+=.pdf,.dvi,.ps,.ps.gz,.aux,.bbl,.blg,.log,.out,.ent,.fdb_latexmk,.brf " TeX by-products
 
+  return addons
+endfun
 
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" Rest of this file borrowed from :help VAM-installation """""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-  """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-  call vam#ActivateAddons(addons, {'auto_install' : 1})
+fun! EnsureVamIsOnDisk(vam_install_path)
+  " windows users may want to use http://mawercer.de/~marc/vam/index.php
+  " to fetch VAM, VAM-known-repositories and the listed plugins
+  " without having to install curl, 7-zip and git tools first
+  " -> BUG [4] (git-less installation)
+  if !filereadable(a:vam_install_path.'/vim-addon-manager/.git/config')
+     \&& 1 == confirm("Clone VAM into ".a:vam_install_path."?","&Y\n&N")
+    " I'm sorry having to add this reminder. Eventually it'll pay off.
+    call confirm("Remind yourself that most plugins ship with ".
+                \"documentation (README*, doc/*.txt). It is your ".
+                \"first source of knowledge. If you can't find ".
+                \"the info you're looking for in reasonable ".
+                \"time ask maintainers to improve documentation")
+    call mkdir(a:vam_install_path, 'p')
+    execute '!git clone --depth=1 git://github.com/MarcWeber/vim-addon-manager '.shellescape(a:vam_install_path, 1).'/vim-addon-manager'
+    " VAM runs helptags automatically when you install or update 
+    " plugins
+    exec 'helptags '.fnameescape(a:vam_install_path.'/vim-addon-manager/doc')
+  endif
+endf
+
+fun! SetupVAM()
+  " Set advanced options like this:
+  " let g:vim_addon_manager = {}
+  " let g:vim_addon_manager['key'] = value
+
+  " Example: drop git sources unless git is in PATH. Same plugins can
+  " be installed from www.vim.org. Lookup MergeSources to get more control
+  " let g:vim_addon_manager['drop_git_sources'] = !executable('git')
+
+  " VAM install location:
+  let vam_install_path = expand('$HOME') . '/.vim/vim-addons'
+  call EnsureVamIsOnDisk(vam_install_path)
+  exec 'set runtimepath+='.vam_install_path.'/vim-addon-manager'
+
+  " Tell VAM which plugins to fetch & load:
+  call vam#ActivateAddons(['vim-addon-manager'] + SetupVAMAddons(), {'auto_install' : 1})
   " sample: call vam#ActivateAddons(['pluginA','pluginB', ...], {'auto_install' : 0})
-  "  - look up source from pool (<c-x><c-p> complete plugin names):
-  "    ActivateAddons(["foo",  ..
-  "  - name rewritings: 
+
+  " Addons are put into vam_install_path/plugin-name directory
+  " unless those directories exist. Then they are activated.
+  " Activating means adding addon dirs to rtp and do some additional
+  " magic
+
+  " How to find addon names?
+  " - look up source from pool
+  " - (<c-x><c-p> complete plugin names):
+  " You can use name rewritings to point to sources:
   "    ..ActivateAddons(["github:foo", .. => github://foo/vim-addon-foo
   "    ..ActivateAddons(["github:user/repo", .. => github://user/repo
   " Also see section "2.2. names of addons and addon sources" in VAM's documentation
 endfun
 call SetupVAM()
-" experimental: run after gui has been started (gvim) [3]
+" experimental [E1]: load plugins lazily depending on filetype, See
+" NOTES
+" experimental [E2]: run after gui has been started (gvim) [3]
 " option1:  au VimEnter * call SetupVAM()
 " option2:  au GUIEnter * call SetupVAM()
 " See BUGS sections below [*]
 " Vim 7.0 users see BUGS section [3]
+
 endif
+
+
+
+
 " vim:sw=2

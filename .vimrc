@@ -15,12 +15,12 @@ set nocompatible        " This is Vi IMproved, not Vi :^)
 
 " source optional files
 fun! SourceOptional(files)
-    for f in a:files | if filereadable(expand(f)) | exec 'source '.f | endif | endfor
+  for f in a:files | if filereadable(expand(f)) | exec 'source '.f | endif | endfor
 endfun
 command! -nargs=* SourceOptional :call SourceOptional([<f-args>])
 
 " setup vim-addon-manager aka VAM
-SourceOptional ~/.vim/setup-vam.vim
+SourceOptional ~/.vim/addons.vim
 
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
@@ -147,7 +147,8 @@ nnoremap <F2> :set list!<CR>
 inoremap <F2> <C-o>:set list!<CR>
 
 " Toggle hlsearch (highlight search matches).
-nmap <F3> :set hlsearch!<CR>
+nnoremap <F3> :set hlsearch!<CR>
+inoremap <F3> <C-o>:set hlsearch!<CR>
 
 " Fix syntax highlighting by doing it from start of file
 " See: http://vim.wikia.com/wiki/Fix_syntax_highlighting
