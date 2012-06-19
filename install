@@ -11,6 +11,7 @@ cd ~/.dotfiles || . update
 install() {
     local d=$1
     local src=${2:-$d}
+    local symlink=${3:-true}
     local n=$src
     # sanitize name
     n=${n#.}
@@ -26,10 +27,12 @@ install() {
             tr '\n' /)
         ;;
     esac
-    run ${n}_before
-    if [ x"$(readlink ~/"$d")" = x"$rel.dotfiles/$src" ]; then
+    run ${n}_before "$@"
+    # check if symlinks or hardlinks are already there
+    if [ x"$(readlink ~/"$d")" = x"$rel.dotfiles/$src" \
+        -o ~/"$d" -ef "$src" ]; then
         echo "$d installed"
-        run ${n}_after
+        run ${n}_after "$@"
     else
         if read -p "install $d? " -n1; then
             echo
@@ -37,9 +40,13 @@ install() {
                 [Yy])
                 # backup previous one
                 ! [ -e ~/"$d" ] || mv -iv ~/"$d" ~/"$d"~
-                # create a symlink
-                ln -sfnv "$rel.dotfiles/$src" ~/"$d"
-                run ${n}_after
+                # create a symlink or a hardlink
+                if $symlink; then
+                    ln -snfv "$rel.dotfiles/$src" ~/"$d"
+                else
+                    ln -fv "$src" ~/"$d"
+                fi
+                run ${n}_after "$@"
                 ;;
             esac
         fi
@@ -88,9 +95,25 @@ fonts_after() { make -C .fonts; }
 install .fonts.conf
 install .fonts
 
+# Mac OS X
 case $(uname) in Darwin)
-    for s in Mac/Optimize*.{applescript,sh}; do
-        [ -e "$s" ] || continue
-        install Library/Scripts/"${s#Mac/}" "$s"
+    shopt -s nullglob
+    # compile applescripts
+    scptd=Mac/Scripts/compiled/
+    mkdir -p "$scptd"
+    for s in Mac/Scripts/*.applescript; do
+        o=$(basename "$s" .applescript)
+        o="$scptd$o.scpt"
+        [ "$s" -nt "$o" ] || continue
+        echo "$s: compiling..."
+        osacompile -o "$o" "$s"
+    done
+    # install them
+    for s in "$scptd"*.scpt; do
+        install Library/Scripts/"${s#$scptd}" "$s" false
+        rm -f ~/Library/Scripts/"${s#$scptd}"~
+    done
+    for s in Mac/Scripts/*.sh; do
+        install Library/Scripts/"${s#Mac/Scripts/}" "$s" false
     done
 ;; esac
