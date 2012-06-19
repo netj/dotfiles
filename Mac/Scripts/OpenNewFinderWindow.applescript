@@ -31,6 +31,6 @@ tell application "Finder" to activate
 tell application "System Events"
 	tell process "Finder"
 		click menu item 1 of menu 3 of menu bar 1
-		-- click menu item "»õ·Î¿î Finder À©µµ¿ì" of menu "ÆÄÀÏ" of menu bar 1
+		-- click menu item "ìƒˆë¡œìš´ Finder ìœˆë„ìš°" of menu "íŒŒì¼" of menu bar 1
 	end tell
 end tell

@@ -48,6 +48,6 @@ end tell
 -- XXX Chrome will eventually support Scripting
 tell application "System Events"
 	tell process "Google Chrome"
-		click menu item "»õ Ã¢" of menu "ÆÄÀÏ" of menu bar 1
+		click menu item "ìƒˆ ì°½" of menu "íŒŒì¼" of menu bar 1
 	end tell
 end tell

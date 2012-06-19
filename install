@@ -106,6 +106,7 @@ case $(uname) in Darwin)
         o="$scptd$o.scpt"
         [ "$s" -nt "$o" ] || continue
         echo "$s: compiling..."
+        xattr -w com.apple.TextEncoding 'UTF-8;134217984' "$s"
         osacompile -o "$o" "$s"
     done
     # install them

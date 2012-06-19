@@ -4,7 +4,7 @@
 
 # First, try the control-click menu of Terminal app icon on the Dock
 # See: http://www.mac-forums.com/forums/os-x-operating-system/146570-applescript-detect-if-dock-contextual-menu-item-checked.html
-property appNames : {"Terminal", "ÅÍ¹Ì³Î"}
+property appNames : {"Terminal", "í„°ë¯¸ë„"}
 tell application "Dock" to activate
 tell application "System Events"
 	tell process "Dock"
@@ -41,6 +41,6 @@ tell application "Terminal" to activate
 tell application "System Events"
 	tell process "Terminal"
 		click menu item 1 of menu 3 of menu bar 1
-		-- click menu item "»õ·Î¿î À©µµ¿ì" of menu "¼Ğ" of menu bar 1
+		-- click menu item "ìƒˆë¡œìš´ ìœˆë„ìš°" of menu "ì…¸" of menu bar 1
 	end tell
 end tell

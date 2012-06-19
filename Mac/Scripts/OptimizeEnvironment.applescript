@@ -21,7 +21,7 @@ property defaultDisplay : macbookDisplay
 on run args
 	
 	-- consider the screen size
-	tell application "Finder" to ¡þ
+	tell application "Finder" to ï¿¢
 		set {_x, _y, _w, _h} to bounds of window of desktop
 	
 	if (count args) = 0 then
@@ -92,11 +92,11 @@ to adjustDisplayCoordinatesWithDock(displayInfo)
 		set {dockX, dockY} to position in list 1
 		set {dockW, dockH} to size in list 1
 	end tell
-	if dockX = 0 ¡þ
+	if dockX = 0 ï¿¢
 		then -- dock is at left
 		set displayInfo's baseCoords to {dockW, menubarHeight}
 		set displayInfo's screenMargin to displayInfo's baseCoords
-	else if dockY + dockH ¡Ã item 2 of displayInfo's screenSize ¡þ
+	else if dockY + dockH â‰¥ item 2 of displayInfo's screenSize ï¿¢
 		then -- dock is at bottom
 		set displayInfo's baseCoords to {0, menubarHeight}
 		set displayInfo's screenMargin to {0, menubarHeight + dockH}
@@ -183,7 +183,7 @@ to moveAndResize(args)
 		-- first, figure out width and height
 		set _w to origW
 		if newW is not null then
-			if newW ¡Â 1 then -- scale
+			if newW â‰¤ 1 then -- scale
 				set _w to newW * effWidth
 			else
 				set _w to newW
@@ -191,7 +191,7 @@ to moveAndResize(args)
 		end if
 		set _h to origH
 		if newH is not null then
-			if newH ¡Â 1 then
+			if newH â‰¤ 1 then
 				set _h to newH * effHeight
 			else
 				set _h to newH
@@ -201,7 +201,7 @@ to moveAndResize(args)
 		-- then, the position
 		set _x to origX
 		if newX is not null then
-			if newX ¡Â 1 then
+			if newX â‰¤ 1 then
 				set _x to offsetX + newX * (effWidth - _w)
 			else
 				set _x to newX
@@ -209,7 +209,7 @@ to moveAndResize(args)
 		end if
 		set _y to origY
 		if newY is not null then
-			if newY ¡Â 1 then
+			if newY â‰¤ 1 then
 				set _y to offsetY + newY * (effHeight - _h)
 			else
 				set _y to newY
@@ -239,9 +239,9 @@ to moveWindows(processesToMove)
 				tell process procName
 					repeat with win in windows
 						set {_x, _y} to position of win
-						if (_x < 0 or _y < 0 ¡þ
-							or _x ¡Ã defaultDisplay's screenWidth ¡þ
-							or _y ¡Ã defaultDisplay's screenHeight) then
+						if (_x < 0 or _y < 0 ï¿¢
+							or _x â‰¥ defaultDisplay's screenWidth ï¿¢
+							or _y â‰¥ defaultDisplay's screenHeight) then
 							-- TODO move to a relatively similar position as where it was?
 							set position of win to defaultDisplay's baseCoords
 						end if
