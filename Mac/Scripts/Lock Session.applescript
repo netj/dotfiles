@@ -1,4 +1,4 @@
-# AppleScript for opening a new Terminal window
+# AppleScript for locking session
 # Author: Jaeho Shin <netj@sparcs.org>
 # Created: 2009-10-02
 

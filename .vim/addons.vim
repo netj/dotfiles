@@ -68,6 +68,7 @@ fun! SetupVAMAddons()
     " CoffeeScript autocompilation
     "autocmd BufWritePost *.coffee silent CoffeeMake! | cwindow
   ActivateAddons applescript
+    au! BufRead,BufNewFile *.applescript setfiletype applescript
   ActivateAddons vim-addon-scala
     " Scala (See: http://mdr.github.com/scalariform/)
     au BufEnter *.scala setl formatprg=scalariform\ --forceOutput

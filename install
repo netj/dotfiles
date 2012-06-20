@@ -25,9 +25,8 @@ install() {
             tr '\n' /)
         ;;
     esac
-    # check if symlinks or hardlinks are already there
-    if [ x"$(readlink ~/"$d")" = x"$rel.dotfiles/$src" \
-        -o ~/"$d" -ef "$src" ]; then
+    # check if our link is already there
+    if [ ~/"$d" -ef "$src" ]; then
         run ${n}_before "$@"
         echo "$d installed"
         run ${n}_after "$@"
@@ -104,7 +103,7 @@ install .fonts
 # Mac OS X
 shopt -s nullglob extglob
 case $(uname) in Darwin)
-    # compile applescripts
+    # install applescripts
     scptd=Mac/Scripts/compiled/
     mkdir -p "$scptd"
     compilescpt() {
@@ -122,14 +121,13 @@ case $(uname) in Darwin)
         local obj="$scptd${srcrel%.applescript}".scpt
         local dst=Library/Scripts/"${obj#$scptd}"
         local n=$(shname "$dst")
-        eval "${n}_before() { compilescpt '$obj' '$src'; }" # TODO escape obj and src
+        eval "${n}_before() { compilescpt '${obj//\'/\'\\\'\'}' '${src//\'/\'\\\'\'}'; }" # TODO escape obj and src
         install "$dst" "$obj" true true
     }
-    for s in Mac/Scripts/!(OptimizeEnvironment).applescript; do
+    for s in Mac/Scripts/{!(Optimize\ Environment),Applications/*/*}.applescript; do
         installscpt "$s"
     done
-    # install them
-    for s in Mac/Scripts/OptimizeEnvironment.applescript Mac/Scripts/*.sh; do
+    for s in Mac/Scripts/{Optimize\ Environment.applescript,*.sh}; do
         install Library/Scripts/"${s#Mac/Scripts/}" "$s" true
     done
 ;; esac
