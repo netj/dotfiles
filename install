@@ -109,6 +109,8 @@ case $(uname) in Darwin)
     compilescpt() {
         local o=$1 s="$2"
         cd ./.dotfiles
+        local n=$(shname "$o")
+        run ${n}_before "$@"
         ! [ "$o" -nt "$s" ] || continue
         echo "$o: compiling ${s##*/}"
         mkdir -p "$(dirname "$o")"
@@ -121,12 +123,23 @@ case $(uname) in Darwin)
         local obj="$scptd${srcrel%.applescript}".scpt
         local dst=Library/Scripts/"${obj#$scptd}"
         local n=$(shname "$dst")
-        eval "${n}_before() { compilescpt '${obj//\'/\'\\\'\'}' '${src//\'/\'\\\'\'}'; }" # TODO escape obj and src
+        [ x"$(type -t ${n}_before)" = x"function" ] ||
+            eval "${n}_before() { compilescpt '${obj//\'/\'\\\'\'}' '${src//\'/\'\\\'\'}'; }" # TODO escape obj and src
         install "$dst" "$obj" true true
     }
     for s in Mac/Scripts/{!(Optimize\ Environment),Applications/*/*}.applescript; do
         installscpt "$s"
     done
+    Mac_Scripts_compiled_Applications_Finder_lselect_scpt_before() {
+        curl -RLo .dotfiles/Mac/Scripts/Applications/Finder/lselect.applescript http://anoved.net/files/lselect.applescript
+    }
+    installscpt Mac/Scripts/Applications/Finder/lselect.applescript
+    Library_Scripts_Applications_iTunes_iTunes_SED_scpt_before() {
+        curl -RLO http://aurelio.googlecode.com/files/iTunes_SED-1.1.zip
+        ditto -xk iTunes_SED-*.zip .dotfiles/"$scptd"/Applications/iTunes/
+        rm -f iTunes_SED-*.zip
+    }
+    installscpt Mac/Scripts/Applications/iTunes/iTunes\ SED.applescript
     for s in Mac/Scripts/{Optimize\ Environment.applescript,*.sh}; do
         install Library/Scripts/"${s#Mac/Scripts/}" "$s" true
     done
