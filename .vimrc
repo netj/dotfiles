@@ -163,6 +163,15 @@ inoremap <F5> <C-o>:set wrap!<CR>
 nnoremap <F6> :set paste!<CR>
 inoremap <F6> <C-o>:set paste!<CR>
 
+" Window resize for Mac (to be mapped to pinch in/out gestures)
+nnoremap <D-≠>      16<C-w>>
+inoremap <D-≠> <C-o>16<C-w>>
+nnoremap <D-–>      16<C-w><
+inoremap <D-–> <C-o>16<C-w><
+nnoremap <D-±>      8<C-w>+
+inoremap <D-±> <C-o>8<C-w>+
+nnoremap <D-—>      8<C-w>-
+inoremap <D-—> <C-o>8<C-w>-
 
 " Don't use Ex mode, use Q for formatting
 map Q gq
