@@ -11,11 +11,9 @@ cd ~/.dotfiles || . update
 install() {
     local d=$1
     local src=${2:-$d}
-    local symlink=${3:-true}
-    local n=$src
-    # sanitize name
-    n=${n#.}
-    n=${n//[\/.- ]/_}
+    local nosymlink=${3:-false}
+    local nobackup=${4:-false}
+    local n=$(shname "$d")
     # compute relative path
     local rel=
     case $d in
@@ -27,10 +25,10 @@ install() {
             tr '\n' /)
         ;;
     esac
-    run ${n}_before "$@"
     # check if symlinks or hardlinks are already there
     if [ x"$(readlink ~/"$d")" = x"$rel.dotfiles/$src" \
         -o ~/"$d" -ef "$src" ]; then
+        run ${n}_before "$@"
         echo "$d installed"
         run ${n}_after "$@"
     else
@@ -38,19 +36,27 @@ install() {
             echo
             case "$REPLY" in
                 [Yy])
-                # backup previous one
-                ! [ -e ~/"$d" ] || mv -iv ~/"$d" ~/"$d"~
-                # create a symlink or a hardlink
-                if $symlink; then
-                    ln -snfv "$rel.dotfiles/$src" ~/"$d"
-                else
-                    ln -fv "$src" ~/"$d"
-                fi
-                run ${n}_after "$@"
-                ;;
+                    run ${n}_before "$@"
+                    # backup previous one
+                    ! [ -e ~/"$d" ] || $nobackup || mv -iv ~/"$d" ~/"$d"~
+                    # create a symlink or a hardlink
+                    if $nosymlink; then
+                        ln -fv "$src" ~/"$d"
+                    else
+                        ln -snfv "$rel.dotfiles/$src" ~/"$d"
+                    fi
+                    run ${n}_after "$@"
+                    ;;
             esac
         fi
     fi
+}
+shname() {
+    local n=$1
+    # sanitize name
+    n=${n#.}
+    n=${n//[\/. -]/_}
+    echo "$n"
 }
 run() { [ "`type -t $1 2>/dev/null`" != function ] || (cd; "$@"); }
 safeln() {
@@ -96,25 +102,34 @@ install .fonts.conf
 install .fonts
 
 # Mac OS X
+shopt -s nullglob extglob
 case $(uname) in Darwin)
-    shopt -s nullglob
     # compile applescripts
     scptd=Mac/Scripts/compiled/
     mkdir -p "$scptd"
-    for s in Mac/Scripts/*.applescript; do
-        o=$(basename "$s" .applescript)
-        o="$scptd$o.scpt"
-        [ "$s" -nt "$o" ] || continue
-        echo "$s: compiling..."
+    compilescpt() {
+        local o=$1 s="$2"
+        cd ./.dotfiles
+        ! [ "$o" -nt "$s" ] || continue
+        echo "$o: compiling ${s##*/}"
+        mkdir -p "$(dirname "$o")"
         xattr -w com.apple.TextEncoding 'UTF-8;134217984' "$s"
-        osacompile -o "$o" "$s"
+        osacompile -x -o "$o" "$s"
+    }
+    installscpt() {
+        local src=$1
+        local srcrel=${src#Mac/Scripts/}
+        local obj="$scptd${srcrel%.applescript}".scpt
+        local dst=Library/Scripts/"${obj#$scptd}"
+        local n=$(shname "$dst")
+        eval "${n}_before() { compilescpt '$obj' '$src'; }" # TODO escape obj and src
+        install "$dst" "$obj" true true
+    }
+    for s in Mac/Scripts/!(OptimizeEnvironment).applescript; do
+        installscpt "$s"
     done
     # install them
-    for s in "$scptd"*.scpt; do
-        install Library/Scripts/"${s#$scptd}" "$s" false
-        rm -f ~/Library/Scripts/"${s#$scptd}"~
-    done
-    for s in Mac/Scripts/*.sh; do
-        install Library/Scripts/"${s#Mac/Scripts/}" "$s" false
+    for s in Mac/Scripts/OptimizeEnvironment.applescript Mac/Scripts/*.sh; do
+        install Library/Scripts/"${s#Mac/Scripts/}" "$s" true
     done
 ;; esac

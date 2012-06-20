@@ -1,2 +1,2 @@
 #!/bin/sh
-osascript `dirname "$0"`/OptimizeEnvironment.scpt "Gates Office"
+osascript `dirname "$0"`/OptimizeEnvironment.applescript "Gates Office"

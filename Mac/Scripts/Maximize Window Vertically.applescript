@@ -32,9 +32,7 @@ set maxHeight to 10000
 
 # Figure out the frontmost/current process name
 # http://ctrloptcmd.com/archives/536/center-and-resize-window-with-applescript/
-tell application "System Events" to ￢
-	set theProcessName to the name of first item of ￢
-		(every process whose frontmost is true)
+tell application "System Events" to set theProcessName to the name of first item of (every process whose frontmost is true)
 
 # First, try with window's bounds
 try

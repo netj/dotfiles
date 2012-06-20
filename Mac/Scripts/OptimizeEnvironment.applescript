@@ -21,8 +21,7 @@ property defaultDisplay : macbookDisplay
 on run args
 	
 	-- consider the screen size
-	tell application "Finder" to ￢
-		set {_x, _y, _w, _h} to bounds of window of desktop
+	tell application "Finder" to set {_x, _y, _w, _h} to bounds of window of desktop
 	
 	if (count args) = 0 then
 		if _w = item 1 of defaultDisplay's screenSize and _h = item 2 of defaultDisplay's screenSize then
@@ -92,12 +91,10 @@ to adjustDisplayCoordinatesWithDock(displayInfo)
 		set {dockX, dockY} to position in list 1
 		set {dockW, dockH} to size in list 1
 	end tell
-	if dockX = 0 ￢
-		then -- dock is at left
+	if dockX = 0 then -- dock is at left
 		set displayInfo's baseCoords to {dockW, menubarHeight}
 		set displayInfo's screenMargin to displayInfo's baseCoords
-	else if dockY + dockH ≥ item 2 of displayInfo's screenSize ￢
-		then -- dock is at bottom
+	else if dockY + dockH ≥ item 2 of displayInfo's screenSize then
 		set displayInfo's baseCoords to {0, menubarHeight}
 		set displayInfo's screenMargin to {0, menubarHeight + dockH}
 	else -- dock is at right
@@ -239,9 +236,7 @@ to moveWindows(processesToMove)
 				tell process procName
 					repeat with win in windows
 						set {_x, _y} to position of win
-						if (_x < 0 or _y < 0 ￢
-							or _x ≥ defaultDisplay's screenWidth ￢
-							or _y ≥ defaultDisplay's screenHeight) then
+						if (_x < 0 or _y < 0 or _x ≥ defaultDisplay's screenWidth or _y ≥ defaultDisplay's screenHeight) then
 							-- TODO move to a relatively similar position as where it was?
 							set position of win to defaultDisplay's baseCoords
 						end if
