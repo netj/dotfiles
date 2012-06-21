@@ -16,6 +16,12 @@ script syncmaster30inDisplay
 	property screenMargin : baseCoords
 end script
 
+script thunderboltDisplay
+	property screenSize : {2560, 1440}
+	property baseCoords : {67, 22}
+	property screenMargin : baseCoords
+end script
+
 property defaultDisplay : macbookDisplay
 
 on run args
@@ -23,13 +29,16 @@ on run args
 	-- consider the screen size
 	tell application "Finder" to set {_x, _y, _w, _h} to bounds of window of desktop
 	
-	if (count args) = 0 then
+	if (count args) = 0 or not (item 1 of args is not in {"MacBook", "Gates Office", "MPK Office"}) then
 		if _w = item 1 of defaultDisplay's screenSize and _h = item 2 of defaultDisplay's screenSize then
 			set args to {"MacBook"}
-		else if _w > item 1 of defaultDisplay's screenSize or _h > item 2 of defaultDisplay's screenSize then
+		else if _h = (item 2 of defaultDisplay's screenSize) + (item 2 of syncmaster30inDisplay's screenSize) then
 			set args to {"Gates Office"}
+		else if _w = (item 1 of defaultDisplay's screenSize) + (item 1 of thunderboltDisplay's screenSize) then
+			set args to {"MPK Office"}
 		end if
 	end if
+	log args & _w & _h
 	
 	-- move and resize some apps (without knowing the environment)
 	if appIsRunning("Safari") then tell application "Safari" to my moveAndResize({w:1321, wins:windows})
@@ -40,7 +49,7 @@ on run args
 		-- some environment specific move/resizes
 		if appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.98, wins:windows})
 	else if "Gates Office" is in args then
-		-- I have a SyncMaste 305T in my office :)
+		-- I have a SyncMaster 305T in my office :)
 		set defaultDisplay to syncmaster30inDisplay
 		adjustDisplayCoordinatesWithDock(defaultDisplay)
 		-- adjust offset of macbookDisplay
@@ -48,13 +57,27 @@ on run args
 		set macbookDisplay's baseCoords to {484, 1600}
 		-- some environment specific move/resizes
 		if appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.8, wins:windows})
+	else if "MPK Office" is in args then
+		-- There's an Apple Thunderbolt Display at my workplace
+		set defaultDisplay to thunderboltDisplay
+		adjustDisplayCoordinatesWithDock(defaultDisplay)
+		-- adjust offset of macbookDisplay
+		set macbookDisplay's screenMargin to {2, 2}
+		set macbookDisplay's baseCoords to {2560, 702}
+		-- some environment specific move/resizes
+		if appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.8, wins:windows})
 	end if
-	
 	-- move and resize some apps
-	
-	if appIsRunning("Mail") then tell application "Mail" to my moveAndResize({disp:macbookDisplay, x:0, y:0, w:1532, h:1, wins:windows of message viewers})
+
+	if appIsRunning("Mail") then tell application "Mail" to my moveAndResize({disp:macbookDisplay, x:0, y:0, w:1532, h:0.9, wins:windows of message viewers})
 	if appIsRunning("iChat") then tell application "iChat" to my moveAndResize({disp:macbookDisplay, x:0.9, y:0.9, h:700, wins:windows})
 	if appIsRunning("Twitter") then tell application "Twitter" to my moveAndResize({disp:macbookDisplay, x:1, y:0, h:1, wins:windows})
+	if appIsRunning("Adium") then tell application "Adium"
+		my moveAndResize({disp:macbookDisplay, x:1, y:0, w:250, h:1, wins:windows})
+		my moveAndResize({disp:macbookDisplay, x:1, y:1, w:0.6, h:0.75, wins:chat windows})
+	end tell
+
+	if appIsRunning("Eclipse") then tell application "System Events" to tell process "Eclipse" to my moveAndResize({w:1, h:1, wins:windows})
 	
 	if appIsRunning("Skim") then tell application "Skim" to my moveAndResize({wins:windows, w:0.6, h:1})
 	if appIsRunning("Papers2") then
@@ -201,7 +224,7 @@ to moveAndResize(args)
 			if newX ≤ 1 then
 				set _x to offsetX + newX * (effWidth - _w)
 			else
-				set _x to newX
+				set _x to offsetX + newX
 			end if
 		end if
 		set _y to origY
@@ -209,7 +232,7 @@ to moveAndResize(args)
 			if newY ≤ 1 then
 				set _y to offsetY + newY * (effHeight - _h)
 			else
-				set _y to newY
+				set _y to offsetY + newY
 			end if
 		end if
 		
