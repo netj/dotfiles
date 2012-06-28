@@ -69,7 +69,7 @@ on run args
 		if appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.8, wins:windows})
 	end if
 	-- move and resize some apps
-
+	
 	if appIsRunning("Mail") then tell application "Mail" to my moveAndResize({disp:macbookDisplay, x:0, y:0, w:1532, h:0.9, wins:windows of message viewers})
 	if appIsRunning("iChat") then tell application "iChat" to my moveAndResize({disp:macbookDisplay, x:0.9, y:0.9, h:700, wins:windows})
 	if appIsRunning("Twitter") then tell application "Twitter" to my moveAndResize({disp:macbookDisplay, x:1, y:0, h:1, wins:windows})
@@ -77,28 +77,11 @@ on run args
 		my moveAndResize({disp:macbookDisplay, x:1, y:0, w:250, h:1, wins:windows})
 		my moveAndResize({disp:macbookDisplay, x:1, y:1, w:0.6, h:0.75, wins:chat windows})
 	end tell
-
-	if appIsRunning("Eclipse") then tell application "System Events" to tell process "Eclipse" to my moveAndResize({w:1, h:1, wins:windows})
+	
+	if appIsRunning("Eclipse") then moveAndResize({w:1, h:1, wins:getAppWindows("Eclipse")})
 	
 	if appIsRunning("Skim") then tell application "Skim" to my moveAndResize({wins:windows, w:0.6, h:1})
-	if appIsRunning("Papers2") then
-		tell application "System Events"
-			repeat
-				-- XXX if Papers is in a different Space, no windows are seen here
-				tell application "Papers2" to activate
-				key code 37 using command down -- Cmd-L to go to its window
-				delay 1
-				tell process "Papers2" to set papersWindows to get windows
-				if (count papersWindows) > 0 then
-					my moveAndResize({x:0, y:0, wins:papersWindows, w:1, h:1})
-					exit repeat
-				else
-					-- if the screen is locked, no papersWindows will be found, so repeat it
-					delay 5
-				end if
-			end repeat
-		end tell
-	end if
+	if appIsRunning("Papers2") then moveAndResize({x:0, y:0, wins:getAppWindows("Papers2"), w:1, h:1})
 	
 	if appIsRunning("Mail") then
 		tell application "Mail" to activate
@@ -135,6 +118,31 @@ on appIsRunning(appName)
 end appIsRunning
 
 
+-- How to get windows of applications not friendly to AppleScript/Events
+on getAppWindows(appName)
+	if appIsRunning(appName) then
+		tell application "System Events"
+			set appDockIcon to get UI element appName of list 1 of process "Dock"
+			repeat
+				tell application appName to activate
+				click appDockIcon
+				click appDockIcon
+				delay 1
+				set appWindows to get windows of process appName
+				if (count appWindows) > 0 then
+					return appWindows
+				else
+					-- if the screen is locked, no papersWindows will be found, so repeat it
+					delay 5
+					-- TODO limit retry count
+				end if
+			end repeat
+		end tell
+	else
+		return {}
+	end if
+end getAppWindows
+
 -- moveAndResize -- a piece of AppleScript for changing the size and position of windows
 -- Author: Jaeho Shin <netj@sparcs.org>
 -- Created: 2012-06-09
@@ -153,37 +161,14 @@ For x,y,w,h, you can pass:
 
 *)
 to moveAndResize(args)
-	-- XXX these try-on-error really sucks :(
-	try
-		set wins to wins of args
-	on error
-		set wins to null
-	end try
-	try
-		set displayInfo to disp of args
-	on error
-		set displayInfo to defaultDisplay
-	end try
-	try
-		set newX to x of args
-	on error
-		set newX to null
-	end try
-	try
-		set newY to y of args
-	on error
-		set newY to null
-	end try
-	try
-		set newW to w of args
-	on error
-		set newW to null
-	end try
-	try
-		set newH to h of args
-	on error
-		set newH to null
-	end try
+	-- Learned how to augment default values to a record from Nigel Garvey: http://macscripter.net/viewtopic.php?pid=139333#p139333
+	set args to args & {wins:{}, disp:defaultDisplay, x:null, y:null, w:null, h:null}
+	set wins to wins of args
+	set displayInfo to disp of args
+	set newX to x of args
+	set newY to y of args
+	set newW to w of args
+	set newH to h of args
 	set {screenWidth, screenHeight} to displayInfo's screenSize
 	set {marginH, marginV} to displayInfo's screenMargin
 	set {offsetX, offsetY} to displayInfo's baseCoords
