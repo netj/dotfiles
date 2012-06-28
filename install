@@ -127,22 +127,20 @@ case $(uname) in Darwin)
             eval "${n}_before() { compilescpt '${obj//\'/\'\\\'\'}' '${src//\'/\'\\\'\'}'; }" # TODO escape obj and src
         install "$dst" "$obj" true true
     }
-    for s in Mac/Scripts/{!(Adapt\ to\ Environment),Applications/*/*}.applescript; do
-        installscpt "$s"
-    done
     Mac_Scripts_compiled_Applications_Finder_lselect_scpt_before() {
         ! [ -e .dotfiles/Mac/Scripts/Applications/Finder/lselect.applescript ] || return 0
         curl -RLo .dotfiles/Mac/Scripts/Applications/Finder/lselect.applescript http://anoved.net/files/lselect.applescript
     }
-    installscpt Mac/Scripts/Applications/Finder/lselect.applescript
     Library_Scripts_Applications_iTunes_iTunes_SED_scpt_before() {
         ! [ -e .dotfiles/"$scptd"/Applications/iTunes/iTunes\ SED.scpt ] || return 0
         curl -RLO http://aurelio.googlecode.com/files/iTunes_SED-1.1.zip
         ditto -xk iTunes_SED-*.zip .dotfiles/"$scptd"/Applications/iTunes/
         rm -f iTunes_SED-*.zip
     }
-    installscpt Mac/Scripts/Applications/iTunes/iTunes\ SED.applescript
-    for s in Mac/Scripts/{Adapt\ to\ Environment.applescript,*.sh}; do
+    for s in Mac/Scripts/{*,Applications/{*/*,Finder/lselect,iTunes/iTunes\ SED}}.applescript; do
+        installscpt "$s"
+    done
+    for s in Mac/Scripts/*.sh; do
         install Library/Scripts/"${s#Mac/Scripts/}" "$s" true true
     done
 ;; esac

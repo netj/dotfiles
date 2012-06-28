@@ -29,12 +29,13 @@ on run args
 	-- consider the screen size
 	tell application "Finder" to set {_x, _y, _w, _h} to bounds of window of desktop
 	
+	set defaultDisplay to macbookDisplay
 	if (count args) = 0 or not (item 1 of args is not in {"MacBook", "Gates Office", "MPK Office"}) then
-		if _w = item 1 of defaultDisplay's screenSize and _h = item 2 of defaultDisplay's screenSize then
+		if _w = item 1 of macbookDisplay's screenSize and _h = item 2 of macbookDisplay's screenSize then
 			set args to {"MacBook"}
-		else if _h = (item 2 of defaultDisplay's screenSize) + (item 2 of syncmaster30inDisplay's screenSize) then
+		else if _h = (item 2 of macbookDisplay's screenSize) + (item 2 of syncmaster30inDisplay's screenSize) then
 			set args to {"Gates Office"}
-		else if _w = (item 1 of defaultDisplay's screenSize) + (item 1 of thunderboltDisplay's screenSize) then
+		else if _w = (item 1 of macbookDisplay's screenSize) + (item 1 of thunderboltDisplay's screenSize) then
 			set args to {"MPK Office"}
 		end if
 	end if
