@@ -2,88 +2,100 @@
 # Author: Jaeho Shin <netj@sparcs.org>
 # Created: 2012-06-09
 
-property menubarHeight : 22 -- will probably stay constant, I guess
+--------------------------------------------------------------------------------------------------------
 
-script macbookDisplay
-	property screenSize : {1680, 1050}
-	property baseCoords : {51, 22}
-	property screenMargin : baseCoords
+on Display(w, h)
+	return {screenSize:{w, h}, baseCoords:{0, 0}, screenMargin:{0, 0}}
+end Display
+
+property macbookDisplay : Display(1680, 1050)
+property syncmaster27inDisplay : Display(1920, 1200)
+property syncmaster30inDisplay : Display(2560, 1600)
+property thunderboltDisplay : Display(2560, 1440)
+
+--------------------------------------------------------------------------------------------------------
+
+on use(disp, x, y)
+	return {disp:disp, x:x, y:y}
+end use
+
+script macbookConfiguration
+	property name : "MacBook"
+	property screens : {horizontal:{use(macbookDisplay, 0, 0)}}
+	property defaultScreen : macbookDisplay
+	on adapt()
+		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.98, wins:windows})
+	end adapt
 end script
 
-script syncmaster30inDisplay
-	property screenSize : {2560, 1600}
-	property baseCoords : {67, 22}
-	property screenMargin : baseCoords
+script homeConfiguration
+	property name : "Home"
+	-- a SyncMaster 275T is at my home desk
+	property screens : {horizontal:{use(syncmaster27inDisplay, 0, 0), use(macbookDisplay, 1920, 508)}}
+	property defaultScreen : syncmaster27inDisplay
+	on adapt()
+		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.8, wins:windows})
+	end adapt
 end script
 
-script thunderboltDisplay
-	property screenSize : {2560, 1440}
-	property baseCoords : {67, 22}
-	property screenMargin : baseCoords
+script gatesOfficeConfiguration
+	property name : "Gates Office"
+	-- I have a SyncMaster 305T in my office :)
+	property screens : {vertical:{use(syncmaster30inDisplay, 0, 0), use(macbookDisplay, 484, 1600)}}
+	property defaultScreen : syncmaster30inDisplay
+	on adapt()
+		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.8, wins:windows})
+	end adapt
 end script
 
+script mpkOfficeConfiguration
+	property name : "MPK Office"
+	-- There's an Apple Thunderbolt Display at my workplace
+	property screens : {horizontal:{use(thunderboltDisplay, 0, 0), use(macbookDisplay, 2560, 702)}}
+	property defaultScreen : thunderboltDisplay
+	on adapt()
+		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.8, wins:windows})
+	end adapt
+end script
+
+property configurations : {}
+property currentConfiguration : macbookConfiguration
 property defaultDisplay : macbookDisplay
 
+--------------------------------------------------------------------------------------------------------
+
 on run args
-	
-	-- consider the screen size
-	tell application "Finder" to set {_x, _y, _w, _h} to bounds of window of desktop
-	
-	set defaultDisplay to macbookDisplay
-	if (count args) = 0 or not (item 1 of args is not in {"MacBook", "Gates Office", "MPK Office"}) then
-		if _w = item 1 of macbookDisplay's screenSize and _h = item 2 of macbookDisplay's screenSize then
-			set args to {"MacBook"}
-		else if _h = (item 2 of macbookDisplay's screenSize) + (item 2 of syncmaster30inDisplay's screenSize) then
-			set args to {"Gates Office"}
-		else if _w = (item 1 of macbookDisplay's screenSize) + (item 1 of thunderboltDisplay's screenSize) then
-			set args to {"MPK Office"}
-		end if
-	end if
-	log args & _w & _h
+	-- define configurations and pick one
+	set configurations to {}
+	useConfiguration(macbookConfiguration)
+	useConfiguration(homeConfiguration)
+	useConfiguration(gatesOfficeConfiguration)
+	useConfiguration(mpkOfficeConfiguration)
+	determineCurrentConfiguration(args)
+	log args & actualWidth & actualHeight & currentConfiguration's name
 	
 	-- move and resize some apps (without knowing the environment)
-	if appIsRunning("Safari") then tell application "Safari" to my moveAndResize({w:1321, wins:windows})
+	if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({w:1321, wins:windows})
 	
-	-- decide the environment
-	if "MacBook" is in args then
-		adjustDisplayCoordinatesWithDock(defaultDisplay)
-		-- some environment specific move/resizes
-		if appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.98, wins:windows})
-	else if "Gates Office" is in args then
-		-- I have a SyncMaster 305T in my office :)
-		set defaultDisplay to syncmaster30inDisplay
-		adjustDisplayCoordinatesWithDock(defaultDisplay)
-		-- adjust offset of macbookDisplay
-		set macbookDisplay's screenMargin to {2, 2}
-		set macbookDisplay's baseCoords to {484, 1600}
-		-- some environment specific move/resizes
-		if appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.8, wins:windows})
-	else if "MPK Office" is in args then
-		-- There's an Apple Thunderbolt Display at my workplace
-		set defaultDisplay to thunderboltDisplay
-		adjustDisplayCoordinatesWithDock(defaultDisplay)
-		-- adjust offset of macbookDisplay
-		set macbookDisplay's screenMargin to {2, 2}
-		set macbookDisplay's baseCoords to {2560, 702}
-		-- some environment specific move/resizes
-		if appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.8, wins:windows})
-	end if
+	-- environment specific move/resizes
+	currentConfiguration's adapt()
+	
 	-- move and resize some apps
-	
-	if appIsRunning("Mail") then tell application "Mail" to my moveAndResize({disp:macbookDisplay, x:0, y:0, w:1532, h:0.9, wins:windows of message viewers})
-	if appIsRunning("iChat") then tell application "iChat" to my moveAndResize({disp:macbookDisplay, x:0.9, y:0.9, h:700, wins:windows})
-	if appIsRunning("Twitter") then tell application "Twitter" to my moveAndResize({disp:macbookDisplay, x:1, y:0, h:1, wins:windows})
-	if appIsRunning("Adium") then tell application "Adium"
+        if my appIsRunning("Mail") then tell application "Mail" to my moveAndResize({disp:macbookDisplay, x:0, y:0, w:1532, h:1, wins:windows of message viewers})
+	if my appIsRunning("iChat") then tell application "iChat" to my moveAndResize({disp:macbookDisplay, x:0.9, y:0.9, h:700, wins:windows})
+	if my appIsRunning("Twitter") then tell application "Twitter" to my moveAndResize({disp:macbookDisplay, x:1, y:0, h:1, wins:windows})
+	if my appIsRunning("Adium") then tell application "Adium"
+                if my appIsRunning("Mail") then tell application "Mail" to my moveAndResize({disp:macbookDisplay, h:0.9, wins:windows of message viewers})
 		my moveAndResize({disp:macbookDisplay, x:1, y:0, w:250, h:1, wins:windows})
 		my moveAndResize({disp:macbookDisplay, x:1, y:1, w:0.6, h:0.75, wins:chat windows})
 	end tell
 	
-	if appIsRunning("Eclipse") then moveAndResize({w:1, h:1, wins:getAppWindows("Eclipse")})
+	if my appIsRunning("Eclipse") then moveAndResize({w:1, h:1, wins:my getAppWindows("Eclipse")})
 	
-	if appIsRunning("Skim") then tell application "Skim" to my moveAndResize({wins:windows, w:0.6, h:1})
-	if appIsRunning("Papers2") then moveAndResize({x:0, y:0, wins:getAppWindows("Papers2"), w:1, h:1})
+	if my appIsRunning("Skim") then tell application "Skim" to my moveAndResize({wins:windows, w:0.6, h:1})
+	if my appIsRunning("Papers2") then moveAndResize({x:0, y:0, wins:my getAppWindows("Papers2"), w:1, h:1})
 	
-	if appIsRunning("Mail") then
+	if my appIsRunning("Mail") then
 		tell application "Mail" to activate
 		tell application "System Events" to key code 18 using command down -- Cmd-1 to goto inbox
 	end if
@@ -92,7 +104,73 @@ end run
 
 --------------------------------------------------------------------------------------------------------
 
+-- configurations
+
+on useConfiguration(config)
+	set end of configurations to config
+end useConfiguration
+
+property actualWidth : null
+property actualHeight : null
+
+on determineCurrentConfiguration(args)
+	-- consider the screen size
+	tell application "Finder" to set {_x, _y, actualWidth, actualHeight} to bounds of window of desktop
+	
+	-- determine which configuration to use
+	set currentConfiguration to macbookConfiguration -- default
+	if (count args) > 0 and (exists (configurations whose name = item 1 of args)) then
+		set currentConfiguration to first item of (configurations whose name = item 1 of args)
+	else
+		repeat with config in configurations
+			if actualScreensMatch(config) then
+				set currentConfiguration to config
+				exit repeat
+			end if
+		end repeat
+	end if
+	
+	-- adjust other properties
+	set defaultDisplay to currentConfiguration's defaultScreen
+	adjustDisplayCoordinatesWithDock(defaultDisplay)
+	
+	return currentConfiguration
+end determineCurrentConfiguration
+
+
+-- check if actual screen size matches config
+on actualScreensMatch(config)
+	set screens to (config's screens) & {horizontal:null, vertical:null}
+	-- first check actual width with horizontal screen config
+	set hz to screens's horizontal
+	if hz is not null then
+		set totalW to 0
+		repeat with screen in hz
+			set disp to screen's disp
+			set disp's baseCoords to {screen's x, screen's y}
+			set disp's screenMargin to {2, 2}
+			set totalW to totalW + (item 1 of disp's screenSize)
+		end repeat
+		if totalW ≠ actualWidth then return false
+	end if
+	-- then check if actual height matches vertical screen config
+	set vt to screens's vertical
+	if vt is not null then
+		set totalH to 0
+		repeat with screen in vt
+			set disp to screen's disp
+			set disp's baseCoords to {screen's x, screen's y}
+			set disp's screenMargin to {2, 2}
+			set totalH to totalH + (item 2 of disp's screenSize)
+		end repeat
+		if totalH ≠ actualHeight then return false
+	end if
+	return true
+end actualScreensMatch
+
+
 -- How to take Dock's size and position into account
+property menubarHeight : 22 -- will probably stay constant, I guess
 to adjustDisplayCoordinatesWithDock(displayInfo)
 	tell application "System Events" to tell process "Dock"
 		set {dockX, dockY} to position in list 1
@@ -114,13 +192,13 @@ end adjustDisplayCoordinatesWithDock
 -- How to check if application is running
 -- derived from: http://vgable.com/blog/2009/04/24/how-to-check-if-an-application-is-running-with-applescript/
 on appIsRunning(appName)
-	tell application "System Events" to get exists (processes where name is appName)
+	tell application "System Events" to return exists (processes where name is appName)
 end appIsRunning
 
 
 -- How to get windows of applications not friendly to AppleScript/Events
 on getAppWindows(appName)
-	if appIsRunning(appName) then
+	if my appIsRunning(appName) then
 		tell application "System Events"
 			set appDockIcon to get UI element appName of list 1 of process "Dock"
 			repeat
@@ -234,26 +312,5 @@ to moveAndResize(args)
 	end repeat
 end moveAndResize
 
-
--- Move every window to main display
--- derived from: http://www.macosxtips.co.uk/index_files/move-all-windows-to-main-display.php
-to moveWindows(processesToMove)
-	set {screenWidth, screenHeight} to screenSize
-	tell application "System Events"
-		repeat with procName in processesToMove
-			try
-				tell process procName
-					repeat with win in windows
-						set {_x, _y} to position of win
-						if (_x < 0 or _y < 0 or _x ≥ defaultDisplay's screenWidth or _y ≥ defaultDisplay's screenHeight) then
-							-- TODO move to a relatively similar position as where it was?
-							set position of win to defaultDisplay's baseCoords
-						end if
-					end repeat
-				end tell
-			end try
-		end repeat
-	end tell
-end moveWindows
 
 # vim:ft=applescript
