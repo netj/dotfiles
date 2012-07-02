@@ -90,7 +90,7 @@ on run args
 		my moveAndResize({disp:macbookDisplay, x:1, y:1, w:0.6, h:0.75, wins:chat windows})
 	end tell
 	
-	if my appIsRunning("Eclipse") then moveAndResize({w:1, h:1, wins:my getAppWindows("Eclipse")})
+	if my appIsRunning("Eclipse") then moveAndResize({x:0, y:0, w:1, h:1, wins:my getAppWindows("Eclipse")})
 	
 	if my appIsRunning("Skim") then tell application "Skim" to my moveAndResize({wins:windows, w:0.6, h:1})
 	if my appIsRunning("Papers2") then moveAndResize({x:0, y:0, wins:my getAppWindows("Papers2"), w:1, h:1})
