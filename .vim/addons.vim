@@ -51,9 +51,13 @@ fun! SetupVAMAddons()
 
 
   """ Some file types
+  let g:sparkup = {}
+    let g:sparkup.lhs_expand = '<C-\><C-e>'
+    let g:sparkup.lhs_jump_next_empty_tag = '<C-\><C-n>'
   ActivateAddons sparkup
   ActivateAddons vim-less
   ActivateAddons xmledit
+    let g:xml_jump_string = "`"
 
   ActivateAddons Markdown
   "ActivateAddons vim-ft-markdown_fold
