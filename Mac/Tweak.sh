@@ -28,31 +28,31 @@ defaults write com.apple.Safari IncludeDebugMenu -boolean true
 
 # How to show Dictionary definitions first in Spotlight results
 # See-Also: http://apple.stackexchange.com/a/52530
-if ! defaults read com.apple.spotlight orderedItems | grep -q MENU_DEFINITION; then
+if ! defaults read com.apple.spotlight orderedItems 2>/dev/null | grep -q MENU_DEFINITION; then
     spotlightPlist=~/Library/Preferences/com.apple.spotlight.plist
     if [ -e $spotlightPlist ]; then
         defaults write com.apple.spotlight orderedItems -array-add '{"enabled"=true;"name"="MENU_DEFINITION";}'
     else
         plutil -convert binary1 -o $spotlightPlist -- - <<<\
-            '{"version":2'\
-            ',"orderedItems":'\
-            '[{"enabled":true,"name":"MENU_DEFINITION"}'\
-            ',{"enabled":true,"name":"APPLICATIONS"}'\
-            ',{"enabled":true,"name":"SYSTEM_PREFS"}'\
-            ',{"enabled":true,"name":"DOCUMENTS"}'\
-            ',{"enabled":true,"name":"DIRECTORIES"}'\
-            ',{"enabled":true,"name":"MESSAGES"}'\
-            ',{"enabled":true,"name":"CONTACT"}'\
-            ',{"enabled":true,"name":"EVENT_TODO"}'\
-            ',{"enabled":true,"name":"IMAGES"}'\
-            ',{"enabled":true,"name":"PDF"}'\
-            ',{"enabled":true,"name":"BOOKMARKS"}'\
-            ',{"enabled":true,"name":"MUSIC"}'\
-            ',{"enabled":true,"name":"MOVIES"}'\
-            ',{"enabled":true,"name":"FONTS"}'\
-            ',{"enabled":true,"name":"PRESENTATIONS"}'\
-            ',{"enabled":true,"name":"SPREADSHEETS"}'\
-            ']}'
+'{"version":2'\
+',"orderedItems":'\
+'[{"enabled":true,"name":"MENU_DEFINITION"}'\
+',{"enabled":true,"name":"APPLICATIONS"}'\
+',{"enabled":true,"name":"SYSTEM_PREFS"}'\
+',{"enabled":true,"name":"DOCUMENTS"}'\
+',{"enabled":true,"name":"DIRECTORIES"}'\
+',{"enabled":true,"name":"MESSAGES"}'\
+',{"enabled":true,"name":"CONTACT"}'\
+',{"enabled":true,"name":"EVENT_TODO"}'\
+',{"enabled":true,"name":"IMAGES"}'\
+',{"enabled":true,"name":"PDF"}'\
+',{"enabled":true,"name":"BOOKMARKS"}'\
+',{"enabled":true,"name":"MUSIC"}'\
+',{"enabled":true,"name":"MOVIES"}'\
+',{"enabled":true,"name":"FONTS"}'\
+',{"enabled":true,"name":"PRESENTATIONS"}'\
+',{"enabled":true,"name":"SPREADSHEETS"}'\
+']}'
     fi
     open /System/Library/PreferencePanes/Spotlight.prefPane
 fi
