@@ -5,7 +5,7 @@ set -eu
 
 Archive=$1; shift
 DestDir=$1; shift
-DestDir=$(cd "$DestDir" && echo "$PWD")
+DestDir=$(cd "${DestDir%% *}" && echo "$PWD")
 
 case "$Archive" in
     *.zip)
