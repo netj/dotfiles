@@ -24,7 +24,7 @@ script macbookConfiguration
 	property screens : {horizontal:{use(macbookDisplay, 0, 0)}}
 	property defaultScreen : macbookDisplay
 	on adapt()
-		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.98, wins:windows})
+		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.98, wins:my getLargeEnoughWindows(windows)})
 	end adapt
 end script
 
@@ -34,7 +34,7 @@ script homeConfiguration
 	property screens : {horizontal:{use(syncmaster27inDisplay, 0, 0), use(macbookDisplay, 1920, 508)}}
 	property defaultScreen : syncmaster27inDisplay
 	on adapt()
-		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.8, wins:windows})
+		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.95, wins:my getLargeEnoughWindows(windows)})
 	end adapt
 end script
 
@@ -44,7 +44,7 @@ script gatesOfficeConfiguration
 	property screens : {vertical:{use(syncmaster30inDisplay, 0, 0), use(macbookDisplay, 484, 1600)}}
 	property defaultScreen : syncmaster30inDisplay
 	on adapt()
-		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.8, wins:windows})
+		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.8, wins:my getLargeEnoughWindows(windows)})
 	end adapt
 end script
 
@@ -54,7 +54,7 @@ script mpkOfficeConfiguration
 	property screens : {horizontal:{use(thunderboltDisplay, 0, 0), use(macbookDisplay, 2560, 702)}}
 	property defaultScreen : thunderboltDisplay
 	on adapt()
-		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.8, wins:windows})
+		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.8, wins:my getLargeEnoughWindows(windows)})
 	end adapt
 end script
 
@@ -65,6 +65,9 @@ property defaultDisplay : macbookDisplay
 --------------------------------------------------------------------------------------------------------
 
 on run args
+	-- TODO remember current application
+	-- set curApp to current application
+	
 	-- define configurations and pick one
 	set configurations to {}
 	useConfiguration(macbookConfiguration)
@@ -75,17 +78,17 @@ on run args
 	log args & actualWidth & actualHeight & currentConfiguration's name
 	
 	-- move and resize some apps (without knowing the environment)
-	if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({w:1321, wins:windows})
+	if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({w:1321, wins:my getLargeEnoughWindows(windows)})
 	
 	-- environment specific move/resizes
 	currentConfiguration's adapt()
 	
 	-- move and resize some apps
-        if my appIsRunning("Mail") then tell application "Mail" to my moveAndResize({disp:macbookDisplay, x:0, y:0, w:1532, h:1, wins:windows of message viewers})
+	if my appIsRunning("Mail") then tell application "Mail" to my moveAndResize({disp:macbookDisplay, x:0, y:0, w:1532, h:1, wins:windows of message viewers})
 	if my appIsRunning("iChat") then tell application "iChat" to my moveAndResize({disp:macbookDisplay, x:0.9, y:0.9, h:700, wins:windows})
 	if my appIsRunning("Twitter") then tell application "Twitter" to my moveAndResize({disp:macbookDisplay, x:1, y:0, h:1, wins:windows})
 	if my appIsRunning("Adium") then tell application "Adium"
-                if my appIsRunning("Mail") then tell application "Mail" to my moveAndResize({disp:macbookDisplay, h:0.9, wins:windows of message viewers})
+		if my appIsRunning("Mail") then tell application "Mail" to my moveAndResize({disp:macbookDisplay, h:0.9, wins:windows of message viewers})
 		my moveAndResize({disp:macbookDisplay, x:1, y:0, w:250, h:1, wins:windows})
 		my moveAndResize({disp:macbookDisplay, x:1, y:1, w:0.6, h:0.75, wins:chat windows})
 	end tell
@@ -95,11 +98,17 @@ on run args
 	if my appIsRunning("Skim") then tell application "Skim" to my moveAndResize({wins:windows, w:0.6, h:1})
 	if my appIsRunning("Papers2") then moveAndResize({x:0, y:0, wins:my getAppWindows("Papers2"), w:1, h:1})
 	
-	if my appIsRunning("Mail") then
-		tell application "Mail" to activate
-		tell application "System Events" to key code 18 using command down -- Cmd-1 to goto inbox
-	end if
-	
+	-- -- get back to current application
+	-- try
+        --         log name of curApp
+        --         activate curApp
+	-- 	my getAppIntoView(name of curApp)
+	-- on error
+		if my appIsRunning("Mail") then
+			tell application "Mail" to activate
+			tell application "System Events" to key code 18 using command down -- Cmd-1 to goto inbox
+		end if
+	-- end try
 end run
 
 --------------------------------------------------------------------------------------------------------
@@ -195,17 +204,39 @@ on appIsRunning(appName)
 	tell application "System Events" to return exists (processes where name is appName)
 end appIsRunning
 
+-- How to get application into view
+on getAppIntoView(appName)
+	tell application "System Events"
+		tell application appName to activate
+		try
+                        set appDockIcon to get UI element appName of list 1 of process "Dock"
+                        click appDockIcon
+                        click appDockIcon
+                        delay 1
+		on error
+			tell process appName
+				set windowTitle to front window's title
+				try
+					set windowMenu to menu bar item "Window" of menu bar 1
+				on error
+					set windowMenu to menu bar item "윈도우" of menu bar 1
+				end try
+                                try
+                                        click menu item windowTitle of menu 1 of windowMenu
+                                on error
+                                        click last menu item of menu 1 of windowMenu
+                                end try
+			end tell
+		end try
+	end tell
+end getAppIntoView
 
 -- How to get windows of applications not friendly to AppleScript/Events
 on getAppWindows(appName)
 	if my appIsRunning(appName) then
 		tell application "System Events"
-			set appDockIcon to get UI element appName of list 1 of process "Dock"
 			repeat
-				tell application appName to activate
-				click appDockIcon
-				click appDockIcon
-				delay 1
+				my getAppIntoView(appName)
 				set appWindows to get windows of process appName
 				if (count appWindows) > 0 then
 					return appWindows
@@ -220,6 +251,34 @@ on getAppWindows(appName)
 		return {}
 	end if
 end getAppWindows
+
+on getLargeEnoughWindows(wins)
+	return my filterWindows(wins, {minW:800, minH:600})
+end getLargeEnoughWindows
+
+on filterWindows(wins, cond)
+	set cond to cond & {minW:null, minH:null, maxW:null, maxH:null}
+	set satisfyingWindows to {}
+	repeat with win in wins
+		try
+			set {x, y, x2, y2} to bounds of win
+			set w to x2 - x
+			set h to y2 - y
+		on error
+			set {x, y} to position of win
+			set {w, h} to size of win
+		end try
+		try
+			if cond's minW is not null and w < cond's minW then error 0
+			if cond's maxW is not null and w > cond's maxW then error 0
+			if cond's minH is not null and h < cond's minH then error 0
+			if cond's maxH is not null and h > cond's maxH then error 0
+			set end of satisfyingWindows to win
+		end try
+	end repeat
+	return satisfyingWindows
+end filterWindows
+
 
 -- moveAndResize -- a piece of AppleScript for changing the size and position of windows
 -- Author: Jaeho Shin <netj@sparcs.org>
