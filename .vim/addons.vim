@@ -1,15 +1,32 @@
-if ! exists("*SetupVAMAddons")
+if ! exists("*SetupAddons")
 
-fun! SetupVAMAddons()
+fun! SetupAddons()
   let addons=[] | command! -nargs=* ActivateAddons let addons+=[<f-args>]
 
   """ Look and Feels
   " See Also: http://www.quora.com/Which-are-the-best-vim-plugins
   " See Also: http://stevelosh.com/blog/2010/09/coming-home-to-vim/
-  ActivateAddons Color_Sampler_Pack
-  ActivateAddons ScrollColors
+  " See for more available schemes in ColorSamplerPack: http://www.vi-improved.org/color_sampler_pack/
+  " dark-lo: desertEx anotherdark darkZ inkpot jellybeans herald railscasts fruity dante wombat256 chocolateliquor clarity freya xoria256 twilight darkslategray darkblue2
+  " dark-hi: candycode asu1dark jammy lettuce darkspectrum desert256 leo vibrantink vividchalk guardian torte darkbone
+  " light-hi: eclipse nuvola fruit
+  " light-lo: spring autumn autumn2 siena
+  " fun: matrix borland golden camo
+  ActivateAddons Color_Sampler_Pack molokai
+    if has("gui_running") || &t_Co >= 256
+      " scroll among my favorites with VimTip341
+      let g:mySetColors = split('jellybeans molokai inkpot desertEx darkZ chocolateliquor')
+      " let g:mySetColors=split('desertEx anotherdark darkZ inkpot jellybeans herald railscasts fruity dante wombat256 chocolateliquor clarity freya xoria256 twilight darkslategray darkblue2  candycode asu1dark jammy lettuce darkspectrum desert256 leo vibrantink vividchalk guardian torte darkbone  eclipse nuvola fruit  spring autumn autumn2 siena  matrix borland golden camo')
+    else " &term == "screen" " e.g. screen's color support isn't so good
+      let g:mySetColors = split('default chocolateliquor')
+    endif
 
   """ Productivity boosters
+  ActivateAddons Gundo
+  ActivateAddons bufexplorer.zip
+  ActivateAddons Tagbar
+
+  ActivateAddons Tabular
   ActivateAddons surround
   ActivateAddons rainbow_parentheses
     nnoremap <F7> :RainbowParenthesesToggleAll<CR>
@@ -47,7 +64,9 @@ fun! SetupVAMAddons()
 
   """ Git, Github
   ActivateAddons fugitive
-  ActivateAddons Gist
+  ActivateAddons Gist WebAPI
+    let g:gist_clip_command = 'pbcopy'
+    let g:gist_open_browser_after_post = 1
 
 
   """ Some file types
@@ -134,7 +153,7 @@ fun! SetupVAM()
   exec 'set runtimepath+='.vam_install_path.'/vim-addon-manager'
 
   " Tell VAM which plugins to fetch & load:
-  call vam#ActivateAddons(['vim-addon-manager'] + SetupVAMAddons(), {'auto_install' : 1})
+  call vam#ActivateAddons(['vim-addon-manager'] + SetupAddons(), {'auto_install' : 1})
   " sample: call vam#ActivateAddons(['pluginA','pluginB', ...], {'auto_install' : 0})
 
   " Addons are put into vam_install_path/plugin-name directory

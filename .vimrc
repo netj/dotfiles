@@ -99,20 +99,10 @@ if &t_Co > 2
 endif
 
 if &t_Co >= 8
-  " See for more available schemes in ColorSamplerPack: http://www.vi-improved.org/color_sampler_pack/
-  " dark-lo: desertEx anotherdark darkZ inkpot jellybeans herald railscasts fruity dante wombat256 chocolateliquor clarity freya xoria256 twilight darkslategray darkblue2
-  " dark-hi: candycode asu1dark jammy lettuce darkspectrum desert256 leo vibrantink vividchalk guardian torte darkbone
-  " light-hi: eclipse nuvola fruit
-  " light-lo: spring autumn autumn2 siena
-  " fun: matrix borland golden camo
   try
     if &t_Co >= 256
-      " scroll among my favorites with VimTip341
-      let g:mySetColors = split('jellybeans inkpot desertEx darkZ chocolateliquor')
       colorscheme jellybeans
     else " &term == "screen"
-      " e.g. screen's color support isn't so good
-      let g:mySetColors = split('default chocolateliquor')
       colorscheme default
     endif
     " let g:mySetColors=split('desertEx anotherdark darkZ inkpot jellybeans herald railscasts fruity dante wombat256 chocolateliquor clarity freya xoria256 twilight darkslategray darkblue2  candycode asu1dark jammy lettuce darkspectrum desert256 leo vibrantink vividchalk guardian torte darkbone  eclipse nuvola fruit  spring autumn autumn2 siena  matrix borland golden camo')
