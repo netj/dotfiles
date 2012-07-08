@@ -20,6 +20,18 @@ all: install
 %Fonts.mk: genFontsFetchRules Makefile; @./$< $* >$@
 
 
+## Envy Code R, Damien Guard's coding font
+## See: http://damieng.com/blog/2008/05/26/envy-code-r-preview-7-coding-font-released
+EnvyCodeRFontsURL := http://download.damieng.com/fonts/original/EnvyCodeR-PR7.zip
+EnvyCodeRFontsArchive := EnvyCodeR.zip
+EnvyCodeRFonts := \
+    Envy?Code?R?Bold.ttf   \
+    Envy?Code?R?Italic.ttf \
+    Envy?Code?R.ttf         \
+    #
+include EnvyCodeRFonts.mk
+
+
 ## Nanum Fonts
 ifeq (,$(filter Darwin-10.7 Darwin-10.7.%,$(uname_version)))
 # Mac OS X Lion includes Nanum Fonts
