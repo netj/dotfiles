@@ -1,25 +1,34 @@
-if ! exists("*SetupAddons")
+if exists("*SetupAddons") | finish | endif
 
 fun! SetupAddons()
-  let addons=[] | command! -nargs=* ActivateAddons let addons+=[<f-args>]
 
   """ Look and Feels
   " See Also: http://www.quora.com/Which-are-the-best-vim-plugins
   " See Also: http://stevelosh.com/blog/2010/09/coming-home-to-vim/
   " See for more available schemes in ColorSamplerPack: http://www.vi-improved.org/color_sampler_pack/
-  " dark-lo: desertEx anotherdark darkZ inkpot jellybeans herald railscasts fruity dante wombat256 chocolateliquor clarity freya xoria256 twilight darkslategray darkblue2
+  " dark-lo: desertEx anotherdark darkZ inkpot jellybeans herald railscasts fruity dante wombat256 ChocolateLiquor clarity freya xoria256 twilight darkslategray darkblue2
   " dark-hi: candycode asu1dark jammy lettuce darkspectrum desert256 leo vibrantink vividchalk guardian torte darkbone
-  " light-hi: eclipse nuvola fruit
-  " light-lo: spring autumn autumn2 siena
+  " light-hi: summerfruit256 eclipse nuvola fruit
+  " light-lo: spring autumn sienna
   " fun: matrix borland golden camo
   ActivateAddons Color_Sampler_Pack molokai
-    if has("gui_running") || &t_Co >= 256
+  ActivateAddons git:git://gist.github.com/1432015.git
+    if has("gui_running")
       " scroll among my favorites with VimTip341
-      let g:mySetColors = split('jellybeans molokai inkpot desertEx darkZ chocolateliquor')
+      let g:mySetColors = split('jellybeans molokai inkpot desertEx darkZ lettuce vibrantink vividchalk chocolateliquor matrix golden camo spring autumn sienna summerfruit256 fruit')
       " let g:mySetColors=split('desertEx anotherdark darkZ inkpot jellybeans herald railscasts fruity dante wombat256 chocolateliquor clarity freya xoria256 twilight darkslategray darkblue2  candycode asu1dark jammy lettuce darkspectrum desert256 leo vibrantink vividchalk guardian torte darkbone  eclipse nuvola fruit  spring autumn autumn2 siena  matrix borland golden camo')
-    else " &term == "screen" " e.g. screen's color support isn't so good
-      let g:mySetColors = split('default chocolateliquor')
+      colorscheme jellybeans
+    else
+      if &t_Co >= 256
+        " many color schemes only work well on GVim
+        let g:mySetColors = split('jellybeans molokai inkpot lettuce summerfruit256')
+        colorscheme jellybeans
+      else
+        let g:mySetColors = split('default')
+        colorscheme default
+      endif
     endif
+    " let g:mySetColors=split('desertEx anotherdark darkZ inkpot jellybeans herald railscasts fruity dante wombat256 chocolateliquor clarity freya xoria256 twilight darkslategray darkblue2  candycode asu1dark jammy lettuce darkspectrum desert256 leo vibrantink vividchalk guardian torte darkbone  eclipse nuvola fruit  spring autumn autumn2 siena  matrix borland golden camo')
 
   """ Productivity boosters
   ActivateAddons Gundo
@@ -109,7 +118,6 @@ fun! SetupAddons()
       \ imap <D-j> <Plug>IMAP_JumpBack|
       \ set suffixes+=.pdf,.dvi,.ps,.ps.gz,.aux,.bbl,.blg,.log,.out,.ent,.fdb_latexmk,.brf " TeX by-products
 
-  return addons
 endfun
 
 
@@ -153,7 +161,8 @@ fun! SetupVAM()
   exec 'set runtimepath+='.vam_install_path.'/vim-addon-manager'
 
   " Tell VAM which plugins to fetch & load:
-  call vam#ActivateAddons(['vim-addon-manager'] + SetupAddons(), {'auto_install' : 1})
+  call vam#ActivateAddons(['vim-addon-manager'], {'auto_install' : 1})
+  call SetupAddons()
   " sample: call vam#ActivateAddons(['pluginA','pluginB', ...], {'auto_install' : 0})
 
   " Addons are put into vam_install_path/plugin-name directory
@@ -177,10 +186,6 @@ call SetupVAM()
 " option2:  au GUIEnter * call SetupVAM()
 " See BUGS sections below [*]
 " Vim 7.0 users see BUGS section [3]
-
-endif
-
-
 
 
 " vim:sw=2

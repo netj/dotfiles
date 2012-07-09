@@ -10,9 +10,3 @@ patch-Color_Sampler_Pack-jellybeans: jellybeans.vim.patch ##
 	vim +q
 	-cd vim-addons/Color_Sampler_Pack && patch -fp0 <../../$<
 
-# Switch color schemes: http://vim.wikia.com/wiki/VimTip341
-SwitchColorSchemes: plugin/setcolors.vim ##
-plugin/setcolors.vim:
-	mkdir -p $(@D)
-	curl -#LRko $@ https://raw.github.com/gist/1432015/setcolors.vim
-

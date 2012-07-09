@@ -1,6 +1,3 @@
-/*
-!/.gitignore
-!/Makefile
-!/setup-vam.vim
-!/filetype.vim
-!/jellybeans.vim.patch
+/.netrwhist
+/spell
+/vim-addons

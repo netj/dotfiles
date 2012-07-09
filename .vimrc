@@ -98,18 +98,6 @@ if &t_Co > 2
   highlight Search term=reverse ctermbg=3 ctermfg=1
 endif
 
-if &t_Co >= 8
-  try
-    if &t_Co >= 256
-      colorscheme jellybeans
-    else " &term == "screen"
-      colorscheme default
-    endif
-    " let g:mySetColors=split('desertEx anotherdark darkZ inkpot jellybeans herald railscasts fruity dante wombat256 chocolateliquor clarity freya xoria256 twilight darkslategray darkblue2  candycode asu1dark jammy lettuce darkspectrum desert256 leo vibrantink vividchalk guardian torte darkbone  eclipse nuvola fruit  spring autumn autumn2 siena  matrix borland golden camo')
-  catch /.*/
-  endtry
-endif
-
 " Mac OS X (>=10.7) Terminal.app's Title Icon and Drag & Drop support
 "  See: http://www.macosxautomation.com/lion/terminal.html
 "  See: /private/etc/bashrc's update_terminal_cwd
