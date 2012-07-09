@@ -83,7 +83,7 @@ if has("gui_running")
   set guioptions-=b
   set guioptions-=t
   set guioptions-=T
-  set guifont=Consolas:h16,Menlo:h16,Monaco:h16
+  set guifont=Envy_Code_R:h16,Consolas:h16,Menlo:h16,Monaco:h16
   set t_Co=256
   if has("gui_macvim")
     set transparency=5
