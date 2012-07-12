@@ -135,11 +135,12 @@ ModeToggleKey cursorcolumn    <C-\>;
 ModeToggleKey diff            <C-\><C-d>
 ModeToggleKey foldenable      <C-\><C-z>
 ModeToggleKey list            <C-\><Space>
+ModeToggleKey modifiable      <C-\><C-m>
 ModeToggleKey number          <C-\>1
 ModeToggleKey paste           <C-\><C-]>
 ModeToggleKey readonly        <C-\><C-r>
 ModeToggleKey ruler           <C-\>%
-ModeToggleKey scrollbind      <C-\><CR>
+ModeToggleKey scrollbind      <C-\>+
 ModeToggleKey spell           <C-\>?
 ModeToggleKey swapfile        <C-\>$
 ModeToggleKey undofile        <C-\><C-u>

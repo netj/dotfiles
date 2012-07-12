@@ -52,12 +52,17 @@ fun! SetupAddons()
     nnoremap <C-\>0      :call RainbowParenthesesLoadAndToggleAll()<CR>
     inoremap <C-\>0 <C-o>:call RainbowParenthesesLoadAndToggleAll()<CR>
 
-  ActivateAddons quickhl
-    nmap <Space>m <Plug>(quickhl-toggle)
-    xmap <Space>m <Plug>(quickhl-toggle)
-    nmap <Space>M <Plug>(quickhl-reset)
-    xmap <Space>M <Plug>(quickhl-reset)
-    nmap <Space># <Plug>(quickhl-match)
+  ActivateAddons Mark%2666
+    let g:mwHistAdd = '' " '/@'
+    let g:mwAutoLoadMarks = 1
+    let g:mwAutoSaveMarks = 1
+    set viminfo+=!  " Save and restore global variables. 
+    nmap <Space>m <Leader>m
+    xmap <Space>m <Leader>m
+    nmap <Space>M <Leader>n
+    xmap <Space>M <Leader>n
+    nmap <Space>n <Leader>*
+    nmap <Space>N <Leader>/
 
   """ CamelCase stuff
   " Shougo's NeoComplCache is really nice!
@@ -65,7 +70,7 @@ fun! SetupAddons()
     let g:acp_enableAtStartup = 0
     " XXX Rather than enabling at startup, I use special key combo Cmd-Shift-D to turn it on
     "let g:neocomplcache_enable_at_startup = 1
-    noremap <space>N :NeoComplCacheEnable<CR>
+    noremap <Space><C-n> :NeoComplCacheEnable<CR>
     "let g:neocomplcache_enable_smart_case = 1
     let g:neocomplcache_enable_camel_case_completion = 1
     let g:neocomplcache_enable_underbar_completion = 1
