@@ -32,14 +32,32 @@ fun! SetupAddons()
 
   """ Productivity boosters
   ActivateAddons Gundo
+    let g:gundo_close_on_revert = 1
+    nnoremap <Space>u :GundoToggle<CR>
   ActivateAddons bufexplorer.zip
+    nnoremap <Space>b :BufExplorerHorizontalSplit<CR>
   ActivateAddons Tagbar
+    nnoremap <Space>t :TagbarToggle<CR>
 
   ActivateAddons Tabular
   ActivateAddons surround
   ActivateAddons rainbow_parentheses
-    nnoremap <F7> :RainbowParenthesesToggleAll<CR>
-    inoremap <F7> <C-o>:RainbowParenthesesToggleAll<CR>
+    fun! RainbowParenthesesLoadAndToggleAll()
+      exec 'RainbowParenthesesLoadRound'
+      exec 'RainbowParenthesesLoadSquare'
+      exec 'RainbowParenthesesLoadBraces'
+      exec 'RainbowParenthesesLoadChevrons'
+      exec 'RainbowParenthesesToggleAll'
+    endfun
+    nnoremap <C-\>0      :call RainbowParenthesesLoadAndToggleAll()<CR>
+    inoremap <C-\>0 <C-o>:call RainbowParenthesesLoadAndToggleAll()<CR>
+
+  ActivateAddons quickhl
+    nmap <Space>m <Plug>(quickhl-toggle)
+    xmap <Space>m <Plug>(quickhl-toggle)
+    nmap <Space>M <Plug>(quickhl-reset)
+    xmap <Space>M <Plug>(quickhl-reset)
+    nmap <Space># <Plug>(quickhl-match)
 
   """ CamelCase stuff
   " Shougo's NeoComplCache is really nice!
@@ -47,7 +65,7 @@ fun! SetupAddons()
     let g:acp_enableAtStartup = 0
     " XXX Rather than enabling at startup, I use special key combo Cmd-Shift-D to turn it on
     "let g:neocomplcache_enable_at_startup = 1
-    map <D-D> :NeoComplCacheEnable<CR>:NeoComplCacheCachingBuffer<CR>:NeoComplCacheCachingInclude<CR>
+    noremap <space>N :NeoComplCacheEnable<CR>
     "let g:neocomplcache_enable_smart_case = 1
     let g:neocomplcache_enable_camel_case_completion = 1
     let g:neocomplcache_enable_underbar_completion = 1
@@ -64,6 +82,9 @@ fun! SetupAddons()
   "ActivateAddons ack
   "ActivateAddons slime
   ActivateAddons The_NERD_tree
+    nnoremap <Space>e :NERDTreeFind<CR>
+    let g:NERDTreeShowHidden = 1
+    let g:NERDTreeChDirMode = 2
   ActivateAddons snipmate
   "ActivateAddons vmark.vim_Visual_Bookmarking " XXX beware: <F2>/<F3> is overrided
   " TODO let b:vm_guibg = yellow
@@ -73,9 +94,17 @@ fun! SetupAddons()
 
   """ Git, Github
   ActivateAddons fugitive
+    nnoremap <Space>gg :Gstatus<CR>
+    nnoremap <Space>gd :Gdiff<CR>
+    nnoremap <Space>gb :Gblame<CR>
+    nnoremap <Space>gl :Glog<CR>:copen<CR>
+    nnoremap <Space>ge :Gedit<CR>
   ActivateAddons Gist WebAPI
     let g:gist_clip_command = 'pbcopy'
     let g:gist_open_browser_after_post = 1
+    nnoremap <Space>GL :Gist -l<CR>
+    nnoremap <Space>GA :Gist -la<CR>
+    nnoremap <Space>GS :Gist -ls<CR>
 
 
   """ Some file types
@@ -92,7 +121,10 @@ fun! SetupAddons()
     " Marked
     au! FileType markdown
       \ setlocal spell |
-      \ map <D-e> :!open -a Marked '%'<CR><CR>
+    if has("mac")
+      au! FileType markdown
+        \ map <D-e> :!open -a Marked '%'<CR><CR>
+    endif
   ActivateAddons JSON
     au! BufRead,BufNewFile *.json setfiletype json
 
@@ -110,13 +142,16 @@ fun! SetupAddons()
   ActivateAddons vim-latex
     au! FileType tex
       \ setlocal spell textwidth=76 |
-      \ map  <D-e>   <F5>| map! <D-e>   <F5>|
-      \ map  <D-E> <S-F5>| map! <D-E> <S-F5>|
-      \ map  <D-r>   <F7>| map! <D-r>   <F7>|
-      \ map  <D-R> <S-F7>| map! <D-R> <S-F7>|
-      \ map  <D-®>   <F9>| map! <D-®>   <F9>|
-      \ imap <D-j> <Plug>IMAP_JumpBack|
       \ set suffixes+=.pdf,.dvi,.ps,.ps.gz,.aux,.bbl,.blg,.log,.out,.ent,.fdb_latexmk,.brf " TeX by-products
+    if has("mac")
+      au! FileType tex
+        \ map  <D-e>   <F5>| map! <D-e>   <F5>|
+        \ map  <D-E> <S-F5>| map! <D-E> <S-F5>|
+        \ map  <D-r>   <F7>| map! <D-r>   <F7>|
+        \ map  <D-R> <S-F7>| map! <D-R> <S-F7>|
+        \ map  <D-®>   <F9>| map! <D-®>   <F9>|
+        \ imap <D-j> <Plug>IMAP_JumpBack|
+    endif
 
 endfun
 

@@ -26,6 +26,8 @@ SourceOptional ~/.vim/addons.vim
 set backspace=indent,eol,start
 
 set autoindent		" always set autoindenting on
+set copyindent		" indent even when copying
+set preserveindent	" preserve whitespace for indentations
 set nobackup		" don't keep backups
 set history=128		" keep 128 lines of command line history
 set ruler		" show the cursor position all the time
@@ -112,6 +114,69 @@ endif
 " Key bindings                                                                -
 "------------------------------------------------------------------------------
 
+" Don't use Ex mode, use Q for formatting
+map Q gq
+
+" Mode Toggler Keys
+fun! ModeToggleKey(mode, lhs)
+  exec 'nnoremap '.a:lhs.'      :set '.a:mode.'!<CR>:set '.a:mode.'?<CR>'
+  exec 'inoremap '.a:lhs.' <C-o>:set '.a:mode.'!<CR>'
+endfun
+command! -nargs=+ -complete=option ModeToggleKey  :call ModeToggleKey(<f-args>)
+
+" toggle display of unprintable characters
+ModeToggleKey autoread        <C-\>&
+ModeToggleKey autowrite       <C-\>!
+ModeToggleKey autowriteall    <C-\>!!
+ModeToggleKey binary          <C-\>@
+ModeToggleKey cursorbind      <C-\>.
+ModeToggleKey cursorline      <C-\>:
+ModeToggleKey cursorcolumn    <C-\>;
+ModeToggleKey diff            <C-\><C-d>
+ModeToggleKey foldenable      <C-\><C-z>
+ModeToggleKey list            <C-\><Space>
+ModeToggleKey number          <C-\>1
+ModeToggleKey paste           <C-\><C-]>
+ModeToggleKey readonly        <C-\><C-r>
+ModeToggleKey ruler           <C-\>%
+ModeToggleKey scrollbind      <C-\><CR>
+ModeToggleKey spell           <C-\>?
+ModeToggleKey swapfile        <C-\>$
+ModeToggleKey undofile        <C-\><C-u>
+ModeToggleKey winfixwidth     <C-\>\|
+ModeToggleKey winfixheight    <C-\>_
+ModeToggleKey wrap            <C-\><C-\>
+
+" Fold
+nnoremap <Space>z      :set foldmethod=indent<CR>
+nnoremap <Space>Z      :set foldmethod=syntax<CR>
+
+" Fix syntax highlighting by doing it from start of file
+" See: http://vim.wikia.com/wiki/Fix_syntax_highlighting
+nnoremap <C-\>s      :syntax sync fromstart<CR>
+inoremap <C-\>s <C-o>:syntax sync fromstart<CR>
+
+" Toggle hlsearch (highlight search matches).
+nnoremap <Space>* :nohlsearch<CR>
+
+
+" Window resize for Mac (to be mapped to pinch in/out gestures)
+if has("mac")
+  nnoremap <D-≠>      16<C-w>>
+  inoremap <D-≠> <C-o>16<C-w>>
+  nnoremap <D-–>      16<C-w><
+  inoremap <D-–> <C-o>16<C-w><
+  nnoremap <D-±>      8<C-w>+
+  inoremap <D-±> <C-o>8<C-w>+
+  nnoremap <D-—>      8<C-w>-
+  inoremap <D-—> <C-o>8<C-w>-
+endif
+
+
+"------------------------------------------------------------------------------
+" Abbreviations                                                               -
+"------------------------------------------------------------------------------
+
 " My name + email address.
 iab netj>    Jaeho Shin <netj@sparcs.org>
 iab netj@cs> Jaeho Shin <netj@cs.stanford.edu>
@@ -119,58 +184,6 @@ iab jshin>   Jaeho.Shin@Stanford.EDU
 
 " Frequently typed lines.
 iab Created:    Created: <C-R>=system("date +%Y-%m-%d")
-
-" Toggle list (display unprintable characters).
-nnoremap <F2> :set list!<CR>
-inoremap <F2> <C-o>:set list!<CR>
-
-" Toggle hlsearch (highlight search matches).
-nnoremap <F3> :set hlsearch!<CR>
-inoremap <F3> <C-o>:set hlsearch!<CR>
-
-" Fix syntax highlighting by doing it from start of file
-" See: http://vim.wikia.com/wiki/Fix_syntax_highlighting
-noremap <F4> :syntax sync fromstart<CR>
-inoremap <F4> <C-o>:syntax sync fromstart<CR>
-
-" Toggle wrapping
-noremap <F5> :set wrap!<CR>
-inoremap <F5> <C-o>:set wrap!<CR>
-
-" Toggle paste
-nnoremap <F6> :set paste!<CR>
-inoremap <F6> <C-o>:set paste!<CR>
-
-" Window resize for Mac (to be mapped to pinch in/out gestures)
-nnoremap <D-≠>      16<C-w>>
-inoremap <D-≠> <C-o>16<C-w>>
-nnoremap <D-–>      16<C-w><
-inoremap <D-–> <C-o>16<C-w><
-nnoremap <D-±>      8<C-w>+
-inoremap <D-±> <C-o>8<C-w>+
-nnoremap <D-—>      8<C-w>-
-inoremap <D-—> <C-o>8<C-w>-
-
-" Don't use Ex mode, use Q for formatting
-map Q gq
-
-" Make p in Visual mode replace the selected text with the "" register.
-"vnoremap p <Esc>:let current_reg = @"<CR>gvs<C-R>=current_reg<CR><Esc>
-
-" This is an alternative that also works in block mode, but the deleted
-" text is lost and it only works for putting the current register.
-"vnoremap p "_dp
-
-" ROT13 decode/encode the selected text (visual mode).
-" Alternative: 'unmap g' and then use 'g?'.
-vmap <F2> :!tr A-Za-z N-ZA-Mn-za-m<CR>
-
-" Print an empty <a> tag.
-"map! ;h <a href=""></a><ESC>5hi
-
-" Wrap an <a> tag around the URL under the cursor.
-"map ;H lBi<a href="<ESC>Ea"></a><ESC>3hi
-
 
 "------------------------------------------------------------------------------
 " File-type specific settings.
