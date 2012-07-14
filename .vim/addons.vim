@@ -1,6 +1,10 @@
 if exists("*SetupAddons") | finish | endif
 
 fun! SetupAddons()
+  """ More info about Vim plugins
+  " See Also: http://www.catonmat.net/series/vim-plugins-you-should-know-about
+  " See Also: http://www.drchip.org/astronaut/vim/
+  " See Also: http://pinboard.in/u:netj/t:vim/t:tweaks
 
   """ Look and Feels
   " See Also: http://www.quora.com/Which-are-the-best-vim-plugins
@@ -39,8 +43,10 @@ fun! SetupAddons()
   ActivateAddons Tagbar
     nnoremap <Space>t :TagbarToggle<CR>
 
-  ActivateAddons Tabular
+  ActivateAddons Align%294
   ActivateAddons surround
+  ActivateAddons repeat
+  ActivateAddons matchit.zip
   ActivateAddons rainbow_parentheses
     fun! RainbowParenthesesLoadAndToggleAll()
       exec 'RainbowParenthesesLoadRound'
@@ -52,8 +58,12 @@ fun! SetupAddons()
     nnoremap <C-\>0      :call RainbowParenthesesLoadAndToggleAll()<CR>
     inoremap <C-\>0 <C-o>:call RainbowParenthesesLoadAndToggleAll()<CR>
 
+  " ActivateAddons RltvNmbr
+  ActivateAddons DrawIt
+  " ActivateAddons MixCase
+
   ActivateAddons Mark%2666
-    let g:mwHistAdd = '' " '/@'
+    let g:mwHistAdd       = '' " '/@'
     let g:mwAutoLoadMarks = 1
     let g:mwAutoSaveMarks = 1
     set viminfo+=!  " Save and restore global variables. 
@@ -88,8 +98,10 @@ fun! SetupAddons()
   "ActivateAddons slime
   ActivateAddons The_NERD_tree
     nnoremap <Space>e :NERDTreeFind<CR>
+    let g:NERDTreeQuitOnOpen = 1
     let g:NERDTreeShowHidden = 1
-    let g:NERDTreeChDirMode = 2
+    let g:NERDTreeChDirMode  = 2
+  ActivateAddons renamer
   ActivateAddons snipmate
   "ActivateAddons vmark.vim_Visual_Bookmarking " XXX beware: <F2>/<F3> is overrided
   " TODO let b:vm_guibg = yellow
@@ -120,6 +132,7 @@ fun! SetupAddons()
   ActivateAddons vim-less
   ActivateAddons xmledit
     let g:xml_jump_string = "`"
+  ActivateAddons ragtag
 
   ActivateAddons Markdown
   "ActivateAddons vim-ft-markdown_fold
