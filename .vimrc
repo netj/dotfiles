@@ -6,8 +6,10 @@
 " 
 " Derived many parts from
 " Uwe Hermann <uwe@hermann-uwe.de>'s vimrc at 2005-11-20
+"
+" More settings for plugins can be found in .vim/addons.vim.
 
-version 7.0
+version 7.3
 
 if v:progname =~? "evim" | finish | endif
 
@@ -29,7 +31,7 @@ set autoindent		" always set autoindenting on
 set copyindent		" indent even when copying
 set preserveindent	" preserve whitespace for indentations
 set nobackup		" don't keep backups
-set history=128		" keep 128 lines of command line history
+set history=1024	" keep so many lines of command line history
 set ruler		" show the cursor position all the time
 set showcmd		" display incomplete commands
 set showmode		" display current mode
@@ -117,6 +119,12 @@ endif
 " Don't use Ex mode, use Q for formatting
 map Q gq
 
+" quickly display mappings of <C-\>, <Space>, <Leader>
+nnoremap <C-\><C-l>     :map <C-\><CR>
+nnoremap <Space><C-l>   :map <S<BS>Space><CR>
+nnoremap <Leader><C-l>  :map <L<BS>Leader><CR>
+
+
 " Mode Toggler Keys
 fun! ModeToggleKey(mode, lhs)
   exec 'nnoremap '.a:lhs.'      :set '.a:mode.'!<CR>:set '.a:mode.'?<CR>'
@@ -131,7 +139,7 @@ ModeToggleKey autowriteall    <C-\>!!
 ModeToggleKey binary          <C-\>@
 ModeToggleKey cursorbind      <C-\>.
 ModeToggleKey cursorline      <C-\>:
-ModeToggleKey cursorcolumn    <C-\>;
+ModeToggleKey cursorcolumn    <C-\>,
 ModeToggleKey diff            <C-\><C-d>
 ModeToggleKey foldenable      <C-\><C-z>
 ModeToggleKey list            <C-\><Space>
@@ -141,7 +149,7 @@ ModeToggleKey paste           <C-\><C-]>
 ModeToggleKey readonly        <C-\><C-r>
 ModeToggleKey ruler           <C-\>%
 ModeToggleKey scrollbind      <C-\>+
-ModeToggleKey spell           <C-\>?
+ModeToggleKey spell           <C-\>~
 ModeToggleKey swapfile        <C-\>$
 ModeToggleKey undofile        <C-\><C-u>
 ModeToggleKey winfixwidth     <C-\>\|
@@ -151,6 +159,7 @@ ModeToggleKey wrap            <C-\><C-\>
 " Fold
 nnoremap <Space>z      :set foldmethod=indent<CR>
 nnoremap <Space>Z      :set foldmethod=syntax<CR>
+nnoremap <Space><C-z>  :set foldmethod=manual<CR>
 
 " Fix syntax highlighting by doing it from start of file
 " See: http://vim.wikia.com/wiki/Fix_syntax_highlighting
