@@ -101,6 +101,10 @@ fun! SetupAddons()
     let g:NERDTreeQuitOnOpen = 1
     let g:NERDTreeShowHidden = 1
     let g:NERDTreeChDirMode  = 2
+    let g:NERDTreeIgnore = ['^.*\.sw[p-z]$'] " ignore vim swap files
+    autocmd BufEnter NERD_tree_* map <Space><Space> go
+    autocmd BufEnter NERD_tree_* map <Space>s       gi
+    autocmd BufEnter NERD_tree_* map <Space>v       gv
   ActivateAddons renamer
   ActivateAddons snipmate
   "ActivateAddons vmark.vim_Visual_Bookmarking " XXX beware: <F2>/<F3> is overrided
