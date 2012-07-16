@@ -213,8 +213,10 @@ fun! SetupVAM()
   call EnsureVamIsOnDisk(vam_install_path)
   exec 'set runtimepath+='.vam_install_path.'/vim-addon-manager'
 
+  let g:vim_addon_manager = {}
+  let g:vim_addon_manager['auto_install'] = 1
   " Tell VAM which plugins to fetch & load:
-  call vam#ActivateAddons(['vim-addon-manager'], {'auto_install' : 1})
+  call vam#ActivateAddons(['vim-addon-manager'])
   call SetupAddons()
   " sample: call vam#ActivateAddons(['pluginA','pluginB', ...], {'auto_install' : 0})
 
