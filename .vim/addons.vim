@@ -10,29 +10,43 @@ fun! SetupAddons()
   " See Also: http://www.quora.com/Which-are-the-best-vim-plugins
   " See Also: http://stevelosh.com/blog/2010/09/coming-home-to-vim/
   " See for more available schemes in ColorSamplerPack: http://www.vi-improved.org/color_sampler_pack/
-  " dark-lo: desertEx anotherdark darkZ inkpot jellybeans herald railscasts fruity dante wombat256 ChocolateLiquor clarity freya xoria256 twilight darkslategray darkblue2
-  " dark-hi: candycode asu1dark jammy lettuce darkspectrum desert256 leo vibrantink vividchalk guardian torte darkbone
+  " dark-lo: desertEx inkpot anotherdark jellybeans herald railscasts dante wombat256 ChocolateLiquor clarity freya xoria256 twilight darkslategray darkblue2
+  " dark-hi: fruity candycode asu1dark jammy lettuce vibrantink vividchalk guardian torte darkZ
   " light-hi: summerfruit256 eclipse nuvola fruit
   " light-lo: spring autumn sienna
   " fun: matrix borland golden camo
+  " bright: summerfruit256 buttercream PapayaWhip nuvola habiLight fruit eclipse earendel
   ActivateAddons Color_Sampler_Pack molokai
+  " scroll among my favorites with VimTip341
   ActivateAddons git:git://gist.github.com/1432015.git
+    let s:mySetColorsSet = []
+    fun! s:addColorSet(reversed, name, ...)
+      let colors = a:000 | if a:reversed | let colors = reverse(copy(colors)) | endif
+      let s:mySetColorsSet += [colors]
+    endfun
+    command -nargs=+ -bar -bang AddColorSet  call s:addColorSet('<bang>'!='', <f-args>)
     if has("gui_running")
-      " scroll among my favorites with VimTip341
-      let g:mySetColors = split('jellybeans molokai inkpot desertEx darkZ lettuce vibrantink vividchalk chocolateliquor matrix golden camo spring autumn sienna summerfruit256 fruit')
-      " let g:mySetColors=split('desertEx anotherdark darkZ inkpot jellybeans herald railscasts fruity dante wombat256 chocolateliquor clarity freya xoria256 twilight darkslategray darkblue2  candycode asu1dark jammy lettuce darkspectrum desert256 leo vibrantink vividchalk guardian torte darkbone  eclipse nuvola fruit  spring autumn autumn2 siena  matrix borland golden camo')
-      colorscheme jellybeans
+      AddColorSet  'darkLo'     jellybeans     desertEx    lucius       camo      dante     candy           " brookstream
+      AddColorSet  'creativity' spring         clarity     navajo-night sea       oceandeep breeze          " dusk        tabula     darkblue2
+      AddColorSet  'darkHi'     fruity         oceanblack  jammy        northland lettuce   molokai         " neon        vibrantink vividchalk colorer torte
+      AddColorSet  'bright'     summerfruit256 buttercream PapayaWhip   nuvola    habiLight fruit           " eclipse     earendel
+      AddColorSet! 'precision'  autumn         railscasts  Guardian     candycode inkpot    ChocolateLiquor
     else
       if &t_Co >= 256
         " many color schemes only work well on GVim
-        let g:mySetColors = split('jellybeans molokai inkpot lettuce summerfruit256')
-        colorscheme jellybeans
+        AddColorSet 'hi'     jellybeans inkpot         molokai navajo-night
+        AddColorSet 'lo'     lucius     lettuce        dante   wombat256
+        AddColorSet 'bright' tabula     summerfruit256
+        " desertEx colorer vividchalk candycode nuvola earendel
       else
-        let g:mySetColors = split('default')
-        colorscheme default
+        AddColorSet 'fallback' default
       endif
     endif
-    " let g:mySetColors=split('desertEx anotherdark darkZ inkpot jellybeans herald railscasts fruity dante wombat256 chocolateliquor clarity freya xoria256 twilight darkslategray darkblue2  candycode asu1dark jammy lettuce darkspectrum desert256 leo vibrantink vividchalk guardian torte darkbone  eclipse nuvola fruit  spring autumn autumn2 siena  matrix borland golden camo')
+    " XXX tlib seems not working, so workaround
+    "ActivateAddons tlib
+    "let g:mySetColors = tlib#list#RemoveAll(tlib#list#Flatten(tlib#list#Zip(g:mySetColorsSet)),'')
+    let g:mySetColors = s:stripeLists(s:mySetColorsSet)
+    exec 'colorscheme '.g:mySetColors[0]
 
   """ Productivity boosters
   ActivateAddons Gundo
@@ -175,6 +189,23 @@ fun! SetupAddons()
         \ imap <D-j> <Plug>IMAP_JumpBack|
     endif
 
+endfun
+
+fun! s:stripeLists(lists)
+  let stripedList = []
+  let added = 1
+  let i = 0
+  while added
+    let added = 0
+    for singleList in a:lists
+      if i < len(singleList)
+        call add(stripedList, singleList[i])
+        let added = 1
+      endif
+    endfor
+    let i += 1
+  endwhile
+  return stripedList
 endfun
 
 
