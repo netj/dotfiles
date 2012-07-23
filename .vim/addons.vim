@@ -57,9 +57,13 @@ fun! SetupAddons()
   ActivateAddons Tagbar
     nnoremap <Space>t :TagbarToggle<CR>
 
+    " Align%294's \m= collides with Mark%2666 unless already mapped
+    map <Leader>tm= <Plug>AM_m=
   ActivateAddons Align%294
   ActivateAddons surround
   ActivateAddons repeat
+  ActivateAddons EasyMotion
+    let g:EasyMotion_leader_key = '<Space>w'
   ActivateAddons matchit.zip
   ActivateAddons rainbow_parentheses
     fun! RainbowParenthesesLoadAndToggleAll()
@@ -107,6 +111,10 @@ fun! SetupAddons()
   " CamelCaseComplete is less convenient (CTRL-X CTRL-C), yet lightweight
   ActivateAddons CamelCaseComplete CompleteHelper
   ActivateAddons camelcasemotion
+    " recover default ,
+    nnoremap ,, ,
+    xnoremap ,, ,
+    onoremap ,, ,
 
   "ActivateAddons ack
   "ActivateAddons slime
@@ -115,10 +123,11 @@ fun! SetupAddons()
     let g:NERDTreeQuitOnOpen = 1
     let g:NERDTreeShowHidden = 1
     let g:NERDTreeChDirMode  = 2
-    let g:NERDTreeIgnore = ['^.*\.sw[p-z]$'] " ignore vim swap files
-    autocmd BufEnter NERD_tree_* map <Space><Space> go
-    autocmd BufEnter NERD_tree_* map <Space>s       gi
-    autocmd BufEnter NERD_tree_* map <Space>v       gv
+    let g:NERDTreeIgnore = ['^.*\.sw[p-z]$', '^\..*\.un\~'] " ignore vim swap and undo files
+    " easier preview key mapping
+    autocmd BufEnter NERD_tree_* map <buffer> <Space><Space> go
+    autocmd BufEnter NERD_tree_* map <buffer> <Space>s       gi
+    autocmd BufEnter NERD_tree_* map <buffer> <Space>v       gv
   ActivateAddons renamer
   ActivateAddons snipmate
   "ActivateAddons vmark.vim_Visual_Bookmarking " XXX beware: <F2>/<F3> is overrided
