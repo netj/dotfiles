@@ -41,7 +41,7 @@ end script
 script gatesOfficeConfiguration
 	property name : "Gates Office"
 	-- I have a SyncMaster 305T in my office :)
-	property screens : {vertical:{use(syncmaster30inDisplay, 0, 0), use(macbookDisplay, 484, 1600)}}
+	property screens : {vertical:{use(syncmaster30inDisplay, 0, 0), use(macbookDisplay, 2560, 1315)}}
 	property defaultScreen : syncmaster30inDisplay
 	on adapt()
 		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.8, wins:my getLargeEnoughWindows(windows)})
