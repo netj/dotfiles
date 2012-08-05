@@ -101,7 +101,6 @@ install .fonts.conf
 install .fonts
 
 # Mac OS X
-shopt -s nullglob extglob
 case $(uname) in Darwin)
     # install applescripts
     scptd=Mac/Scripts/compiled/
@@ -138,9 +137,17 @@ case $(uname) in Darwin)
         rm -f iTunes_SED-*.zip
     }
     for s in Mac/Scripts/{*,Applications/{*/*,Finder/lselect,iTunes/iTunes\ SED}}.applescript; do
+        [ -e "$s" ] || continue
         installscpt "$s"
     done
     for s in Mac/Scripts/*.sh; do
-        install Library/Scripts/"${s#Mac/Scripts/}" "$s" true true
+        [ -e "$s" ] || continue
+        install Library/"${s#Mac/}" "$s" true true
+    done
+
+    # install KeyRemap4MacBook settings
+    for xml in Mac/KeyRemap4MacBook/*.xml; do
+        [ -e "$xml" ] || continue
+        install Library/"Application Support"/"${xml#Mac/}" "$xml"
     done
 ;; esac
