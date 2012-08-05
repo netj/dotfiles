@@ -20,6 +20,7 @@ killall Finder
 defaults write -g ApplePressAndHoldEnabled -boolean false
 defaults write -g AppleShowAllExtensions -boolean true
 defaults write -g NSNavPanelExpandedStateForSaveMode -boolean true
+defaults write -g NSScrollAnimationEnabled -bool NO
 
 defaults write com.apple.Safari ShowStatusBar -boolean true
 defaults write com.apple.Safari WebKitDeveloperExtras -boolean true
