@@ -19,6 +19,7 @@
         <autogen>--KeyToKey-- KeyCode::W,         ModifierFlag::COMMAND_L,                             KeyCode::W,         ModifierFlag::COMMAND_L</autogen>
         <autogen>--KeyToKey-- KeyCode::C,         ModifierFlag::COMMAND_L|ModifierFlag::NONE,          KeyCode::C,         ModifierFlag::COMMAND_L</autogen>
         <autogen>--KeyToKey-- KeyCode::V,         ModifierFlag::COMMAND_L,                             KeyCode::V,         ModifierFlag::COMMAND_L</autogen>
+        <autogen>--KeyToKey-- KeyCode::SPACE,     ModifierFlag::COMMAND_L,                             KeyCode::SPACE,     ModifierFlag::COMMAND_L</autogen>
         <!-- pass-through fullscreen, zoom font size -->
         <autogen>--KeyToKey-- KeyCode::F, ModifierFlag::CONTROL_L|ModifierFlag::COMMAND_L|ModifierFlag::NONE,
         <!---->               KeyCode::F, ModifierFlag::CONTROL_L|ModifierFlag::COMMAND_L                     </autogen>
