@@ -26,6 +26,11 @@ defaults write com.apple.Safari ShowStatusBar -boolean true
 defaults write com.apple.Safari WebKitDeveloperExtras -boolean true
 defaults write com.apple.Safari WebKitWebGLEnabled -boolean true
 defaults write com.apple.Safari IncludeDebugMenu -boolean true
+# http://hints.macworld.com/article.php?story=20120731105734626
+defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2StandardFontFamily 'Lucida Grande'
+defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DefaultFontSize 18
+defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2FixedFontFamily 'Envy Code R'
+defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DefaultFixedFontSize 16
 
 # How to show Dictionary definitions first in Spotlight results
 # See-Also: http://apple.stackexchange.com/a/52530
