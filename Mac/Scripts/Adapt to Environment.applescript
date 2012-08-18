@@ -85,8 +85,8 @@ on run args
 	
 	-- move and resize some apps
 	if my appIsRunning("Mail") then tell application "Mail" to my moveAndResize({disp:macbookDisplay, x:0, y:0, w:1532, h:1, wins:windows of message viewers})
-        set messagesAppName to "iChat"
-        if (get version of application "Finder") >= "10.8" then set messagesAppName to "Messages"
+        set messagesAppName to "Messages"
+        if (get version of application "Finder") < "10.8" then set messagesAppName to "iChat"
 	if my appIsRunning(messagesAppName) then tell application messagesAppName to my moveAndResize({disp:macbookDisplay, x:0.95, y:0.9, h:700, wins:windows})
 	if my appIsRunning("Twitter") then tell application "Twitter" to my moveAndResize({disp:macbookDisplay, x:1, y:0, h:1, wins:windows})
 	if my appIsRunning("Adium") then tell application "Adium"
