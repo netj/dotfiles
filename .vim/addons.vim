@@ -55,7 +55,8 @@ fun! SetupAddons()
   ActivateAddons bufexplorer.zip
     nnoremap <Space>b :BufExplorerHorizontalSplit<CR>
   ActivateAddons Tagbar
-    nnoremap <Space>t :TagbarToggle<CR>
+    nnoremap <Space>t :TagbarOpenAutoClose<CR>
+    nnoremap <Space>T :TagbarToggle<CR>
 
     " Align%294's \m= collides with Mark%2666 unless already mapped
     map <Leader>tm= <Plug>AM_m=
