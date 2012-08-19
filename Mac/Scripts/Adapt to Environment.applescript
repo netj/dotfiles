@@ -41,7 +41,7 @@ end script
 script gatesOfficeConfiguration
 	property name : "Gates Office"
 	-- I have a SyncMaster 305T in my office :)
-	property screens : {vertical:{use(syncmaster30inDisplay, 0, 0), use(macbookDisplay, 2560, 1315)}}
+	property screens : {horizontal:{use(syncmaster30inDisplay, 0, 0), use(macbookDisplay, 2560, 1315)}}
 	property defaultScreen : syncmaster30inDisplay
 	on adapt()
 		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.8, wins:my getLargeEnoughWindows(windows)})
@@ -85,8 +85,8 @@ on run args
 	
 	-- move and resize some apps
 	if my appIsRunning("Mail") then tell application "Mail" to my moveAndResize({disp:macbookDisplay, x:0, y:0, w:1532, h:1, wins:windows of message viewers})
-        set messagesAppName to "Messages"
-        if (get version of application "Finder") < "10.8" then set messagesAppName to "iChat"
+		set messagesAppName to "Messages"
+		if (get version of application "Finder") < "10.8" then set messagesAppName to "iChat"
 	if my appIsRunning(messagesAppName) then tell application messagesAppName to my moveAndResize({disp:macbookDisplay, x:0.95, y:0.9, h:700, wins:windows})
 	if my appIsRunning("Twitter") then tell application "Twitter" to my moveAndResize({disp:macbookDisplay, x:1, y:0, h:1, wins:windows})
 	if my appIsRunning("Adium") then tell application "Adium"
@@ -150,35 +150,46 @@ end determineCurrentConfiguration
 
 
 -- check if actual screen size matches config
+property detectionTolerance : 10 -- px of alignment error to tolerate
 on actualScreensMatch(config)
 	set screens to (config's screens) & {horizontal:null, vertical:null}
 	-- first check actual width with horizontal screen config
 	set hz to screens's horizontal
 	if hz is not null then
 		set totalW to 0
+		set totalH to 0
 		repeat with screen in hz
 			set disp to screen's disp
 			set disp's baseCoords to {screen's x, screen's y}
 			set disp's screenMargin to {2, 2}
 			set totalW to totalW + (item 1 of disp's screenSize)
+			set newH to (item 2 of disp's screenSize) + (item 2 of disp's baseCoords)
+			if newH > totalH then set totalH to newH
 		end repeat
-		if totalW ≠ actualWidth then return false
+		if abs(totalW - actualWidth) > detectionTolerance or abs(totalH - actualHeight) > detectionTolerance then return false
 	end if
 	-- then check if actual height matches vertical screen config
 	set vt to screens's vertical
 	if vt is not null then
+		set totalW to 0
 		set totalH to 0
 		repeat with screen in vt
 			set disp to screen's disp
 			set disp's baseCoords to {screen's x, screen's y}
 			set disp's screenMargin to {2, 2}
+			set newW to (item 1 of disp's screenSize) + (item 1 of disp's baseCoords)
+			if newW > totalW then set totalW to newW
 			set totalH to totalH + (item 2 of disp's screenSize)
 		end repeat
-		if totalH ≠ actualHeight then return false
+		if abs(totalW - actualWidth) > detectionTolerance or abs(totalH - actualHeight) > detectionTolerance then return false
 	end if
 	return true
 end actualScreensMatch
 
+on abs(v)
+	if v < 0 then return -v
+	return v
+end abs
 
 -- How to take Dock's size and position into account
 property menubarHeight : 22 -- will probably stay constant, I guess
@@ -362,6 +373,7 @@ to moveAndResize(args)
 		end if
 		
 		-- change the size and position of the window
+		--log ("moveAndResize "& _x &" "& _y &" "& _w &" "& _h &"\t"& (win's name))
 		try
 			set bounds of win to {_x, _y, _x + _w, _y + _h}
 		on error
