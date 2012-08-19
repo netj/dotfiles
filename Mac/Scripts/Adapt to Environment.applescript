@@ -102,9 +102,9 @@ on run args
 	
 	-- -- get back to current application
 	-- try
-        --         log name of curApp
-        --         activate curApp
-	-- 	my getAppIntoView(name of curApp)
+	--		log name of curApp
+	--		activate curApp
+	--	my getAppIntoView(name of curApp)
 	-- on error
 		if my appIsRunning("Mail") then
 			tell application "Mail" to activate
@@ -211,10 +211,10 @@ on getAppIntoView(appName)
 	tell application "System Events"
 		tell application appName to activate
 		try
-                        set appDockIcon to get UI element appName of list 1 of process "Dock"
-                        click appDockIcon
-                        click appDockIcon
-                        delay 1
+			set appDockIcon to get UI element appName of list 1 of process "Dock"
+			click appDockIcon
+			click appDockIcon
+			delay 1
 		on error
 			tell process appName
 				set windowTitle to front window's title
@@ -223,11 +223,11 @@ on getAppIntoView(appName)
 				on error
 					set windowMenu to menu bar item "윈도우" of menu bar 1
 				end try
-                                try
-                                        click menu item windowTitle of menu 1 of windowMenu
-                                on error
-                                        click last menu item of menu 1 of windowMenu
-                                end try
+				try
+						click menu item windowTitle of menu 1 of windowMenu
+				on error
+						click last menu item of menu 1 of windowMenu
+				end try
 			end tell
 		end try
 	end tell
@@ -289,7 +289,7 @@ end filterWindows
 (*
 Running the following line will move and resize all windows of that application:
 
-    tell application "Finder" to my moveAndResize(x,y, windows, w,h)
+	tell application "Finder" to my moveAndResize(x,y, windows, w,h)
 
   
 For x,y,w,h, you can pass:
@@ -374,4 +374,4 @@ to moveAndResize(args)
 end moveAndResize
 
 
-# vim:ft=applescript
+# vim:ft=applescript:sw=4:ts=4:sts=4:noet
