@@ -20,14 +20,17 @@
         <autogen>--KeyToKey-- KeyCode::C,         ModifierFlag::COMMAND_L|ModifierFlag::NONE,          KeyCode::C,         ModifierFlag::COMMAND_L</autogen>
         <autogen>--KeyToKey-- KeyCode::V,         ModifierFlag::COMMAND_L,                             KeyCode::V,         ModifierFlag::COMMAND_L</autogen>
         <autogen>--KeyToKey-- KeyCode::SPACE,     ModifierFlag::COMMAND_L,                             KeyCode::SPACE,     ModifierFlag::COMMAND_L</autogen>
+        <autogen>--KeyToKey-- KeyCode::COMMA,     ModifierFlag::COMMAND_L,                             KeyCode::COMMA,     ModifierFlag::COMMAND_L</autogen>
         <!-- pass-through fullscreen, zoom font size -->
         <autogen>--KeyToKey-- KeyCode::F, ModifierFlag::CONTROL_L|ModifierFlag::COMMAND_L|ModifierFlag::NONE,
         <!---->               KeyCode::F, ModifierFlag::CONTROL_L|ModifierFlag::COMMAND_L                     </autogen>
         <autogen>--KeyToKey-- KeyCode::MINUS, ModifierFlag::COMMAND_L, KeyCode::MINUS, ModifierFlag::COMMAND_L</autogen>
         <autogen>--KeyToKey-- KeyCode::EQUAL, ModifierFlag::COMMAND_L, KeyCode::EQUAL, ModifierFlag::COMMAND_L</autogen>
-        <!-- pass-through my TotalTerminal combo ⌃⌘⏎ -->
+        <!-- pass-through my TotalTerminal combos ⌃⌘⏎ ⌃⌘P -->
         <autogen>--KeyToKey-- KeyCode::RETURN, ModifierFlag::CONTROL_L|ModifierFlag::COMMAND_L|ModifierFlag::NONE,
         <!---->               KeyCode::RETURN, ModifierFlag::CONTROL_L|ModifierFlag::COMMAND_L </autogen>
+        <autogen>--KeyToKey-- KeyCode::P, ModifierFlag::CONTROL_L|ModifierFlag::COMMAND_L|ModifierFlag::NONE,
+        <!---->               KeyCode::P, ModifierFlag::CONTROL_L|ModifierFlag::COMMAND_L </autogen>
         <!-- change rest of keys with Command, Shift+Command, Control+Command, and Control+Shift+Command to Option -->
         <include path="wrap_most_keys.xml"><replacementdef><replacementname>BEFORE</replacementname> <replacementvalue>ModifierFlag::NONE|ModifierFlag::COMMAND_L                     </replacementvalue></replacementdef><replacementdef><replacementname>AFTER</replacementname> <replacementvalue>ModifierFlag::OPTION_L                                               </replacementvalue></replacementdef></include>
         <include path="wrap_most_keys.xml"><replacementdef><replacementname>BEFORE</replacementname> <replacementvalue>ModifierFlag::NONE|ModifierFlag::COMMAND_L|VK_SHIFT            </replacementvalue></replacementdef><replacementdef><replacementname>AFTER</replacementname> <replacementvalue>ModifierFlag::OPTION_L|ModifierFlag::SHIFT_L                         </replacementvalue></replacementdef></include>
