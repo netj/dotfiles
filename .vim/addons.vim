@@ -20,33 +20,59 @@ fun! SetupAddons()
   " scroll among my favorites with VimTip341
   ActivateAddons git:git://gist.github.com/1432015.git
     let s:mySetColorsSet = []
+    let s:mySetColorsSetDiff = []
     fun! s:addColorSet(reversed, name, ...)
       let colors = a:000 | if a:reversed | let colors = reverse(copy(colors)) | endif
-      let s:mySetColorsSet += [colors]
+      if stridx(a:name, "'diff") >= 0
+        let s:mySetColorsSetDiff += [colors]
+      else
+        let s:mySetColorsSet += [colors]
+      endif
     endfun
-    command -nargs=+ -bar -bang AddColorSet  call s:addColorSet('<bang>'!='', <f-args>)
+    command -nargs=+ -bar -bang AddColorSet  call s:addColorSet(<bang>0, <f-args>)
     if has("gui_running")
-      AddColorSet  'darkLo'     jellybeans     desertEx    lucius       camo      dante     candy           " brookstream
-      AddColorSet  'creativity' spring         clarity     navajo-night sea       oceandeep breeze          " dusk        tabula     darkblue2
-      AddColorSet  'darkHi'     fruity         oceanblack  jammy        northland lettuce   molokai         " neon        vibrantink vividchalk colorer torte
-      AddColorSet  'bright'     summerfruit256 buttercream PapayaWhip   nuvola    habiLight fruit           " eclipse     earendel
+      AddColorSet  'darkLo'     jellybeans     desertEx    lucius       camo      dante     candy           "      brookstream
+      AddColorSet  'creativity' spring         clarity     navajo-night sea       oceandeep breeze          "      dusk        tabula     darkblue2
+      AddColorSet  'darkHi'     fruity         oceanblack  jammy        northland lettuce   molokai         "      neon        vibrantink vividchalk colorer torte
+      AddColorSet  'bright'     summerfruit256 buttercream PapayaWhip   nuvola    habiLight fruit           "      eclipse     earendel
       AddColorSet! 'precision'  autumn         railscasts  Guardian     candycode inkpot    ChocolateLiquor
+      AddColorSet  'diff'       jellybeans     candycode   xoria256     "         inkpot    ChocolateLiquor lucius railscasts  northland  blacksea
+      AddColorSet  'diffLight'  PapayaWhip     taqua       silent       "         solarized
     else
       if &t_Co >= 256
-        " many color schemes only work well on GVim
-        AddColorSet 'hi'     jellybeans inkpot         molokai navajo-night
-        AddColorSet 'lo'     lucius     lettuce        dante   wombat256
+        " many color schemes only work well on GUI
+        AddColorSet 'hi'     jellybeans inkpot          molokai         navajo-night
+        AddColorSet 'lo'     lucius          lettuce         dante        wombat256
         AddColorSet 'bright' tabula     summerfruit256
+        AddColorSet 'diff'   xoria256 calmar256-light maroloccio inkpot ChocolateLiquor " candycode calmar256-dark PapayaWhip lettuce blacksea
         " desertEx colorer vividchalk candycode nuvola earendel
       else
         AddColorSet 'fallback' default
+        AddColorSet 'diff'  default
       endif
     endif
     " XXX tlib seems not working, so workaround
     "ActivateAddons tlib
     "let g:mySetColors = tlib#list#RemoveAll(tlib#list#Flatten(tlib#list#Zip(g:mySetColorsSet)),'')
-    let g:mySetColors = s:stripeLists(s:mySetColorsSet)
-    exec 'colorscheme '.g:mySetColors[0]
+    let g:mySetColorsNormal = s:stripeLists(s:mySetColorsSet)
+    let g:mySetColorsDiff   = s:stripeLists(s:mySetColorsSetDiff)
+    let g:mySetColors       = g:mySetColorsNormal
+    exec 'colorscheme' g:mySetColors[0]
+    " use separate colorscheme for viewing diffs
+    " See: http://superuser.com/questions/157676/change-color-scheme-when-calling-vimdiff-inside-vim
+    let g:diff_colors_name  = g:mySetColorsDiff[0]
+    let g:prior_colors_name = g:colors_name
+    autocmd FilterWritePost,BufEnter,WinEnter,WinLeave *
+          \ if &diff && g:mySetColors is g:mySetColorsNormal |
+          \   let g:prior_colors_name = g:colors_name |
+          \   let g:mySetColors = g:mySetColorsDiff   |
+          \   exec 'colorscheme' g:diff_colors_name |
+          \ elseif !&diff && g:mySetColors is g:mySetColorsDiff |
+          \   let g:diff_colors_name = g:colors_name |
+          \   let g:mySetColors = g:mySetColorsNormal |
+          \   exec 'colorscheme' g:prior_colors_name |
+          \ endif
+
 
   """ Productivity boosters
   ActivateAddons Gundo
@@ -57,6 +83,8 @@ fun! SetupAddons()
   ActivateAddons Tagbar
     nnoremap <Space>t :TagbarOpenAutoClose<CR>
     nnoremap <Space>T :TagbarToggle<CR>
+  " unimpaired quickfix access with [q, ]q, [Q, ]Q
+  ActivateAddons unimpaired
 
     " Align%294's \m= collides with Mark%2666 unless already mapped
     map <Leader>tm= <Plug>AM_m=
@@ -126,6 +154,7 @@ fun! SetupAddons()
     let g:NERDTreeQuitOnOpen = 1
     let g:NERDTreeShowHidden = 1
     let g:NERDTreeChDirMode  = 2
+    let g:NERDTreeSortOrder = ['*', '\.swp$', '\.bak$', '\~$'] " don't put directories on top
     let g:NERDTreeIgnore = ['^.*\.sw[p-z]$', '^\..*\.un\~'] " ignore vim swap and undo files
     " easier preview key mapping
     autocmd BufEnter NERD_tree_* map <buffer> <Space><Space> go
@@ -141,11 +170,22 @@ fun! SetupAddons()
 
   """ Git, Github
   ActivateAddons fugitive
+    " tips from vimcasts.org
+    autocmd User fugitive
+      \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
+      \   nnoremap <buffer> .. :edit %:h<CR> |
+      \ endif
+    autocmd BufReadPost fugitive://* set bufhidden=delete
+    set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
+    " some shorthands
     nnoremap <Space>gg :Gstatus<CR>
     nnoremap <Space>gd :Gdiff<CR>
+    nnoremap <Space>gD :Gdiff HEAD<CR>
     nnoremap <Space>gb :Gblame<CR>
     nnoremap <Space>gl :Glog<CR>:copen<CR>
+    nnoremap <Space>gL :Glog --<CR>
     nnoremap <Space>ge :Gedit<CR>
+    nnoremap <Space>gE :Gedit 
   ActivateAddons Gist WebAPI
     let g:gist_clip_command = 'pbcopy'
     let g:gist_open_browser_after_post = 1
