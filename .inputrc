@@ -7,9 +7,18 @@ set visible-stats On
 set completion-ignore-case On
 set mark-symlinked-directories On
 
+# http://www.ukuug.org/events/linux2003/papers/bash_tips/
+$if Bash
+    # Do history expansion ! when space is pressed
+    Space: magic-space
+    # Insert-Option Macro (enhanced to handle multi-word commands)
+    "\eo": "\C-p\C-a\ef\C-] \C-b\C-f "
+    "\es": menu-complete
+$endif
+
 # better search
-"\ep": history-search-backward
-"\en": history-search-forward
+"\e[A": history-search-backward
+"\e[B": history-search-forward
 #  save forward search from the usually-screened-by-terminal-STOP C-s
 "\C-]": forward-search-history
 
