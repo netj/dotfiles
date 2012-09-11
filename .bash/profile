@@ -8,8 +8,8 @@
 . ~/.bash/plugins/bpm.sh vocabularies
 
 # load local settings and modules
-for REPLY in ~/.bash_local
-do [ -f $REPLY ] && . $REPLY
+for s in ~/.bash_local
+do [ -r $s ] && . $s
 done
 
 . ~/.bash/plugins/bpm.sh load
