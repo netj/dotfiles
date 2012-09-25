@@ -31,7 +31,7 @@ end script
 script homeConfiguration
 	property name : "Home"
 	-- a SyncMaster 275T is at my home desk
-	property screens : {horizontal:{use(syncmaster27inDisplay, 0, 0), use(macbookDisplay, 1920, 508)}}
+	property screens : {vertical:{use(syncmaster27inDisplay, 0, 0), use(macbookDisplay, 133, 1200)}}
 	property defaultScreen : syncmaster27inDisplay
 	on adapt()
 		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.95, wins:my getLargeEnoughWindows(windows)})
