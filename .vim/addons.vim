@@ -227,7 +227,7 @@ fun! SetupAddons()
 
   " Vim-LaTeX
   " See-Also: http://michaelgoerz.net/refcards/vimlatexqrc.pdf
-  ActivateAddons vim-latex
+  ActivateAddons LaTeX-Suite_aka_Vim-LaTeX
     au! FileType tex
       \ setlocal spell textwidth=76 |
       \ set suffixes+=.pdf,.dvi,.ps,.ps.gz,.aux,.bbl,.blg,.log,.out,.ent,.fdb_latexmk,.brf " TeX by-products
