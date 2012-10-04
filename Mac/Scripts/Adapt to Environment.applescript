@@ -101,6 +101,7 @@ on run args
 		if my appIsRunning("Mail") then tell application "Mail" to my moveAndResize({disp:macbookDisplay, h:0.9, wins:windows of message viewers})
 		my moveAndResize({disp:macbookDisplay, x:1, y:0, w:250, h:1, wins:windows})
 		my moveAndResize({disp:macbookDisplay, x:1, y:1, w:0.6, h:0.75, wins:chat windows})
+		my keepInAllSpaces(chat windows, numScreens > 1)
 	end tell
 	
 	if my appIsRunning("Eclipse") then moveAndResize({x:0, y:0, w:1, h:1, wins:my getAppWindows("Eclipse")})
@@ -114,12 +115,11 @@ on run args
 	--		activate curApp
 	--	my getAppIntoView(name of curApp)
 	-- on error
-		if my appIsRunning("Mail") then
-			tell application "Mail" to activate
+		if my appIsRunning("Mail") then tell application "Mail"
+			activate
 			tell application "System Events" to key code 18 using command down -- Cmd-1 to goto inbox
-			-- keep Mail window in all screens or not
-			tell application "Mail" to my keepInAllSpaces(message viewers, numScreens > 1)
-		end if
+			my keepInAllSpaces(message viewers, numScreens > 1)
+		end tell
 	-- end try
 
 	return true
