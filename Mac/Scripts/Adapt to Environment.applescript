@@ -93,8 +93,7 @@ on run args
 		if my appIsRunning("Mail") then tell application "Mail" to my moveAndResize({disp:macbookDisplay, h:0.9, wins:windows of message viewers})
 		tell application messagesAppName
 			my moveAndResize({disp:macbookDisplay, x:0, y:1, h:700, wins:windows})
-			tell application "System Events" to tell process messagesAppName to key code 18 using command down
-			my moveAndResize({disp:macbookDisplay, x:1, y:0, h:1, wins:{first window}})
+			my moveAndResize({disp:macbookDisplay, x:1, y:0, h:1, wins:{first window whose name is "대화 상대" or name is "Buddies"}})
 		end tell
 	end if
 	if my appIsRunning("Twitter") then tell application "Twitter" to my moveAndResize({disp:macbookDisplay, x:1, y:0, h:1, wins:windows})
@@ -122,6 +121,8 @@ on run args
 			tell application "Mail" to my keepInAllSpaces(message viewers, numScreens > 1)
 		end if
 	-- end try
+
+	return true
 end run
 
 --------------------------------------------------------------------------------------------------------
@@ -409,9 +410,9 @@ on keepInAllSpaces(wins, keepOrNot)
 			tell application "System Events"
 			tell process procName
 				keystroke "f" using {command down, control down, shift down}
-				--delay 0.1
-				--set afloatWindow to (first window whose title is "Afloat — Adjust Effects")
-				set afloatWindow to window 1
+				delay 0.1
+				set afloatWindow to (first window whose title is "Afloat — Adjust Effects")
+				-- XXX this is buggy: set afloatWindow to window 1
 				tell afloatWindow
 					set chkbox to (first checkbox whose title is "Keep this window on the screen on all Spaces")
 					if chkbox's value is not keepVal then click chkbox
