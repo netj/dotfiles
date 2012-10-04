@@ -76,6 +76,8 @@ on run args
 	useConfiguration(mpkOfficeConfiguration)
 	determineCurrentConfiguration(args)
 	log args & actualWidth & actualHeight & currentConfiguration's name
+	set screens to (currentConfiguration's screens & {horizontal:{}, vertical:{}})
+	set numScreens to screens's horizontal's length + screens's vertical's length
 	
 	-- move and resize some apps (without knowing the environment)
 	if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({w:1321, wins:my getLargeEnoughWindows(windows)})
@@ -89,7 +91,11 @@ on run args
 	if (get version of application "Finder") < "10.8" then set messagesAppName to "iChat"
 	if my appIsRunning(messagesAppName)
 		if my appIsRunning("Mail") then tell application "Mail" to my moveAndResize({disp:macbookDisplay, h:0.9, wins:windows of message viewers})
-		tell application messagesAppName to my moveAndResize({disp:macbookDisplay, x:0, y:1, h:700, wins:windows})
+		tell application messagesAppName
+			my moveAndResize({disp:macbookDisplay, x:0, y:1, h:700, wins:windows})
+			tell application "System Events" to tell process messagesAppName to key code 18 using command down
+			my moveAndResize({disp:macbookDisplay, x:1, y:0, h:1, wins:{first window}})
+		end tell
 	end if
 	if my appIsRunning("Twitter") then tell application "Twitter" to my moveAndResize({disp:macbookDisplay, x:1, y:0, h:1, wins:windows})
 	if my appIsRunning("Adium") then tell application "Adium"
@@ -112,6 +118,8 @@ on run args
 		if my appIsRunning("Mail") then
 			tell application "Mail" to activate
 			tell application "System Events" to key code 18 using command down -- Cmd-1 to goto inbox
+			-- keep Mail window in all screens or not
+			tell application "Mail" to my keepInAllSpaces(message viewers, numScreens > 1)
 		end if
 	-- end try
 end run
@@ -387,6 +395,34 @@ to moveAndResize(args)
 		end try
 	end repeat
 end moveAndResize
+
+
+-- keepInAllSpaces -- Uses "Afloat" to keep window in all spaces
+-- See: http://infinite-labs.net/afloat/
+on keepInAllSpaces(wins, keepOrNot)
+	set keepVal to 0
+	if keepOrNot then set keepVal to 1
+	repeat with w in wins
+		activate w
+		log w
+		set procName to short name of (info for (path to frontmost application))
+			tell application "System Events"
+			tell process procName
+				keystroke "f" using {command down, control down, shift down}
+				--delay 0.1
+				--set afloatWindow to (first window whose title is "Afloat — Adjust Effects")
+				set afloatWindow to window 1
+				tell afloatWindow
+					set chkbox to (first checkbox whose title is "Keep this window on the screen on all Spaces")
+					if chkbox's value is not keepVal then click chkbox
+					click (first button whose title is "Done")
+				end tell
+			end tell
+		end tell
+		return
+	end repeat
+end keepInAllSpaces
+
 
 
 # vim:ft=applescript:sw=4:ts=4:sts=4:noet
