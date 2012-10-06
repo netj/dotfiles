@@ -5,49 +5,89 @@
 
 set -e
 
-cd ~/.dotfiles || . update
+DotfilesRoot=$(cd "$(dirname "$0")" >/dev/null; pwd)
+Home=$(cd >/dev/null; pwd)
+
+# make sure we have all the git submodules in place
+(
+cd "$DotfilesRoot"
+git submodule | grep ^- | awk '{print $2}' | xargs git submodule update --init
+)
+
+
 
 # install symlinks
+#  determine relative path to DotfilesRoot from Home
+dotdots() {
+    tr / '\n' <<<"$1" |
+    sed -n '/^$/d; s/.*/../p' |
+    tr '\n' /
+}
+if [[ $DotfilesRoot != $Home/.dotfiles ]]; then
+    if [[ $DotfilesRoot = $Home* ]]; then
+        echo >&2 "WARNING: ~${DotfilesRoot#$Home}: not a standard location. (~/.dotfiles recommended)"
+        dotfilesRel=${DotfilesRoot#$Home/}
+    else
+        echo >&2 "WARNING: $DotfilesRoot: not under home directory ($Home)"
+        dotfilesRel=$DotfilesRoot
+    fi
+else
+    dotfilesRel=.dotfiles
+fi
 install() {
-    local d=$1
-    local src=${2:-$d}
+    local dst=$1
+    local src=${2:-$dst}
     local nosymlink=${3:-false}
     local nobackup=${4:-false}
-    local n=$(shname "$d")
+    local n=$(shname "$dst")
     # compute relative path
     local rel=
-    case $d in
-        */*) # need relative path to .dotfiles if path has depth
-        local dd=$(dirname "$d")
+    case $dst in
+        */*) # need relative path to DotfilesRoot if path has depth
+        local dd=$(dirname "$dst")
         mkdir -p ~/"$dd"
-        rel=$(tr / '\n' <<<"$dd" |
-            sed -n '/^$/d; s/.*/../p' |
-            tr '\n' /)
+        case $dotfilesRel in
+            /*)
+                # no $rel prefix needed for an absolute path
+                ;;
+            *)
+                rel=$(dotdots "$dd")
+                ;;
+        esac
         ;;
     esac
     # check if our link is already there
-    if [ ~/"$d" -ef "$src" ]; then
+    if [ ~/"$dst" -ef "$DotfilesRoot/$src" ]; then
         run ${n}_before "$@"
-        echo "$d installed"
+        echo "$dst installed"
         run ${n}_after "$@"
     else
-        if read -p "install $d? " -n1; then
+        while read -p "install $dst? [yNq] " -n1; do
             echo
             case "$REPLY" in
-                [Yy])
+                [Yy]) # yes, install
                     run ${n}_before "$@"
                     # backup previous one
-                    ! [ -e ~/"$d" ] || $nobackup || mv -iv ~/"$d" ~/"$d"~
+                    ! [ -e ~/"$dst" ] || $nobackup || mv -iv ~/"$dst" ~/"$dst"~
                     # create a symlink or a hardlink
                     if $nosymlink; then
-                        ln -fv "$src" ~/"$d"
+                        ln -fv "$src" ~/"$dst"
                     else
-                        ln -snfv "$rel.dotfiles/$src" ~/"$d"
+                        ln -snfv "$rel$dotfilesRel/$src" ~/"$dst"
                     fi
                     run ${n}_after "$@"
+                    break
+                    ;;
+                [Nn]|"") # no, skip
+                    break
+                    ;;
+                [Qq]) # quit, abort installation
+                    exit 2
+                    ;;
+                *) # pardon me?
                     ;;
             esac
-        fi
+        done
     fi
 }
 shname() {
@@ -110,14 +150,16 @@ fonts_after() { make -C .fonts; }
 install .fonts.conf
 install .fonts
 
+
 # Mac OS X
 case $(uname) in Darwin)
     # install applescripts
+    cd "$DotfilesRoot"
     scptd=Mac/Scripts/compiled/
     mkdir -p "$scptd"
     compilescpt() {
         local o=$1 s="$2"
-        cd ./.dotfiles
+        cd "$DotfilesRoot"
         local n=$(shname "$o")
         run ${n}_before "$@"
         ! [ "$o" -nt "$s" ] || return 0
@@ -137,13 +179,15 @@ case $(uname) in Darwin)
         install "$dst" "$obj" true true
     }
     Mac_Scripts_compiled_Applications_Finder_lselect_scpt_before() {
-        ! [ -e .dotfiles/Mac/Scripts/Applications/Finder/lselect.applescript ] || return 0
-        curl -RLo .dotfiles/Mac/Scripts/Applications/Finder/lselect.applescript http://anoved.net/files/lselect.applescript
+        cd "$DotfilesRoot"
+        ! [ -e Mac/Scripts/Applications/Finder/lselect.applescript ] || return 0
+        curl -RLo Mac/Scripts/Applications/Finder/lselect.applescript http://anoved.net/files/lselect.applescript
     }
     Library_Scripts_Applications_iTunes_iTunes_SED_scpt_before() {
-        ! [ -e .dotfiles/"$scptd"/Applications/iTunes/iTunes\ SED.scpt ] || return 0
+        cd "$DotfilesRoot"
+        ! [ -e "$scptd"/Applications/iTunes/iTunes\ SED.scpt ] || return 0
         curl -RLO http://aurelio.googlecode.com/files/iTunes_SED-1.1.zip
-        ditto -xk iTunes_SED-*.zip .dotfiles/"$scptd"/Applications/iTunes/
+        ditto -xk iTunes_SED-*.zip "$scptd"/Applications/iTunes/
         rm -f iTunes_SED-*.zip
     }
     for s in Mac/Scripts/{*,Applications/{*/*,Finder/lselect,iTunes/iTunes\ SED}}.applescript; do

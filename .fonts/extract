@@ -5,7 +5,8 @@ set -eu
 
 Archive=$1; shift
 DestDir=$1; shift
-DestDir=$(cd "${DestDir%% *}" && echo "$PWD")
+DestDir=${DestDir%% *}
+DestDir=$(mkdir -p "$DestDir"; cd "$DestDir" && pwd)
 
 case "$Archive" in
     *.zip)
@@ -29,6 +30,7 @@ case "$Archive" in
             *)
                 unzip -o "$Archive" "$@" -d "$DestDir"
                 (
+                    mkdir -p "$DestDir"
                     cd "$DestDir"
                     chmod -x "$@"
                 )
