@@ -405,19 +405,21 @@ on keepInAllSpaces(wins, keepOrNot)
 	if keepOrNot then set keepVal to 1
 	repeat with w in wins
 		activate w
-		log w
+		delay 0.1
 		set procName to short name of (info for (path to frontmost application))
 			tell application "System Events"
 			tell process procName
-				keystroke "f" using {command down, control down, shift down}
-				delay 0.1
-				set afloatWindow to (first window whose title is "Afloat — Adjust Effects")
-				-- XXX this is buggy: set afloatWindow to window 1
-				tell afloatWindow
-					set chkbox to (first checkbox whose title is "Keep this window on the screen on all Spaces")
-					if chkbox's value is not keepVal then click chkbox
-					click (first button whose title is "Done")
-				end tell
+				try
+					keystroke "f" using {command down, control down, shift down}
+					delay 0.1
+					set afloatWindow to (first window whose title is "Afloat — Adjust Effects")
+					-- XXX this is buggy: set afloatWindow to window 1
+					tell afloatWindow
+						set chkbox to (first checkbox whose title is "Keep this window on the screen on all Spaces")
+						if chkbox's value is not keepVal then click chkbox
+						click (first button whose title is "Done")
+					end tell
+				end try
 			end tell
 		end tell
 		return
