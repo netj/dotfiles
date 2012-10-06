@@ -8,11 +8,11 @@ This shell script includes some preference tweaks I use on my Macs.
 ## Terminal.app
 Open any `.terminal` file to load configuration into Mac OS X's Terminal app.
 You should use Mac's default terminal unless you have a strong reason to do
-otherwise even after watching [the talk given by Terminal.app's author][Ben
-Stiglitz's talk].  [TotalTerminal][] is another reason why you should use the
-default one.  I recommend using [Envy Code R font][] for your terminal if you
-want something different from Apple's default, Menlo or Monaco.  You can find
-more fonts from my [.fonts directory](.fonts#readme).
+otherwise even after watching [the talk given by Terminal.app's author][Ben Stiglitz's talk].
+[TotalTerminal][] is another reason why you should use the default one.  I
+recommend using [Envy Code R font][] for your terminal if you want something
+different from Apple's default, Menlo or Monaco.  You can find more fonts from
+my [.fonts directory](.fonts#readme).
 
 
 ## KeyRemap4MacBook .xml
