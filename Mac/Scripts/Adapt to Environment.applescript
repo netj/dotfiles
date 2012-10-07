@@ -93,7 +93,9 @@ on run args
 		if my appIsRunning("Mail") then tell application "Mail" to my moveAndResize({disp:macbookDisplay, h:0.9, wins:windows of message viewers})
 		tell application messagesAppName
 			my moveAndResize({disp:macbookDisplay, x:0, y:1, h:700, wins:windows})
-			my moveAndResize({disp:macbookDisplay, x:1, y:0, h:1, wins:{first window whose name is "대화 상대" or name is "Buddies"}})
+			try
+				my moveAndResize({disp:macbookDisplay, x:1, y:0, h:1, wins:windows whose name is in {"대화 상대", "Buddies"}})
+			end try
 		end tell
 	end if
 	if my appIsRunning("Twitter") then tell application "Twitter" to my moveAndResize({disp:macbookDisplay, x:1, y:0, h:1, wins:windows})
