@@ -77,7 +77,7 @@ on run args
 	determineCurrentConfiguration(args)
 	log args & actualWidth & actualHeight & currentConfiguration's name
 	set screens to (currentConfiguration's screens & {horizontal:{}, vertical:{}})
-	set numScreens to screens's horizontal's length + screens's vertical's length
+	set numScreens to (screens's horizontal's length) + (screens's vertical's length)
 	
 	-- move and resize some apps (without knowing the environment)
 	if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({w:1321, wins:my getLargeEnoughWindows(windows)})
@@ -89,7 +89,7 @@ on run args
 	if my appIsRunning("Mail") then tell application "Mail" to my moveAndResize({disp:macbookDisplay, x:0, y:0, w:1532, h:1, wins:windows of message viewers})
 	set messagesAppName to "Messages"
 	if (get version of application "Finder") < "10.8" then set messagesAppName to "iChat"
-	if my appIsRunning(messagesAppName)
+	if my appIsRunning(messagesAppName) then
 		if my appIsRunning("Mail") then tell application "Mail" to my moveAndResize({disp:macbookDisplay, h:0.9, wins:windows of message viewers})
 		tell application messagesAppName
 			my moveAndResize({disp:macbookDisplay, x:0, y:1, h:700, wins:windows})
@@ -117,13 +117,13 @@ on run args
 	--		activate curApp
 	--	my getAppIntoView(name of curApp)
 	-- on error
-		if my appIsRunning("Mail") then tell application "Mail"
-			activate
-			tell application "System Events" to key code 18 using command down -- Cmd-1 to goto inbox
-			my keepInAllSpaces(message viewers, numScreens > 1)
-		end tell
+	if my appIsRunning("Mail") then tell application "Mail"
+		activate
+		tell application "System Events" to key code 18 using command down -- Cmd-1 to goto inbox
+		my keepInAllSpaces(message viewers, numScreens > 1)
+	end tell
 	-- end try
-
+	
 	return true
 end run
 
@@ -249,9 +249,9 @@ on getAppIntoView(appName)
 					set windowMenu to menu bar item "윈도우" of menu bar 1
 				end try
 				try
-						click menu item windowTitle of menu 1 of windowMenu
+					click menu item windowTitle of menu 1 of windowMenu
 				on error
-						click last menu item of menu 1 of windowMenu
+					click last menu item of menu 1 of windowMenu
 				end try
 			end tell
 		end try
@@ -409,12 +409,12 @@ on keepInAllSpaces(wins, keepOrNot)
 		activate w
 		delay 0.1
 		set procName to short name of (info for (path to frontmost application))
-			tell application "System Events"
+		tell application "System Events"
 			tell process procName
 				try
 					keystroke "f" using {command down, control down, shift down}
 					delay 0.1
-					set afloatWindow to (first window whose title is "Afloat — Adjust Effects")
+					set afloatWindow to (first window whose title is "Afloat ― Adjust Effects")
 					-- XXX this is buggy: set afloatWindow to window 1
 					tell afloatWindow
 						set chkbox to (first checkbox whose title is "Keep this window on the screen on all Spaces")
