@@ -270,15 +270,19 @@ on getAppWindowIntoView(appName, windowName)
 			delay 0.2
 			perform action "AXRaise" of window windowName
 		on error
+			set initialTitle to missing value
 			repeat 10 times
-				try
-					set win to window windowName
-					-- it will fail above if window is not visible
-					perform action "AXRaise" of win
-					exit repeat
-				end try
+				-- move desktops to find the window
 				log "Looking for " & windowName & " of " & appName
 				my getAppIntoView(appName)
+				if get (count every windows) = 0 then exit repeat
+				if front window's title is initialTitle then exit repeat
+				if initialTitle is missing value then set initialTitle to front window's title
+				try
+					-- this will fail above if window is not visible on the current desktop
+					perform action "AXRaise" of window windowName
+					exit repeat
+				end try
 			end repeat
 		end try
 	end tell
