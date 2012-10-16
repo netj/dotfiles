@@ -1,4 +1,4 @@
-# AppleScript for organizing position and size of windows automatically in my Mac
+﻿# AppleScript for organizing position and size of windows automatically in my Mac
 # Author: Jaeho Shin <netj@sparcs.org>
 # Created: 2012-06-09
 
@@ -65,8 +65,16 @@ property defaultDisplay : macbookDisplay
 --------------------------------------------------------------------------------------------------------
 
 on run args
-	-- TODO remember current application
-	-- set curApp to current application
+	tell application "System Events" to set UI elements enabled to true
+	
+	-- remember current application
+	set curAppName to short name of (info for (path to frontmost application))
+	set curWinName to null
+	try
+		set curWinName to front window's name of application curAppName
+	end try
+	log "* Current Application: " & curAppName
+	if curWinName is not null then log "* Current Window: " & curWinName
 	
 	-- define configurations and pick one
 	set configurations to {}
@@ -75,7 +83,9 @@ on run args
 	useConfiguration(gatesOfficeConfiguration)
 	useConfiguration(mpkOfficeConfiguration)
 	determineCurrentConfiguration(args)
-	log args & actualWidth & actualHeight & currentConfiguration's name
+	if args is not {} then log {"* Command-Line arguments: "} & args
+	log "* Screen size: " & (actualWidth & " x " & actualHeight)
+	log "* Detected context: " & currentConfiguration's name
 	set screens to (currentConfiguration's screens & {horizontal:{}, vertical:{}})
 	set numScreens to (screens's horizontal's length) + (screens's vertical's length)
 	
@@ -86,15 +96,22 @@ on run args
 	currentConfiguration's adapt()
 	
 	-- move and resize some apps
-	if my appIsRunning("Mail") then tell application "Mail" to my moveAndResize({disp:macbookDisplay, x:0, y:0, w:1532, h:1, wins:windows of message viewers})
+	if my appIsRunning("Mail") then tell application "Mail"
+		my moveAndResize({disp:macbookDisplay, x:0, y:0, w:1532, h:1, wins:windows of message viewers})
+		my switchToDesktopNumber(1)
+		my keepInAllSpaces(message viewers, numScreens > 1)
+	end tell
 	set messagesAppName to "Messages"
 	if (get version of application "Finder") < "10.8" then set messagesAppName to "iChat"
 	if my appIsRunning(messagesAppName) then
 		if my appIsRunning("Mail") then tell application "Mail" to my moveAndResize({disp:macbookDisplay, h:0.9, wins:windows of message viewers})
 		tell application messagesAppName
 			my moveAndResize({disp:macbookDisplay, x:0, y:1, h:700, wins:windows})
+			my keepInAllSpaces(windows, numScreens > 1)
 			try
-				my moveAndResize({disp:macbookDisplay, x:1, y:0, h:1, wins:windows whose name is in {"대화 상대", "Buddies"}})
+				set buddiesWindows to windows whose name is "대화 상대" or name is "Buddies"
+				my moveAndResize({disp:macbookDisplay, x:1, y:0, h:1, wins:buddiesWindows})
+				my keepInAllSpaces(buddiesWindows, yes)
 			end try
 		end tell
 	end if
@@ -111,18 +128,9 @@ on run args
 	if my appIsRunning("Skim") then tell application "Skim" to my moveAndResize({wins:windows, w:0.6, h:1})
 	if my appIsRunning("Papers2") then moveAndResize({x:0, y:0, wins:my getAppWindows("Papers2"), w:1, h:1})
 	
-	-- -- get back to current application
-	-- try
-	--		log name of curApp
-	--		activate curApp
-	--	my getAppIntoView(name of curApp)
-	-- on error
-	if my appIsRunning("Mail") then tell application "Mail"
-		activate
-		tell application "System Events" to key code 18 using command down -- Cmd-1 to goto inbox
-		my keepInAllSpaces(message viewers, numScreens > 1)
-	end tell
-	-- end try
+	-- get back to current application, and front window
+	--	tell application curAppName to activate
+	if curWinName is not null then my getAppWindowIntoView(curAppName, curWinName)
 	
 	return true
 end run
@@ -233,43 +241,62 @@ end appIsRunning
 
 -- How to get application into view
 on getAppIntoView(appName)
+	tell application appName to activate
+	set appDockName to displayed name of (info for (path to frontmost application))
+	if appDockName ends with ".app" then set appDockName to characters 1 thru -5 of appDockName as text
+	log "activating " & appDockName
 	tell application "System Events"
-		tell application appName to activate
 		try
-			set appDockIcon to get UI element appName of list 1 of process "Dock"
+			set appDockIcon to get UI element appDockName of list 1 of process "Dock"
 			click appDockIcon
 			click appDockIcon
-			delay 1
+			delay 0.3
 		on error
-			tell process appName
-				set windowTitle to front window's title
-				try
-					set windowMenu to menu bar item "Window" of menu bar 1
-				on error
-					set windowMenu to menu bar item "윈도우" of menu bar 1
-				end try
-				try
-					click menu item windowTitle of menu 1 of windowMenu
-				on error
-					click last menu item of menu 1 of windowMenu
-				end try
-			end tell
+			set windowMenu to (first menu bar item whose title is "Window" or title is "윈도우") of menu bar 1 of process appName
+			click last menu item of menu 1 of windowMenu
 		end try
 	end tell
 end getAppIntoView
+
+-- How to get window into view
+on getAppWindowIntoView(appName, windowName)
+	log "activating " & appName & "'s window named: " & windowName
+	tell application appName to activate
+	tell application "System Events" to tell process appName
+		try
+			set windowMenuItem to menu item windowName of menu 1 of (first menu bar item whose title is "Window" or title is "윈도우") of menu bar 1
+			click windowMenuItem
+			if "✓" is not the value of attribute "AXMenuItemMarkChar" of windowMenuItem then click windowMenuItem
+			delay 0.2
+			perform action "AXRaise" of window windowName
+		on error
+			repeat 10 times
+				try
+					set win to window windowName
+					-- it will fail above if window is not visible
+					perform action "AXRaise" of win
+					exit repeat
+				end try
+				log "Looking for " & windowName & " of " & appName
+				my getAppIntoView(appName)
+			end repeat
+		end try
+	end tell
+end getAppWindowIntoView
+
 
 -- How to get windows of applications not friendly to AppleScript/Events
 on getAppWindows(appName)
 	if my appIsRunning(appName) then
 		tell application "System Events"
-			repeat
+			repeat 120 times
 				my getAppIntoView(appName)
 				set appWindows to get windows of process appName
 				if (count appWindows) > 0 then
 					return appWindows
 				else
 					-- if the screen is locked, no papersWindows will be found, so repeat it
-					delay 5
+					delay 0.5
 					-- TODO limit retry count
 				end if
 			end repeat
@@ -407,21 +434,24 @@ on keepInAllSpaces(wins, keepOrNot)
 	if keepOrNot then set keepVal to 1
 	repeat with w in wins
 		activate w
-		delay 0.1
-		set procName to short name of (info for (path to frontmost application))
+		set appName to short name of (info for (path to frontmost application))
+		my getAppWindowIntoView(appName, w's name)
 		tell application "System Events"
-			tell process procName
-				try
-					keystroke "f" using {command down, control down, shift down}
+			tell process appName
+				-- ⌃⇧⌘F
+				key code 3 using {command down, control down, shift down}
+				repeat 5 times
+					try
+						set afloatWindow to window "Afloat — Adjust Effects"
+						tell afloatWindow
+							set chkbox to checkbox "Keep this window on the screen on all Spaces"
+							if chkbox's value is not keepVal then click chkbox
+							click button "Done"
+						end tell
+						exit repeat
+					end try
 					delay 0.1
-					set afloatWindow to (first window whose title is "Afloat ― Adjust Effects")
-					-- XXX this is buggy: set afloatWindow to window 1
-					tell afloatWindow
-						set chkbox to (first checkbox whose title is "Keep this window on the screen on all Spaces")
-						if chkbox's value is not keepVal then click chkbox
-						click (first button whose title is "Done")
-					end tell
-				end try
+				end repeat
 			end tell
 		end tell
 		return
@@ -429,5 +459,14 @@ on keepInAllSpaces(wins, keepOrNot)
 end keepInAllSpaces
 
 
+-- switchToDesktopNumber -- jumps to the desktop number
+-- This requires key mappings of ⌃⌥1, ⌃⌥2, ..., ⌃⌥0 from System Preferences
+on switchToDesktopNumber(num)
+	-- key codes for 1 thru 9, and 0
+	log "switching to desktop " & num
+	set keyCodeMapping to {18, 19, 20, 21, 23, 22, 26, 28, 25, 29}
+	set k to item num of keyCodeMapping
+	tell application "System Events" to key code k using {control down, option down}
+end switchToDesktopNumber
 
 # vim:ft=applescript:sw=4:ts=4:sts=4:noet
