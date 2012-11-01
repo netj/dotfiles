@@ -169,6 +169,9 @@ inoremap <C-\>s <C-o>:syntax sync fromstart<CR>
 " Toggle hlsearch (highlight search matches).
 nnoremap <Space>* :nohlsearch<CR>
 
+" Arrows for moving cursor based on displayed lines
+nnoremap <Up>   gk
+nnoremap <Down> gj
 
 " Window resize for Mac (to be mapped to pinch in/out gestures)
 if has("mac")
