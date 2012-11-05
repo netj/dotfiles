@@ -36,8 +36,8 @@ fun! SetupAddons()
       AddColorSet  'darkHi'     fruity         oceanblack  jammy        northland lettuce   molokai         "      neon        vibrantink vividchalk colorer torte
       AddColorSet  'bright'     summerfruit256 buttercream PapayaWhip   nuvola    habiLight fruit           "      eclipse     earendel
       AddColorSet! 'precision'  autumn         railscasts  Guardian     candycode inkpot    ChocolateLiquor
-      AddColorSet  'diff'       jellybeans     candycode   xoria256     "         inkpot    ChocolateLiquor lucius railscasts  northland  blacksea
-      AddColorSet  'diffLight'  PapayaWhip     taqua       silent       "         solarized
+      AddColorSet  'diff'       xoria256       candycode   jellybeans   "         inkpot    ChocolateLiquor lucius railscasts  northland  blacksea
+      AddColorSet  'diffLight'  PapayaWhip     taqua       silent
     else
       if &t_Co >= 256
         " many color schemes only work well on GUI
