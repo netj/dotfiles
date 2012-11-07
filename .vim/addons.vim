@@ -16,7 +16,7 @@ fun! SetupAddons()
   " light-lo: spring autumn sienna
   " fun: matrix borland golden camo
   " bright: summerfruit256 buttercream PapayaWhip nuvola habiLight fruit eclipse earendel
-  ActivateAddons Color_Sampler_Pack molokai
+  ActivateAddons Colour_Sampler_Pack molokai
   " scroll among my favorites with VimTip341
   ActivateAddons git:git://gist.github.com/1432015.git
     let s:mySetColorsSet = []
