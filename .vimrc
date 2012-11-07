@@ -69,6 +69,15 @@ set suffixes+=#         " Emacs auto backups
 set suffixes+=.hi       " Haskell intermediates
 set suffixes+=.cmi,.cmo,.cmx,.cma,.cmxa,.blg,.annot " OCaml intermediates
 
+" keep swap, undo in ~/.vim/tmp/
+if isdirectory($HOME."/.vim/tmp") == 0
+  silent !mkdir -p ~/.vim/tmp
+endif
+set directory=~/.vim/tmp//
+set directory+=.
+set undodir=~/.vim/tmp//
+set undodir+=.
+
 
 " let xterm title work even in screen or tmux
 " From http://vim.wikia.com/wiki/Automatically_set_screen_title
