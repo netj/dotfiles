@@ -65,7 +65,19 @@ property defaultDisplay : macbookDisplay
 --------------------------------------------------------------------------------------------------------
 
 on run args
-	tell application "System Events" to set UI elements enabled to true
+	tell application "System Events"
+		-- enable UI scripting
+		set UI elements enabled to true
+		-- wait while screen saver is there
+		repeat while true
+			try
+				get process "ScreenSaverEngine"
+			on error
+				exit repeat
+			end try
+			delay 1
+		end repeat
+	end tell
 	
 	-- remember current application
 	set curAppName to short name of (info for (path to frontmost application))
@@ -99,6 +111,7 @@ on run args
 	if my appIsRunning("Mail") then tell application "Mail"
 		my moveAndResize({disp:macbookDisplay, x:0, y:0, w:1532, h:1, wins:windows of message viewers})
 		my switchToDesktopNumber(1)
+		activate
 		my keepInAllSpaces(message viewers, numScreens > 1)
 	end tell
 	set messagesAppName to "Messages"
