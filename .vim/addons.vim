@@ -232,6 +232,31 @@ fun! SetupAddons()
       \ setlocal spell textwidth=76 |
       \ set suffixes+=.pdf,.dvi,.ps,.ps.gz,.aux,.bbl,.blg,.log,.out,.ent,.fdb_latexmk,.brf " TeX by-products
     if has("mac")
+      " Use Skim as our PDF viewer and latexmk to compile
+      let g:Tex_ViewRule_pdf="Skim"
+      " In Skim's preferences, use the following for PDF-TeX Sync Support
+      " Command: /opt/homebrew/bin/mvim
+      " Arguments: $(osascript -e 'tell application "MacVim" to get name of front window' | sed 's/.* - /--servername /') --remote-silent +":%line|silent!.foldopen!|" "%file"
+      " Command must be a full path name to mvim unless you put it in a system location such as /usr/bin.
+      " Arguments has a fancy applescript to open on the active MacVim window.
+      for fmt in split("pdf ps dvi")
+        let g:Tex_CompileRule_{fmt}=""
+              \."source ~/.bashrc && cd \"$(dirname $*)\" && "
+              \."latexmk"
+              \." -latexoption='-synctex=1 -interaction=nonstopmode'"
+              \." -".fmt
+              \." $*"
+      endfor
+      " for quick compile/view/sync with latexmk
+      fun! g:LaTeX_Build()
+        write
+        let oldmore=&more | set nomore
+        exec "make ".escape(Tex_GetMainFileName(),' \')
+        let &more=oldmore
+        set filetype=tex
+        call Tex_ForwardSearchLaTeX()
+      endfun
+      " better bindings with Command-key
       au! FileType tex
         \ map  <D-e>   <F5>| map! <D-e>   <F5>|
         \ map  <D-E> <S-F5>| map! <D-E> <S-F5>|
@@ -239,6 +264,9 @@ fun! SetupAddons()
         \ map  <D-R> <S-F7>| map! <D-R> <S-F7>|
         \ map  <D-®>   <F9>| map! <D-®>   <F9>|
         \ imap <D-j> <Plug>IMAP_JumpBack|
+        \ nnoremap <S-D-CR> :call g:LaTeX_Build()<CR>:cwindow<CR>|
+        \ xnoremap <S-D-CR> :call g:LaTeX_Build()<CR>gv|
+        \ inoremap <S-D-CR> <C-\><C-N>:call g:LaTeX_Build()<CR>gi|
     endif
 
 endfun
@@ -330,4 +358,4 @@ call SetupVAM()
 " Vim 7.0 users see BUGS section [3]
 
 
-" vim:sw=2
+" vim:sw=2:undofile
