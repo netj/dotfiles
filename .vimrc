@@ -158,7 +158,7 @@ ModeToggleKey paste           <C-\><C-]>
 ModeToggleKey readonly        <C-\><C-r>
 ModeToggleKey ruler           <C-\>%
 ModeToggleKey scrollbind      <C-\>+
-ModeToggleKey spell           <C-\>~
+ModeToggleKey spell           <C-\>=
 ModeToggleKey swapfile        <C-\>$
 ModeToggleKey undofile        <C-\><C-u>
 ModeToggleKey winfixwidth     <C-\>\|
@@ -177,6 +177,14 @@ inoremap <C-\>s <C-o>:syntax sync fromstart<CR>
 
 " Toggle hlsearch (highlight search matches).
 nnoremap <Space>* :nohlsearch<CR>
+
+" Easy open and close of the QuickFix window
+nnoremap <Space>q :copen<CR>
+au! BufWinEnter *
+      \ if &buftype == "quickfix" |
+      \   nnoremap <buffer> <silent> q :close<CR>|
+      \ endif
+" XXX is above the best way to close with q? why don't BufAdd, BufNew work?
 
 " Arrows for moving cursor based on displayed lines
 nnoremap <Up>   gk
