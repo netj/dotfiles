@@ -192,14 +192,14 @@ nnoremap <Down> gj
 
 " Window resize for Mac (to be mapped to pinch in/out gestures)
 if has("mac")
-  nnoremap <D-≠>      16<C-w>>
-  inoremap <D-≠> <C-o>16<C-w>>
-  nnoremap <D-–>      16<C-w><
-  inoremap <D-–> <C-o>16<C-w><
-  nnoremap <D-±>      8<C-w>+
-  inoremap <D-±> <C-o>8<C-w>+
-  nnoremap <D-—>      8<C-w>-
-  inoremap <D-—> <C-o>8<C-w>-
+  nnoremap <M-C-D-+>        16<C-w>>
+  inoremap <M-C-D-+>   <C-o>16<C-w>>
+  nnoremap <M-C-D-->        16<C-w><
+  inoremap <M-C-D-->   <C-o>16<C-w><
+  nnoremap <C-D-+>           8<C-w>+
+  inoremap <C-D-+>      <C-o>8<C-w>+
+  nnoremap <C-D-->           8<C-w>-
+  inoremap <C-D-->      <C-o>8<C-w>-
 endif
 
 
