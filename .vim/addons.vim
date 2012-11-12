@@ -197,7 +197,7 @@ fun! SetupAddons()
   """ Some file types
   let g:sparkup = {}
     let g:sparkup.lhs_expand = '<C-\><C-e>'
-    let g:sparkup.lhs_jump_next_empty_tag = '<C-\><C-n>'
+    let g:sparkup.lhs_jump_next_empty_tag = '<C-\><C-f>'
   ActivateAddons sparkup
   ActivateAddons vim-less
   ActivateAddons xmledit
