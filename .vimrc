@@ -236,6 +236,9 @@ if has("autocmd")
     \   exe "normal g`\"" |
     \ endif
 
+  " Play nice with crontab: "temp file must be edited in place"
+  autocmd FileType crontab set nobackup nowritebackup
+
 endif " has("autocmd")
 
 
