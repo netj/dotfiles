@@ -249,6 +249,12 @@ for sfx in split(&suffixes, ',')
 endfor
 
 
+" vimpager has problem with <Space> mappings
+if exists("vimpager")
+  set timeout timeoutlen=0
+endif
+
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Local settings                                                              "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
