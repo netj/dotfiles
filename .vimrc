@@ -18,11 +18,10 @@ set nocompatible        " This is Vi IMproved, not Vi :^)
 " Command and key combo for loading the vim-addon-manager aka VAM
 " VAM's auto_install can interrupt many scripts relying on vim, so loading
 " only when used interactively.  You could add LoadAddons to ~/.vim_local, but
-" adding an alias to the shell is recommended:
-"
-"  export EDITOR='vim --cmd "let g:AutoloadAddons=1"'
-"  alias vim=$EDITOR
-"
+" adding an alias to the shell is recommended: >
+"   export EDITOR='vim --cmd "let g:AutoloadAddons=1"'
+"   alias vim=$EDITOR
+"<
 command! LoadAddons  silent! delfunction SetupAddons|
       \source ~/.vim/addons.vim|
 "      \silent! norm :unmap <S<BS>Space><S<BS>Space><CR>|
@@ -88,8 +87,10 @@ if isdirectory($HOME."/.vim/tmp") == 0
 endif
 set directory=~/.vim/tmp//
 set directory+=.
-set undodir=~/.vim/tmp//
-set undodir+=.
+if exists("&undodir") " for vim < 7.3
+  set undodir=~/.vim/tmp//
+  set undodir+=.
+endif
 
 
 " let xterm title work even in screen or tmux

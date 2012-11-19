@@ -311,15 +311,15 @@ fun! EnsureVamIsOnDisk(vam_install_path)
   " without having to install curl, 7-zip and git tools first
   " -> BUG [4] (git-less installation)
   if !filereadable(a:vam_install_path.'/vim-addon-manager/.git/config')
-     \&& 1 == confirm("Clone VAM into ".a:vam_install_path."?","&Y\n&N")
-    " I'm sorry having to add this reminder. Eventually it'll pay off.
-    call confirm("Remind yourself that most plugins ship with ".
-                \"documentation (README*, doc/*.txt). It is your ".
-                \"first source of knowledge. If you can't find ".
-                \"the info you're looking for in reasonable ".
-                \"time ask maintainers to improve documentation")
+    " \&& 1 == confirm("Clone VAM into ".a:vam_install_path."?","&Y\n&N")
+    "" I'm sorry having to add this reminder. Eventually it'll pay off.
+    "call confirm("Remind yourself that most plugins ship with ".
+    "            \"documentation (README*, doc/*.txt). It is your ".
+    "            \"first source of knowledge. If you can't find ".
+    "            \"the info you're looking for in reasonable ".
+    "            \"time ask maintainers to improve documentation")
     call mkdir(a:vam_install_path, 'p')
-    execute '!git clone --depth=1 git://github.com/MarcWeber/vim-addon-manager '.shellescape(a:vam_install_path, 1).'/vim-addon-manager'
+    call system('git clone --depth=1 git://github.com/MarcWeber/vim-addon-manager '.shellescape(a:vam_install_path, 1).'/vim-addon-manager')
     " VAM runs helptags automatically when you install or update 
     " plugins
     exec 'helptags '.fnameescape(a:vam_install_path.'/vim-addon-manager/doc')
@@ -335,16 +335,25 @@ fun! SetupVAM()
   " be installed from www.vim.org. Lookup MergeSources to get more control
   " let g:vim_addon_manager['drop_git_sources'] = !executable('git')
 
+  " Default VAM settings
+  if !exists("g:vim_addon_manager") | let g:vim_addon_manager = {} | endif
+  call extend(g:vim_addon_manager, {
+        \'known_repos_activation_policy': 'yes',
+        \'auto_install': 1,
+        \'shell_commands_run_method': 'system',
+        \'log_to_buf': 0,
+        \}, 'keep')
+
   " VAM install location:
   let vam_install_path = expand('$HOME') . '/.vim/vim-addons'
   call EnsureVamIsOnDisk(vam_install_path)
   exec 'set runtimepath+='.vam_install_path.'/vim-addon-manager'
 
-  let g:vim_addon_manager = {}
-  let g:vim_addon_manager['auto_install'] = 1
   " Tell VAM which plugins to fetch & load:
+  let more = &more | set nomore
   call vam#ActivateAddons(['vim-addon-manager'])
   call SetupAddons()
+  let &more = more
   " sample: call vam#ActivateAddons(['pluginA','pluginB', ...], {'auto_install' : 0})
 
   " Addons are put into vam_install_path/plugin-name directory
