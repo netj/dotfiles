@@ -253,20 +253,30 @@ fun! SetupAddons()
         let oldmore=&more | set nomore
         exec "make ".escape(Tex_GetMainFileName(),' \')
         let &more=oldmore
+      endfun
+      fun! g:LaTeX_BuildAndView()
+        call s:LaTeX_Build()
         set filetype=tex
         call Tex_ForwardSearchLaTeX()
       endfun
-      " better bindings with Command-key
-      au! FileType tex
-        \ map  <D-e>   <F5>| map! <D-e>   <F5>|
-        \ map  <D-E> <S-F5>| map! <D-E> <S-F5>|
-        \ map  <D-r>   <F7>| map! <D-r>   <F7>|
-        \ map  <D-R> <S-F7>| map! <D-R> <S-F7>|
-        \ map  <D-®>   <F9>| map! <D-®>   <F9>|
-        \ imap <D-j> <Plug>IMAP_JumpBack|
-        \ nnoremap <S-D-CR> :call g:LaTeX_Build()<CR>:cwindow<CR>|
-        \ xnoremap <S-D-CR> :call g:LaTeX_Build()<CR>gv|
-        \ inoremap <S-D-CR> <C-\><C-N>:call g:LaTeX_Build()<CR>gi|
+      " and some key bindings with Command-key
+      fun! s:LaTeX_SetupKeyBindings()
+        map! <D-e>   <F5>
+        map! <D-E> <S-F5>
+        map! <D-r>   <F7>
+        map! <D-R> <S-F7>
+        map! <D-®>   <F9>
+        imap <D-j> <Plug>IMAP_JumpBack
+        let keyMappings = {}
+        let keyMappings[  '<D-CR>'] = 'g:LaTeX_Build'
+        let keyMappings['<S-D-CR>'] = 'g:LaTeX_BuildAndView'
+        for [key,fn] in items(keyMappings)
+          exec 'nnoremap '.key.'           :call '.fn.'()<CR><CR>:cwindow<CR>'
+          exec 'xnoremap '.key.'           :call '.fn.'()<CR><CR>gv'
+          exec 'inoremap '.key.' <C-\><C-N>:call '.fn.'()<CR><CR>gi'
+        endfor
+      endfun
+      au! FileType tex call s:LaTeX_SetupKeyBindings()
     endif
 
 endfun
