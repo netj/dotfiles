@@ -255,17 +255,17 @@ fun! SetupAddons()
         let &more=oldmore
       endfun
       fun! g:LaTeX_BuildAndView()
-        call s:LaTeX_Build()
+        call g:LaTeX_Build()
         set filetype=tex
         call Tex_ForwardSearchLaTeX()
       endfun
       " and some key bindings with Command-key
       fun! s:LaTeX_SetupKeyBindings()
-        map! <D-e>   <F5>
-        map! <D-E> <S-F5>
-        map! <D-r>   <F7>
-        map! <D-R> <S-F7>
-        map! <D-®>   <F9>
+        map <D-e>   <F5>| map! <D-e>   <F5>
+        map <D-E> <S-F5>| map! <D-E> <S-F5>
+        map <D-r>   <F7>| map! <D-r>   <F7>
+        map <D-R> <S-F7>| map! <D-R> <S-F7>
+        map <D-®>   <F9>| map! <D-®>   <F9>
         imap <D-j> <Plug>IMAP_JumpBack
         let keyMappings = {}
         let keyMappings[  '<D-CR>'] = 'g:LaTeX_Build'
