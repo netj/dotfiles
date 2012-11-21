@@ -6,16 +6,17 @@
 all: $(shell sed <Makefile -n '/:.*\#\#$$/ s/:.*$$//p')
 
 # VAM installation
-vam-update:
+vam-update: ##
 	vim -u NONE \
 	    +"set nomore | source ~/.vim/addons.vim" \
-	    +"\"set nomore | UpdateActivatedAddons" \
+	    +"set nomore | UpdateActivatedAddons" \
 	    +"qa" \
 	    #
 	vim -u NONE \
 	    ~/.bash_local + \
 	    +"g/^## vim with addons {{{$$/,/^## }}}$$/d" \
-	    +"norm O## vim with addons {{{" \
+	    +"let o='O' | if line('.')==line('$$') | let o='o'" \
+	    +"exec 'norm '.o.'## vim with addons {{{'" \
 	    +'r!sed -n '\''/".*add.*alias.*>$$/,/^"<$$/{/^"   /s/^" *//p}'\'' <~/.vimrc' \
 	    +"norm o## }}}" \
 	    +wq \
