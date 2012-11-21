@@ -9,6 +9,7 @@ all: $(shell sed <Makefile -n '/:.*\#\#$$/ s/:.*$$//p')
 vam-update: ##
 	vim -u NONE \
 	    +"set nomore | source ~/.vim/addons.vim" \
+	    +"set nomore | UpdateAddons vim-addon-manager-known-repositories" \
 	    +"set nomore | UpdateActivatedAddons" \
 	    +"qa" \
 	    #
