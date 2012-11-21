@@ -1,3 +1,6 @@
+version 7.3
+set nocompatible
+
 if exists("*SetupAddons") | finish | endif
 
 fun! SetupAddons()
@@ -29,7 +32,7 @@ fun! SetupAddons()
         let s:mySetColorsSet += [colors]
       endif
     endfun
-    command -nargs=+ -bar -bang AddColorSet  call s:addColorSet(<bang>0, <f-args>)
+    command! -nargs=+ -bar -bang AddColorSet  call s:addColorSet(<bang>0, <f-args>)
     if has("gui_running")
       AddColorSet  'darkLo'     jellybeans     desertEx    lucius       camo      dante     candy           "      brookstream
       AddColorSet  'creativity' spring         clarity     navajo-night sea       oceandeep breeze          "      dusk        tabula     darkblue2
@@ -204,8 +207,7 @@ fun! SetupAddons()
     let g:xml_jump_string = "`"
   ActivateAddons ragtag
 
-  ActivateAddons Markdown
-  "ActivateAddons vim-ft-markdown_fold
+  ActivateAddons markdown@tpope " Markdown vim-ft-markdown_fold
     " Marked
     au! FileType markdown
       \ setlocal spell |

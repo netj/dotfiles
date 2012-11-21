@@ -15,14 +15,21 @@ if v:progname =~? "evim" | finish | endif
 
 set nocompatible        " This is Vi IMproved, not Vi :^)
 
+" Command and key combo for loading the vim-addon-manager aka VAM
+" VAM's auto_install can interrupt many scripts relying on vim, so loading
+" only when used interactively.  You could add LoadAddons to ~/.vim_local, but
+" adding an alias to the shell is recommended:
+"
+"   alias vim='vim --cmd "source ~/.vim/addons.vim"'
+"
+command! LoadAddons   source ~/.vim/addons.vim|silent! norm :unmap <S<BS>Space><S<BS>Space><CR>
+noremap <Space><Space> :LoadAddons<CR>
+
 " source optional files
 fun! SourceOptional(files)
   for f in a:files | if filereadable(expand(f)) | exec 'source '.f | endif | endfor
 endfun
 command! -nargs=* SourceOptional :call SourceOptional([<f-args>])
-
-" setup vim-addon-manager aka VAM
-SourceOptional ~/.vim/addons.vim
 
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
@@ -253,6 +260,7 @@ endfor
 if exists("vimpager")
   set timeout timeoutlen=0
 endif
+
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
