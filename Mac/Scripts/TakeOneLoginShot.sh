@@ -10,7 +10,12 @@
 # Created: 2012-11-17
 set -eu
 
-: ${DateFormat:=%Y/%m/%d-%H%M%S} ${NumRetries:=3} ${JPEGQuality:=20}
+: \
+    ${DateFormat:=%Y/%m/%d-%H%M%S} \
+    ${MinSecsBetweenShots:=20} \
+    ${NumRetries:=3} \
+    ${JPEGQuality:=20} \
+    #
 
 [ -d ~/.loginshots ] || ln -sfn ~/Dropbox/Photos/LoginShots ~/.loginshots
 LoginShotsFolder=~/.loginshots
@@ -19,6 +24,15 @@ event=${*:-}
 
 filename="$LoginShotsFolder/$(date +"$DateFormat")$event.jpg"
 mkdir -p "$(dirname "$filename")"
+
+latest="$LoginShotsFolder"/LATEST.JPG
+
+# try not to take too many shots in a short period
+timediff=$(( $(date +%s) - $(date -r "$latest" +%s 2>/dev/null || echo 0) ))
+if [[ $timediff -lt $MinSecsBetweenShots ]]; then
+    echo >&2 "throttling shots: only ${timediff}s have past"
+    exit 2
+fi
 
 # take a shot
 for i in $(seq $NumRetries); do
@@ -30,7 +44,13 @@ for i in $(seq $NumRetries); do
         kill $pid
     fi
 done
-[ -s "$filename" ] || echo >&2 "imagesnap failed ($NumRetries tries) for $filename"
+if ! [ -s "$filename" ]; then
+    echo >&2 "imagesnap failed ($NumRetries tries) for $filename"
+    exit 4
+fi
 
 # and compress
 sips -s format jpeg -s formatOptions $JPEGQuality "$filename"
+
+# update the latest pointer
+ln -sfn "${filename#$LoginShotsFolder/}" "$latest"
