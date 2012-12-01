@@ -275,7 +275,7 @@ fun! SetupAddons()
         let keyMappings['<S-D-CR>'] = 'g:LaTeX_BuildAndView'
         for [key,fn] in items(keyMappings)
           exec 'nnoremap '.key.'           :call '.fn.'()<CR><CR>:cwindow<CR>'
-          exec 'xnoremap '.key.'           :call '.fn.'()<CR><CR>gv'
+          exec 'xnoremap '.key.' <C-\><C-N>:call '.fn.'()<CR><CR>gv'
           exec 'inoremap '.key.' <C-\><C-N>:call '.fn.'()<CR><CR>gi'
         endfor
       endfun
