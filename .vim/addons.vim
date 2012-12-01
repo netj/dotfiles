@@ -213,7 +213,8 @@ fun! SetupAddons()
       \ setlocal spell |
     if has("mac")
       au! FileType markdown
-        \ map <D-e> :!open -a Marked '%'<CR><CR>
+        \ nnoremap <D-e> :!open -a Marked '%'<CR><CR>|
+        \ noremap! <D-e> <C-\><C-N><D-e>gi|
     endif
   ActivateAddons JSON
     au! BufRead,BufNewFile *.json setfiletype json
