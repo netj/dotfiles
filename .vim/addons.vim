@@ -88,6 +88,17 @@ fun! SetupAddons()
     nnoremap <Space>T :TagbarToggle<CR>
   " unimpaired quickfix access with [q, ]q, [Q, ]Q
   ActivateAddons unimpaired
+    " Eclipse-style movement
+    nmap <M-Up>   V<M-Up>
+    nmap <M-Down> V<M-Down>
+    vmap <M-Up>   [egv
+    vmap <M-Down> ]egv
+    imap <M-Up>   <C-\><C-N>[egi
+    imap <M-Down> <C-\><C-N>]egi
+    if has("mac")
+      let g:macvim_skip_cmd_opt_movement = 1 " http://superuser.com/questions/310364/switch-buffers-in-macvim
+    endif
+    
 
     " Align%294's \m= collides with Mark%2666 unless already mapped
     map <Leader>tm= <Plug>AM_m=
