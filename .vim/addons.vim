@@ -242,6 +242,8 @@ fun! SetupAddons()
   " Vim-LaTeX is a comprehensive plugin for working with LaTeX
   " See: http://vim-latex.sourceforge.net/documentation/latex-suite/
   ActivateAddons LaTeX-Suite_aka_Vim-LaTeX
+    let g:Tex_IgnoreLevel = 0
+    let g:Tex_IgnoreUnmatched = 0
     let g:Tex_Folding = 1
     let g:Tex_AutoFolding = 0
     fun! s:LaTeX_Build()
@@ -264,12 +266,7 @@ fun! SetupAddons()
       nmap <buffer><silent> <Space>z  <Plug>Tex_RefreshFolds
       " Use latexmk and enable synctex
       for fmt in split("pdf ps dvi")
-        let g:Tex_CompileRule_{fmt}=""
-              \."source ~/.bashrc && cd \"$(dirname $*)\" && "
-              \."max_print_line=1024 latexmk"
-              \." -latexoption='-synctex=1 -interaction=nonstopmode -file-line-error'"
-              \." -".fmt
-              \." $*"
+        let g:Tex_CompileRule_{fmt}="~/.vim/latexmk.sh ".fmt." $*"
       endfor
       if has("mac")
         " Use Skim as our PDF viewer and latexmk to compile
