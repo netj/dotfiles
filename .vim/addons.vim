@@ -239,59 +239,79 @@ fun! SetupAddons()
     " Scala (See: http://mdr.github.com/scalariform/)
     au BufEnter *.scala setl formatprg=scalariform\ --forceOutput
 
-  " Vim-LaTeX
-  " See-Also: http://michaelgoerz.net/refcards/vimlatexqrc.pdf
+  " Vim-LaTeX is a comprehensive plugin for working with LaTeX
+  " See: http://vim-latex.sourceforge.net/documentation/latex-suite/
   ActivateAddons LaTeX-Suite_aka_Vim-LaTeX
-    au! FileType tex
-      \ setlocal spell textwidth=76 |
-      \ set suffixes+=.pdf,.dvi,.ps,.ps.gz,.aux,.bbl,.blg,.log,.out,.ent,.fdb_latexmk,.brf " TeX by-products
-    if has("mac")
-      " Use Skim as our PDF viewer and latexmk to compile
-      let g:Tex_ViewRule_pdf="Skim"
-      " In Skim's preferences, use the following for PDF-TeX Sync Support
-      " Command: /opt/homebrew/bin/mvim
-      " Arguments: $(osascript -e 'tell application "MacVim" to get name of front window' | sed 's/.* - /--servername /') --remote-silent +":%line|silent!.foldopen!|" "%file"
-      " Command must be a full path name to mvim unless you put it in a system location such as /usr/bin.
-      " Arguments has a fancy applescript to open on the active MacVim window.
+    let g:Tex_Folding = 1
+    let g:Tex_AutoFolding = 0
+    fun! s:LaTeX_Build()
+      write
+      let oldmore=&more | set nomore
+      exec "make ".escape(Tex_GetMainFileName(),' \')
+      let &more=oldmore
+    endfun
+    command! LaTeXBuild        call s:LaTeX_Build()
+    fun! s:LaTeX_BuildAndView()
+      call s:LaTeX_Build()
+      set filetype=tex
+      call Tex_ForwardSearchLaTeX()
+    endfun
+    command! LaTeXBuildAndView call s:LaTeX_BuildAndView()
+    fun! s:LaTeX_Setup()
+      setlocal spell textwidth=76 wrap
+      setlocal suffixes+=.pdf,.dvi,.ps,.ps.gz,.aux,.bbl,.blg,.log,.out,.ent,.fdb_latexmk,.fls,.brf " TeX by-products
+      let g:NERDTreeSortOrder += split('\.log \.pdf \.ps.gz \.ps \.dvi \.aux \.bbl \.blg \.out \.ent \.fdb_latexmk \.synctex.gz \.fls \.brf')
+      nmap <buffer><silent> <Space>z  <Plug>Tex_RefreshFolds
+      " Use latexmk and enable synctex
       for fmt in split("pdf ps dvi")
         let g:Tex_CompileRule_{fmt}=""
               \."source ~/.bashrc && cd \"$(dirname $*)\" && "
-              \."latexmk"
-              \." -latexoption='-synctex=1 -interaction=nonstopmode'"
+              \."max_print_line=1024 latexmk"
+              \." -latexoption='-synctex=1 -interaction=nonstopmode -file-line-error'"
               \." -".fmt
               \." $*"
       endfor
-      " for quick compile/view/sync with latexmk
-      fun! g:LaTeX_Build()
-        write
-        let oldmore=&more | set nomore
-        exec "make ".escape(Tex_GetMainFileName(),' \')
-        let &more=oldmore
-      endfun
-      fun! g:LaTeX_BuildAndView()
-        call g:LaTeX_Build()
-        set filetype=tex
-        call Tex_ForwardSearchLaTeX()
-      endfun
-      " and some key bindings with Command-key
-      fun! s:LaTeX_SetupKeyBindings()
-        map <D-e>   <F5>| map! <D-e>   <F5>
-        map <D-E> <S-F5>| map! <D-E> <S-F5>
-        map <D-r>   <F7>| map! <D-r>   <F7>
-        map <D-R> <S-F7>| map! <D-R> <S-F7>
-        map <D-®>   <F9>| map! <D-®>   <F9>
-        imap <D-j> <Plug>IMAP_JumpBack
+      if has("mac")
+        " Use Skim as our PDF viewer and latexmk to compile
+        let g:Tex_ViewRule_pdf="Skim"
+        " In Skim's preferences, use the following for PDF-TeX Sync Support
+        " Command: /opt/homebrew/bin/mvim
+        " Arguments: $(osascript -e 'tell application "MacVim" to get name of front window' | sed 's/.* - /--servername /') --remote-silent +":%line|silent!.foldopen!|" "%file"
+        " Command must be a full path name to mvim unless you put it in a system location such as /usr/bin.
+        " Arguments has a fancy applescript to open on the active MacVim window.
+        " some key bindings with Command-key
+        map  <buffer><silent> <D-e> <Plug>Tex_FastEnvironmentInsert
+        map! <buffer><silent> <D-e> <Plug>Tex_FastEnvironmentInsert
+        map  <buffer><silent> <D-E> <Plug>Tex_FastEnvironmentChange
+        map! <buffer><silent> <D-E> <Plug>Tex_FastEnvironmentChange
+        map  <buffer><silent> <D-r> <Plug>Tex_FastCommandInsert
+        map! <buffer><silent> <D-r> <Plug>Tex_FastCommandInsert
+        map  <buffer><silent> <D-R> <Plug>Tex_FastCommandChange
+        map! <buffer><silent> <D-R> <Plug>Tex_FastCommandChange
+        map! <buffer><silent> <D-®> <Plug>Tex_Completion
+        map  <buffer><silent> <D-j> <Plug>IMAP_JumpForward
+        map  <buffer><silent> <D-k> <Plug>IMAP_JumpBack
+        map! <buffer><silent> <D-j> <Plug>IMAP_JumpForward
+        map! <buffer><silent> <D-k> <Plug>IMAP_JumpBack
+        " and ones for quick compile/view/sync with latexmk
         let keyMappings = {}
-        let keyMappings[  '<D-CR>'] = 'g:LaTeX_Build'
-        let keyMappings['<S-D-CR>'] = 'g:LaTeX_BuildAndView'
-        for [key,fn] in items(keyMappings)
-          exec 'nnoremap '.key.'           :call '.fn.'()<CR><CR>:cwindow<CR>'
-          exec 'xnoremap '.key.' <C-\><C-N>:call '.fn.'()<CR><CR>gv'
-          exec 'inoremap '.key.' <C-\><C-N>:call '.fn.'()<CR><CR>gi'
+        let keyMappings[  '<D-CR>'] = 'LaTeXBuild'
+        let keyMappings['<S-D-CR>'] = 'LaTeXBuildAndView'
+        for [key,cmd] in items(keyMappings)
+          exec 'nnoremap <buffer> '.key.'           :'.cmd.'<CR><CR>:cwindow<CR>'
+          exec 'xnoremap <buffer> '.key.' <C-\><C-N>:'.cmd.'<CR><CR>gv'
+          exec 'snoremap <buffer> '.key.' <C-\><C-N>:'.cmd.'<CR><CR>gv<C-G>'
+          exec 'inoremap <buffer> '.key.' <C-\><C-N>:'.cmd.'<CR><CR>gi'
         endfor
-      endfun
-      au! FileType tex call s:LaTeX_SetupKeyBindings()
-    endif
+      endif
+    endfun
+    au! FileType tex call s:LaTeX_Setup()
+  " Automatic LaTeX Plugin for Vim and LaTeX_Box is also nice supporting
+  " latexmk directly, vim-like motions, mappings, etc.  but I find it a little
+  " premature yet (e.g., ShowErrors didn't work for me)
+  " See: http://atp-vim.sourceforge.net
+  "ActivateAddons AutomaticLaTeXPlugin
+  "ActivateAddons LaTeX_Box
 
 endfun
 
