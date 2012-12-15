@@ -19,8 +19,8 @@ set nocompatible        " This is Vi IMproved, not Vi :^)
 " VAM's auto_install can interrupt many scripts relying on vim, so loading
 " only when used interactively.  You could add LoadAddons to ~/.vim_local, but
 " adding an alias to the shell is recommended: >
-"   export EDITOR='env VIMADDONS=1 vim'
-"   alias vim=$EDITOR
+"   export EDITOR="$HOME/.vim/vim+addons"
+"   alias vim='VIMADDONS=1 vim'
 "<
 command! LoadAddons  silent! delfunction SetupAddons|
       \source ~/.vim/addons.vim|
