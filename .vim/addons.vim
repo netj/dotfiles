@@ -175,6 +175,7 @@ fun! SetupAddons()
     autocmd BufEnter NERD_tree_* map <buffer> <Space>s       gi
     autocmd BufEnter NERD_tree_* map <buffer> <Space>v       gv
   ActivateAddons renamer
+  ActivateAddons recover
   ActivateAddons snipmate
   "ActivateAddons vmark.vim_Visual_Bookmarking " XXX beware: <F2>/<F3> is overrided
   " TODO let b:vm_guibg = yellow
