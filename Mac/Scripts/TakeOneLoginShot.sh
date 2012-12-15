@@ -35,14 +35,16 @@ if [[ $timediff -lt $MinSecsBetweenShots ]]; then
 fi
 
 # take a shot
+delay=4
 for i in $(seq $NumRetries); do
     imagesnap "$filename" & pid=$!
-    sleep 3
+    sleep $delay
     if [ -s "$filename" ]; then
         break
     elif ps -o pid= -p $pid &>/dev/null; then
         kill $pid
     fi
+    let delay += 2
 done
 if ! [ -s "$filename" ]; then
     echo >&2 "imagesnap failed ($NumRetries tries) for $filename"
