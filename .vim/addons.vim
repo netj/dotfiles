@@ -21,7 +21,7 @@ fun! SetupAddons()
   " bright: summerfruit256 buttercream PapayaWhip nuvola habiLight fruit eclipse earendel
   ActivateAddons Colour_Sampler_Pack molokai
   " scroll among my favorites with VimTip341
-  ActivateAddons git:git://gist.github.com/1432015.git
+  ActivateAddons git:https://gist.github.com/1432015.git
     let s:mySetColorsSet = []
     let s:mySetColorsSetDiff = []
     fun! s:addColorSet(reversed, name, ...)
