@@ -227,6 +227,7 @@ fun! SetupAddons()
       au! FileType markdown
         \ nnoremap <D-e> :!open -a Marked '%'<CR><CR>|
         \ noremap! <D-e> <C-\><C-N><D-e>gi|
+        \ call sparkup#Setup()|
     endif
   ActivateAddons JSON
     au! BufRead,BufNewFile *.json setfiletype json
