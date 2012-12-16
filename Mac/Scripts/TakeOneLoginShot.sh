@@ -44,7 +44,7 @@ for i in $(seq $NumRetries); do
     elif ps -o pid= -p $pid &>/dev/null; then
         kill $pid
     fi
-    let delay += 2
+    let delay+=2
 done
 if ! [ -s "$filename" ]; then
     echo >&2 "imagesnap failed ($NumRetries tries) for $filename"
