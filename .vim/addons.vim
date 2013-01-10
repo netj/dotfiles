@@ -21,7 +21,7 @@ fun! SetupAddons()
   " bright: summerfruit256 buttercream PapayaWhip nuvola habiLight fruit eclipse earendel
   ActivateAddons Colour_Sampler_Pack molokai
   " scroll among my favorites with VimTip341
-  ActivateAddons git:https://gist.github.com/1432015.git
+  ActivateAddons git:http://gist.github.com/1432015.git
     let s:mySetColorsSet = []
     let s:mySetColorsSetDiff = []
     fun! s:addColorSet(reversed, name, ...)
@@ -78,9 +78,11 @@ fun! SetupAddons()
 
 
   """ Productivity boosters
+  if has("python")
   ActivateAddons Gundo
     let g:gundo_close_on_revert = 1
     nnoremap <Space>u :GundoToggle<CR>
+  endif
   ActivateAddons bufexplorer.zip
     nnoremap <Space>b :BufExplorerHorizontalSplit<CR>
   ActivateAddons Tagbar
