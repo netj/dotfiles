@@ -30,6 +30,8 @@ patch-Color_Sampler_Pack-jellybeans: jellybeans.vim.patch vam-update ##
 # CoffeeTags + TagBar + Vim
 # See: https://github.com/lukaszkorecki/CoffeeTags#readme
 coffeetags: ##
-	mkdir -p ftplugin/coffee
-	coffeetags  --vim-conf > ftplugin/coffee/tagbar-coffee.vim
+	! type coffeetags || { \
+	    mkdir -p ftplugin/coffee && \
+	    coffeetags --vim-conf >ftplugin/coffee/tagbar-coffee.vim; \
+	}
 
