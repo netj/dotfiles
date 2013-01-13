@@ -15,6 +15,7 @@ killall Dock
 defaults write com.apple.finder QLEnableXRayFolders -boolean true
 defaults write com.apple.finder ShowPathBar -boolean true
 defaults write com.apple.finder PathBarRootAtHome -boolean true
+defaults write com.apple.desktopservices DSDontWriteNetworkStores true
 killall Finder
 
 defaults write -g ApplePressAndHoldEnabled -boolean false
