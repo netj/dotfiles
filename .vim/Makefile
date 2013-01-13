@@ -13,12 +13,14 @@ vam-update: ##
 	    +"set nomore | UpdateActivatedAddons" \
 	    +"qa" \
 	    #
-	vim -u NONE \
+
+vim-addons-bash_local: ##
+	vim -n -u NONE \
 	    ~/.bash_local + \
 	    +"g/^## vim with addons {{{$$/,/^## }}}$$/d" \
 	    +"let o='O' | if line('.')==line('$$') | let o='o'" \
 	    +"exec 'norm '.o.'## vim with addons {{{'" \
-	    +'r!sed -n '\''/".*add.*alias.*>$$/,/^"<$$/{/^"   /s/^" *//p}'\'' <~/.vimrc' \
+	    +'r!sed -n '\''/".*add.*alias.*>$$/,/^"<$$/{/^"   /s/^" *//p;}'\'' <~/.vimrc' \
 	    +"norm o## }}}" \
 	    +wq \
 	    #
