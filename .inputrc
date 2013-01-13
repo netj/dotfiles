@@ -1,25 +1,79 @@
 # netj's READLINE configuration
 # Author: Jaeho Shin <netj@sparcs.org>
+# Overhauled: 2013-01-13
 
 # enhanced options
-set show-all-if-ambiguous On
-set visible-stats On
+set show-all-if-ambiguous Off
+set show-all-if-unmodified On
+set menu-complete-display-prefix Off
+set skip-completed-text On
+
 set completion-ignore-case On
+
+set visible-stats On
 set mark-symlinked-directories On
 
-# http://www.ukuug.org/events/linux2003/papers/bash_tips/
-$if Bash
-    # Do history expansion ! when space is pressed
-    Space: magic-space
-    # Insert-Option Macro (enhanced to handle multi-word commands)
-    "\eo": "\C-p\C-a\ef\C-] \C-b\C-f "
-    "\es": menu-complete
-$endif
+set mark-modified-lines On
 
-# better search
+
+# Menu complete with Meta-s/S
+"\es": menu-complete
+"\eS": menu-complete-backward
+
+# Universal argument
+"\e\C-u": universal-argument
+
+
+# incremental history search, both reverse and forward with Ctrl-r/]
+"\C-r": reverse-search-history
+"\C-]": forward-search-history
+#  often, Ctrl-s (default for forward search) is usually masked by tty's STOP
+#  moreover, things like "\e\C-r" reset the isearch keyword
+#  so, overriding Ctrl-] (default character-search) seems to be the best choice
+
+# better history search with Arrow keys: Up/Down
 "\e[A": history-search-backward
 "\e[B": history-search-forward
-#  save forward search from the usually-screened-by-terminal-STOP C-s
-"\C-]": forward-search-history
+
+
+# character search with Meta-] and Ctrl-Meta-]
+"\e]":    character-search
+"\e\C-]": character-search-backward
+
+# backward/forward words by space with Meta-Shift-B/F
+"\eB": "\C-b\e\C-] \C-f"
+"\eF": "\e] "
+"\e|": delete-horizontal-space
+
+# easier backward/forward path components with Meta-Ctrl-B/F
+"\e\C-b": "\C-b\e\C-]/\C-f"
+"\e\C-f": "\e]/"
+
+
+# Bash-specific READLINE Tweaks
+# See-Also: http://www.ukuug.org/events/linux2003/papers/bash_tips/
+$if Bash
+
+    # Do history expansion ! when space is pressed
+    Space: magic-space
+
+    # Insert-Option Macro (enhanced to handle multi-word commands)
+    "\eo": "\C-p\C-a\e\C-]  "
+
+    # a better backward/forward words by space with Meta-Shift-B/F
+    "\eviB": vi-backward-bigword
+    "\eviW": vi-forward-bigword
+    "\eviE": vi-end-bigword
+    "\eB": "\eviB"
+    "\eF": "\C-f\eviE\C-f"
+
+    # backward/forward shell words by Meta-Left/Right
+    "\e\e[D": shell-backward-word
+    "\e\e[C": shell-forward-word
+    #  and a kill too
+    "\eH": shell-backward-kill-word
+    "\eD": shell-kill-word
+
+$endif
 
 $include ~/.input_local
