@@ -3,22 +3,26 @@
 # Overhauled: 2013-01-13
 
 # enhanced options
-set show-all-if-ambiguous Off
-set show-all-if-unmodified On
-set menu-complete-display-prefix Off
-set skip-completed-text On
-
 set completion-ignore-case On
-
 set visible-stats On
 set mark-symlinked-directories On
 
 set mark-modified-lines On
+set skip-completed-text On
 
+# Vim-like menu-complete (set wildmode=list:full wildchar=<Tab>)
+set show-all-if-ambiguous On
+set show-all-if-unmodified Off
+set menu-complete-display-prefix Off
+Tab:      menu-complete
+#  a la <S-Tab>, <C-L> and <C-D>
+"\e[Z":   menu-complete-backward
+"\e\C-d": possible-completions
+"\e\C-l": complete
 
-# Menu complete with Meta-s/S
-"\es": menu-complete
-"\eS": menu-complete-backward
+## Menu complete with Meta-s/S
+#"\es": menu-complete
+#"\eS": menu-complete-backward
 
 # Universal argument
 "\e\C-u": universal-argument

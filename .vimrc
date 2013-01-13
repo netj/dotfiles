@@ -71,8 +71,9 @@ set expandtab
 set listchars=tab:>.,eol:$
 
 " expansions
-set wildmode=full,list:full
-set wildchar=<TAB>
+set wildmode=list:full
+set wildchar=<Tab>
+set wildignorecase
 
 "  some by-product files
 set suffixes+=.o,.a     " object and archive files
