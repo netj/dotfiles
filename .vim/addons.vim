@@ -169,7 +169,7 @@ fun! SetupAddons()
     nnoremap <Space>e :NERDTreeFind<CR>
     let g:NERDTreeQuitOnOpen = 1
     let g:NERDTreeShowHidden = 1
-    let g:NERDTreeChDirMode  = 2
+    let g:NERDTreeChDirMode  = 1
     let g:NERDTreeSortOrder = ['*', '\.swp$', '\.bak$', '\~$'] " don't put directories on top
     let g:NERDTreeIgnore = ['^.*\.sw[p-z]$', '^\..*\.un\~'] " ignore vim swap and undo files
     " easier preview key mapping
@@ -184,6 +184,9 @@ fun! SetupAddons()
   "if has("ruby")
   "  ActivateAddons tips
   "end
+  ActivateAddons localvimrc
+    let g:localvimrc_persistent = 1
+    let g:localvimrc_sandbox = 0
 
   """ Git, Github
   ActivateAddons fugitive
