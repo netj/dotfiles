@@ -144,6 +144,13 @@ install .vimrc
 install .vim
 fi
 
+if has git; then
+git_excludesfile_after() {
+    git config --global core.excludesfile ~/.git-excludesfile
+}
+install .git-excludesfile
+fi
+
 ! has tmux ||
 install .tmux.conf
 ! has screen ||
