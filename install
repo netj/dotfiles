@@ -2,19 +2,12 @@
 # netj's dotfiles installer
 # Author: Jaeho Shin <netj@sparcs.org>
 # Created: 2006-05-21
-
-set -e
+set -eu
 
 DotfilesRoot=$(cd "$(dirname "$0")" >/dev/null; pwd)
 Home=$(cd >/dev/null; pwd)
 
-# make sure we have all the git submodules in place
-(
-cd "$DotfilesRoot"
-git submodule | grep ^- | awk '{print $2}' | xargs git submodule update --init
-)
-
-
+### some vocabularies first ###################################################
 
 # install symlinks
 #  determine relative path to DotfilesRoot from Home
@@ -109,6 +102,19 @@ safeln() {
         [ -e "$tgt" ] || ln -sfnv "$src" "$tgt"
     done
 }
+has() { type "$1" &>/dev/null; }
+
+###############################################################################
+
+
+# make sure we have all the git submodules in place
+if has git; then
+(
+cd "$DotfilesRoot"
+git submodule | grep ^- | awk '{print $2}' | xargs git submodule update --init
+)
+fi
+
 
 # core
 bash_after() {
@@ -132,17 +138,23 @@ bash_after() {
 install .bash
 install .inputrc
 
+if has vim; then
 vim_after() { make -C .vim; }
 install .vimrc
 install .vim
+fi
 
+! has tmux ||
 install .tmux.conf
+! has screen ||
 install .screenrc
 install .toprc
 
+if has emacs; then
 emacs_d_elisp_Makefile_after() { make -C .emacs.d/elisp; }
 install .emacs
 install .emacs.d/elisp/Makefile
+fi
 
 
 # GUI
