@@ -7,7 +7,7 @@ set completion-ignore-case On
 set visible-stats On
 set mark-symlinked-directories On
 
-set mark-modified-lines On
+#set mark-modified-lines On
 set skip-completed-text On
 
 # Vim-like menu-complete (set wildmode=list:full wildchar=<Tab>)
