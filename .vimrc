@@ -195,6 +195,7 @@ nnoremap <Space>* :nohlsearch<CR>
 
 " Easy open and close of the QuickFix window
 nnoremap <Space>q :copen<CR>
+nnoremap <Space>l :lopen<CR>
 au! BufWinEnter *
       \ if &buftype == "quickfix" |
       \   nnoremap <buffer> <silent> q :close<CR>|
