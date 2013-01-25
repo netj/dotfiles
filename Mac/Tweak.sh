@@ -10,6 +10,16 @@ defaults write com.apple.dock mouse-over-hilite-stack -boolean true
 defaults write com.apple.dock itunes-notifications -boolean true
 defaults write com.apple.dock notification-always-show-image -boolean true
 defaults write com.apple.dock mineffect -string Scale
+# Hot Corners with Cmd+[tb][lr] (inspired by http://macmule.com/2011/03/08/set-start-screen-saver-to-a-hot-corner/)
+# domain=com.apple.Dock; for key in wvous-{b,t}{l,r}-{corner,modifier}; do echo defaults write $domain $key $(defaults read $domain $key); done
+defaults write com.apple.Dock wvous-bl-corner   10
+defaults write com.apple.Dock wvous-bl-modifier 1048576
+defaults write com.apple.Dock wvous-br-corner   2
+defaults write com.apple.Dock wvous-br-modifier 1048576
+defaults write com.apple.Dock wvous-tl-corner   5
+defaults write com.apple.Dock wvous-tl-modifier 1048576
+defaults write com.apple.Dock wvous-tr-corner   7
+defaults write com.apple.Dock wvous-tr-modifier 1048576
 killall Dock
 
 defaults write com.apple.finder QLEnableXRayFolders -boolean true
