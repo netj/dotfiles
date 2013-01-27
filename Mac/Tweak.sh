@@ -20,6 +20,7 @@ defaults write com.apple.Dock wvous-tl-corner   5
 defaults write com.apple.Dock wvous-tl-modifier 1048576
 defaults write com.apple.Dock wvous-tr-corner   7
 defaults write com.apple.Dock wvous-tr-modifier 1048576
+killall DashboardClient || true
 killall Dock
 
 defaults write com.apple.finder QLEnableXRayFolders -boolean true
