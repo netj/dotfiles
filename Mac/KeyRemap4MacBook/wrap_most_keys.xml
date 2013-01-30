@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <root>
     <block>
-        <include path="/Library/org.pqrs/KeyRemap4MacBook/app/KeyRemap4MacBook.app/Contents/Resources/include/checkbox/commons/wrap_keys/alphabet.xml" />
-        <include path="/Library/org.pqrs/KeyRemap4MacBook/app/KeyRemap4MacBook.app/Contents/Resources/include/checkbox/commons/wrap_keys/number.xml"   />
-        <include path="/Library/org.pqrs/KeyRemap4MacBook/app/KeyRemap4MacBook.app/Contents/Resources/include/checkbox/commons/wrap_keys/symbol.xml"   />
-        <include path="/Library/org.pqrs/KeyRemap4MacBook/app/KeyRemap4MacBook.app/Contents/Resources/include/checkbox/commons/wrap_keys/special.xml"  />
-        <include path="/Library/org.pqrs/KeyRemap4MacBook/app/KeyRemap4MacBook.app/Contents/Resources/include/checkbox/commons/wrap_keys/keypad.xml"   />
+        <include path="/Applications/KeyRemap4MacBook.app/Contents/Resources/include/checkbox/commons/wrap_keys/alphabet.xml" />
+        <include path="/Applications/KeyRemap4MacBook.app/Contents/Resources/include/checkbox/commons/wrap_keys/number.xml"   />
+        <include path="/Applications/KeyRemap4MacBook.app/Contents/Resources/include/checkbox/commons/wrap_keys/symbol.xml"   />
+        <include path="/Applications/KeyRemap4MacBook.app/Contents/Resources/include/checkbox/commons/wrap_keys/special.xml"  />
+        <include path="/Applications/KeyRemap4MacBook.app/Contents/Resources/include/checkbox/commons/wrap_keys/keypad.xml"   />
     </block>
 </root>

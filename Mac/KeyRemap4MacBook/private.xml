@@ -10,30 +10,30 @@
         <identifier>private.terminal_commandL_to_optionL</identifier>
         <only>TERMINAL</only>
         <!-- pass-through some common Mac keys -->
-        <autogen>--KeyToKey-- KeyCode::TAB,       ModifierFlag::COMMAND_L|ModifierFlag::NONE,          KeyCode::TAB,       ModifierFlag::COMMAND_L</autogen>
-        <autogen>--KeyToKey-- KeyCode::BACKQUOTE, ModifierFlag::COMMAND_L|ModifierFlag::NONE,          KeyCode::BACKQUOTE, ModifierFlag::COMMAND_L</autogen>
-        <autogen>--KeyToKey-- KeyCode::TAB,       ModifierFlag::COMMAND_L|VK_SHIFT|ModifierFlag::NONE, KeyCode::TAB,       ModifierFlag::COMMAND_L|VK_SHIFT</autogen>
-        <autogen>--KeyToKey-- KeyCode::BACKQUOTE, ModifierFlag::COMMAND_L|VK_SHIFT|ModifierFlag::NONE, KeyCode::BACKQUOTE, ModifierFlag::COMMAND_L|VK_SHIFT</autogen>
-        <autogen>--KeyToKey-- KeyCode::M,         ModifierFlag::COMMAND_L|ModifierFlag::NONE,          KeyCode::M,         ModifierFlag::COMMAND_L</autogen>
-        <autogen>--KeyToKey-- KeyCode::N,         ModifierFlag::COMMAND_L,                             KeyCode::N,         ModifierFlag::COMMAND_L</autogen>
-        <autogen>--KeyToKey-- KeyCode::W,         ModifierFlag::COMMAND_L,                             KeyCode::W,         ModifierFlag::COMMAND_L</autogen>
-        <autogen>--KeyToKey-- KeyCode::C,         ModifierFlag::COMMAND_L|ModifierFlag::NONE,          KeyCode::C,         ModifierFlag::COMMAND_L</autogen>
-        <autogen>--KeyToKey-- KeyCode::V,         ModifierFlag::COMMAND_L,                             KeyCode::V,         ModifierFlag::COMMAND_L</autogen>
-        <autogen>--KeyToKey-- KeyCode::SPACE,     ModifierFlag::COMMAND_L,                             KeyCode::SPACE,     ModifierFlag::COMMAND_L</autogen>
-        <autogen>--KeyToKey-- KeyCode::COMMA,     ModifierFlag::COMMAND_L,                             KeyCode::COMMA,     ModifierFlag::COMMAND_L</autogen>
+        <autogen>__KeyToKey__ KeyCode::TAB,       ModifierFlag::COMMAND_L|ModifierFlag::NONE,          KeyCode::TAB,       ModifierFlag::COMMAND_L</autogen>
+        <autogen>__KeyToKey__ KeyCode::BACKQUOTE, ModifierFlag::COMMAND_L|ModifierFlag::NONE,          KeyCode::BACKQUOTE, ModifierFlag::COMMAND_L</autogen>
+        <autogen>__KeyToKey__ KeyCode::TAB,       ModifierFlag::COMMAND_L|VK_SHIFT|ModifierFlag::NONE, KeyCode::TAB,       ModifierFlag::COMMAND_L|VK_SHIFT</autogen>
+        <autogen>__KeyToKey__ KeyCode::BACKQUOTE, ModifierFlag::COMMAND_L|VK_SHIFT|ModifierFlag::NONE, KeyCode::BACKQUOTE, ModifierFlag::COMMAND_L|VK_SHIFT</autogen>
+        <autogen>__KeyToKey__ KeyCode::M,         ModifierFlag::COMMAND_L|ModifierFlag::NONE,          KeyCode::M,         ModifierFlag::COMMAND_L</autogen>
+        <autogen>__KeyToKey__ KeyCode::N,         ModifierFlag::COMMAND_L,                             KeyCode::N,         ModifierFlag::COMMAND_L</autogen>
+        <autogen>__KeyToKey__ KeyCode::W,         ModifierFlag::COMMAND_L,                             KeyCode::W,         ModifierFlag::COMMAND_L</autogen>
+        <autogen>__KeyToKey__ KeyCode::C,         ModifierFlag::COMMAND_L|ModifierFlag::NONE,          KeyCode::C,         ModifierFlag::COMMAND_L</autogen>
+        <autogen>__KeyToKey__ KeyCode::V,         ModifierFlag::COMMAND_L,                             KeyCode::V,         ModifierFlag::COMMAND_L</autogen>
+        <autogen>__KeyToKey__ KeyCode::SPACE,     ModifierFlag::COMMAND_L,                             KeyCode::SPACE,     ModifierFlag::COMMAND_L</autogen>
+        <autogen>__KeyToKey__ KeyCode::COMMA,     ModifierFlag::COMMAND_L,                             KeyCode::COMMA,     ModifierFlag::COMMAND_L</autogen>
         <!-- pass-through zoom font size, clear buffer -->
-        <autogen>--KeyToKey-- KeyCode::MINUS, ModifierFlag::COMMAND_L, KeyCode::MINUS, ModifierFlag::COMMAND_L</autogen>
-        <autogen>--KeyToKey-- KeyCode::EQUAL, ModifierFlag::COMMAND_L, KeyCode::EQUAL, ModifierFlag::COMMAND_L</autogen>
-        <autogen>--KeyToKey-- KeyCode::K,     ModifierFlag::COMMAND_L, KeyCode::K,     ModifierFlag::COMMAND_L</autogen>
+        <autogen>__KeyToKey__ KeyCode::MINUS, ModifierFlag::COMMAND_L, KeyCode::MINUS, ModifierFlag::COMMAND_L</autogen>
+        <autogen>__KeyToKey__ KeyCode::EQUAL, ModifierFlag::COMMAND_L, KeyCode::EQUAL, ModifierFlag::COMMAND_L</autogen>
+        <autogen>__KeyToKey__ KeyCode::K,     ModifierFlag::COMMAND_L, KeyCode::K,     ModifierFlag::COMMAND_L</autogen>
         <!-- pass-through Afloat -->
-        <autogen>--KeyToKey-- KeyCode::A, ModifierFlag::CONTROL_L|ModifierFlag::COMMAND_L|ModifierFlag::NONE,
+        <autogen>__KeyToKey__ KeyCode::A, ModifierFlag::CONTROL_L|ModifierFlag::COMMAND_L|ModifierFlag::NONE,
         <!---->               KeyCode::A, ModifierFlag::CONTROL_L|ModifierFlag::COMMAND_L                     </autogen>
-        <autogen>--KeyToKey-- KeyCode::F, ModifierFlag::CONTROL_L|VK_SHIFT|ModifierFlag::COMMAND_L|ModifierFlag::NONE,
+        <autogen>__KeyToKey__ KeyCode::F, ModifierFlag::CONTROL_L|VK_SHIFT|ModifierFlag::COMMAND_L|ModifierFlag::NONE,
         <!---->               KeyCode::F, ModifierFlag::CONTROL_L|VK_SHIFT|ModifierFlag::COMMAND_L                     </autogen>
         <!-- pass-through my TotalTerminal combos ⌃⌘⏎ ⌃⌘P -->
-        <autogen>--KeyToKey-- KeyCode::RETURN, ModifierFlag::CONTROL_L|ModifierFlag::COMMAND_L|ModifierFlag::NONE,
+        <autogen>__KeyToKey__ KeyCode::RETURN, ModifierFlag::CONTROL_L|ModifierFlag::COMMAND_L|ModifierFlag::NONE,
         <!---->               KeyCode::RETURN, ModifierFlag::CONTROL_L|ModifierFlag::COMMAND_L </autogen>
-        <autogen>--KeyToKey-- KeyCode::P, ModifierFlag::CONTROL_L|ModifierFlag::COMMAND_L|ModifierFlag::NONE,
+        <autogen>__KeyToKey__ KeyCode::P, ModifierFlag::CONTROL_L|ModifierFlag::COMMAND_L|ModifierFlag::NONE,
         <!---->               KeyCode::P, ModifierFlag::CONTROL_L|ModifierFlag::COMMAND_L </autogen>
         <!-- change rest of keys with Command, Shift+Command, Control+Command, and Control+Shift+Command to Option -->
         <include path="wrap_most_keys.xml"><replacementdef><replacementname>BEFORE</replacementname> <replacementvalue>ModifierFlag::NONE|ModifierFlag::COMMAND_L                     </replacementvalue></replacementdef><replacementdef><replacementname>AFTER</replacementname> <replacementvalue>ModifierFlag::OPTION_L                                               </replacementvalue></replacementdef></include>
@@ -46,7 +46,7 @@
         <name>In Vim, Make Escape key also Switch to English IM</name>
         <identifier>private.vim_esc_also_switches_to_english_inputmode</identifier>
         <only>VI</only>
-        <autogen>--KeyToKey-- KeyCode::ESCAPE,
+        <autogen>__KeyToKey__ KeyCode::ESCAPE,
         <!---->               KeyCode::ESCAPE,KeyCode::VK_CHANGE_INPUTMODE_ENGLISH </autogen>
     </item>
 </root>
