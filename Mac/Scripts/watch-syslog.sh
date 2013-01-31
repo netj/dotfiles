@@ -12,8 +12,8 @@ greppatt=$1; shift
 pidfile=$1; shift
 
 # check pidfile if already watching
-if pid=$(cat "$pidfile" 2>/dev/null) &&
-    ps -o command= $pid 2>/dev/null | grep -q "$(basename "$0")"; then
+if pid=$(cat "$pidfile" 2>/dev/null) && ps -o command= $pid 2>/dev/null |
+        grep -F "$(basename "$0")" | grep -q -F "$(basename "$pidfile")"; then
     echo >&2 "$pidfile: Already running as PID $pid"
     exit 2
 else
