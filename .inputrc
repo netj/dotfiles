@@ -62,7 +62,7 @@ $if Bash
     Space: magic-space
 
     # Insert-Option Macro (enhanced to handle multi-word commands)
-    "\eo": "\C-p\C-a\e\C-]  "
+    "\eo": "\C-p\C-a\e]  "
 
     # a better backward/forward words by space with Meta-Shift-B/F
     "\eviB": vi-backward-bigword
