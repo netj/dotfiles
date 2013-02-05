@@ -268,8 +268,15 @@ fun! SetupAddons()
     command! LaTeXBuildAndView call s:LaTeX_BuildAndView()
     fun! s:LaTeX_Setup()
       setlocal spell textwidth=76 wrap
-      setlocal suffixes+=.pdf,.dvi,.ps,.ps.gz,.aux,.bbl,.blg,.log,.out,.ent,.fdb_latexmk,.fls,.brf " TeX by-products
-      let g:NERDTreeSortOrder += split('\.log \.pdf \.ps.gz \.ps \.dvi \.aux \.bbl \.blg \.out \.ent \.fdb_latexmk \.synctex.gz \.fls \.brf')
+      let suffixes = ".pdf,.dvi,.ps,.ps.gz"
+                  \.",.aux,.bbl,.blg,.log,.out,.ent"
+                  \.",.fdb_latexmk,.fls,.brf,.synctex.gz"
+      if stridx(&suffixes, suffixes) == -1
+        exec "setlocal suffixes+=".suffixes
+        let patt = '\('. join(map(split(suffixes,','),
+              \                   '"\\".v:val'), '\|') .'\)$'
+        let g:NERDTreeSortOrder += [patt]
+      endif
       nmap <buffer><silent> <Space>z  <Plug>Tex_RefreshFolds
       " Use latexmk and enable synctex
       for fmt in split("pdf ps dvi")
