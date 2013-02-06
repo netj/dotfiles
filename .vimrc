@@ -73,7 +73,9 @@ set listchars=tab:>.,eol:$
 " expansions
 set wildmode=list:full
 set wildchar=<Tab>
-set wildignorecase
+if has("&wildignorecase")
+  set wildignorecase
+endif
 
 "  some by-product files
 set suffixes+=.o,.a     " object and archive files
