@@ -283,7 +283,16 @@ fun! SetupAddons()
     fun! s:LaTeX_Setup()
       setlocal spell autowrite 
             \ textwidth=80 formatoptions-=t formatoptions-=c
-            \ wrap linebreak showbreak=...\  cpoptions+=n
+      if has("linebreak")
+        setlocal wrap linebreak showbreak=...\  cpoptions+=n
+        " See: http://stackoverflow.com/questions/5706820/using-vim-isnt-there-a-more-efficient-way-to-format-latex-paragraphs-according
+        if has("gui") | let &l:showbreak="\u21aa   " | endif " use a better unicode character:↪
+        " Move cursor based on displayed lines
+        for key in split("j k 0 $")
+          exec 'noremap <buffer>  '.key.' g'.key
+          exec 'noremap <buffer> g'.key.'  '.key
+        endfor
+      endif
       let suffixes = ".pdf,.dvi,.ps,.ps.gz"
                   \.",.aux,.bbl,.blg,.log,.out,.ent"
                   \.",.fdb_latexmk,.fls,.brf,.synctex.gz"
@@ -293,11 +302,14 @@ fun! SetupAddons()
               \                   '"\\".v:val'), '\|') .'\)$'
         let g:NERDTreeSortOrder += [patt]
       endif
-      " Q or gq gives inconsistent result when 'linebreak' is set with 'wrap',
-      " but 'linebreak' is useful when working with people who don't wrap
-      " lines.  So turn 'wrap' off, when start doing formatting.
-      nnoremap <buffer><silent> Q :setlocal nowrap<CR>gq
-      vnoremap <buffer><silent> Q <C-\><C-N>:setlocal nowrap<CR>gvgq
+      " better LaTeX formatting, perhaps with a custom formatprg
+      "   See: http://stackoverflow.com/questions/5706820/using-vim-isnt-there-a-more-efficient-way-to-format-latex-paragraphs-according
+      "   See: http://stackoverflow.com/questions/1451827/vim-make-gq-treat-as-the-end-of-a-sentence
+      let &l:formatprg = '~/.vim/format-latex.pl'
+      "   See: http://denihow.com/vim-gq-command-to-re-wrap-paragraph-and-latex/
+      "   See: http://superuser.com/questions/422214/vim-gq-command-to-re-wrap-paragraph-and-latex
+      let &l:formatlistpat = '^\s*\\\ze\(end\|item\)\>'
+      setlocal formatoptions+=n
       " Use LaTeX folds
       nmap <buffer><silent> <Space>z  <Plug>Tex_RefreshFolds
       " Use latexmk and enable synctex
