@@ -254,20 +254,23 @@ fun! SetupAddons()
     let g:Tex_Folding = 1
     let g:Tex_AutoFolding = 0
     fun! s:LaTeX_Build()
-      write
+      norm m`m[
       let oldmore=&more | set nomore
       exec "make ".escape(Tex_GetMainFileName(),' \')
       let &more=oldmore
+      norm m]g``
     endfun
-    command! LaTeXBuild        call s:LaTeX_Build()
     fun! s:LaTeX_BuildAndView()
       call s:LaTeX_Build()
       set filetype=tex
       call Tex_ForwardSearchLaTeX()
     endfun
+    command! LaTeXBuild        call s:LaTeX_Build()
     command! LaTeXBuildAndView call s:LaTeX_BuildAndView()
     fun! s:LaTeX_Setup()
-      setlocal spell textwidth=76 wrap
+      setlocal spell autowrite 
+            \ textwidth=80 formatoptions-=t formatoptions-=c
+            \ wrap linebreak showbreak=...\  cpoptions+=n
       let suffixes = ".pdf,.dvi,.ps,.ps.gz"
                   \.",.aux,.bbl,.blg,.log,.out,.ent"
                   \.",.fdb_latexmk,.fls,.brf,.synctex.gz"
@@ -277,6 +280,12 @@ fun! SetupAddons()
               \                   '"\\".v:val'), '\|') .'\)$'
         let g:NERDTreeSortOrder += [patt]
       endif
+      " Q or gq gives inconsistent result when 'linebreak' is set with 'wrap',
+      " but 'linebreak' is useful when working with people who don't wrap
+      " lines.  So turn 'wrap' off, when start doing formatting.
+      nnoremap <buffer><silent> Q :setlocal nowrap<CR>gq
+      vnoremap <buffer><silent> Q <C-\><C-N>:setlocal nowrap<CR>gvgq
+      " Use LaTeX folds
       nmap <buffer><silent> <Space>z  <Plug>Tex_RefreshFolds
       " Use latexmk and enable synctex
       for fmt in split("pdf ps dvi")
