@@ -153,34 +153,40 @@ nnoremap <Leader><C-l>  :map <L<BS>Leader><CR>
 
 " Mode Toggler Keys
 fun! ModeToggleKey(mode, lhs)
-  exec 'nnoremap '.a:lhs.'      :set '.a:mode.'!<CR>:set '.a:mode.'?<CR>'
-  exec 'inoremap '.a:lhs.' <C-o>:set '.a:mode.'!<CR>'
+  for [prefix,cmd] in [['<C-\>','setlocal'], ['<C-\><C-G>', 'set']]
+    exec 'nnoremap '.prefix.a:lhs.' :'.cmd.' '.a:mode.'!<CR>'
+          \                       .':'.cmd.' '.a:mode.'?<CR>'
+    exec 'imap     '.prefix.a:lhs.' <C-\><C-N>'.prefix.a:lhs.'gi'
+    exec 'vmap     '.prefix.a:lhs.' <C-\><C-N>'.prefix.a:lhs.'gv'
+  endfor
 endfun
 command! -nargs=+ -complete=option ModeToggleKey  :call ModeToggleKey(<f-args>)
 
-" toggle display of unprintable characters
-ModeToggleKey autoread        <C-\>&
-ModeToggleKey autowrite       <C-\>!
-ModeToggleKey autowriteall    <C-\>!!
-ModeToggleKey binary          <C-\>@
-ModeToggleKey cursorbind      <C-\>.
-ModeToggleKey cursorline      <C-\>:
-ModeToggleKey cursorcolumn    <C-\>,
-ModeToggleKey diff            <C-\><C-d>
-ModeToggleKey foldenable      <C-\><C-z>
-ModeToggleKey list            <C-\><Space>
-ModeToggleKey modifiable      <C-\><C-m>
-ModeToggleKey number          <C-\>1
-ModeToggleKey paste           <C-\><C-]>
-ModeToggleKey readonly        <C-\><C-r>
-ModeToggleKey ruler           <C-\>%
-ModeToggleKey scrollbind      <C-\>+
-ModeToggleKey spell           <C-\>=
-ModeToggleKey swapfile        <C-\>$
-ModeToggleKey undofile        <C-\><C-u>
-ModeToggleKey winfixwidth     <C-\>\|
-ModeToggleKey winfixheight    <C-\>_
-ModeToggleKey wrap            <C-\><C-\>
+" toggle options with <C-\> followed by the individual key
+ModeToggleKey autoread        <C-e>
+ModeToggleKey autowrite       <C-w>
+ModeToggleKey autowriteall    W
+ModeToggleKey binary          @
+ModeToggleKey cursorbind      .
+ModeToggleKey cursorline      :
+ModeToggleKey cursorcolumn    ,
+ModeToggleKey diff            <C-d>
+ModeToggleKey foldenable      <C-z>
+ModeToggleKey list            <Space>
+ModeToggleKey list            <C-Space>
+ModeToggleKey list            <C-@>
+ModeToggleKey modifiable      <C-m>
+ModeToggleKey number          1
+ModeToggleKey paste           <C-]>
+ModeToggleKey readonly        <C-r>
+ModeToggleKey ruler           %
+ModeToggleKey scrollbind      +
+ModeToggleKey spell           =
+ModeToggleKey swapfile        $
+ModeToggleKey undofile        <C-u>
+ModeToggleKey winfixwidth     \|
+ModeToggleKey winfixheight    _
+ModeToggleKey wrap            <C-\>
 
 " Fold
 nnoremap <Space>z      :set foldmethod=indent<CR>
@@ -189,15 +195,14 @@ nnoremap <Space><C-z>  :set foldmethod=manual<CR>
 
 " Fix syntax highlighting by doing it from start of file
 " See: http://vim.wikia.com/wiki/Fix_syntax_highlighting
-nnoremap <C-\>s      :syntax sync fromstart<CR>
-inoremap <C-\>s <C-o>:syntax sync fromstart<CR>
+nnoremap <Space>s      :syntax sync fromstart<CR>
 
 " Toggle hlsearch (highlight search matches).
-nnoremap <Space>* :nohlsearch<CR>
+nnoremap <Space>*      :nohlsearch<CR>
 
 " Easy open and close of the QuickFix window
-nnoremap <Space>q :copen<CR>
-nnoremap <Space>l :lopen<CR>
+nnoremap <Space>q      :copen<CR>
+nnoremap <Space>l      :lopen<CR>
 au! BufWinEnter *
       \ if &buftype == "quickfix" |
       \   nnoremap <buffer> <silent> q :close<CR>|

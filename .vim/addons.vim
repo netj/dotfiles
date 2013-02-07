@@ -65,16 +65,20 @@ fun! SetupAddons()
     " See: http://superuser.com/questions/157676/change-color-scheme-when-calling-vimdiff-inside-vim
     let g:diff_colors_name  = g:mySetColorsDiff[0]
     let g:prior_colors_name = g:colors_name
-    autocmd FilterWritePost,BufEnter,WinEnter,WinLeave *
-          \ if &diff && g:mySetColors is g:mySetColorsNormal |
-          \   let g:prior_colors_name = g:colors_name |
-          \   let g:mySetColors = g:mySetColorsDiff   |
-          \   exec 'colorscheme' g:diff_colors_name |
-          \ elseif !&diff && g:mySetColors is g:mySetColorsDiff |
-          \   let g:diff_colors_name = g:colors_name |
-          \   let g:mySetColors = g:mySetColorsNormal |
-          \   exec 'colorscheme' g:prior_colors_name |
-          \ endif
+    fun! s:DetectDiffColorScheme()
+      if &diff && g:mySetColors is g:mySetColorsNormal
+        let g:prior_colors_name = g:colors_name
+        let g:mySetColors = g:mySetColorsDiff
+        exec 'colorscheme' g:diff_colors_name
+      elseif !&diff && g:mySetColors is g:mySetColorsDiff
+        let g:diff_colors_name = g:colors_name
+        let g:mySetColors = g:mySetColorsNormal
+        exec 'colorscheme' g:prior_colors_name
+      endif
+    endfun
+    command! DetectDiffColorScheme call s:DetectDiffColorScheme()
+    autocmd FilterWritePost,BufEnter,WinEnter,WinLeave *  DetectDiffColorScheme
+    nnoremap <Space>d :diffoff \| DetectDiffColorScheme<CR>
 
 
   """ Productivity boosters
