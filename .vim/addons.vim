@@ -21,7 +21,7 @@ fun! SetupAddons()
   " bright: summerfruit256 buttercream PapayaWhip nuvola habiLight fruit eclipse earendel
   ActivateAddons Colour_Sampler_Pack molokai
   " scroll among my favorites with VimTip341
-  ActivateAddons git:http://gist.github.com/1432015.git
+  ActivateAddons git:git://gist.github.com/1432015.git
     let s:mySetColorsSet = []
     let s:mySetColorsSetDiff = []
     fun! s:addColorSet(reversed, name, ...)
@@ -425,7 +425,9 @@ fun! SetupVAM()
   "    ..ActivateAddons(["github:user/repo", .. => github://user/repo
   " Also see section "2.2. names of addons and addon sources" in VAM's documentation
 endfun
+try
 call SetupVAM()
+endtry
 " experimental [E1]: load plugins lazily depending on filetype, See
 " NOTES
 " experimental [E2]: run after gui has been started (gvim) [3]

@@ -7,7 +7,8 @@ all: $(shell sed <Makefile -n '/:.*\#\#$$/ s/:.*$$//p')
 
 # VAM installation
 vam-update: ##
-	vim -u NONE \
+	GIT_SSL_NO_VERIFY=true \
+	vim -u NONE -i NONE \
 	    +"set nomore | source ~/.vim/addons.vim" \
 	    +"set nomore | UpdateAddons vim-addon-manager-known-repositories" \
 	    +"set nomore | UpdateActivatedAddons" \
@@ -15,7 +16,7 @@ vam-update: ##
 	    #
 
 vim-addons-bash_local: ##
-	vim -n -u NONE \
+	vim -n -u NONE -i NONE \
 	    ~/.bash_local + \
 	    +"g/^## vim with addons {{{$$/,/^## }}}$$/d" \
 	    +"let o='O' | if line('.')==line('$$') | let o='o'" \
