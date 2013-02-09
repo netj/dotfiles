@@ -111,6 +111,7 @@ fun! SetupAddons()
   ActivateAddons Align%294
   ActivateAddons surround
   ActivateAddons repeat
+  ActivateAddons vim-visual-star-search
   ActivateAddons EasyMotion
     let g:EasyMotion_leader_key = '<Space>w'
   ActivateAddons matchit.zip
