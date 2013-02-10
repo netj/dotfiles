@@ -7,6 +7,8 @@ all: $(shell sed <Makefile -n '/:.*\#\#$$/ s/:.*$$//p')
 
 # VAM installation
 vam-update: ##
+	read -p "update vim-addons? [yN] " -n1 -t2 || echo n; \
+	case $$REPLY in [yY]) echo "updating vim-addons..." ;; *) exit 0 ;; esac; \
 	GIT_SSL_NO_VERIFY=true \
 	vim -u NONE -i NONE \
 	    +"set nomore | source ~/.vim/addons.vim" \
