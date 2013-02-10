@@ -3,13 +3,15 @@
 # Author: Jaeho Shin <netj@sparcs.org>
 # Created: 2012-07-05
 # See-Also: http://secrets.blacktree.com/
+# See-Also: http://osxdaily.com/tag/defaults-write/
+# See-Also: https://github.com/mathiasbynens/dotfiles/blob/master/.osx
 set -eu
 
 defaults write com.apple.dock showhidden -boolean true
 defaults write com.apple.dock mouse-over-hilite-stack -boolean true
-defaults write com.apple.dock itunes-notifications -boolean true
 defaults write com.apple.dock notification-always-show-image -boolean true
 defaults write com.apple.dock mineffect -string Scale
+defaults write com.apple.dock expose-animation-duration -float 0.17
 # Hot Corners with Cmd+[tb][lr] (inspired by http://macmule.com/2011/03/08/set-start-screen-saver-to-a-hot-corner/)
 # domain=com.apple.Dock; for key in wvous-{b,t}{l,r}-{corner,modifier}; do echo defaults write $domain $key $(defaults read $domain $key); done
 defaults write com.apple.Dock wvous-bl-corner   10
@@ -23,16 +25,26 @@ defaults write com.apple.Dock wvous-tr-modifier 1048576
 killall DashboardClient || true
 killall Dock
 
-defaults write com.apple.finder QLEnableXRayFolders -boolean true
 defaults write com.apple.finder ShowPathBar -boolean true
 defaults write com.apple.finder PathBarRootAtHome -boolean true
-defaults write com.apple.desktopservices DSDontWriteNetworkStores true
+defaults write com.apple.finder QLEnableXRayFolders -boolean true
+defaults write com.apple.finder QLEnableTextSelection -bool TRUE;killall Finder # Allow text selection in Quick Look
+defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false      # Disable the warning when changing a file extension
+defaults write com.apple.desktopservices DSDontWriteNetworkStores true          # No .DS_Store on network volumes
 killall Finder
 
+# http://brettterpstra.com/2011/12/04/quick-tip-repeat-cocoa-text-actions-emacsvim-style/
+defaults write -g NSRepeatCountBinding -string "^u"
+defaults write -g NSTextShowsControlCharacters -bool true
 defaults write -g ApplePressAndHoldEnabled -boolean false
+defaults write -g NSAutomaticSpellingCorrectionEnabled -bool false
 defaults write -g AppleShowAllExtensions -boolean true
-defaults write -g NSNavPanelExpandedStateForSaveMode -boolean true
-defaults write -g NSScrollAnimationEnabled -bool NO
+defaults write -g NSScrollAnimationEnabled -bool false
+defaults write -g NSWindowResizeTime -float 0.001
+defaults write -g NSDocumentSaveNewDocumentsToCloud -bool false         # Don't save to iCloud by default
+defaults write -g NSNavPanelExpandedStateForSaveMode -boolean true      # Expand save panel by default
+defaults write -g PMPrintingExpandedStateForPrint -bool true            # Expand printer panel by default
+defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
 
 defaults write com.apple.Safari ShowStatusBar -boolean true
 defaults write com.apple.Safari WebKitDeveloperExtras -boolean true
@@ -43,6 +55,8 @@ defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebK
 defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DefaultFontSize 18
 defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2FixedFontFamily 'Envy Code R'
 defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DefaultFixedFontSize 16
+
+defaults write com.apple.mail AddressesIncludeNameOnPasteboard -bool false  # Copy email addresses without the names
 
 # How to show Dictionary definitions first in Spotlight results
 # See-Also: http://apple.stackexchange.com/a/52530

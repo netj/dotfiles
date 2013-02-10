@@ -227,4 +227,9 @@ case $(uname) in Darwin)
             ! [ -x "$x" ] || "$x" reloadxml
         }
     done
+
+    # DefaultKeyBinding.dict
+    # See: http://hints.macworld.com/article.php?story=20060317045211408
+    # See: http://www.hcs.harvard.edu/~jrus/site/cocoa-text.html
+    install Library/KeyBindings/DefaultKeyBinding.dict Mac/KeyBindings/DefaultKeyBinding.dict true
 ;; esac

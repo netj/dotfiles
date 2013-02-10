@@ -43,9 +43,42 @@
     </item>
 
     <item>
+        <name>For Korean input source, make Control and Option combos work just as if it were in English mode.  Normally, Option combos just enter Roman characters, and Control ones are disabled.</name>
+        <identifier>private.korean_control_option_combos_workaround</identifier>
+        <inputsource_only>KOREAN</inputsource_only>
+        <!-- Control, Option key combos will be done in English -->
+        <!-- XXX TODO gracefully handle Ctrl+x/Opt+x keys while character is in composition -->
+        <autogen>__KeyToKey__ KeyCode::CONTROL_L, KeyCode::CONTROL_L,
+        <!----> Option::KEYTOKEY_BEFORE_KEYDOWN,  KeyCode::VK_CHANGE_INPUTMODE_ENGLISH,
+        <!----> Option::KEYTOKEY_AFTER_KEYUP,     KeyCode::VK_CHANGE_INPUTSOURCE_KOREAN </autogen>
+        <autogen>__KeyToKey__ KeyCode::CONTROL_R, KeyCode::CONTROL_R,
+        <!----> Option::KEYTOKEY_BEFORE_KEYDOWN,  KeyCode::VK_CHANGE_INPUTMODE_ENGLISH,
+        <!----> Option::KEYTOKEY_AFTER_KEYUP,     KeyCode::VK_CHANGE_INPUTSOURCE_KOREAN </autogen>
+        <autogen>__KeyToKey__ KeyCode::OPTION_L,  KeyCode::OPTION_L,
+        <!----> Option::KEYTOKEY_BEFORE_KEYDOWN,  KeyCode::VK_CHANGE_INPUTMODE_ENGLISH,
+        <!----> Option::KEYTOKEY_AFTER_KEYUP,     KeyCode::VK_CHANGE_INPUTSOURCE_KOREAN </autogen>
+        <autogen>__KeyToKey__ KeyCode::OPTION_R,  KeyCode::OPTION_R,
+        <!----> Option::KEYTOKEY_BEFORE_KEYDOWN,  KeyCode::VK_CHANGE_INPUTMODE_ENGLISH,
+        <!----> Option::KEYTOKEY_AFTER_KEYUP,     KeyCode::VK_CHANGE_INPUTSOURCE_KOREAN </autogen>
+        <!-- XXX It turns out to be very difficult to get COMMAND_L work just like OPTION_L only for Terminal,
+             while still letting COMMAND-SPACE to switch input methods. - ->
+        <block>
+            <only>TERMINAL</only>
+            <autogen>__KeyToKey__ KeyCode::SPACE, ModifierFlag::COMMAND_L,
+                                                      KeyCode::VK_CHANGE_INPUTMODE_ENGLISH,
+                    Option::KEYTOKEY_AFTER_KEYUP,     KeyCode::VK_CHANGE_INPUTMODE_ENGLISH </autogen>
+            <autogen>__KeyToKey__ KeyCode::COMMAND_L, KeyCode::OPTION_R,
+            <!- - > Option::KEYTOKEY_BEFORE_KEYDOWN,  KeyCode::VK_CHANGE_INPUTMODE_ENGLISH, KeyCode::SPACE, KeyCode::DELETE,
+            <!- - > Option::KEYTOKEY_AFTER_KEYUP,     KeyCode::VK_CHANGE_INPUTSOURCE_KOREAN </autogen>
+        </block>
+        -->
+    </item>
+
+    <item>
         <name>In Vim, Make Escape key also Switch to English IM</name>
         <identifier>private.vim_esc_also_switches_to_english_inputmode</identifier>
         <only>VI</only>
+        <inputsource_not>ENGLISH</inputsource_not>
         <autogen>__KeyToKey__ KeyCode::ESCAPE,
         <!---->               KeyCode::ESCAPE,KeyCode::VK_CHANGE_INPUTMODE_ENGLISH </autogen>
     </item>
