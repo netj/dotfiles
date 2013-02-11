@@ -79,6 +79,13 @@ fun! SetupAddons()
     command! DetectDiffColorScheme call s:DetectDiffColorScheme()
     autocmd FilterWritePost,BufEnter,WinEnter,WinLeave *  DetectDiffColorScheme
     nnoremap <Space>d :diffoff \| DetectDiffColorScheme<CR>
+  if has("gui_running")
+    ActivateAddons powerline
+    set laststatus=2 noshowmode showcmd
+    let &guifont = join(map(split(&guifont,","),
+          \ 'split(v:val,":")[0]." for Powerline:".split(v:val,":")[1]'),",")
+    "let g:Powerline_symbols = 'fancy'
+  endif
 
 
   """ Productivity boosters

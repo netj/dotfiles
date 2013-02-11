@@ -27,10 +27,20 @@ EnvyCodeRFontsArchive := EnvyCodeR.zip
 EnvyCodeRFonts := \
     Envy?Code?R?Bold.ttf   \
     Envy?Code?R?Italic.ttf \
-    Envy?Code?R.ttf         \
+    Envy?Code?R.ttf        \
     #
 include EnvyCodeRFonts.mk
 
+# patch font for Powerline
+PowerlineFontPatcher = ../.vim/vim-addons/powerline/font/fontpatcher.py
+EnvyCodeRForPowerline = Envy\ Code\ R\ for\ Powerline.otf
+InstalledFiles += $(FONTSDIR)/$(EnvyCodeRForPowerline)
+$(FONTSDIR)/$(EnvyCodeRForPowerline): $(EnvyCodeRForPowerline)
+	ln -fv "$<" "$@"
+$(EnvyCodeRForPowerline): $(FONTSDIR)/Envy\ Code\ R.ttf $(PowerlineFontPatcher)
+	-fontforge -script $(PowerlineFontPatcher) "$<"
+$(PowerlineFontPatcher):
+	true
 
 ## Nanum Fonts
 ifeq (,$(filter Darwin-10.7 Darwin-10.7.%,$(uname_version)))
