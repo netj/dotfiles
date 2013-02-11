@@ -15,21 +15,6 @@ if v:progname =~? "evim" | finish | endif
 
 set nocompatible        " This is Vi IMproved, not Vi :^)
 
-" Command and key combo for loading the vim-addon-manager aka VAM
-" VAM's auto_install can interrupt many scripts relying on vim, so loading
-" only when used interactively.  You could add LoadAddons to ~/.vim_local, but
-" adding an alias to the shell is recommended: >
-"   export EDITOR="$HOME/.vim/vim+addons"
-"   alias vim='VIMADDONS=1 vim'
-"<
-command! LoadAddons  silent! delfunction SetupAddons|
-      \source ~/.vim/addons.vim|
-"      \silent! norm :unmap <S<BS>Space><S<BS>Space><CR>|
-noremap <Space><Space> :LoadAddons<CR>
-if has("gui_running") || exists("$VIMADDONS")
-  LoadAddons
-endif
-
 " source optional files
 fun! SourceOptional(files)
   for f in a:files | if filereadable(expand(f)) | exec 'source '.f | endif | endfor
@@ -277,6 +262,24 @@ if exists("vimpager")
   set timeout timeoutlen=0
 endif
 
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Vim Addons/Scripts/Plugins                                                  "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Command and key combo for loading the vim-addon-manager aka VAM
+" VAM's auto_install can interrupt many scripts relying on vim, so loading
+" only when used interactively.  You could add LoadAddons to ~/.vim_local, but
+" adding an alias to the shell is recommended: >
+"   export EDITOR="$HOME/.vim/vim+addons"
+"   alias vim='VIMADDONS=1 vim'
+"<
+command! LoadAddons  silent! delfunction SetupAddons|
+      \source ~/.vim/addons.vim|
+"      \silent! norm :unmap <S<BS>Space><S<BS>Space><CR>|
+noremap <Space><Space> :LoadAddons<CR>
+if has("gui_running") || exists("$VIMADDONS")
+  LoadAddons
+endif
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
