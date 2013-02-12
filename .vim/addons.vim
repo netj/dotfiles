@@ -250,6 +250,7 @@ fun! SetupAddons()
     au! BufRead,BufNewFile *.json setfiletype json
 
   ActivateAddons vim-coffee-script
+    au! BufRead,BufNewFile *.coffee syntax sync fromstart
     " CoffeeScript autocompilation
     "autocmd BufWritePost *.coffee silent CoffeeMake! | cwindow
   ActivateAddons applescript
