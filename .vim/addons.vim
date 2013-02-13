@@ -306,6 +306,7 @@ fun! SetupAddons()
       endfor
       if has("mac")
         " Use Skim as our PDF viewer and latexmk to compile
+        TCTarget pdf
         let g:Tex_ViewRule_pdf="Skim"
         " In Skim's preferences, use the following for PDF-TeX Sync Support
         " Command: /opt/homebrew/bin/mvim
@@ -321,7 +322,7 @@ fun! SetupAddons()
         map! <buffer><silent> <D-r> <Plug>Tex_FastCommandInsert
         map  <buffer><silent> <D-R> <Plug>Tex_FastCommandChange
         map! <buffer><silent> <D-R> <Plug>Tex_FastCommandChange
-        map! <buffer><silent> <D-®> <Plug>Tex_Completion
+        map! <buffer><silent>  <Plug>Tex_Completion
         map  <buffer><silent> <D-j> <Plug>IMAP_JumpForward
         map  <buffer><silent> <D-k> <Plug>IMAP_JumpBack
         map! <buffer><silent> <D-j> <Plug>IMAP_JumpForward
