@@ -238,23 +238,23 @@ fun! SetupAddons()
 
   ActivateAddons markdown@tpope " Markdown vim-ft-markdown_fold
     " Marked
-    au! FileType markdown
+    au FileType markdown
       \ setlocal spell |
     if has("mac")
-      au! FileType markdown
+      au FileType markdown
         \ nnoremap <D-e> :!open -a Marked '%'<CR><CR>|
         \ noremap! <D-e> <C-\><C-N><D-e>gi|
         \ call sparkup#Setup()|
     endif
   ActivateAddons JSON
-    au! BufRead,BufNewFile *.json setfiletype json
+    au BufRead,BufNewFile *.json setfiletype json
 
   ActivateAddons vim-coffee-script
-    au! BufRead,BufNewFile *.coffee syntax sync fromstart
+    au BufRead,BufNewFile *.coffee syntax sync fromstart
     " CoffeeScript autocompilation
     "autocmd BufWritePost *.coffee silent CoffeeMake! | cwindow
   ActivateAddons applescript
-    au! BufRead,BufNewFile *.applescript setfiletype applescript
+    au BufRead,BufNewFile *.applescript setfiletype applescript
   ActivateAddons vim-addon-scala
     " Scala (See: http://mdr.github.com/scalariform/)
     au BufEnter *.scala setl formatprg=scalariform\ --forceOutput
@@ -269,7 +269,7 @@ fun! SetupAddons()
     fun! s:LaTeX_Build()
       norm m`m[
       let oldmore=&more | set nomore
-      exec "make ".escape(Tex_GetMainFileName(),' \')
+      exec "make! ".escape(Tex_GetMainFileName(),' \')
       let &more=oldmore
       norm m]g``
     endfun
@@ -339,7 +339,7 @@ fun! SetupAddons()
         endfor
       endif
     endfun
-    au! FileType tex call s:LaTeX_Setup()
+    au FileType tex call s:LaTeX_Setup()
   " Automatic LaTeX Plugin for Vim and LaTeX_Box is also nice supporting
   " latexmk directly, vim-like motions, mappings, etc.  but I find it a little
   " premature yet (e.g., ShowErrors didn't work for me)
