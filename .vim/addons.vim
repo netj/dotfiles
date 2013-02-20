@@ -258,6 +258,8 @@ fun! SetupAddons()
   ActivateAddons vim-addon-scala
     " Scala (See: http://mdr.github.com/scalariform/)
     au BufEnter *.scala setl formatprg=scalariform\ --forceOutput
+  ActivateAddons octave%3600
+    au BufRead,BufNewFile *.oct,*.m setlocal filetype=octave
 
   " Vim-LaTeX is a comprehensive plugin for working with LaTeX
   " See: http://vim-latex.sourceforge.net/documentation/latex-suite/
