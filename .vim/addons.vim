@@ -283,8 +283,7 @@ fun! SetupAddons()
     command! LaTeXBuild        call s:LaTeX_Build()
     command! LaTeXBuildAndView call s:LaTeX_BuildAndView()
     fun! s:LaTeX_Setup()
-      setlocal spell autowrite 
-            \ textwidth=80 formatoptions-=t formatoptions-=c
+      setlocal spell autowrite textwidth=0 formatoptions-=t formatoptions-=c
       if has("linebreak")
         setlocal wrap linebreak showbreak=...\  cpoptions+=n
         " See: http://stackoverflow.com/questions/5706820/using-vim-isnt-there-a-more-efficient-way-to-format-latex-paragraphs-according
@@ -324,7 +323,7 @@ fun! SetupAddons()
         let g:Tex_ViewRule_pdf="Skim"
         " In Skim's preferences, use the following for PDF-TeX Sync Support
         " Command: /opt/homebrew/bin/mvim
-        " Arguments: $(osascript -e 'tell application "MacVim" to get name of front window' | sed 's/.* - /--servername /') --remote-silent +":%line|silent!.foldopen!|" "%file"
+        " Arguments: $(osascript -e 'tell application "MacVim" to get name of front window' | sed 's/.* - /--servername /') --remote-silent +"%line|exec 'norm zz'|silent!.foldopen!|" +"norm zz" "%file"
         " Command must be a full path name to mvim unless you put it in a system location such as /usr/bin.
         " Arguments has a fancy applescript to open on the active MacVim window.
         " some key bindings with Command-key

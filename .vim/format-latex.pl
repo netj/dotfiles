@@ -25,7 +25,16 @@ sub passthru {
     breakLine();
     print $line, "\n";
 }
+sub sentence {
+    my $sentence = shift;
+    # clean up whitespace in each sentence
+    $sentence =~ s/\s+/ /g;
+    return $sentence;
+}
 sub breakLine {
+    # preserve end-of-line comments
+    $buf =~ s/^(.*?)(%.*)$/$1/;
+    my $comment = $2 || "";
     if ($nesting == 0) {
         # break the buffered into multiple lines for each sentence
         while ($buf =~ /
@@ -34,11 +43,11 @@ sub breakLine {
             ([\p{Uppercase Letter}\p{Hangul_Syllables}])
             /gx) {
             # each sentence ends with a period, and begins with an upper case
-            print $1, "\n";
+            print sentence($1), "\n";
             substr($buf, 0, length($&)) = "$3";
         }
     }
-    print $buf, "\n" if $buf ne "";
+    print sentence($buf), $comment, "\n" if $buf ne "";
     $buf = "";
 }
 for my $line (<>) {
@@ -47,15 +56,14 @@ for my $line (<>) {
         passthru($line);
     } elsif ($line =~ /^(.*?)\s*(\\(begin|end|item|\[|\]|\$\$|part|chapter|((sub|)sub|)section|paragraph|label).*)$/) {
         buffer($1);
-        breakLine();
-        buffer($2);
+        passthru($2);
+        # TODO break line after begin{...} etc?
         if ($3 eq "begin" or $3 eq "[") {
             $nesting++;
         } elsif ($3 eq "end" or $3 eq "]") {
             $nesting--;
             $nesting = 0 if $nesting lt 0; # could be formatting in the middle of things
         }
-        breakLine();
     } else {
         if ($line =~ /^\s*$/) {
             passthru($line);
