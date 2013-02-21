@@ -29,13 +29,13 @@ sub breakLine {
     if ($nesting == 0) {
         # break the buffered into multiple lines for each sentence
         while ($buf =~ /
-            (.*?[\p{Letter}]+[\.\?!])
+            (.*?([\p{Letter}\$\\{}]+)[\.\?!])
             \s+
             ([\p{Uppercase Letter}\p{Hangul_Syllables}])
             /gx) {
             # each sentence ends with a period, and begins with an upper case
             print $1, "\n";
-            substr($buf, 0, length($&)) = "$2";
+            substr($buf, 0, length($&)) = "$3";
         }
     }
     print $buf, "\n" if $buf ne "";
