@@ -38,7 +38,7 @@ sub breakLine {
     if ($nesting == 0) {
         # break the buffered into multiple lines for each sentence
         while ($buf =~ /
-            (.*?([\p{Letter}\$\\{}]+)[\.\?!])
+            (.*?( [\p{Letter}\$\\{}]+ | \S*\$ )[\.\?!])
             \s+
             ([\p{Uppercase Letter}\p{Hangul_Syllables}])
             /gx) {
@@ -50,20 +50,27 @@ sub breakLine {
     print sentence($buf), $comment, "\n" if $buf ne "";
     $buf = "";
 }
-for my $line (<>) {
-    chomp $line;
+sub process {
+    my $line = shift;
     if ($line =~ /^\s*%.*/) {
         passthru($line);
-    } elsif ($line =~ /^(.*?)\s*(\\(begin|end|item|\[|\]|\$\$|part|chapter|((sub|)sub|)section|paragraph|label).*)$/) {
-        buffer($1);
-        passthru($2);
+    } elsif ($line =~ /^(.*?)(\s*)
+        \\(begin|end|item|\[|\]|\$\$
+          |part|chapter|((sub|)sub|)section|paragraph
+          |label)
+      /x) {
+        my $texCommand = $3;
+        my $rest = substr $line, length($&);
+        buffer($1); breakLine();
+        print ((length($1) > 0 ? "" : $2) . "\\$texCommand");
         # TODO break line after begin{...} etc?
-        if ($3 eq "begin" or $3 eq "[") {
+        if ($texCommand eq "begin" or $texCommand eq "[") {
             $nesting++;
-        } elsif ($3 eq "end" or $3 eq "]") {
+        } elsif ($texCommand eq "end" or $texCommand eq "]") {
             $nesting--;
             $nesting = 0 if $nesting lt 0; # could be formatting in the middle of things
         }
+        process($rest);
     } else {
         if ($line =~ /^\s*$/) {
             passthru($line);
@@ -76,5 +83,9 @@ for my $line (<>) {
             buffer($line);
         }
     }
+}
+for my $line (<>) {
+    chomp $line;
+    process($line);
 }
 breakLine();
