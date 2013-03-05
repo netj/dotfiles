@@ -75,6 +75,7 @@ fun! SetupAddons()
         let g:mySetColors = g:mySetColorsNormal
         exec 'colorscheme' g:prior_colors_name
       endif
+      " XXX if exists("*Powerline") | call Powerline(winnr(), winnr()) | endif
     endfun
     command! DetectDiffColorScheme call s:DetectDiffColorScheme()
     autocmd FilterWritePost,BufEnter,WinEnter,WinLeave *  DetectDiffColorScheme
@@ -218,6 +219,12 @@ fun! SetupAddons()
     nnoremap <Space>gL :Glog --<CR>
     nnoremap <Space>ge :Gedit<CR>
     nnoremap <Space>gE :Gedit 
+  ActivateAddons git:git://github.com/airblade/vim-gitgutter.git
+    let g:gitgutter_enabled = 1
+    nnoremap <Space><C-g><C-g> :ToggleGitGutter<CR>
+    nnoremap <Space><C-g>g     :ToggleGitGutterLineHighlights<CR>
+    nnoremap ]g :GitGutterNextHunk<CR>
+    nnoremap [g :GitGutterPrevHunk<CR>
   ActivateAddons Gist WebAPI
     let g:gist_clip_command = 'pbcopy'
     let g:gist_open_browser_after_post = 1
