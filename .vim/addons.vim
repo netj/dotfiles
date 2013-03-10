@@ -260,6 +260,7 @@ fun! SetupAddons()
     au BufRead,BufNewFile *.coffee syntax sync fromstart
     " CoffeeScript autocompilation
     "autocmd BufWritePost *.coffee silent CoffeeMake! | cwindow
+  ActivateAddons jade
   ActivateAddons applescript
     au BufRead,BufNewFile *.applescript setfiletype applescript
   ActivateAddons vim-addon-scala
