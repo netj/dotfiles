@@ -2,6 +2,8 @@
 # Author: Jaeho Shin <netj@sparcs.org>
 # Created: 2010-08-07
 
+export SHELL := $(shell which bash)
+
 .PHONY: all
 all: $(shell sed <Makefile -n '/:.*\#\#$$/ s/:.*$$//p')
 
