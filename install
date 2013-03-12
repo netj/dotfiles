@@ -168,6 +168,8 @@ install .tmux.conf
 install .screenrc
 install .toprc
 
+install .curlrc
+
 if has emacs; then
 emacs_d_elisp_Makefile_after() { make -C .emacs.d/elisp; }
 install .emacs
