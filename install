@@ -27,6 +27,7 @@ if [[ $DotfilesRoot != $Home/.dotfiles ]]; then
 else
     dotfilesRel=.dotfiles
 fi
+DotfilesSkipList="$DotfilesRoot/skip"
 install() {
     local dst=$1
     local src=${2:-$dst}
@@ -55,8 +56,12 @@ install() {
         echo "$dst installed"
         run ${n}_after "$@"
     else
-        while read -p "install $dst? [yNq] " -n1; do
-            echo
+        if grep -qF "$dst" "$DotfilesSkipList" &>/dev/null; then
+            echo "$dst skipped"
+            return
+        fi
+        while read -p "install $dst? [yNxq] " -n1; do
+            [ -z "$REPLY" ] || echo
             case "$REPLY" in
                 [Yy]) # yes, install
                     run ${n}_before "$@"
@@ -74,6 +79,12 @@ install() {
                 [Nn]|"") # no, skip
                     break
                     ;;
+                [Xx]|"") # skip for future
+                    echo "$dst" >>"$DotfilesSkipList"
+                    echo "$dst skipped.  To undo, run: rm $DotfilesSkipList"
+                    sleep 1
+                    break
+                    ;;
                 [Qq]) # quit, abort installation
                     exit 2
                     ;;
@@ -87,7 +98,7 @@ shname() {
     local n=$1
     # sanitize name
     n=${n#.}
-    n=${n//[\/. -]/_}
+    n=${n//[^A-Za-z0-9_]/_}
     echo "$n"
 }
 run() { [ "`type -t $1 2>/dev/null`" != function ] || (cd; "$@"); }
