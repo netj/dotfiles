@@ -329,9 +329,9 @@ fun! SetupAddons()
         " Use Skim as our PDF viewer and latexmk to compile
         TCTarget pdf
         let g:Tex_ViewRule_pdf="Skim"
-        " In Skim's preferences, use the following for PDF-TeX Sync Support
-        " Command: /opt/homebrew/bin/mvim
-        " Arguments: $(osascript -e 'tell application "MacVim" to get name of front window' | sed 's/.* - /--servername /') --remote-silent +"%line|exec 'norm zz'|silent!.foldopen!|" +"norm zz" "%file"
+        " In Skim's preferences, use the following for Custom PDF-TeX Sync support
+        " Command: /Users/YOURUSERNAME/.vim/synctex.skim-macvim.sh
+        " Arguments: "%file" %line /path/to/mvim/command
         " Command must be a full path name to mvim unless you put it in a system location such as /usr/bin.
         " Arguments has a fancy applescript to open on the active MacVim window.
         " some key bindings with Command-key
