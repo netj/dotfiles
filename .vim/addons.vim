@@ -85,7 +85,8 @@ fun! SetupAddons()
     set laststatus=2 noshowmode showcmd
     let &guifont = join(map(split(&guifont,","),
           \ 'split(v:val,":")[0]." for Powerline:".split(v:val,":")[1]'),",")
-    "let g:Powerline_symbols = 'fancy'
+    " using colorscheme from localvimrc can screw up powerline, hence below:
+    autocmd VimEnter * doautoall Powerline BufEnter,ColorScheme
   endif
 
 
