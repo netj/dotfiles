@@ -75,7 +75,7 @@ fun! SetupAddons()
         let g:mySetColors = g:mySetColorsNormal
         exec 'colorscheme' g:prior_colors_name
       endif
-      " XXX if exists("*Powerline") | call Powerline(winnr(), winnr()) | endif
+      if exists("*Powerline") | doautoall Powerline BufEnter,ColorScheme | endif
     endfun
     command! DetectDiffColorScheme call s:DetectDiffColorScheme()
     autocmd FilterWritePost,BufEnter,WinEnter,WinLeave *  DetectDiffColorScheme
