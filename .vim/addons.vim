@@ -220,6 +220,11 @@ fun! SetupAddons()
     nnoremap <Space>gL :Glog --<CR>
     nnoremap <Space>ge :Gedit<CR>
     nnoremap <Space>gE :Gedit 
+  ActivateAddons gitv
+    nnoremap <Space>gv :Gitv --all<CR>
+    nnoremap <Space>gV :Gitv! --all<CR>
+    vnoremap <Space>gV :Gitv! --all<CR>
+    set lazyredraw
   ActivateAddons git:git://github.com/airblade/vim-gitgutter.git
     let g:gitgutter_enabled = 1
     nnoremap <Space><C-g><C-g> :ToggleGitGutter<CR>
