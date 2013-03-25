@@ -36,7 +36,7 @@ PowerlineFontPatcher = ../.vim/vim-addons/powerline/font/fontpatcher.py
 EnvyCodeRForPowerline = Envy\ Code\ R\ for\ Powerline.otf
 InstalledFiles += $(FONTSDIR)/$(EnvyCodeRForPowerline)
 $(FONTSDIR)/$(EnvyCodeRForPowerline): $(EnvyCodeRForPowerline)
-	ln -fv "$<" "$@"
+	-ln -fv "$<" "$@"
 $(EnvyCodeRForPowerline): $(FONTSDIR)/Envy\ Code\ R.ttf $(PowerlineFontPatcher)
 	-fontforge -script $(PowerlineFontPatcher) "$<"
 $(PowerlineFontPatcher):
