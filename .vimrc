@@ -188,7 +188,7 @@ nnoremap <Space>*      :nohlsearch<CR>
 " Easy open and close of the QuickFix window
 nnoremap <Space>q      :copen<CR>
 nnoremap <Space>l      :lopen<CR>
-au! BufWinEnter *
+au BufWinEnter *
       \ if &buftype == "quickfix" |
       \   nnoremap <buffer> <silent> q :close<CR>|
       \ endif
@@ -264,6 +264,13 @@ endfor
 if exists("vimpager")
   set timeout timeoutlen=0
 endif
+
+
+" Use a split window for viewing man-pages
+runtime ftplugin/man.vim
+nnoremap K  :Man <C-R>=expand("<cword>")<CR><CR>
+nnoremap gK K
+au FileType man nnoremap <buffer> q <C-w>q
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
