@@ -4,25 +4,25 @@
 
 --------------------------------------------------------------------------------------------------------
 
-on Display(w, h)
-	return {screenSize:{w, h}, baseCoords:{0, 0}}
-end Display
+on Screen(w, h)
+	return {size:{w, h}, origin:{0, 0}, visibleSize:{w, h}, visibleOrigin:{0, 0}}
+end Screen
 
-property macbookDisplay : Display(1680, 1050)
-property syncmaster27inDisplay : Display(1920, 1200)
-property syncmaster30inDisplay : Display(2560, 1600)
-property thunderboltDisplay : Display(2560, 1440)
+property macbookDisplay : Screen(1680, 1050)
+property syncmaster27inDisplay : Screen(1920, 1200)
+property syncmaster30inDisplay : Screen(2560, 1600)
+property thunderboltDisplay : Screen(2560, 1440)
 property detectionTolerance : 100 -- px of alignment error to tolerate
 
 --------------------------------------------------------------------------------------------------------
 
-on use(disp, x, y)
-	return {disp:disp, x:x, y:y}
+on use(screen, x, y)
+	return {screen:screen, x:x, y:y}
 end use
 
 script macbookConfiguration
 	property name : "MacBook"
-	property screens : {horizontal:{use(macbookDisplay, 0, 0)}}
+	property screenLayout : {horizontal:{use(macbookDisplay, 0, 0)}}
 	property mainScreen : macbookDisplay
 	on adapt()
 		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.98, wins:my getLargeEnoughWindows(windows)})
@@ -32,7 +32,7 @@ end script
 script homeConfiguration
 	property name : "Home"
 	-- a SyncMaster 275T is at my home desk
-	property screens : {vertical:{use(syncmaster27inDisplay, 0, 0), use(macbookDisplay, 133, 1200)}}
+	property screenLayout : {vertical:{use(syncmaster27inDisplay, 0, 0), use(macbookDisplay, 133, 1200)}}
 	property mainScreen : syncmaster27inDisplay
 	on adapt()
 		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.95, wins:my getLargeEnoughWindows(windows)})
@@ -42,7 +42,7 @@ end script
 script gatesOfficeConfiguration
 	property name : "Gates Office"
 	-- I have a SyncMaster 305T in my office :)
-	property screens : {horizontal:{use(syncmaster30inDisplay, 0, 0), use(macbookDisplay, 2560, 1315)}}
+	property screenLayout : {horizontal:{use(syncmaster30inDisplay, 0, 0), use(macbookDisplay, 2560, 1315)}}
 	property mainScreen : syncmaster30inDisplay
 	on adapt()
 		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.8, wins:my getLargeEnoughWindows(windows)})
@@ -52,7 +52,7 @@ end script
 script mpkOfficeConfiguration
 	property name : "MPK Office"
 	-- There's an Apple Thunderbolt Display at my workplace
-	property screens : {horizontal:{use(thunderboltDisplay, 0, 0), use(macbookDisplay, 2560, 702)}}
+	property screenLayout : {horizontal:{use(thunderboltDisplay, 0, 0), use(macbookDisplay, 2560, 702)}}
 	property mainScreen : thunderboltDisplay
 	on adapt()
 		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.8, wins:my getLargeEnoughWindows(windows)})
@@ -99,11 +99,10 @@ on run args
 	if args is not {} then log {"* Command-Line arguments: "} & args
 	log "* Detected context: " & currentConfiguration's name
 	log "* Screen size: " & (actualWidth & " x " & actualHeight)
-	set screens to (currentConfiguration's screens & {horizontal:{}, vertical:{}})
 	set screenIndex to 0
-	repeat with screen in screens's horizontal & screens's vertical
-		set {w, h} to screen's disp's screenSize
-		set {x, y} to screen's disp's baseCoords
+	repeat with placement in getAllScreenPlacementIn(currentConfiguration)
+		set {w, h} to placement's screen's visibleSize
+		set {x, y} to placement's screen's visibleOrigin
 		log "*  Screen " & screenIndex & ": " & w & " x " & h & " at (" & x & ", " & y & ")"
 		set screenIndex to screenIndex + 1
 	end repeat
@@ -117,7 +116,7 @@ on run args
 	
 	-- move and resize some apps
 	if my appIsRunning("Mail") then tell application "Mail"
-		my moveAndResize({disp:macbookDisplay, x:0, y:0, w:1532, h:1, wins:windows of message viewers})
+		my moveAndResize({screen:macbookDisplay, x:0, y:0, w:1532, h:1, wins:windows of message viewers})
 		my switchToDesktopNumber(1)
 		activate
 		my keepInAllSpaces(message viewers, numScreens > 1)
@@ -125,22 +124,22 @@ on run args
 	set messagesAppName to "Messages"
 	if (get version of application "Finder") < "10.8" then set messagesAppName to "iChat"
 	if my appIsRunning(messagesAppName) then
-		if my appIsRunning("Mail") then tell application "Mail" to my moveAndResize({disp:macbookDisplay, h:0.9, wins:windows of message viewers})
+		if my appIsRunning("Mail") then tell application "Mail" to my moveAndResize({screen:macbookDisplay, h:0.9, wins:windows of message viewers})
 		tell application messagesAppName
-			my moveAndResize({disp:macbookDisplay, x:0, y:1, h:700, wins:windows})
+			my moveAndResize({screen:macbookDisplay, x:0, y:1, h:700, wins:windows})
 			my keepInAllSpaces(windows, numScreens > 1)
 			try
 				set buddiesWindows to windows whose name is "대화 상대" or name is "Buddies"
-				my moveAndResize({disp:macbookDisplay, x:1, y:0, h:1, wins:buddiesWindows})
+				my moveAndResize({screen:macbookDisplay, x:1, y:0, h:1, wins:buddiesWindows})
 				my keepInAllSpaces(buddiesWindows, yes)
 			end try
 		end tell
 	end if
-	if my appIsRunning("Twitter") then tell application "Twitter" to my moveAndResize({disp:macbookDisplay, x:1, y:0, h:1, wins:windows})
+	if my appIsRunning("Twitter") then tell application "Twitter" to my moveAndResize({screen:macbookDisplay, x:1, y:0, h:1, wins:windows})
 	if my appIsRunning("Adium") then tell application "Adium"
-		if my appIsRunning("Mail") then tell application "Mail" to my moveAndResize({disp:macbookDisplay, h:0.9, wins:windows of message viewers})
-		my moveAndResize({disp:macbookDisplay, x:1, y:0, w:250, h:1, wins:windows})
-		my moveAndResize({disp:macbookDisplay, x:1, y:1, w:0.6, h:0.75, wins:chat windows})
+		if my appIsRunning("Mail") then tell application "Mail" to my moveAndResize({screen:macbookDisplay, h:0.9, wins:windows of message viewers})
+		my moveAndResize({screen:macbookDisplay, x:1, y:0, w:250, h:1, wins:windows})
+		my moveAndResize({screen:macbookDisplay, x:1, y:1, w:0.6, h:0.75, wins:chat windows})
 		my keepInAllSpaces(chat windows, numScreens > 1)
 	end tell
 	
@@ -164,6 +163,11 @@ on useConfiguration(config)
 	set end of configurations to config
 end useConfiguration
 
+to getAllScreenPlacementIn(config)
+	set screenLayout to (config's screenLayout & {horizontal:{}, vertical:{}})
+	return screenLayout's horizontal & screenLayout's vertical
+end getAllScreenPlacementIn
+
 property actualWidth : null
 property actualHeight : null
 
@@ -185,24 +189,27 @@ on determineCurrentConfiguration(args)
 	end if
 
 	-- adjust display properties
-	set screens to (currentConfiguration's screens & {horizontal:{}, vertical:{}})
-	set screens to screens's horizontal & screens's vertical
-	repeat with screen in screens
-		set disp to screen's disp
-		set screenDim to disp's screenSize's first item & "x" & disp's screenSize's second item
+	set screenIndex to 0
+	repeat with placement in getAllScreenPlacementIn(currentConfiguration)
+		set screen to placement's screen
+		set {w, h} to screen's size
+		set screenDim to w & "x" & h
 		set screenNumber to ""
 		try
-			set screenNumber to disp's screenNumber
+			set screenNumber to screen's screenNumber
 		end try
-		set cmd to "~/Library/Scripts/NSScreen.py " & screenDim & " " & screenNumber & " -- Xvisible Yvisible Wvisible Hvisible"
-		set displayInfo to do shell script cmd
+		set cmd to "~/Library/Scripts/NSScreen.py " & screenDim & " " & screenNumber & " -- X Y  Xvisible Yvisible  Wvisible Hvisible"
+		#log cmd
+		set screenInfo to do shell script cmd
 		set delimiter to the text item delimiters
 		set the text item delimiters to ASCII character 13
-		if (count (text items of displayInfo)) = 4 then
-			#log {cmd, text items of displayInfo}
-			set {x,y,w,h} to text items of displayInfo
-			set disp's baseCoords to {x as number, y as number}
-			set disp's screenSize to {w as number, h as number}
+		if (count (text items of screenInfo)) = 6 then
+			#log {cmd, text items of screenInfo}
+			set {x,y, xv,yv, wv,hv} to text items of screenInfo
+			set placement's x to x as number
+			set placement's y to y as number
+			set screen's visibleOrigin to {xv as number, yv as number}
+			set screen's visibleSize to {wv as number, hv as number}
 		end if
 		set the text item delimiters to delimiter
 	end repeat
@@ -211,35 +218,40 @@ on determineCurrentConfiguration(args)
 	return currentConfiguration
 end determineCurrentConfiguration
 
-
 -- check if actual screen size matches config
 on actualScreensMatch(config)
-	set screens to (config's screens) & {horizontal:null, vertical:null}
+	set layout to (config's screenLayout) & {horizontal:null, vertical:null}
 	-- first check actual width with horizontal screen config
-	set hz to screens's horizontal
+	set hz to layout's horizontal
 	if hz is not null then
 		set totalW to 0
 		set totalH to 0
-		repeat with screen in hz
-			set disp to screen's disp
-			set disp's baseCoords to {screen's x, screen's y}
-			set totalW to totalW + (item 1 of disp's screenSize)
-			set newH to (item 2 of disp's screenSize) + (item 2 of disp's baseCoords)
+		repeat with placement in hz
+			set screen to placement's screen
+			set screen's origin to {placement's x, placement's y}
+			set {w,h} to screen's size
+			set {x,y} to screen's origin
+			set totalW to totalW + w
+			set newH to h + y
 			if newH > totalH then set totalH to newH
+			# TODO keep track of minY as well
 		end repeat
 		if abs(totalW - actualWidth) > detectionTolerance or abs(totalH - actualHeight) > detectionTolerance then return false
 	end if
 	-- then check if actual height matches vertical screen config
-	set vt to screens's vertical
+	set vt to layout's vertical
 	if vt is not null then
 		set totalW to 0
 		set totalH to 0
-		repeat with screen in vt
-			set disp to screen's disp
-			set disp's baseCoords to {screen's x, screen's y}
-			set newW to (item 1 of disp's screenSize) + (item 1 of disp's baseCoords)
+		repeat with placement in vt
+			set screen to placement's screen
+			set screen's origin to {placement's x, placement's y}
+			set {w,h} to screen's size
+			set {x,y} to screen's origin
+			set newW to w + x
 			if newW > totalW then set totalW to newW
-			set totalH to totalH + (item 2 of disp's screenSize)
+			# TODO keep track of minX as well
+			set totalH to totalH + h
 		end repeat
 		if abs(totalW - actualWidth) > detectionTolerance or abs(totalH - actualHeight) > detectionTolerance then return false
 	end if
@@ -376,15 +388,21 @@ For x,y,w,h, you can pass:
 *)
 to moveAndResize(args)
 	-- Learned how to augment default values to a record from Nigel Garvey: http://macscripter.net/viewtopic.php?pid=139333#p139333
-	set args to args & {wins:{}, disp:mainScreen, x:null, y:null, w:null, h:null}
+	set args to args & {wins:{}, screen:mainScreen, x:null, y:null, w:null, h:null}
 	set wins to wins of args
-	set displayInfo to disp of args
+	set screen to screen of args
 	set newX to x of args
 	set newY to y of args
 	set newW to w of args
 	set newH to h of args
-	set {screenWidth, screenHeight} to displayInfo's screenSize
-	set {offsetX, offsetY} to displayInfo's baseCoords
+	set {screenWidth, screenHeight} to screen's size
+	try
+		set {screenWidth, screenHeight} to screen's visibleSize
+	end try
+	set {offsetX, offsetY} to screen's origin
+	try
+		set {offsetX, offsetY} to screen's visibleOrigin
+	end try
 	repeat with win in wins
 		-- see where window win is and how large it is
 		try
