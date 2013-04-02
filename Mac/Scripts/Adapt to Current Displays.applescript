@@ -482,13 +482,57 @@ end keepInAllSpaces
 
 
 -- switchToDesktopNumber -- jumps to the desktop number
--- This requires key mappings of ⌃⌥1, ⌃⌥2, ..., ⌃⌥0 from System Preferences
 on switchToDesktopNumber(num)
-	-- key codes for 1 thru 9, and 0
-	log "switching to desktop " & num
-	set keyCodeMapping to {18, 19, 20, 21, 23, 22, 26, 28, 25, 29}
-	set k to item num of keyCodeMapping
-	tell application "System Events" to key code k using {control down, option down}
+	-- find key code from AppleSymbolicHotKeys for switching to Space 1 thru 9
+	set symbolicKeyForSwitchingToSpace1 to 118
+	try
+		# See: http://hintsforums.macworld.com/showthread.php?t=114785
+		# See: http://krypted.com/mac-os-x/defaults-symbolichotkeys/
+		tell application "System Events"
+			# See: http://www.j-schell.de/node/316
+			set plist to property list file "~/Library/Preferences/com.apple.symbolichotkeys.plist"
+			set AppleSymbolicHotKeys to plist's property list item "AppleSymbolicHotKeys"
+			set symkeyName to (symbolicKeyForSwitchingToSpace1 + num-1) as string
+			set symkey to AppleSymbolicHotKeys's property list item symkeyName
+			set symkeyValue to symkey's property list item "value"
+			if (symkey's property list item "enabled"'s value) and (symkeyValue's property list item "type"'s value) is "standard" then
+				try
+					set {ascii, code, m} to symkeyValue's property list item "parameters"'s value
+					if not 0 = my BWAND(m, 2^17) then key down shift
+					if not 0 = my BWAND(m, 2^18) then key down control
+					if not 0 = my BWAND(m, 2^19) then key down option
+					if not 0 = my BWAND(m, 2^20) then key down command
+					tell me to log "switching to desktop " & num
+					key code code
+				on error err
+					tell me to log "Error: cannot switch to desktop " & num & ": " & err
+				end try
+				key up command
+				key up option
+				key up control
+				key up shift
+				return true
+			end if
+		end tell
+	end try
+	tell me to log "Error: no key bound for switching to desktop " & num
 end switchToDesktopNumber
+
+# See: https://gist.github.com/bassx/2227137
+(* __int1 : integer
+ * __int2 : integer
+ * Integers are from 0 till 2 ^ 31 - 1. When integers become greater than 2 ^ 31 then they will become a real and the handler wont't work.
+ *)
+on BWAND(__int1, __int2)
+	set theResult to 0
+	repeat with bitOffset from 30 to 0 by -1
+		if __int1 div (2 ^ bitOffset) = 1 and __int2 div (2 ^ bitOffset) = 1 then
+			set theResult to theResult + 2 ^ bitOffset
+		end if
+		set __int1 to __int1 mod (2 ^ bitOffset)
+		set __int2 to __int2 mod (2 ^ bitOffset)
+	end repeat
+	return theResult as integer
+end BWAND
 
 # vim:ft=applescript:sw=4:ts=4:sts=4:noet
