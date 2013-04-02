@@ -22,7 +22,7 @@ end use
 
 script macbookConfiguration
 	property name : "MacBook"
-	property screenLayout : {horizontal:{use(macbookDisplay, 0, 0)}}
+	property screenLayout : {use(macbookDisplay, 0, 0)}
 	property mainScreen : macbookDisplay
 	on adapt()
 		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.98, wins:my getLargeEnoughWindows(windows)})
@@ -32,7 +32,7 @@ end script
 script homeConfiguration
 	property name : "Home"
 	-- a SyncMaster 275T is at my home desk
-	property screenLayout : {vertical:{use(syncmaster27inDisplay, 0, 0), use(macbookDisplay, 133, 1200)}}
+	property screenLayout : {use(syncmaster27inDisplay, 0, 0), use(macbookDisplay, 133, 1200)}
 	property mainScreen : syncmaster27inDisplay
 	on adapt()
 		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.95, wins:my getLargeEnoughWindows(windows)})
@@ -42,7 +42,7 @@ end script
 script gatesOfficeConfiguration
 	property name : "Gates Office"
 	-- I have a SyncMaster 305T in my office :)
-	property screenLayout : {horizontal:{use(syncmaster30inDisplay, 0, 0), use(macbookDisplay, 2560, 1315)}}
+	property screenLayout : {use(syncmaster30inDisplay, 0, 0), use(macbookDisplay, 2560, 1315)}
 	property mainScreen : syncmaster30inDisplay
 	on adapt()
 		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.8, wins:my getLargeEnoughWindows(windows)})
@@ -52,7 +52,7 @@ end script
 script mpkOfficeConfiguration
 	property name : "MPK Office"
 	-- There's an Apple Thunderbolt Display at my workplace
-	property screenLayout : {horizontal:{use(thunderboltDisplay, 0, 0), use(macbookDisplay, 2560, 702)}}
+	property screenLayout : {use(thunderboltDisplay, 0, 0), use(macbookDisplay, 2560, 702)}
 	property mainScreen : thunderboltDisplay
 	on adapt()
 		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.8, wins:my getLargeEnoughWindows(windows)})
@@ -96,14 +96,15 @@ on run args
 	useConfiguration(gatesOfficeConfiguration)
 	useConfiguration(mpkOfficeConfiguration)
 	determineCurrentConfiguration(args)
+
 	if args is not {} then log {"* Command-Line arguments: "} & args
 	log "* Detected context: " & currentConfiguration's name
 	log "* Screen size: " & (actualWidth & " x " & actualHeight)
 	set screenIndex to 0
-	repeat with placement in getAllScreenPlacementIn(currentConfiguration)
+	repeat with placement in currentConfiguration's screenLayout
 		set {w, h} to placement's screen's visibleSize
 		set {x, y} to placement's screen's visibleOrigin
-		log "*  Screen " & screenIndex & ": " & w & " x " & h & " at (" & x & ", " & y & ")"
+		log "  * Screen " & screenIndex & ": " & w & " x " & h & " at (" & x & ", " & y & ")"
 		set screenIndex to screenIndex + 1
 	end repeat
 	set numScreens to screenIndex
@@ -163,11 +164,6 @@ on useConfiguration(config)
 	set end of configurations to config
 end useConfiguration
 
-to getAllScreenPlacementIn(config)
-	set screenLayout to (config's screenLayout & {horizontal:{}, vertical:{}})
-	return screenLayout's horizontal & screenLayout's vertical
-end getAllScreenPlacementIn
-
 property actualWidth : null
 property actualHeight : null
 
@@ -190,7 +186,7 @@ on determineCurrentConfiguration(args)
 
 	-- adjust display properties
 	set screenIndex to 0
-	repeat with placement in getAllScreenPlacementIn(currentConfiguration)
+	repeat with placement in currentConfiguration's screenLayout
 		set screen to placement's screen
 		set {w, h} to screen's size
 		set screenDim to w & "x" & h
@@ -212,6 +208,7 @@ on determineCurrentConfiguration(args)
 			set screen's visibleSize to {wv as number, hv as number}
 		end if
 		set the text item delimiters to delimiter
+		set screenIndex to screenIndex + 1
 	end repeat
 	
 	set mainScreen to currentConfiguration's mainScreen
@@ -220,43 +217,25 @@ end determineCurrentConfiguration
 
 -- check if actual screen size matches config
 on actualScreensMatch(config)
-	set layout to (config's screenLayout) & {horizontal:null, vertical:null}
-	-- first check actual width with horizontal screen config
-	set hz to layout's horizontal
-	if hz is not null then
-		set totalW to 0
-		set totalH to 0
-		repeat with placement in hz
-			set screen to placement's screen
-			set screen's origin to {placement's x, placement's y}
-			set {w,h} to screen's size
-			set {x,y} to screen's origin
-			set totalW to totalW + w
-			set newH to h + y
-			if newH > totalH then set totalH to newH
-			# TODO keep track of minY as well
-		end repeat
-		if abs(totalW - actualWidth) > detectionTolerance or abs(totalH - actualHeight) > detectionTolerance then return false
-	end if
-	-- then check if actual height matches vertical screen config
-	set vt to layout's vertical
-	if vt is not null then
-		set totalW to 0
-		set totalH to 0
-		repeat with placement in vt
-			set screen to placement's screen
-			set screen's origin to {placement's x, placement's y}
-			set {w,h} to screen's size
-			set {x,y} to screen's origin
-			set newW to w + x
-			if newW > totalW then set totalW to newW
-			# TODO keep track of minX as well
-			set totalH to totalH + h
-		end repeat
-		if abs(totalW - actualWidth) > detectionTolerance or abs(totalH - actualHeight) > detectionTolerance then return false
-	end if
-	return true
+	set {minX,minY, maxX,maxY} to computeBounds(config's screenLayout)
+	set {w,h} to {maxX - minX, maxY - minY}
+	return abs(w - actualWidth) <= detectionTolerance and abs(h - actualHeight) <= detectionTolerance
 end actualScreensMatch
+
+on computeBounds(layout)
+	set {minX,minY, maxX,maxY} to {0,0, 0,0}
+	repeat with placement in layout
+		set screen to placement's screen
+		set screen's origin to {placement's x, placement's y}
+		set {w,h} to screen's size
+		set {x,y} to screen's origin
+		if minX > x     then set minX to x
+		if minY > y     then set minY to y
+		if maxX < x + w then set maxX to x + w
+		if maxY < y + h then set maxY to y + h
+	end repeat
+	return {minX,minY, maxX,maxY}
+end computeBounds
 
 on abs(v)
 	if v < 0 then return -v
