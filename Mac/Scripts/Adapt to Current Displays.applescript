@@ -23,7 +23,6 @@ end use
 script macbookConfiguration
 	property name : "MacBook"
 	property screenLayout : {use(macbookDisplay, 0, 0)}
-	property mainScreen : macbookDisplay
 	on adapt()
 		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.98, wins:my getLargeEnoughWindows(windows)})
 	end adapt
@@ -33,7 +32,6 @@ script homeConfiguration
 	property name : "Home"
 	-- a SyncMaster 275T is at my home desk
 	property screenLayout : {use(syncmaster27inDisplay, 0, 0), use(macbookDisplay, 133, 1200)}
-	property mainScreen : syncmaster27inDisplay
 	on adapt()
 		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.95, wins:my getLargeEnoughWindows(windows)})
 	end adapt
@@ -43,7 +41,6 @@ script gatesOfficeConfiguration
 	property name : "Gates Office"
 	-- I have a SyncMaster 305T in my office :)
 	property screenLayout : {use(syncmaster30inDisplay, 0, 0), use(macbookDisplay, 2560, 1315)}
-	property mainScreen : syncmaster30inDisplay
 	on adapt()
 		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.8, wins:my getLargeEnoughWindows(windows)})
 	end adapt
@@ -53,7 +50,6 @@ script mpkOfficeConfiguration
 	property name : "MPK Office"
 	-- There's an Apple Thunderbolt Display at my workplace
 	property screenLayout : {use(thunderboltDisplay, 0, 0), use(macbookDisplay, 2560, 702)}
-	property mainScreen : thunderboltDisplay
 	on adapt()
 		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.8, wins:my getLargeEnoughWindows(windows)})
 	end adapt
@@ -96,7 +92,7 @@ on run args
 	useConfiguration(gatesOfficeConfiguration)
 	useConfiguration(mpkOfficeConfiguration)
 	determineCurrentConfiguration(args)
-
+	
 	if args is not {} then log {"* Command-Line arguments: "} & args
 	log "* Detected context: " & currentConfiguration's name
 	log "* Screen size: " & (actualWidth & " x " & actualHeight)
@@ -183,8 +179,9 @@ on determineCurrentConfiguration(args)
 			end if
 		end repeat
 	end if
-
+	
 	-- adjust display properties
+	set NSScreenWorked to false
 	set screenIndex to 0
 	repeat with placement in currentConfiguration's screenLayout
 		set screen to placement's screen
@@ -206,12 +203,17 @@ on determineCurrentConfiguration(args)
 			set placement's y to y as number
 			set screen's visibleOrigin to {xv as number, yv as number}
 			set screen's visibleSize to {wv as number, hv as number}
+			#set NSScreenWorked to true
 		end if
 		set the text item delimiters to delimiter
 		set screenIndex to screenIndex + 1
 	end repeat
 	
-	set mainScreen to currentConfiguration's mainScreen
+	set mainScreen to first item's screen of currentConfiguration's screenLayout
+	
+	# use a workaround if NSScreen.py didn't work
+	if not NSScreenWorked then adjustScreenWithDock(mainScreen)
+	
 	return currentConfiguration
 end determineCurrentConfiguration
 
@@ -241,6 +243,27 @@ on abs(v)
 	if v < 0 then return -v
 	return v
 end abs
+
+-- How to take Dock's size and position into account
+property menubarHeight : 22 -- will probably stay constant, I guess
+to adjustScreenWithDock(screen)
+	tell application "System Events" to tell process "Dock"
+		set {dockX, dockY} to position in list 1
+		set {dockW, dockH} to size in list 1
+	end tell
+	set {x,y} to screen's origin
+	set {w,h} to screen's size
+	if dockX = 0 then -- dock is at left
+		set screen's visibleOrigin to {dockW, menubarHeight}
+		set screen's visibleSize to {w -dockW, h -menubarHeight}
+	else if dockY + dockH ≥ item 2 of screen's screenSize then
+		set screen's visibleOrigin to {0, menubarHeight}
+		set screen's visibleSize to {w, h -menubarHeight -dockH}
+	else -- dock is at right
+		set screen's visibleOrigin to {0, menubarHeight}
+		set screen's visibleSize to {w -dockW, h -menubarHeight}
+	end if
+end adjustScreenWithDock
 
 
 -- How to check if application is running
