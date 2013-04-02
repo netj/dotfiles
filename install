@@ -226,7 +226,7 @@ case $(uname) in Darwin)
         [ -e "$s" ] || continue
         installscpt "$s"
     done
-    for s in Mac/Scripts/*.sh; do
+    for s in Mac/Scripts/*.{sh,py}; do
         [ -e "$s" ] || continue
         install Library/"${s#Mac/}" "$s" true true
     done

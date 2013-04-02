@@ -5,13 +5,14 @@
 --------------------------------------------------------------------------------------------------------
 
 on Display(w, h)
-	return {screenSize:{w, h}, baseCoords:{0, 0}, screenMargin:{0, 0}}
+	return {screenSize:{w, h}, baseCoords:{0, 0}}
 end Display
 
 property macbookDisplay : Display(1680, 1050)
 property syncmaster27inDisplay : Display(1920, 1200)
 property syncmaster30inDisplay : Display(2560, 1600)
 property thunderboltDisplay : Display(2560, 1440)
+property detectionTolerance : 100 -- px of alignment error to tolerate
 
 --------------------------------------------------------------------------------------------------------
 
@@ -22,7 +23,7 @@ end use
 script macbookConfiguration
 	property name : "MacBook"
 	property screens : {horizontal:{use(macbookDisplay, 0, 0)}}
-	property defaultScreen : macbookDisplay
+	property mainScreen : macbookDisplay
 	on adapt()
 		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.98, wins:my getLargeEnoughWindows(windows)})
 	end adapt
@@ -32,7 +33,7 @@ script homeConfiguration
 	property name : "Home"
 	-- a SyncMaster 275T is at my home desk
 	property screens : {vertical:{use(syncmaster27inDisplay, 0, 0), use(macbookDisplay, 133, 1200)}}
-	property defaultScreen : syncmaster27inDisplay
+	property mainScreen : syncmaster27inDisplay
 	on adapt()
 		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.95, wins:my getLargeEnoughWindows(windows)})
 	end adapt
@@ -42,7 +43,7 @@ script gatesOfficeConfiguration
 	property name : "Gates Office"
 	-- I have a SyncMaster 305T in my office :)
 	property screens : {horizontal:{use(syncmaster30inDisplay, 0, 0), use(macbookDisplay, 2560, 1315)}}
-	property defaultScreen : syncmaster30inDisplay
+	property mainScreen : syncmaster30inDisplay
 	on adapt()
 		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.8, wins:my getLargeEnoughWindows(windows)})
 	end adapt
@@ -52,7 +53,7 @@ script mpkOfficeConfiguration
 	property name : "MPK Office"
 	-- There's an Apple Thunderbolt Display at my workplace
 	property screens : {horizontal:{use(thunderboltDisplay, 0, 0), use(macbookDisplay, 2560, 702)}}
-	property defaultScreen : thunderboltDisplay
+	property mainScreen : thunderboltDisplay
 	on adapt()
 		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.8, wins:my getLargeEnoughWindows(windows)})
 	end adapt
@@ -60,7 +61,7 @@ end script
 
 property configurations : {}
 property currentConfiguration : macbookConfiguration
-property defaultDisplay : macbookDisplay
+property mainScreen : macbookDisplay
 
 --------------------------------------------------------------------------------------------------------
 
@@ -96,10 +97,17 @@ on run args
 	useConfiguration(mpkOfficeConfiguration)
 	determineCurrentConfiguration(args)
 	if args is not {} then log {"* Command-Line arguments: "} & args
-	log "* Screen size: " & (actualWidth & " x " & actualHeight)
 	log "* Detected context: " & currentConfiguration's name
+	log "* Screen size: " & (actualWidth & " x " & actualHeight)
 	set screens to (currentConfiguration's screens & {horizontal:{}, vertical:{}})
-	set numScreens to (screens's horizontal's length) + (screens's vertical's length)
+	set screenIndex to 0
+	repeat with screen in screens's horizontal & screens's vertical
+		set {w, h} to screen's disp's screenSize
+		set {x, y} to screen's disp's baseCoords
+		log "*  Screen " & screenIndex & ": " & w & " x " & h & " at (" & x & ", " & y & ")"
+		set screenIndex to screenIndex + 1
+	end repeat
+	set numScreens to screenIndex
 	
 	-- move and resize some apps (without knowing the environment)
 	if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({w:1321, wins:my getLargeEnoughWindows(windows)})
@@ -175,17 +183,36 @@ on determineCurrentConfiguration(args)
 			end if
 		end repeat
 	end if
+
+	-- adjust display properties
+	set screens to (currentConfiguration's screens & {horizontal:{}, vertical:{}})
+	set screens to screens's horizontal & screens's vertical
+	repeat with screen in screens
+		set disp to screen's disp
+		set screenDim to disp's screenSize's first item & "x" & disp's screenSize's second item
+		set screenNumber to ""
+		try
+			set screenNumber to disp's screenNumber
+		end try
+		set cmd to "~/Library/Scripts/NSScreen.py " & screenDim & " " & screenNumber & " -- Xvisible Yvisible Wvisible Hvisible"
+		set displayInfo to do shell script cmd
+		set delimiter to the text item delimiters
+		set the text item delimiters to ASCII character 13
+		if (count (text items of displayInfo)) = 4 then
+			#log {cmd, text items of displayInfo}
+			set {x,y,w,h} to text items of displayInfo
+			set disp's baseCoords to {x as number, y as number}
+			set disp's screenSize to {w as number, h as number}
+		end if
+		set the text item delimiters to delimiter
+	end repeat
 	
-	-- adjust other properties
-	set defaultDisplay to currentConfiguration's defaultScreen
-	adjustDisplayCoordinatesWithDock(defaultDisplay)
-	
+	set mainScreen to currentConfiguration's mainScreen
 	return currentConfiguration
 end determineCurrentConfiguration
 
 
 -- check if actual screen size matches config
-property detectionTolerance : 10 -- px of alignment error to tolerate
 on actualScreensMatch(config)
 	set screens to (config's screens) & {horizontal:null, vertical:null}
 	-- first check actual width with horizontal screen config
@@ -196,7 +223,6 @@ on actualScreensMatch(config)
 		repeat with screen in hz
 			set disp to screen's disp
 			set disp's baseCoords to {screen's x, screen's y}
-			set disp's screenMargin to {2, 2}
 			set totalW to totalW + (item 1 of disp's screenSize)
 			set newH to (item 2 of disp's screenSize) + (item 2 of disp's baseCoords)
 			if newH > totalH then set totalH to newH
@@ -211,7 +237,6 @@ on actualScreensMatch(config)
 		repeat with screen in vt
 			set disp to screen's disp
 			set disp's baseCoords to {screen's x, screen's y}
-			set disp's screenMargin to {2, 2}
 			set newW to (item 1 of disp's screenSize) + (item 1 of disp's baseCoords)
 			if newW > totalW then set totalW to newW
 			set totalH to totalH + (item 2 of disp's screenSize)
@@ -225,25 +250,6 @@ on abs(v)
 	if v < 0 then return -v
 	return v
 end abs
-
--- How to take Dock's size and position into account
-property menubarHeight : 22 -- will probably stay constant, I guess
-to adjustDisplayCoordinatesWithDock(displayInfo)
-	tell application "System Events" to tell process "Dock"
-		set {dockX, dockY} to position in list 1
-		set {dockW, dockH} to size in list 1
-	end tell
-	if dockX = 0 then -- dock is at left
-		set displayInfo's baseCoords to {dockW, menubarHeight}
-		set displayInfo's screenMargin to displayInfo's baseCoords
-	else if dockY + dockH ≥ item 2 of displayInfo's screenSize then
-		set displayInfo's baseCoords to {0, menubarHeight}
-		set displayInfo's screenMargin to {0, menubarHeight + dockH}
-	else -- dock is at right
-		set displayInfo's baseCoords to {0, menubarHeight}
-		set displayInfo's screenMargin to {dockW, menubarHeight}
-	end if
-end adjustDisplayCoordinatesWithDock
 
 
 -- How to check if application is running
@@ -370,7 +376,7 @@ For x,y,w,h, you can pass:
 *)
 to moveAndResize(args)
 	-- Learned how to augment default values to a record from Nigel Garvey: http://macscripter.net/viewtopic.php?pid=139333#p139333
-	set args to args & {wins:{}, disp:defaultDisplay, x:null, y:null, w:null, h:null}
+	set args to args & {wins:{}, disp:mainScreen, x:null, y:null, w:null, h:null}
 	set wins to wins of args
 	set displayInfo to disp of args
 	set newX to x of args
@@ -378,7 +384,6 @@ to moveAndResize(args)
 	set newW to w of args
 	set newH to h of args
 	set {screenWidth, screenHeight} to displayInfo's screenSize
-	set {marginH, marginV} to displayInfo's screenMargin
 	set {offsetX, offsetY} to displayInfo's baseCoords
 	repeat with win in wins
 		-- see where window win is and how large it is
@@ -391,8 +396,8 @@ to moveAndResize(args)
 				set {origW, origH} to get size of win
 			end tell
 		end try
-		set effWidth to screenWidth - marginH
-		set effHeight to screenHeight - marginV
+		set effWidth to screenWidth
+		set effHeight to screenHeight
 		
 		-- first, figure out width and height
 		set _w to origW
