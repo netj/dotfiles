@@ -170,6 +170,7 @@ ModeToggleKey cursorline      :
 ModeToggleKey cursorcolumn    ,
 ModeToggleKey diff            <C-d>
 ModeToggleKey foldenable      <C-z>
+ModeToggleKey hlsearch        *
 ModeToggleKey list            <Space>
 ModeToggleKey list            <C-Space>
 ModeToggleKey list            <C-@>
