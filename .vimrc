@@ -131,21 +131,34 @@ endif
 map Q gq
 
 " quickly display mappings of <C-\>, <Space>, <Leader>
-nnoremap <C-\><C-l>     :map <C-\><CR>
 nnoremap <Space><C-l>   :map <S<BS>Space><CR>
 nnoremap <Leader><C-l>  :map <L<BS>Leader><CR>
 
 
 " Mode Toggler Keys
-fun! ModeToggleKey(mode, lhs)
-  for [prefix,cmd] in [['<C-\>','setlocal'], ['<C-\><C-G>', 'set']]
-    exec 'nnoremap '.prefix.a:lhs.' :'.cmd.' '.a:mode.'!<CR>'
-          \                       .':'.cmd.' '.a:mode.'?<CR>'
-    exec 'imap     '.prefix.a:lhs.' <C-\><C-N>'.prefix.a:lhs.'gi'
-    exec 'vmap     '.prefix.a:lhs.' <C-\><C-N>'.prefix.a:lhs.'gv'
-  endfor
+let s:modeToggleKeys = {}
+fun! ModeToggleKey(...)
+  let fmt = '%-20s <C-\>%s'
+  if a:0 == 2
+    let otn = a:1
+    let lhs = a:2
+    let s:modeToggleKeys[otn] = lhs
+    for [prefix,cmd] in [['<C-\>','setlocal'], ['<C-\><C-G>', 'set']]
+      exec 'nnoremap '.prefix.lhs.' :'.cmd.' '.otn.'!<CR>'
+            \                     .':'.cmd.' '.otn.'?<CR>'
+      exec 'imap     '.prefix.lhs.' <C-\><C-N>'.prefix.lhs.'gi'
+      exec 'vmap     '.prefix.lhs.' <C-\><C-N>'.prefix.lhs.'gv'
+    endfor
+  elseif a:0 == 1
+    echo printf(fmt, a:1, s:modeToggleKeys[a:1])
+  else
+    for otn in sort(keys(s:modeToggleKeys))
+      echo printf(fmt, otn, s:modeToggleKeys[otn])
+    endfor
+  endif
 endfun
-command! -nargs=+ -complete=option ModeToggleKey  :call ModeToggleKey(<f-args>)
+command! -nargs=* -complete=option ModeToggleKey  :call ModeToggleKey(<f-args>)
+nnoremap <C-\><C-l>     :ModeToggleKey<CR>
 
 " toggle options with <C-\> followed by the individual key
 ModeToggleKey autoread        <C-e>
