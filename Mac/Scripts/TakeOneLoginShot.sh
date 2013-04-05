@@ -10,17 +10,25 @@
 #    brew install exiftool
 #    mkdir -p /Applications/bin
 # 
-#    # either LocateMe
+# Either LocateMe:
+# 
 #    curl -RLo- http://downloads.sourceforge.net/project/iharder/locateme/LocateMe-v0.2.tgz |
 #    tar xf - --strip-components=1 -C /Applications/bin/ '*/LocateMe'
 # 
-#    # or, whereami
+# Or, whereami:
+# 
 #    open http://d.pr/f/C2qV/download
 #    ditto -xk whereami*.zip .
 #    mv whereami /Applications/bin/
 # 
 # 
-# Then, they need to be installed (symlink'ed) in /usr/bin/ to use it from GUI.
+# Launch it with watch-syslog.sh from cron:
+# 
+#    */23 *   * * *   exec watch-syslog.sh 'loginwindow\[[0-9]\+\]:'  ~/.loginshots.pid  sh -c 'TakeOneLoginShot.sh' &>/dev/null #>>~/tmp/loginshots.log 2>&1
+#    @reboot          exec watch-syslog.sh 'loginwindow\[[0-9]\+\]:'  ~/.loginshots.pid  sh -c 'TakeOneLoginShot.sh' &>/dev/null #>>~/tmp/loginshots.log 2>&1
+# 
+# 
+# They need to be installed (symlink'ed) in /usr/bin/ to be used from GUI.
 # 
 #    sudo ln -sfn $(brew --prefix)/bin/imagesnap   /usr/bin/
 #    sudo ln -sfn $(brew --prefix)/bin/geolocation /usr/bin/
