@@ -1,9 +1,31 @@
 #!/usr/bin/env bash
 # Takes a photo with Mac's built-in camera silently under ~/.loginshots/
 # 
-# Requires imagesnap, which can be installed with Homebrew one-liner:
+# Requires several packages, which can be installed with:
 # 
 #    brew install imagesnap
+# 
+# To also record geolocation, install these as well:
+# 
+#    brew install exiftool
+#    mkdir -p /Applications/bin
+# 
+#    # either LocateMe
+#    curl -RLo- http://downloads.sourceforge.net/project/iharder/locateme/LocateMe-v0.2.tgz |
+#    tar xf - --strip-components=1 -C /Applications/bin/ '*/LocateMe'
+# 
+#    # or, whereami
+#    open http://d.pr/f/C2qV/download
+#    ditto -xk whereami*.zip .
+#    mv whereami /Applications/bin/
+# 
+# 
+# Then, they need to be installed (symlink'ed) in /usr/bin/ to use it from GUI.
+# 
+#    sudo ln -sfn $(brew --prefix)/bin/imagesnap   /usr/bin/
+#    sudo ln -sfn $(brew --prefix)/bin/geolocation /usr/bin/
+#         ln -sfn    /Applications/bin/LocateMe    /usr/bin/
+#         ln -sfn    /Applications/bin/whereami    /usr/bin/
 # 
 #
 # Author: Jaeho Shin <netj@sparcs.org>
@@ -53,6 +75,28 @@ fi
 
 # and compress
 sips -s format jpeg -s formatOptions $JPEGQuality "$filename"
+
+# and record geolocation
+# See: http://apple.stackexchange.com/questions/60152/is-there-a-way-to-access-a-macs-geolocation-from-terminal-mountain-lion
+# See: http://scribblesandsnaps.com/2011/11/23/easy-geotagging-with-exiftool/
+# See: http://www.sno.phy.queensu.ca/~phil/exiftool/TagNames/GPS.html
+if eval $(
+    set -o pipefail
+    if type LocateMe &>/dev/null; then
+        LocateMe -f 'GPSLatitude={LAT}; GPSLongitude={LON}; GPSAltitude={ALT}'
+    elif type whereami &>/dev/null; then
+        whereami | grep 'Longitude\|Latitude' | sed 's/^/GPS/; s/: /=/'
+    fi | tee /dev/stderr
+); then
+    GPSLatitudeRef=N GPSLongitudeRef=E
+    case $GPSLatitude  in -*) GPSLatitudeRef=S  GPSLatitude=${GPSLatitude#-}   ;; esac
+    case $GPSLongitude in -*) GPSLongitudeRef=W GPSLongitude=${GPSLongitude#-} ;; esac
+    exiftool -GPSLatitudeRef=$GPSLatitudeRef   -GPSLatitude=$GPSLatitude   \
+             -GPSLongitudeRef=$GPSLongitudeRef -GPSLongitude=$GPSLongitude \
+             ${GPSAltitude:+-GPSAltitude=$GPSAltitude} \
+        "$filename"
+    rm -f "$filename"_original
+fi
 
 # update the latest pointer
 ln -sfn "${filename#$LoginShotsFolder/}" "$latest"
