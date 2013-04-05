@@ -47,7 +47,10 @@ set -eu
     ${JPEGQuality:=20} \
     #
 
-[ -d ~/.loginshots ] || ln -sfn ~/Dropbox/Photos/LoginShots ~/.loginshots
+[ -d ~/.loginshots ] || {
+    ln -sfn ~/Dropbox/Photos/LoginShots ~/.loginshots
+    mkdir -p $(readlink ~/.loginshots)
+}
 LoginShotsFolder=~/.loginshots
 
 event=${*:-}
