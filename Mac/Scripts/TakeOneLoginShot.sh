@@ -94,6 +94,8 @@ sips -s format jpeg -s formatOptions $JPEGQuality "$filename"
 if eval $(
     set -o pipefail
     if type LocateMe &>/dev/null; then
+        # XXX LocateMe on OS X 10.8 does not update location itself, so using whereami before it
+        ! type whereami &>/dev/null || whereami >&2
         LocateMe -f 'GPSLatitude={LAT}; GPSLongitude={LON}; GPSAltitude={ALT}'
     elif type whereami &>/dev/null; then
         whereami | grep 'Longitude\|Latitude' | sed 's/^/GPS/; s/: /=/'
