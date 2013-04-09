@@ -1,5 +1,5 @@
 #!/usr/bin/osascript
-# Toggle Meeting Mode by switching on/off some apps:
+# Toggle Busy Mode by switching on/off some apps:
 #  e.g., Notification Center, Growl, Messages, and Caffeine
 # 
 # Author: Jaeho Shin <netj@cs.stanford.edu>
@@ -28,7 +28,7 @@ on run
 				tell application "Messages"
 					if isDedicated then
 						set status to away
-						set status message to "in a meeting… 👥⌛🔕"
+						set status message to "busy… ⌛🔕💭👥"
 					else
 						log in every service
 						set status to available
