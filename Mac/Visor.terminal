@@ -173,7 +173,7 @@
 	<data>
 	YnBsaXN0MDDUAQIDBAUGGBlYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3AS
 	AAGGoKQHCBESVSRudWxs1AkKCwwNDg8QVk5TU2l6ZVhOU2ZGbGFnc1ZOU05hbWVWJGNs
-	YXNzI0AwAAAAAAAAEBCAAoADWUVudnlDb2RlUtITFBUWWiRjbGFzc25hbWVYJGNsYXNz
+	YXNzI0AsAAAAAAAAEBCAAoADWUVudnlDb2RlUtITFBUWWiRjbGFzc25hbWVYJGNsYXNz
 	ZXNWTlNGb250ohUXWE5TT2JqZWN0XxAPTlNLZXllZEFyY2hpdmVy0RobVHJvb3SAAQgR
 	GiMtMjc8QktSW2JpcnR2eIKHkpuipa7Aw8gAAAAAAAABAQAAAAAAAAAcAAAAAAAAAAAA
 	AAAAAAAAyg==
@@ -285,6 +285,8 @@
 	BAtzdHJlYW10eXBlZIHoA4QBQISEhAdOU0NvbG9yAISECE5TT2JqZWN0AIWEAWMBhARm
 	ZmZmAQGDzcxMPgGG
 	</data>
+	<key>columnCount</key>
+	<integer>132</integer>
 	<key>cyanColour</key>
 	<data>
 	BAtzdHJlYW10eXBlZIHoA4QBQISEhAdOU0NvbG9yAISECE5TT2JqZWN0AIWEAWMChARm
@@ -375,7 +377,7 @@
 	ZmZmg83MTD+DzcxMPgABhg==
 	</data>
 	<key>rowCount</key>
-	<integer>40</integer>
+	<integer>44</integer>
 	<key>shellExitAction</key>
 	<integer>0</integer>
 	<key>type</key>
