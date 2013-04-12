@@ -25,14 +25,14 @@ help:
 	 echo "  make$(M) disable C='$$c'"; \
 	 done
 
-config: Makefile config.enabled/*
+config: Makefile config.enabled config.enabled/*
 	# Generating ~/.ssh/config
 	@ \
 { \
   echo "# Factorized ssh config"; \
   echo "# Generated: $$(date +%FT%T%:z)"; \
   echo; \
-  cat $(filter-out Makefile,$^) | \
+  cat $(filter-out Makefile config.enabled,$^) | \
   grep -v '^#[[:space:]]*vim:'; \
 } >$@.tmp; [ -e $@ ] && mv -f $@ $@~; mv -f $@.tmp $@
 
