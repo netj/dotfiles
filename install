@@ -4,8 +4,8 @@
 # Created: 2006-05-21
 set -eu
 
-DotfilesRoot=$(cd "$(dirname "$0")" >/dev/null; pwd)
-Home=$(cd >/dev/null; pwd)
+DotfilesRoot=$(cd "$(dirname "$0")" >/dev/null; pwd -P)
+Home=$(cd >/dev/null; pwd -P)
 
 ### some vocabularies first ###################################################
 
@@ -40,6 +40,8 @@ install() {
         */*) # need relative path to DotfilesRoot if path has depth
         local dd=$(dirname "$dst")
         mkdir -p ~/"$dd"
+        dd=$(cd ~/"$dd" >/dev/null && pwd -P)
+        dd=${dd#$Home/}
         case $dotfilesRel in
             /*)
                 # no $rel prefix needed for an absolute path
@@ -153,6 +155,23 @@ if has vim; then
 vim_after() { make -C .vim; }
 install .vimrc
 install .vim
+fi
+
+if has ssh; then
+ssh_Makefile_after() {
+    # install ssh config blocks
+    for c in .dotfiles/.ssh/config.d/*; do
+        install ${c#.dotfiles/}
+    done
+    # backup original and enable everything if this is the first time
+    if ! [ -d .ssh/config.enabled ]; then
+        ! [ -e .ssh/config ] || mv -iv .ssh/config .ssh/config.orig
+        make -C .ssh enable
+    fi
+    # generate .ssh/config
+    make -C .ssh config
+}
+install .ssh/Makefile
 fi
 
 if has git; then
