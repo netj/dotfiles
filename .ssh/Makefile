@@ -21,7 +21,7 @@ help:
 	 done
 	@echo
 	@echo "  make$(M) disable  # to disable all config blocks, or individually:"
-	@cd config.d && for c in *; do \
+	@cd config.enabled && for c in *; do \
 	 echo "  make$(M) disable C='$$c'"; \
 	 done
 
@@ -41,7 +41,7 @@ C ?= *
 
 enable: $(C:%=config.d/%)
 	# enabling $(^F)
-	@mkdir -p $(@D)
+	@mkdir -pv config.enabled
 	@for c in $^; do ln -sfnv ../$$c config.enabled/$${c##*/}; done
 	@find config.enabled/ -type l -exec test ! -e {} \; -exec rm -fv {} +
 
