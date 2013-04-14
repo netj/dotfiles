@@ -19,7 +19,12 @@ fun! SetupAddons()
   " light-lo: spring autumn sienna
   " fun: matrix borland golden camo
   " bright: summerfruit256 buttercream PapayaWhip nuvola habiLight fruit eclipse earendel
-  ActivateAddons Colour_Sampler_Pack molokai
+  ActivateAddons jellybeans molokai Colour_Sampler_Pack
+    let g:jellybeans_overrides = {
+          \    'Todo': { 'guifg': '101010', 'guibg': 'fad07a',
+          \              'ctermfg': 'Black', 'ctermbg': 'Yellow',
+          \              'attr': 'bold' },
+          \}
   " scroll among my favorites with VimTip341
   ActivateAddons git:git://gist.github.com/1432015.git
     let s:mySetColorsSet = []
