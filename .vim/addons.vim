@@ -19,7 +19,7 @@ fun! SetupAddons()
   " light-lo: spring autumn sienna
   " fun: matrix borland golden camo
   " bright: summerfruit256 buttercream PapayaWhip nuvola habiLight fruit eclipse earendel
-  ActivateAddons jellybeans molokai Colour_Sampler_Pack
+  ActivateAddons hybrid jellybeans molokai Colour_Sampler_Pack
     let g:jellybeans_overrides = {
           \    'Todo': { 'guifg': '101010', 'guibg': 'fad07a',
           \              'ctermfg': 'Black', 'ctermbg': 'Yellow',
@@ -39,20 +39,20 @@ fun! SetupAddons()
     endfun
     command! -nargs=+ -bar -bang AddColorSet  call s:addColorSet(<bang>0, <f-args>)
     if has("gui_running")
-      AddColorSet  'darkLo'     jellybeans     desertEx    lucius       camo      dante     candy           "      brookstream
-      AddColorSet  'creativity' spring         clarity     navajo-night sea       oceandeep breeze          "      dusk        tabula     darkblue2
-      AddColorSet  'darkHi'     fruity         oceanblack  jammy        northland lettuce   molokai         "      neon        vibrantink vividchalk colorer torte
-      AddColorSet  'bright'     summerfruit256 buttercream PapayaWhip   nuvola    habiLight fruit           "      eclipse     earendel
-      AddColorSet! 'precision'  autumn         railscasts  Guardian     candycode inkpot    ChocolateLiquor
-      AddColorSet  'diff'       xoria256       candycode   jellybeans   "         inkpot    ChocolateLiquor lucius railscasts  northland  blacksea
+      AddColorSet  'darkLo'     hybrid         desertEx    lucius       camo      dante      candy           " jellybeans brookstream
+      AddColorSet  'creativity' spring         clarity     navajo-night sea       oceandeep  breeze          " dusk       tabula      darkblue2
+      AddColorSet  'darkHi'     fruity         oceanblack  jammy        northland lettuce    molokai         " neon       vibrantink  vividchalk colorer  torte
+      AddColorSet  'bright'     summerfruit256 buttercream PapayaWhip   nuvola    habiLight  fruit           " eclipse    earendel
+      AddColorSet! 'precision'  autumn         railscasts  Guardian     candycode inkpot     ChocolateLiquor
+      AddColorSet  'diff'       xoria256       candycode   hybrid                                            " jellybeans inkpot          ChocolateLiquor lucius     railscasts  northland  blacksea
       AddColorSet  'diffLight'  PapayaWhip     taqua       silent
     else
       if &t_Co >= 256
         " many color schemes only work well on GUI
-        AddColorSet 'hi'     jellybeans inkpot          molokai         navajo-night
-        AddColorSet 'lo'     lucius          lettuce         dante        wombat256
-        AddColorSet 'bright' tabula     summerfruit256
-        AddColorSet 'diff'   xoria256 calmar256-light maroloccio inkpot ChocolateLiquor " candycode calmar256-dark PapayaWhip lettuce blacksea
+        AddColorSet 'lo'     hybrid         wombat256       lettuce    dante
+        AddColorSet 'hi'     jellybeans     inkpot          molokai    navajo-night
+        AddColorSet 'bright' summerfruit256 lucius          tabula
+        AddColorSet 'diff'   xoria256       calmar256-light maroloccio inkpot       ChocolateLiquor " candycode calmar256-dark PapayaWhip lettuce blacksea
         " desertEx colorer vividchalk candycode nuvola earendel
       else
         AddColorSet 'fallback' default
@@ -85,7 +85,7 @@ fun! SetupAddons()
     command! DetectDiffColorScheme call s:DetectDiffColorScheme()
     autocmd FilterWritePost,BufEnter,WinEnter,WinLeave *  DetectDiffColorScheme
     nnoremap <Space>d :diffoff \| DetectDiffColorScheme<CR>
-  if has("gui_running")
+  if has("gui_running") " && 0
     ActivateAddons powerline
     set laststatus=2 noshowmode showcmd
     let &guifont = join(map(split(&guifont,","),
