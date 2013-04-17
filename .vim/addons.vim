@@ -364,7 +364,7 @@ fun! SetupAddons()
         let keyMappings[  '<D-CR>'] = 'LaTeXBuild'
         let keyMappings['<S-D-CR>'] = 'LaTeXBuildAndView'
         for [key,cmd] in items(keyMappings)
-          exec 'nnoremap <buffer> '.key.'           :'.cmd.'<CR><CR>:cwindow<CR>'
+          exec 'nnoremap <buffer> '.key.'           :'.cmd.'<CR>:cwindow<CR>'
           exec 'xnoremap <buffer> '.key.' <C-\><C-N>:'.cmd.'<CR><CR>gv'
           exec 'snoremap <buffer> '.key.' <C-\><C-N>:'.cmd.'<CR><CR>gv<C-G>'
           exec 'inoremap <buffer> '.key.' <C-\><C-N>:'.cmd.'<CR><CR>gi'
