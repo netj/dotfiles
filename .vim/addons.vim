@@ -195,6 +195,17 @@ fun! SetupAddons()
     autocmd BufEnter NERD_tree_* map <buffer> <Space><Space> go
     autocmd BufEnter NERD_tree_* map <buffer> <Space>s       gi
     autocmd BufEnter NERD_tree_* map <buffer> <Space>v       gv
+  "ActivateAddons FuzzyFinder
+  "  nnoremap <Space>f :FufFileWithCurrentBufferDir<CR>
+  "ActivateAddons Command-T
+  "  nnoremap <Space>f :CommandT<CR>
+  ActivateAddons ctrlp
+    let g:ctrlp_map = '<c-p>'
+    let g:ctrlp_cmd = 'CtrlPMixed'
+    let g:ctrlp_mruf_relative = 1
+    let g:ctrlp_custom_ignore = {
+          \ "dir": '\v[\/]\@prefix\@$'
+          \ }
   ActivateAddons renamer
   ActivateAddons recover
   ActivateAddons snipmate
