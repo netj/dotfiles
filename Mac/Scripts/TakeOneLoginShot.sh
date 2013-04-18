@@ -24,8 +24,8 @@
 # 
 # Launch it with watch-syslog.sh from cron:
 # 
-#    */23 *   * * *   exec watch-syslog.sh 'loginwindow\[[0-9]\+\]:'  ~/.loginshots.pid  sh -c 'TakeOneLoginShot.sh' &>/dev/null #>>~/tmp/loginshots.log 2>&1
-#    @reboot          exec watch-syslog.sh 'loginwindow\[[0-9]\+\]:'  ~/.loginshots.pid  sh -c 'TakeOneLoginShot.sh' &>/dev/null #>>~/tmp/loginshots.log 2>&1
+#    */23 *   * * *   exec watch-syslog.sh 'loginwindow\[[0-9]\+\]: in pam_sm_setcred(): Establishing credentials'  ~/.loginshots.pid  bash -c 'sleep 3; TakeOneLoginShot.sh' &>/dev/null #>>~/tmp/loginshots.log 2>&1
+#    @reboot          exec watch-syslog.sh 'loginwindow\[[0-9]\+\]: in pam_sm_setcred(): Establishing credentials'  ~/.loginshots.pid  bash -c 'sleep 3; TakeOneLoginShot.sh' &>/dev/null #>>~/tmp/loginshots.log 2>&1
 # 
 # 
 # They need to be installed (symlink'ed) in /usr/bin/ to be used from GUI.
@@ -42,7 +42,7 @@ set -eu
 
 : \
     ${DateFormat:=%Y/%m/%d-%H%M%S} \
-    ${MinSecsBetweenShots:=20} \
+    ${MinSecsBetweenShots:=5} \
     ${NumRetries:=3} \
     ${JPEGQuality:=20} \
     #
@@ -54,11 +54,12 @@ set -eu
 LoginShotsFolder=~/.loginshots
 
 event=${*:-}
+tag=${event:+.${event}}
 
-filename="$LoginShotsFolder/$(date +"$DateFormat")$event.jpg"
+filename="$LoginShotsFolder/$(date +"$DateFormat")${tag}.jpg"
 mkdir -p "$(dirname "$filename")"
 
-latest="$LoginShotsFolder"/LATEST.JPG
+latest="$LoginShotsFolder/LATEST${tag}.JPG"
 
 # try not to take too many shots in a short period
 timediff=$(( $(date +%s) - $(date -r "$latest" +%s 2>/dev/null || echo 0) ))
