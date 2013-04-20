@@ -85,7 +85,7 @@ fun! SetupAddons()
     command! DetectDiffColorScheme call s:DetectDiffColorScheme()
     autocmd FilterWritePost,BufEnter,WinEnter,WinLeave *  DetectDiffColorScheme
     nnoremap <Space>d :diffoff \| DetectDiffColorScheme<CR>
-  if has("gui_running") " && 0
+  if has("gui_running") && 0
     ActivateAddons powerline
     set laststatus=2 noshowmode showcmd
     let &guifont = join(map(split(&guifont,","),
@@ -301,7 +301,7 @@ fun! SetupAddons()
     fun! s:LaTeX_Build()
       norm m`m[
       let oldmore=&more | set nomore
-      exec "make! ".escape(Tex_GetMainFileName(),' \')
+      exec "silent make! ".escape(Tex_GetMainFileName(),' \')
       let &more=oldmore
       norm m]g``
     endfun
