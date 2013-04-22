@@ -7,7 +7,7 @@ export MinSecsBetweenShots
 
 PATH=~/Library/Scripts:"$PATH"
 exec watch-syslog.sh \
-    'WindowServer\[[0-9]\+\]: MPAccessSurfaceForDisplayDevice\|loginwindow\[[0-9]\+\]: in pam_sm_authenticate(): Got user:' \
+    'loginwindow\[[0-9]\+\]: in pam_sm_authenticate(): Got user:' \
     ~/.monitorLoginAttempts.pid  bash -c '
 TakeOneLoginShot.sh attempt &
 '
