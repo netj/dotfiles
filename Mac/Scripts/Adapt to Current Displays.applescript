@@ -203,7 +203,7 @@ on determineCurrentConfiguration(args)
 			set placement's y to y as number
 			set screen's visibleOrigin to {xv as number, yv as number}
 			set screen's visibleSize to {wv as number, hv as number}
-			#set NSScreenWorked to true
+			set NSScreenWorked to true
 		end if
 		set the text item delimiters to delimiter
 		set screenIndex to screenIndex + 1
@@ -256,7 +256,7 @@ to adjustScreenWithDock(screen)
 	if dockX = 0 then -- dock is at left
 		set screen's visibleOrigin to {dockW, menubarHeight}
 		set screen's visibleSize to {w -dockW, h -menubarHeight}
-	else if dockY + dockH ≥ item 2 of screen's screenSize then
+	else if dockY + dockH ≥ item 2 of screen's size then
 		set screen's visibleOrigin to {0, menubarHeight}
 		set screen's visibleSize to {w, h -menubarHeight -dockH}
 	else -- dock is at right
