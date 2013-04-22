@@ -23,6 +23,9 @@ end use
 script macbookConfiguration
 	property name : "MacBook"
 	property screenLayout : {use(macbookDisplay, 0, 0)}
+	on prepare()
+		my hideDock(true)
+	end prepare
 	on adapt()
 		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.98, wins:my getLargeEnoughWindows(windows)})
 	end adapt
@@ -32,6 +35,9 @@ script homeConfiguration
 	property name : "Home"
 	-- a SyncMaster 275T is at my home desk
 	property screenLayout : {use(syncmaster27inDisplay, 0, 0), use(macbookDisplay, 133, 1200)}
+	on prepare()
+		my hideDock(false)
+	end prepare
 	on adapt()
 		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.95, wins:my getLargeEnoughWindows(windows)})
 	end adapt
@@ -41,6 +47,9 @@ script gatesOfficeConfiguration
 	property name : "Gates Office"
 	-- I have a SyncMaster 305T in my office :)
 	property screenLayout : {use(syncmaster30inDisplay, 0, 0), use(macbookDisplay, 2560, 1315)}
+	on prepare()
+		my hideDock(false)
+	end prepare
 	on adapt()
 		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.8, wins:my getLargeEnoughWindows(windows)})
 	end adapt
@@ -171,8 +180,10 @@ on determineCurrentConfiguration(args)
 	set currentConfiguration to macbookConfiguration -- default
 	if (count args) > 0 and (exists (configurations whose name = item 1 of args)) then
 		set currentConfiguration to first item of (configurations whose name = item 1 of args)
+		currentConfiguration's prepare()
 	else
 		repeat with config in configurations
+			config's prepare()
 			if actualScreensMatch(config) then
 				set currentConfiguration to config
 				exit repeat
@@ -554,5 +565,15 @@ on BWAND(__int1, __int2)
 	end repeat
 	return theResult as integer
 end BWAND
+
+-- hideDock -- toggle autohide for Dock
+on hideDock(hide)
+	tell application "System Events"
+		tell dock preferences
+			set autohide to hide
+			set magnification to (not hide)
+		end tell
+	end tell
+end hideDock
 
 # vim:ft=applescript:sw=4:ts=4:sts=4:noet
