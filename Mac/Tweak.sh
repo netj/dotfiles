@@ -14,15 +14,35 @@ defaults write com.apple.dock mineffect -string Scale
 defaults write com.apple.dock expose-animation-duration -float 0.17
 # Hot Corners with Cmd+[tb][lr] (inspired by http://macmule.com/2011/03/08/set-start-screen-saver-to-a-hot-corner/)
 # domain=com.apple.Dock; for key in wvous-{b,t}{l,r}-{corner,modifier}; do echo defaults write $domain $key $(defaults read $domain $key); done
-defaults write com.apple.Dock wvous-bl-corner   10
-defaults write com.apple.Dock wvous-bl-modifier 1048576
-defaults write com.apple.Dock wvous-br-corner   2
-defaults write com.apple.Dock wvous-br-modifier 1048576
-defaults write com.apple.Dock wvous-tl-corner   5
-defaults write com.apple.Dock wvous-tl-modifier 1048576
-defaults write com.apple.Dock wvous-tr-corner   7
-defaults write com.apple.Dock wvous-tr-modifier 1048576
-killall DashboardClient || true
+#defaults write com.apple.Dock wvous-bl-corner   10
+#defaults write com.apple.Dock wvous-bl-modifier 1048576
+#defaults write com.apple.Dock wvous-br-corner   2
+#defaults write com.apple.Dock wvous-br-modifier 1048576
+#defaults write com.apple.Dock wvous-tl-corner   5
+#defaults write com.apple.Dock wvous-tl-modifier 1048576
+#defaults write com.apple.Dock wvous-tr-corner   7
+#defaults write com.apple.Dock wvous-tr-modifier 1048576
+# However, a better way is to use AppleScript
+osascript -e '
+tell application "System Events" to tell expose preferences
+	tell top left screen corner
+		set activity to start screen saver
+		set modifiers to {command}
+	end tell
+	tell bottom left screen corner
+		set activity to sleep display
+		set modifiers to {command}
+	end tell
+	tell bottom right screen corner
+		set activity to application windows
+		set modifiers to {command}
+	end tell
+	tell top right screen corner
+		set activity to dashboard
+		set modifiers to {command}
+	end tell
+end tell
+'
 killall Dock
 
 defaults write com.apple.finder ShowPathBar -boolean true
