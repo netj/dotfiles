@@ -187,10 +187,20 @@ ModeToggleKey winfixwidth     \|
 ModeToggleKey winfixheight    _
 ModeToggleKey wrap            <C-\>
 
-" Fold
-nnoremap <Space>z      :set foldmethod=indent<CR>
-nnoremap <Space>Z      :set foldmethod=syntax<CR>
-nnoremap <Space><C-z>  :set foldmethod=manual<CR>
+" helper function to cycle thru options
+fun! s:cycle(opt, values)
+  exec "let oldValue = &". a:opt
+  let idx = (index(a:values, oldValue) + 1) % len(a:values)
+  let newValue = a:values[idx]
+  exec "setlocal ". a:opt ."=". newValue
+  exec "setlocal ". a:opt ."?"
+endfun
+
+" Fold method
+nnoremap <Space>z      :call <SID>cycle("foldmethod", split("manual indent syntax"))<CR>
+
+" Virtualedit
+nnoremap <Space>v      :call <SID>cycle("virtualedit", insert(split("all block insert onemore"), ""))<CR>
 
 " Fix syntax highlighting by doing it from start of file
 " See: http://vim.wikia.com/wiki/Fix_syntax_highlighting
