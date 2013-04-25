@@ -60,26 +60,35 @@
         <autogen>__KeyToKey__ KeyCode::OPTION_R,  KeyCode::OPTION_R,
         <!----> Option::KEYTOKEY_BEFORE_KEYDOWN,  KeyCode::VK_CHANGE_INPUTMODE_ENGLISH,
         <!----> Option::KEYTOKEY_AFTER_KEYUP,     KeyCode::VK_CHANGE_INPUTSOURCE_KOREAN </autogen>
-        <!-- XXX It turns out to be very difficult to get COMMAND_L work just like OPTION_L only for Terminal,
-             while still letting COMMAND-SPACE to switch input methods. - ->
-        <block>
-            <only>TERMINAL</only>
-            <autogen>__KeyToKey__ KeyCode::SPACE, ModifierFlag::COMMAND_L,
-                                                      KeyCode::VK_CHANGE_INPUTMODE_ENGLISH,
-                    Option::KEYTOKEY_AFTER_KEYUP,     KeyCode::VK_CHANGE_INPUTMODE_ENGLISH </autogen>
-            <autogen>__KeyToKey__ KeyCode::COMMAND_L, KeyCode::OPTION_R,
-            <!- - > Option::KEYTOKEY_BEFORE_KEYDOWN,  KeyCode::VK_CHANGE_INPUTMODE_ENGLISH, KeyCode::SPACE, KeyCode::DELETE,
-            <!- - > Option::KEYTOKEY_AFTER_KEYUP,     KeyCode::VK_CHANGE_INPUTSOURCE_KOREAN </autogen>
-        </block>
-        -->
     </item>
 
     <item>
-        <name>In Vim, Make Escape key also Switch to English IM</name>
-        <identifier>private.vim_esc_also_switches_to_english_inputmode</identifier>
-        <only>VI</only>
-        <inputsource_not>ENGLISH</inputsource_not>
-        <autogen>__KeyToKey__ KeyCode::ESCAPE,
-        <!---->               KeyCode::ESCAPE,KeyCode::VK_CHANGE_INPUTMODE_ENGLISH </autogen>
+        <name>Fix non-English input source issues in Terminal, Vim, etc.</name>
+        <identifier>private.quick_switch_to_english_inputmode</identifier>
+        <appendix>In Terminal, make Command key switch to English IM</appendix>
+        <block>
+            <only>TERMINAL</only>
+            <inputsource_not>ENGLISH</inputsource_not>
+            <!-- Terminal.app (as of OS X 10.8) does not remember its IM state, making it painful
+                 when you switch back and forth to/from another app with different input source.
+                 For example, while working with Terminal in English IM, if you switch to Messages.app
+                 and use Korean IM to chat for a moment and switch back to Terminal, the IM will stay
+                 as Korean, which is extremely annoying to always switch IM manually.  Simplifying this
+                 workflow to just pressing the Command key lessens the pain a bit.  It would be fantastic
+                 if we can grab the event of Terminal's becoming the active application and automatically
+                 switch to English IM. -->
+            <autogen>__KeyToKey__ KeyCode::SPACE, ModifierFlag::COMMAND_L,
+            <!---->               KeyCode::SPACE, ModifierFlag::COMMAND_L </autogen>
+            <autogen>__KeyToKey__ KeyCode::COMMAND_L,
+            <!---->               KeyCode::COMMAND_L,
+            <!---->  Option::KEYTOKEY_AFTER_KEYUP, KeyCode::VK_CHANGE_INPUTMODE_ENGLISH </autogen>
+        </block>
+        <appendix>In Vim, make escape key also switch to English IM</appendix>
+        <block>
+            <only>VI</only>
+            <inputsource_not>ENGLISH</inputsource_not>
+            <autogen>__KeyToKey__ KeyCode::ESCAPE,
+            <!---->               KeyCode::ESCAPE,KeyCode::VK_CHANGE_INPUTMODE_ENGLISH </autogen>
+        </block>
     </item>
 </root>
