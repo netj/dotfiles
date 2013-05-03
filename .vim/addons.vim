@@ -101,11 +101,32 @@ fun! SetupAddons()
     let g:gundo_close_on_revert = 1
     nnoremap <Space>u :GundoToggle<CR>
   endif
-  ActivateAddons bufexplorer.zip
-    nnoremap <Space>b :BufExplorerHorizontalSplit<CR>
+  "ActivateAddons bufexplorer.zip
+  ActivateAddons tselectbuffer
+    nnoremap <Space>b :TSelectBuffer<CR>
   ActivateAddons Tagbar
     nnoremap <Space>t :TagbarOpenAutoClose<CR>
     nnoremap <Space>T :TagbarToggle<CR>
+  ActivateAddons Ack
+  fun! s:jumpToTagWithQuickFix(w)
+    exec "ltag" a:w
+    keepjumps call setqflist(getloclist(0))
+    " TODO copen | let w:quickfix_title = ":tag ". a:w | close
+    let @/ = "\\<". a:w ."\\>" | keepjumps norm n
+    set hlsearch
+  endfun
+  fun! s:ackWord(w)
+    exec "keepjumps Ack!" "'\\b". a:w ."\\b'"
+    let @/ = "\\<". a:w ."\\>" | keepjumps norm n
+    set hlsearch
+    cfirst
+  endfun
+  if has("gui")
+    " Ctrl-Click in MacVim needs: defaults write org.vim.MacVim MMTranslateCtrlClick 0
+    " See: http://stackoverflow.com/a/10148278/390044
+    noremap <C-LeftMouse>  <C-\><C-N><LeftMouse>:call <SID>jumpToTagWithQuickFix(expand("<cword>"))<CR>
+    noremap <C-RightMouse> <C-\><C-N><LeftMouse>:call <SID>ackWord(expand("<cword>"))<CR>
+  endif
   " unimpaired quickfix access with [q, ]q, [Q, ]Q
   ActivateAddons unimpaired
     " Eclipse-style movement
@@ -208,7 +229,7 @@ fun! SetupAddons()
           \ }
   ActivateAddons renamer
   ActivateAddons recover
-  ActivateAddons snipmate
+  "ActivateAddons snipmate
   "ActivateAddons vmark.vim_Visual_Bookmarking " XXX beware: <F2>/<F3> is overrided
   " TODO let b:vm_guibg = yellow
   "if has("ruby")
