@@ -38,7 +38,7 @@ sub breakLine {
     if ($nesting == 0) {
         # break the buffered into multiple lines for each sentence
         while ($buf =~ /
-            (.*?( [\p{Letter}\$\\{}]+ | \S*\$ )[\.\?!:])
+            (.*?( [\p{Letter}\$\\{}]+ | \S*\$ )[\.\?!:;])
             \s+
             ([\p{Uppercase Letter}\p{Hangul_Syllables}])
             /gx) {
