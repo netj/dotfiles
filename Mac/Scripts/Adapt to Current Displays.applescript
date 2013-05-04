@@ -11,6 +11,7 @@ end Screen
 property macbookDisplay : Screen(1680, 1050)
 property syncmaster27inDisplay : Screen(1920, 1200)
 property syncmaster30inDisplay : Screen(2560, 1600)
+property cinema30inDisplay : Screen(2560, 1600)
 property thunderboltDisplay : Screen(2560, 1440)
 property detectionTolerance : 100 -- px of alignment error to tolerate
 
@@ -47,6 +48,18 @@ script gatesOfficeConfiguration
 	property name : "Gates Office"
 	-- I have a SyncMaster 305T in my office :)
 	property screenLayout : {use(syncmaster30inDisplay, 0, 0), use(macbookDisplay, 2560, 1315)}
+	on prepare()
+		my hideDock(false)
+	end prepare
+	on adapt()
+		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.8, wins:my getLargeEnoughWindows(windows)})
+	end adapt
+end script
+
+script meyerConfiguration
+	property name : "Meyer Library"
+	-- There are 30-in Cinema Displays
+	property screenLayout : {use(cinema30inDisplay, 0, 0), use(macbookDisplay, 440, 1600)}
 	on prepare()
 		my hideDock(false)
 	end prepare
@@ -99,6 +112,7 @@ on run args
 	useConfiguration(macbookConfiguration)
 	useConfiguration(homeConfiguration)
 	useConfiguration(gatesOfficeConfiguration)
+	useConfiguration(meyerConfiguration)
 	useConfiguration(mpkOfficeConfiguration)
 	determineCurrentConfiguration(args)
 	
