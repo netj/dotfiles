@@ -204,6 +204,33 @@ install .fonts
 
 # Mac OS X
 case $(uname) in Darwin)
+    mdfind-has() { [ -n "$(mdfind "$@" | head -1)" ]; }
+
+    # TODO Mac/Tweaks.sh
+
+    # DefaultKeyBinding.dict
+    # See: http://hints.macworld.com/article.php?story=20060317045211408
+    # See: http://www.hcs.harvard.edu/~jrus/site/cocoa-text.html
+    install Library/KeyBindings/DefaultKeyBinding.dict Mac/KeyBindings/DefaultKeyBinding.dict true
+
+    # install KeyRemap4MacBook settings
+    if mdfind-has -onlyin /Applications KeyRemap4MacBook.app; then
+        for xml in Mac/KeyRemap4MacBook/*.xml; do
+            [ -e "$xml" ] || continue
+            install Library/"Application Support"/"${xml#Mac/}" "$xml"
+            Library_Application_Support_KeyRemap4MacBook_private_xml_after() {
+                local x="$(mdfind KeyRemap4MacBook_cli.app | head -n 1)/Contents/MacOS/KeyRemap4MacBook_cli"
+                ! [ -x "$x" ] || "$x" reloadxml
+            }
+        done
+    fi
+
+    # install shell/python/perl scripts
+    for s in Mac/Scripts/*.{sh,py,pl}; do
+        [ -e "$s" ] || continue
+        install Library/"${s#Mac/}" "$s" true true
+    done
+
     # install applescripts
     cd "$DotfilesRoot"
     scptd=Mac/Scripts/compiled/
@@ -245,23 +272,4 @@ case $(uname) in Darwin)
         [ -e "$s" ] || continue
         installscpt "$s"
     done
-    for s in Mac/Scripts/*.{sh,py}; do
-        [ -e "$s" ] || continue
-        install Library/"${s#Mac/}" "$s" true true
-    done
-
-    # install KeyRemap4MacBook settings
-    for xml in Mac/KeyRemap4MacBook/*.xml; do
-        [ -e "$xml" ] || continue
-        install Library/"Application Support"/"${xml#Mac/}" "$xml"
-        Library_Application_Support_KeyRemap4MacBook_private_xml_after() {
-            local x="$(mdfind KeyRemap4MacBook_cli.app | head -n 1)/Contents/MacOS/KeyRemap4MacBook_cli"
-            ! [ -x "$x" ] || "$x" reloadxml
-        }
-    done
-
-    # DefaultKeyBinding.dict
-    # See: http://hints.macworld.com/article.php?story=20060317045211408
-    # See: http://www.hcs.harvard.edu/~jrus/site/cocoa-text.html
-    install Library/KeyBindings/DefaultKeyBinding.dict Mac/KeyBindings/DefaultKeyBinding.dict true
 ;; esac
