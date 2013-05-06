@@ -225,6 +225,13 @@ case $(uname) in Darwin)
         done
     fi
 
+    # install sleepwatcher scripts
+    if has sleepwatcher || mdfind-has 'kMDItemFSName == "'"$1"'"
+                                    && kMDItemContentType == public.unix-executable'; then
+        install .sleep Mac/sleepwatcher/sleep
+        install .wakeup Mac/sleepwatcher/wakeup
+    fi
+
     # install shell/python/perl scripts
     for s in Mac/Scripts/*.{sh,py,pl}; do
         [ -e "$s" ] || continue

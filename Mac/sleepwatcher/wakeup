@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# Wake up script to be used with sleepwatcher
+# See: sleepwatcher (https://github.com/mxcl/homebrew/commits/master/Library/Formula/sleepwatcher.rb)
+#
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2013-05-05
+set -u
+
+# restore Papers2 if was running before we went to sleep
+if [ -e ~/.wakeup.Papers2 ]; then
+    echo "Restoring Papers2"
+    osascript -e ' # instead of # open -a Papers2
+        # restore Papers2
+        delay 5
+        tell application "Papers2"
+            reopen
+            activate
+        end tell
+
+        # go back to the last active app and window in the right Space/Desktop
+        set curWindow  to (do shell script "cat ~/.wakeup.activate.app.window")
+        set curAppPath to (do shell script "readlink ~/.wakeup.activate.app")
+        set curAppName to the short name of (info for curAppPath)
+        set curAppID   to get the id of application curAppName as string # See: http://stackoverflow.com/a/6935608/390044
+        activate application curAppName
+        tell application "System Events"
+            set curAppProcName to name of (first application process where bundle identifier is curAppID)
+            tell process curAppProcName
+	        set windowMenu to (first menu bar item whose title is "Window" or title is "윈도우") of menu bar 1
+	        click menu item curWindow of menu 1 of windowMenu
+	    end tell
+	end tell
+
+        do shell script "rm -f ~/.wakeup.Papers2 ~/.wakeup.activate.*"
+        ' &
+fi
+
+
+# mount all USB disks, attached but previously ejected
+system_profiler SPUSBDataType | grep 'BSD Name: disk\d+$' | sed 's/.*: //' | xargs -L1 diskutil mount &
+
+# mount all time machine destinations
+tmutil destinationinfo | grep "Name" | sed 's/.*: //' | xargs -L1 diskutil mount &
