@@ -297,20 +297,20 @@ fun! SetupAddons()
         \ call sparkup#Setup()|
     endif
   ActivateAddons JSON
-    au BufRead,BufNewFile *.json setfiletype json
+    au BufEnter *.json setfiletype json
 
   ActivateAddons vim-coffee-script
-    au BufRead,BufNewFile *.coffee syntax sync fromstart
+    au BufEnter *.coffee syntax sync fromstart
     " CoffeeScript autocompilation
     "autocmd BufWritePost *.coffee silent CoffeeMake! | cwindow
   ActivateAddons jade
   ActivateAddons applescript
-    au BufRead,BufNewFile *.applescript setfiletype applescript
+    au BufEnter *.applescript setfiletype applescript
   ActivateAddons vim-addon-scala
     " Scala (See: http://mdr.github.com/scalariform/)
     au BufEnter *.scala setl formatprg=scalariform\ --forceOutput
   ActivateAddons octave%3600
-    au BufRead,BufNewFile *.oct,*.m setlocal filetype=octave
+    au BufEnter *.oct,*.m setlocal filetype=octave
 
   " Vim-LaTeX is a comprehensive plugin for working with LaTeX
   " See: http://vim-latex.sourceforge.net/documentation/latex-suite/

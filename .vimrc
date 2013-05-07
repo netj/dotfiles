@@ -247,6 +247,7 @@ iab jshin>   Jaeho.Shin@Stanford.EDU
 " Frequently typed lines.
 iab Created:    Created: <C-R>=system("date +%Y-%m-%d")
 
+
 "------------------------------------------------------------------------------
 " File-type specific settings.
 "------------------------------------------------------------------------------
@@ -271,7 +272,7 @@ if has("autocmd")
   " Play nice with crontab: "temp file must be edited in place"
   autocmd FileType crontab setlocal nobackup nowritebackup
 
-  " Don't worry about spelling in Git commit messages
+  " Don't worry about typos and spelling errors in Git commit messages
   autocmd FileType gitcommit setlocal spell
 
 endif " has("autocmd")
