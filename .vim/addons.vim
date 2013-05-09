@@ -87,6 +87,7 @@ fun! SetupAddons()
     nnoremap <Space>d :diffoff \| DetectDiffColorScheme<CR>
   if has("gui_running") && 0
     ActivateAddons powerline
+
     set laststatus=2 noshowmode showcmd
     let &guifont = join(map(split(&guifont,","),
           \ 'split(v:val,":")[0]." for Powerline:".split(v:val,":")[1]'),",")
@@ -107,7 +108,7 @@ fun! SetupAddons()
   ActivateAddons Tagbar
     nnoremap <Space>t :TagbarOpenAutoClose<CR>
     nnoremap <Space>T :TagbarToggle<CR>
-  ActivateAddons Ack
+  ActivateAddons ack
   fun! s:jumpToTagWithQuickFix(w)
     exec "ltag" a:w
     keepjumps call setqflist(getloclist(0))
@@ -144,8 +145,9 @@ fun! SetupAddons()
     " Align%294's \m= collides with Mark%2666 unless already mapped
     map <Leader>tm= <Plug>AM_m=
   ActivateAddons Align%294
-  ActivateAddons surround
-  ActivateAddons repeat
+  ActivateAddons surround repeat
+  ActivateAddons speeddating
+  ActivateAddons commentary
   ActivateAddons vim-visual-star-search
   ActivateAddons EasyMotion
     let g:EasyMotion_leader_key = '<Space>w'
@@ -202,8 +204,8 @@ fun! SetupAddons()
     nnoremap ,, ,
     xnoremap ,, ,
     onoremap ,, ,
+  ActivateAddons abolish
 
-  "ActivateAddons ack
   "ActivateAddons slime
   ActivateAddons The_NERD_tree
     nnoremap <Space>e :NERDTreeFind<CR>
