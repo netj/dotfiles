@@ -292,7 +292,7 @@ fun! SetupAddons()
       \ setlocal spell |
     if has("mac")
       au FileType markdown
-        \ nnoremap <D-e> :!open -a Marked '%'<CR><CR>|
+        \ nnoremap <D-e> :exec "!open -a Marked ".shellescape(expand("%"))<CR><CR>|
         \ noremap! <D-e> <C-\><C-N><D-e>gi|
         \ call sparkup#Setup()|
     endif
