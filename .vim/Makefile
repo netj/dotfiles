@@ -38,3 +38,9 @@ coffeetags: ##
 	    coffeetags --vim-conf >ftplugin/coffee/tagbar-coffee.vim; \
 	}
 
+# tpope's spelling fixes using :Abolish
+tpopes-abbrevs: after/plugin/abolish.vim ##
+after/plugin/abolish.vim:
+	mkdir -p $(@D) && cd $(@D) && \
+	curl -RLO https://raw.github.com/tpope/tpope/master/.vim/$@
+
