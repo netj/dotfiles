@@ -210,8 +210,9 @@ fi
 
 # Mac OS X
 case $(uname) in Darwin)
-    running-app() { [ true = "$(osascript 2>/dev/null -e '
-            tell application "System Events" to exists process "'"$1"'"')" ]; }
+    running-app() { running "$@"; } # XXX workaround for osascript's intermittent slowness
+    #running-app() { [ true = "$(osascript 2>/dev/null -e '
+    #        tell application "System Events" to exists process "'"$1"'"')" ]; }
     mdfind-has() { [ -n "$(mdfind "$@" | head -1)" ]; }
     has-executable() { mdfind-has 'kMDItemContentType == public.unix-executable
                                 && kMDItemFSName == "'"$1"'"'; }
