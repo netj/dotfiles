@@ -225,10 +225,11 @@ case $(uname) in Darwin)
         done
     fi
 
-    # install sleepwatcher scripts
-    if has sleepwatcher || mdfind-has 'kMDItemFSName == "'"$1"'"
-                                    && kMDItemContentType == public.unix-executable'; then
-        install .sleep Mac/sleepwatcher/sleep
+    # install sleepwatcher scripts (if it's installed or running)
+    if has sleepwatcher || pgrep -q sleepwatcher; then
+                          #mdfind-has 'kMDItemFSName == "sleepwatcher"
+                          #         && kMDItemContentType == public.unix-executable'; then
+        install .sleep  Mac/sleepwatcher/sleep
         install .wakeup Mac/sleepwatcher/wakeup
     fi
 
@@ -238,7 +239,9 @@ case $(uname) in Darwin)
         install Library/"${s#Mac/}" "$s" true true
     done
 
-    # install applescripts
+    # install applescripts (if FastScript is running)
+    if [ true = "$(osascript 2>/dev/null -e '
+            tell application "System Events" to return exists process "FastScripts"')" ]; then
     cd "$DotfilesRoot"
     scptd=Mac/Scripts/compiled/
     mkdir -p "$scptd"
@@ -279,4 +282,5 @@ case $(uname) in Darwin)
         [ -e "$s" ] || continue
         installscpt "$s"
     done
+    fi
 ;; esac
