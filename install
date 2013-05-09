@@ -116,6 +116,7 @@ safeln() {
     done
 }
 has() { type "$1" &>/dev/null; }
+running() { pgrep -q "$@"; }
 
 ###############################################################################
 
@@ -185,8 +186,11 @@ fi
 install .tmux.conf
 ! has screen ||
 install .screenrc
+
+! top -v 2>&1 | grep -q 'procps version' ||
 install .toprc
 
+! has curl ||
 install .curlrc
 
 if has emacs; then
@@ -197,14 +201,20 @@ fi
 
 
 # GUI
+if [ -n "${DISPLAY:-}" ] || running WindowServer; then
 fonts_after() { make -C .fonts; }
 install .fonts.conf
 install .fonts
+fi
 
 
 # Mac OS X
 case $(uname) in Darwin)
+    running-app() { [ true = "$(osascript 2>/dev/null -e '
+            tell application "System Events" to exists process "'"$1"'"')" ]; }
     mdfind-has() { [ -n "$(mdfind "$@" | head -1)" ]; }
+    has-executable() { mdfind-has 'kMDItemContentType == public.unix-executable
+                                && kMDItemFSName == "'"$1"'"'; }
 
     # TODO Mac/Tweaks.sh
 
@@ -214,7 +224,7 @@ case $(uname) in Darwin)
     install Library/KeyBindings/DefaultKeyBinding.dict Mac/KeyBindings/DefaultKeyBinding.dict true
 
     # install KeyRemap4MacBook settings
-    if mdfind-has -onlyin /Applications KeyRemap4MacBook.app; then
+    if running-app KeyRemap4MacBook; then
         for xml in Mac/KeyRemap4MacBook/*.xml; do
             [ -e "$xml" ] || continue
             install Library/"Application Support"/"${xml#Mac/}" "$xml"
@@ -225,10 +235,8 @@ case $(uname) in Darwin)
         done
     fi
 
-    # install sleepwatcher scripts (if it's installed or running)
-    if has sleepwatcher || pgrep -q sleepwatcher; then
-                          #mdfind-has 'kMDItemFSName == "sleepwatcher"
-                          #         && kMDItemContentType == public.unix-executable'; then
+    # install sleepwatcher scripts
+    if has sleepwatcher || running sleepwatcher; then # || has-executable sleepwatcher; then
         install .sleep  Mac/sleepwatcher/sleep
         install .wakeup Mac/sleepwatcher/wakeup
     fi
@@ -239,9 +247,8 @@ case $(uname) in Darwin)
         install Library/"${s#Mac/}" "$s" true true
     done
 
-    # install applescripts (if FastScript is running)
-    if [ true = "$(osascript 2>/dev/null -e '
-            tell application "System Events" to return exists process "FastScripts"')" ]; then
+    # install applescripts
+    if running-app "FastScripts"; then
     cd "$DotfilesRoot"
     scptd=Mac/Scripts/compiled/
     mkdir -p "$scptd"
