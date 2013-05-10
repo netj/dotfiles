@@ -146,6 +146,7 @@ bash_after() {
         auto-tmux
         git-helper
     )
+    [ -d .bash/plugins/enabled ] ||
     . .bash/plugins/bpm.sh enable "${plugins[@]}"
     )
 }
