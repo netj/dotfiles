@@ -266,8 +266,8 @@ fun! SetupAddons()
     set lazyredraw
   ActivateAddons git:git://github.com/airblade/vim-gitgutter.git
     let g:gitgutter_enabled = 1
-    nnoremap <Space><C-g><C-g> :ToggleGitGutter<CR>
-    nnoremap <Space><C-g>g     :ToggleGitGutterLineHighlights<CR>
+    nnoremap <Space><C-g><C-g> :GitGutterToggle<CR>
+    nnoremap <Space><C-g>g     :GitGutterLineHighlightsToggle<CR>
     nnoremap ]g :GitGutterNextHunk<CR>
     nnoremap [g :GitGutterPrevHunk<CR>
   ActivateAddons Gist WebAPI
