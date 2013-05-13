@@ -363,6 +363,37 @@
 	</data>
 	<key>name</key>
 	<string>Baeksoo</string>
+	<key>noWarnProcesses</key>
+	<array>
+		<dict>
+			<key>ProcessName</key>
+			<string>rlogin</string>
+		</dict>
+		<dict>
+			<key>ProcessName</key>
+			<string>telnet</string>
+		</dict>
+		<dict>
+			<key>ProcessName</key>
+			<string>ssh</string>
+		</dict>
+		<dict>
+			<key>ProcessName</key>
+			<string>slogin</string>
+		</dict>
+		<dict>
+			<key>ProcessName</key>
+			<string>screen</string>
+		</dict>
+		<dict>
+			<key>ProcessName</key>
+			<string>tmux</string>
+		</dict>
+		<dict>
+			<key>ProcessName</key>
+			<string>mosh-client</string>
+		</dict>
+	</array>
 	<key>redColour</key>
 	<data>
 	BAtzdHJlYW10eXBlZIHoA4QBQISEhAdOU0NvbG9yAISECE5TT2JqZWN0AIWEAWMChARm

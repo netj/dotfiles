@@ -156,7 +156,7 @@
 	<key>BackgroundSettingsForInactiveWindows</key>
 	<false/>
 	<key>CommandString</key>
-	<string>while :; do auto_tmux_enable=true bash -l; done</string>
+	<string>while :; do atmux; done</string>
 	<key>CursorBlink</key>
 	<integer>1</integer>
 	<key>CursorColor</key>
