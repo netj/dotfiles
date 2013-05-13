@@ -144,6 +144,8 @@ bash_after() {
         xtermtitle
         try+repeat
         auto-tmux
+        tmux-cwd-title
+        tmux-cwd-sync
         git-helper
     )
     [ -d .bash/plugins/enabled ] ||
