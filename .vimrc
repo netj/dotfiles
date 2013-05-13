@@ -83,7 +83,7 @@ endif
 
 " let xterm title work even in screen or tmux
 " From http://vim.wikia.com/wiki/Automatically_set_screen_title
-if &term == "screen"
+if &term =~ "^screen.*"
   set t_ts=]0;
   set t_fs=
 elseif &term == "xterm-color" || &term == "xterm-256color"
@@ -116,7 +116,7 @@ endif
 " Mac OS X (>=10.7) Terminal.app's Title Icon and Drag & Drop support
 "  See: http://www.macosxautomation.com/lion/terminal.html
 "  See: /private/etc/bashrc's update_terminal_cwd
-if !has("gui_running") && $TERM_PROGRAM == "Apple_Terminal" && $TERM_PROGRAM_VERSION >= 297
+if !has("gui_running") && &term !~ "^screen.*" && $TERM_PROGRAM == "Apple_Terminal" && $TERM_PROGRAM_VERSION >= 297
   set title titlestring=%(%m\ %)%((%{expand(\"%:~:h\")})%)%a
   set icon iconstring=%{&t_IE}]7;file://%{hostname()}%{expand(\"%:p\")}%{&t_IS}
   set iconstring+=VIM
