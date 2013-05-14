@@ -33,7 +33,9 @@ set ruler		" show the cursor position all the time
 set showcmd		" display incomplete commands
 set showmode		" display current mode
 set title		" set xterm title
-"set mouse=a		" use mouse
+if has("mouse")
+  set mouse=a		" use mouse
+endif
 set clipboard=exclude:.*
 set nowrap              " no line wrapping
 set scrolloff=2

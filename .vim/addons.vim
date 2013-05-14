@@ -122,7 +122,7 @@ fun! SetupAddons()
     set hlsearch
     cfirst
   endfun
-  if has("gui")
+  if has("gui") || has("mouse")
     " Ctrl-Click in MacVim needs: defaults write org.vim.MacVim MMTranslateCtrlClick 0
     " See: http://stackoverflow.com/a/10148278/390044
     noremap <C-LeftMouse>  <C-\><C-N><LeftMouse>:call <SID>jumpToTagWithQuickFix(expand("<cword>"))<CR>
