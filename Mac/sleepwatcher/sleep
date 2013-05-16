@@ -7,7 +7,6 @@
 set -u
 shopt -s extglob
 
-
 # See-Also: http://atastypixel.com/blog/automatically-eject-all-disks-on-sleep-reconnect-on-wake/
 ejectDisk() {
     local diskname=$1
@@ -65,8 +64,8 @@ osascript -e '
         end if
     end tell
     '
+open -a Backdrop
 # TODO wait until Dropbox finishes syncing Papers2's library
-
 
 wait # for everything we wanted to do
 #say "Sleeping..." # XXX any user interaction done here happens after wakeup

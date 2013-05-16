@@ -11,11 +11,13 @@ if [ -e ~/.wakeup.Papers2 ]; then
     echo "Restoring Papers2"
     osascript -e ' # instead of # open -a Papers2
         # restore Papers2
-        delay 5
-        tell application "Papers2"
-            reopen
-            activate
-        end tell
+        tell application "Papers2" to reopen
+        tell application "System Events" to set visible of application process "Papers2" to true
+        delay 2
+
+        try
+            tell application "Backdrop" to quit
+        end try
 
         # go back to the last active app and window in the right Space/Desktop
         set curWindow  to (do shell script "cat ~/.wakeup.activate.app.window")
