@@ -136,7 +136,7 @@ on run args
 	
 	-- move and resize some apps
 	if my appIsRunning("Mail") then tell application "Mail"
-		my moveAndResize({screen:macbookDisplay, x:0, y:0, w:1532, h:1, wins:windows of message viewers})
+		my moveAndResize({screen:macbookDisplay, x:0, y:0, w:1352, h:1, wins:windows of message viewers})
 		my switchToDesktopNumber(1)
 		activate
 		my keepInAllSpaces(message viewers, numScreens > 1)
