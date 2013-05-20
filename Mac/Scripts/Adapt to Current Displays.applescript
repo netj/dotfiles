@@ -72,6 +72,9 @@ script mpkOfficeConfiguration
 	property name : "MPK Office"
 	-- There's an Apple Thunderbolt Display at my workplace
 	property screenLayout : {use(thunderboltDisplay, 0, 0), use(macbookDisplay, 2560, 702)}
+	on prepare()
+		my hideDock(false)
+	end prepare
 	on adapt()
 		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.8, wins:my getLargeEnoughWindows(windows)})
 	end adapt
