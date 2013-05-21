@@ -7,10 +7,13 @@
 # See-Also: https://github.com/mathiasbynens/dotfiles/blob/master/.osx
 set -eu
 
+fontSerif='Envy Code R'
+fontSansSerif='Lucida Grande'
+fontMonospace='Envy Code R'
+
 defaults write com.apple.dock showhidden -boolean true
 defaults write com.apple.dock mouse-over-hilite-stack -boolean true
-defaults write com.apple.dock notification-always-show-image -boolean true
-defaults write com.apple.dock mineffect -string Scale
+defaults write com.apple.dock mineffect -string suck
 defaults write com.apple.dock expose-animation-duration -float 0.17
 # Hot Corners with Cmd+[tb][lr] (inspired by http://macmule.com/2011/03/08/set-start-screen-saver-to-a-hot-corner/)
 # domain=com.apple.Dock; for key in wvous-{b,t}{l,r}-{corner,modifier}; do echo defaults write $domain $key $(defaults read $domain $key); done
@@ -47,11 +50,16 @@ killall Dock
 
 defaults write com.apple.finder ShowPathBar -boolean true
 defaults write com.apple.finder PathBarRootAtHome -boolean true
-defaults write com.apple.finder QLEnableXRayFolders -boolean true
-defaults write com.apple.finder QLEnableTextSelection -bool TRUE;killall Finder # Allow text selection in Quick Look
+defaults write com.apple.finder QLEnableTextSelection -bool TRUE                # Allow text selection in Quick Look
 defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false      # Disable the warning when changing a file extension
 defaults write com.apple.desktopservices DSDontWriteNetworkStores true          # No .DS_Store on network volumes
 killall Finder
+
+if [[ -n "$(fc-list "$fontMonospace" 2>/dev/null)" ]]; then
+    defaults write org.n8gray.QLColorCode font "$fontMonospace"
+    defaults write org.n8gray.QLColorCode fontSizePoints 13
+fi
+qlmanage -r >/dev/null
 
 # http://brettterpstra.com/2011/12/04/quick-tip-repeat-cocoa-text-actions-emacsvim-style/
 defaults write -g NSRepeatCountBinding -string "^u"
@@ -71,9 +79,9 @@ defaults write com.apple.Safari WebKitDeveloperExtras -boolean true
 defaults write com.apple.Safari WebKitWebGLEnabled -boolean true
 defaults write com.apple.Safari IncludeDebugMenu -boolean true
 # http://hints.macworld.com/article.php?story=20120731105734626
-defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2StandardFontFamily 'Lucida Grande'
+defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2StandardFontFamily "$fontSansSerif"
 defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DefaultFontSize 18
-defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2FixedFontFamily 'Envy Code R'
+defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2FixedFontFamily "$fontMonospace"
 defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DefaultFixedFontSize 16
 
 defaults write com.apple.mail AddressesIncludeNameOnPasteboard -bool false  # Copy email addresses without the names
