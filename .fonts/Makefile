@@ -19,7 +19,6 @@ all: install
 # we'd like to generate a pattern of Makefile rules implicitly when including
 %Fonts.mk: genFontsFetchRules Makefile; @./$< $* >$@
 
-
 ## Envy Code R, Damien Guard's coding font
 ## See: http://damieng.com/blog/2008/05/26/envy-code-r-preview-7-coding-font-released
 EnvyCodeRFontsURL := http://download.damieng.com/fonts/original/EnvyCodeR-PR7.zip
@@ -116,6 +115,13 @@ DijkstraFonts := \
     #
 include DijkstraFonts.mk
 
+## Bubblegum
+BubblegumSansFontsURL := http://www.fontsquirrel.com/fonts/download/bubblegum-sans
+BubblegumSansFontsArchive := BubblegumSans.zip
+BubblegumSansFonts := \
+    BubblegumSans-Regular.otf \
+    #
+include BubblegumSansFonts.mk
 
 ## Microsoft free fonts
 msttcorefonts:
