@@ -210,7 +210,6 @@ on determineCurrentConfiguration(args)
 	
 	-- adjust display properties
 	set NSScreenWorked to false
-	set screenIndex to 0
 	repeat with placement in currentConfiguration's screenLayout
 		set screen to placement's screen
 		set {w, h} to screen's size
@@ -234,13 +233,15 @@ on determineCurrentConfiguration(args)
 			set NSScreenWorked to true
 		end if
 		set the text item delimiters to delimiter
-		set screenIndex to screenIndex + 1
 	end repeat
 	
 	set mainScreen to first item's screen of currentConfiguration's screenLayout
 	
 	# use a workaround if NSScreen.py didn't work
-	if not NSScreenWorked then adjustScreenWithDock(mainScreen)
+	#if not NSScreenWorked then
+		# XXX NSScreen.py miscalculates Dock's width when autohide
+		adjustScreenWithDock(mainScreen)
+	#end if
 	
 	return currentConfiguration
 end determineCurrentConfiguration
