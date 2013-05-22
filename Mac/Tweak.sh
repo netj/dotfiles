@@ -57,24 +57,28 @@ killall Finder
 
 if [[ -n "$(fc-list "$fontMonospace" 2>/dev/null)" ]]; then
     defaults write org.n8gray.QLColorCode font "$fontMonospace"
-    defaults write org.n8gray.QLColorCode fontSizePoints 13
+    defaults write org.n8gray.QLColorCode fontSizePoints 10
 fi
 qlmanage -r >/dev/null
 
 # http://brettterpstra.com/2011/12/04/quick-tip-repeat-cocoa-text-actions-emacsvim-style/
 defaults write -g NSRepeatCountBinding -string "^u"
+defaults write -g NSTextKillRingSize 4
 defaults write -g NSTextShowsControlCharacters -bool true
+#defaults write -g InitialKeyRepeat 15;
+#defaults write -g KeyRepeat 1;
 defaults write -g ApplePressAndHoldEnabled -boolean false
 defaults write -g NSAutomaticSpellingCorrectionEnabled -bool false
 defaults write -g AppleShowAllExtensions -boolean true
+defaults write -g AppleMiniaturizeOnDoubleClick -bool true
 defaults write -g NSScrollAnimationEnabled -bool false
 defaults write -g NSWindowResizeTime -float 0.001
+defaults write -g NSRecentDocumentsLimit 8
 defaults write -g NSDocumentSaveNewDocumentsToCloud -bool false         # Don't save to iCloud by default
 defaults write -g NSNavPanelExpandedStateForSaveMode -boolean true      # Expand save panel by default
 defaults write -g PMPrintingExpandedStateForPrint -bool true            # Expand printer panel by default
 defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
 
-defaults write com.apple.Safari ShowStatusBar -boolean true
 defaults write com.apple.Safari WebKitDeveloperExtras -boolean true
 defaults write com.apple.Safari WebKitWebGLEnabled -boolean true
 defaults write com.apple.Safari IncludeDebugMenu -boolean true
