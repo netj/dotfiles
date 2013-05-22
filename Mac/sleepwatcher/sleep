@@ -7,38 +7,11 @@
 set -u
 shopt -s extglob
 
-# See-Also: http://atastypixel.com/blog/automatically-eject-all-disks-on-sleep-reconnect-on-wake/
-ejectDisk() {
-    local diskname=$1
-    diskutil eject "$diskname" || (
-        diskname=${diskname#/@(dev|Volumes)/}
-        osascript -e 'tell application "Finder" to eject disk "'"$diskname"'"'
-    )
-    # TODO force unmountDisk if still there
-    #diskutil unmountDisk force $diskname
-}
-ejectDisks() {
-    while read diskname; do
-        ejectDisk $diskname &
-    done
-}
+PATH=~/Library/Scripts:"$PATH"
 
-# unmount all USB disks
-system_profiler SPUSBDataType | grep 'BSD Name: disk\d+$' | sed 's/.*: //' | ejectDisks
+# Eject all external, backup volumes and disks
+"Eject All External or Backup Disks.sh"
 
-# eject all remote time machine destinations first (sparsebundle)
-tmutil destinationinfo | grep "Mount Point" | sed 's/.*: //' |
-while read tmdest; do
-    remotedisk=$(hdiutil info |
-        sed -n '\#^image-path *: '"$tmdest"'#,/^==*$/{
-            \#/Volumes/.*$#{ s#.*\(/Volumes/.*\)$#\1#p; q; }
-        }')
-    [ -n "$remotedisk" ] || continue
-    ejectDisk "$remotedisk" &
-done
-
-# eject all remaining time machine destinations
-tmutil destinationinfo | grep "Mount Point" | sed 's/.*: //' | ejectDisks
 
 # To share Papers2 library over Dropbox, it has to be shut down
 echo "Quitting Papers2"
