@@ -226,10 +226,18 @@ on determineCurrentConfiguration(args)
 		if (count (text items of screenInfo)) = 6 then
 			#log {cmd, text items of screenInfo}
 			set {x,y, xv,yv, wv,hv} to text items of screenInfo
+			set xv to xv as number
+			set yv to yv as number
+			set wv to wv as number
+			set hv to hv as number
 			set placement's x to x as number
 			set placement's y to y as number
-			set screen's visibleOrigin to {xv as number, yv as number}
-			set screen's visibleSize to {wv as number, hv as number}
+			if yv = 22 and xv = 4 then
+				set wv to wv + xv
+				set xv to 0 # XXX NSScreen.py miscalculates Dock's width when autohide
+			end if
+			set screen's visibleOrigin to {xv, yv}
+			set screen's visibleSize to {wv, hv}
 			set NSScreenWorked to true
 		end if
 		set the text item delimiters to delimiter
@@ -238,10 +246,9 @@ on determineCurrentConfiguration(args)
 	set mainScreen to first item's screen of currentConfiguration's screenLayout
 	
 	# use a workaround if NSScreen.py didn't work
-	#if not NSScreenWorked then
-		# XXX NSScreen.py miscalculates Dock's width when autohide
+	if not NSScreenWorked then
 		adjustScreenWithDock(mainScreen)
-	#end if
+	end if
 	
 	return currentConfiguration
 end determineCurrentConfiguration
@@ -306,7 +313,7 @@ on getAppIntoView(appName)
 	tell application appName to activate
 	set appDockName to displayed name of (info for (path to frontmost application))
 	if appDockName ends with ".app" then set appDockName to characters 1 thru -5 of appDockName as text
-	log "activating " & appDockName
+	log "# activating " & appDockName
 	tell application "System Events"
 		try
 			set appDockIcon to get UI element appDockName of list 1 of process "Dock"
@@ -322,7 +329,7 @@ end getAppIntoView
 
 -- How to get window into view
 on getAppWindowIntoView(appName, windowName)
-	log "activating " & appName & "'s window named: " & windowName
+	log "# activating " & appName & "'s window named: " & windowName
 	tell application appName to activate
 	tell application "System Events" to tell process appName
 		try
@@ -485,7 +492,7 @@ to moveAndResize(args)
 		end if
 		
 		-- change the size and position of the window
-		--log ("moveAndResize "& _x &" "& _y &" "& _w &" "& _h &"\t"& (win's name))
+		log ("# moveAndResize "& _x &" "& _y &" "& _w &" "& _h &"\t"& (win's name))
 		try
 			set bounds of win to {_x, _y, _x + _w, _y + _h}
 		on error
