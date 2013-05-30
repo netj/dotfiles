@@ -469,6 +469,9 @@ fun! SetupVAM()
 
   " Default VAM settings
   if !exists("g:vim_addon_manager") | let g:vim_addon_manager = {} | endif
+  for vcs in ["git", "hg"]
+    let g:vim_addon_manager['drop_'.vcs.'_sources'] = !executable(vcs)
+  endfor
   call extend(g:vim_addon_manager, {
         \'known_repos_activation_policy': 'yes',
         \'auto_install': 1,
