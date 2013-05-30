@@ -37,7 +37,6 @@ osascript -e '
         end if
     end tell
     '
-open -a Backdrop
 # TODO wait until Dropbox finishes syncing Papers2's library
 
 wait # for everything we wanted to do

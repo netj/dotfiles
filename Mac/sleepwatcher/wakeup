@@ -15,10 +15,6 @@ if [ -e ~/.wakeup.Papers2 ]; then
         tell application "System Events" to set visible of application process "Papers2" to true
         delay 2
 
-        try
-            tell application "Backdrop" to quit
-        end try
-
         # go back to the last active app and window in the right Space/Desktop
         set curWindow  to (do shell script "cat ~/.wakeup.activate.app.window")
         set curAppPath to (do shell script "readlink ~/.wakeup.activate.app")
