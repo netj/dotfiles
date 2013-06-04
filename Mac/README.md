@@ -12,7 +12,7 @@ otherwise even after watching [the talk given by Terminal.app's author][Ben Stig
 [TotalTerminal][] is another reason why you should use the default one.  I
 recommend using [Envy Code R font][] for your terminal if you want something
 different from Apple's default, Menlo or Monaco.  You can find more fonts from
-my [.fonts directory](.fonts#readme).
+my [.fonts directory](../../../tree/master/.fonts#readme).
 
 ### MouseTerm
 [MouseTerm][] is a great SIMBL plugin, which passes mouse events to programs
