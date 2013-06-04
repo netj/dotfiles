@@ -321,11 +321,18 @@ on getAppIntoView(appName)
 			click appDockIcon
 			delay 0.3
 		on error
-			set windowMenu to (first menu bar item whose title is "Window" or title is "윈도우") of menu bar 1 of process appName
-			click last menu item of menu 1 of windowMenu
+			click last menu item of my getAppWindowMenu(appName)
 		end try
 	end tell
 end getAppIntoView
+
+-- How to get application's "Window" menu
+-- XXX only works with English and Korean locales
+on getAppWindowMenu(appName)
+	tell application "System Events" to tell process appName
+		return (menu 1 of (first menu bar item whose title is "Window" or title is "윈도우") of menu bar 1)
+	end tell
+end getAppWindowMenu
 
 -- How to get window into view
 on getAppWindowIntoView(appName, windowName)
@@ -333,7 +340,7 @@ on getAppWindowIntoView(appName, windowName)
 	tell application appName to activate
 	tell application "System Events" to tell process appName
 		try
-			set windowMenuItem to menu item windowName of menu 1 of (first menu bar item whose title is "Window" or title is "윈도우") of menu bar 1
+			set windowMenuItem to menu item windowName of my getAppWindowMenu(appName)
 			click windowMenuItem
 			if "✓" is not the value of attribute "AXMenuItemMarkChar" of windowMenuItem then click windowMenuItem
 			delay 0.2
@@ -516,20 +523,21 @@ on keepInAllSpaces(wins, keepOrNot)
 		my getAppWindowIntoView(appName, w's name)
 		tell application "System Events"
 			tell process appName
-				-- ⌃⇧⌘F
-				key code 3 using {command down, control down, shift down}
-				repeat 5 times
-					try
-						set afloatWindow to window "Afloat — Adjust Effects"
-						tell afloatWindow
-							set chkbox to checkbox "Keep this window on the screen on all Spaces"
-							if chkbox's value is not keepVal then click chkbox
-							click button "Done"
-						end tell
-						exit repeat
-					end try
-					delay 0.1
-				end repeat
+				try
+					click menu item "Adjust Effects" of my getAppWindowMenu(appName)
+					repeat 5 times
+						try
+							set afloatWindow to window "Afloat — Adjust Effects"
+							tell afloatWindow
+								set chkbox to checkbox "Keep this window on the screen on all Spaces"
+								if chkbox's value is not keepVal then click chkbox
+								click button "Done"
+							end tell
+							exit repeat
+						end try
+						delay 0.1
+					end repeat
+				end try
 			end tell
 		end tell
 		return
