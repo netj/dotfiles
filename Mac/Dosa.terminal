@@ -367,6 +367,31 @@
 	BAtzdHJlYW10eXBlZIHoA4QBQISEhAdOU0NvbG9yAISECE5TT2JqZWN0AIWEAWMChARm
 	ZmZmg83MTD+DzcxMPoOamRk/AYY=
 	</data>
+	<key>mouseLeftClick</key>
+	<data>
+	BAtzdHJlYW10eXBlZIHoA4QBQISEhAhOU051bWJlcgCEhAdOU1ZhbHVlAISECE5TT2Jq
+	ZWN0AIWEASqEhAFjlwGG
+	</data>
+	<key>mouseMiddleClick</key>
+	<data>
+	BAtzdHJlYW10eXBlZIHoA4QBQISEhAhOU051bWJlcgCEhAdOU1ZhbHVlAISECE5TT2Jq
+	ZWN0AIWEASqEhAFjlwGG
+	</data>
+	<key>mouseRightClick</key>
+	<data>
+	BAtzdHJlYW10eXBlZIHoA4QBQISEhAhOU051bWJlcgCEhAdOU1ZhbHVlAISECE5TT2Jq
+	ZWN0AIWEASqEhAFjlwGG
+	</data>
+	<key>mouseWheel</key>
+	<data>
+	BAtzdHJlYW10eXBlZIHoA4QBQISEhAhOU051bWJlcgCEhAdOU1ZhbHVlAISECE5TT2Jq
+	ZWN0AIWEASqEhAFjlwGG
+	</data>
+	<key>mouseWheelEmulation</key>
+	<data>
+	BAtzdHJlYW10eXBlZIHoA4QBQISEhAhOU051bWJlcgCEhAdOU1ZhbHVlAISECE5TT2Jq
+	ZWN0AIWEASqEhAFjlwGG
+	</data>
 	<key>name</key>
 	<string>Dosa</string>
 	<key>noWarnProcesses</key>
@@ -412,7 +437,7 @@
 	<key>type</key>
 	<string>Window Settings</string>
 	<key>useOptionAsMetaKey</key>
-	<integer>1</integer>
+	<true/>
 	<key>whiteColour</key>
 	<data>
 	BAtzdHJlYW10eXBlZIHoA4QBQISEhAdOU0NvbG9yAISECE5TT2JqZWN0AIWEAWMDhAJm
