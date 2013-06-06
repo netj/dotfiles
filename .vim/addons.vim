@@ -102,9 +102,10 @@ fun! SetupAddons()
     let g:gundo_close_on_revert = 1
     nnoremap <Space>u :GundoToggle<CR>
   endif
-  "ActivateAddons bufexplorer.zip
-  ActivateAddons tselectbuffer
-    nnoremap <Space>b :TSelectBuffer<CR>
+  ActivateAddons bufexplorer.zip
+    nnoremap <Space>b :BufExplorerHorizontalSplit<CR>
+  "ActivateAddons tselectbuffer
+  "  nnoremap <Space>b :TSelectBuffer<CR>
   ActivateAddons Tagbar
     nnoremap <Space>t :TagbarOpenAutoClose<CR>
     nnoremap <Space>T :TagbarToggle<CR>
