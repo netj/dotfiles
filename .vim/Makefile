@@ -42,5 +42,5 @@ coffeetags: ##
 tpopes-abbrevs: after/plugin/abolish.vim ##
 after/plugin/abolish.vim:
 	mkdir -p $(@D) && cd $(@D) && \
-	curl -RLO https://raw.github.com/tpope/tpope/master/.vim/$@
+	curl -kRLO https://raw.github.com/tpope/tpope/master/.vim/$@
 
