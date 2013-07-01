@@ -2,11 +2,13 @@
 set -eu
 
 PATH="$PATH":/usr/local/bin
-#set -x
-#exec >>/tmp/ctx.log 2>&1
+log=~/.context-adapter.log
 
-: ${ctx:=$(osascript -e 'tell application "ControlPlane" to get current context')}
-growlnotify -a ControlPlane -n "ControlPlane growlnotify" \
+osascript ~/Library/Scripts/"Adapt to Current Displays".scpt &>"$log" &
+
+ctx=$(tail -f "$log" | sed -n '/Detected context: / { s/.*: //p; q; }')
+growlnotify -a Automator -n "Context Adapter" \
     -t "$ctx" -m "Adapting to Context.." 
 
-osascript ~/Library/Scripts/"Adapt to Current Displays".scpt
+
+wait
