@@ -30,9 +30,11 @@
         <!---->               KeyCode::A, ModifierFlag::CONTROL_L|ModifierFlag::COMMAND_L                     </autogen>
         <autogen>__KeyToKey__ KeyCode::F, ModifierFlag::CONTROL_L|VK_SHIFT|ModifierFlag::COMMAND_L|ModifierFlag::NONE,
         <!---->               KeyCode::F, ModifierFlag::CONTROL_L|VK_SHIFT|ModifierFlag::COMMAND_L                     </autogen>
-        <!-- pass-through my TotalTerminal combos ⌃⌘⏎ ⌃⌘P -->
+        <!-- pass-through my TotalTerminal combos ⌃⌘⏎ ⌃⇧⌘⏎ ⌃⌘P -->
         <autogen>__KeyToKey__ KeyCode::RETURN, ModifierFlag::CONTROL_L|ModifierFlag::COMMAND_L|ModifierFlag::NONE,
         <!---->               KeyCode::RETURN, ModifierFlag::CONTROL_L|ModifierFlag::COMMAND_L </autogen>
+        <autogen>__KeyToKey__ KeyCode::RETURN, ModifierFlag::CONTROL_L|ModifierFlag::COMMAND_L|VK_SHIFT|ModifierFlag::NONE,
+        <!---->               KeyCode::RETURN, ModifierFlag::CONTROL_L|ModifierFlag::COMMAND_L|VK_SHIFT </autogen>
         <autogen>__KeyToKey__ KeyCode::P, ModifierFlag::CONTROL_L|ModifierFlag::COMMAND_L|ModifierFlag::NONE,
         <!---->               KeyCode::P, ModifierFlag::CONTROL_L|ModifierFlag::COMMAND_L </autogen>
         <!-- change rest of keys with Command, Shift+Command, Control+Command, and Control+Shift+Command to Option -->

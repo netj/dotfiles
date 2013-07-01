@@ -231,11 +231,11 @@ case $(uname) in Darwin)
     if running-app KeyRemap4MacBook; then
         for xml in Mac/KeyRemap4MacBook/*.xml; do
             [ -e "$xml" ] || continue
-            install Library/"Application Support"/"${xml#Mac/}" "$xml"
             Library_Application_Support_KeyRemap4MacBook_private_xml_after() {
                 local x="$(mdfind KeyRemap4MacBook_cli.app | head -n 1)/Contents/MacOS/KeyRemap4MacBook_cli"
                 ! [ -x "$x" ] || "$x" reloadxml
             }
+            install Library/"Application Support"/"${xml#Mac/}" "$xml"
         done
     fi
 
