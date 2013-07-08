@@ -121,6 +121,8 @@ on run args
 	useConfiguration(mpkOfficeConfiguration)
 	determineCurrentConfiguration(args)
 	
+	showContextChangeNotification(currentConfiguration)
+	
 	if args is not {} then log {"* Command-Line arguments: "} & args
 	log "* Detected context: " & currentConfiguration's name
 	log "* Screen size: " & (actualWidth & " x " & actualHeight)
@@ -132,6 +134,8 @@ on run args
 		set screenIndex to screenIndex + 1
 	end repeat
 	set numScreens to screenIndex
+	
+	
 	
 	-- move and resize some apps (without knowing the environment)
 	if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({w:1321, wins:my getLargeEnoughWindows(windows)})
@@ -256,6 +260,26 @@ on determineCurrentConfiguration(args)
 	
 	return currentConfiguration
 end determineCurrentConfiguration
+
+on showContextChangeNotification(currentConfiguration)
+	tell application "System Events" to set isRunning to ¬
+		(count of (every process whose bundle identifier is "com.Growl.GrowlHelperApp")) > 0
+	if isRunning then
+		set ctx to get currentConfiguration's name
+		tell application id "com.Growl.GrowlHelperApp"
+			set the enabledNotificationsList to {"Context Change"}
+			set the allNotificationsList to enabledNotificationsList & {}
+			register as application "Context Adapter"  ¬
+				all notifications allNotificationsList  ¬
+				default notifications enabledNotificationsList  ¬
+				icon of application "Automator"
+			notify with name "Context Change" ¬
+				title ctx ¬
+				description "Adapting to detected context: " & ctx & "..." ¬
+				application name "Context Adapter"
+		end tell
+	end if
+end showContextChangeNotification
 
 -- check if actual screen size matches config
 on actualScreensMatch(config)
