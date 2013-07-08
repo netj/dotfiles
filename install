@@ -252,7 +252,7 @@ case $(uname) in Darwin)
     done
 
     # install applescripts
-    if running-app "FastScripts"; then
+    if running-app "BetterTouchTool" || running-app "FastScripts"; then
     cd "$DotfilesRoot"
     scptd=Mac/Scripts/compiled/
     mkdir -p "$scptd"
@@ -293,5 +293,18 @@ case $(uname) in Darwin)
         [ -e "$s" ] || continue
         installscpt "$s"
     done
+    if running-app "BetterTouchTool"; then
+        # install AppleScript wrapper for shell scripts (e.g., for Better Touch Tool)
+        for s in Mac/Scripts/*.sh; do
+            dst=Library/"${s#Mac/}"
+            [ -e ~/"$dst" ] || continue
+            wrpr="Mac/Scripts/Applications/BetterTouchTool${s#Mac/Scripts}.applescript"
+            [ -e "$wrpr" ] || {
+                mkdir -p "$(dirname "$wrpr")"
+                echo 'do shell script "~/'\'${dst//\'/\'\\\'\'}\''"' >"$wrpr"
+            }
+            installscpt "$wrpr"
+        done
+    fi
     fi
 ;; esac

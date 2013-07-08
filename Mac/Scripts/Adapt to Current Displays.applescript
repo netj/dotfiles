@@ -8,12 +8,14 @@ on Screen(w, h)
 	return {size:{w, h}, origin:{0, 0}, visibleSize:{w, h}, visibleOrigin:{0, 0}}
 end Screen
 
-property macbookDisplay : Screen(1680, 1050)
+#property macbookDisplay : Screen(1920, 1200) -- Retina MacBook Pro 15"
+property macbookDisplay : Screen(1680, 1050) -- MacBook Pro 15" HiRes
+#property macbookDisplay : Screen(1440, 900) -- MacBook Air 13"
 property syncmaster27inDisplay : Screen(1920, 1200)
 property syncmaster30inDisplay : Screen(2560, 1600)
 property cinema30inDisplay : Screen(2560, 1600)
 property thunderboltDisplay : Screen(2560, 1440)
-property detectionTolerance : 100 -- px of alignment error to tolerate
+property detectionTolerance : 200 -- px of alignment error to tolerate
 
 --------------------------------------------------------------------------------------------------------
 
@@ -158,12 +160,14 @@ on run args
 			end try
 		end tell
 	end if
+
+	-- 3rd party apps
 	if my appIsRunning("Twitter") then tell application "Twitter" to my moveAndResize({screen:macbookDisplay, x:1, y:0, h:1, wins:windows})
 	if my appIsRunning("Adium") then tell application "Adium"
 		if my appIsRunning("Mail") then tell application "Mail" to my moveAndResize({screen:macbookDisplay, h:0.9, wins:windows of message viewers})
-		my moveAndResize({screen:macbookDisplay, x:1, y:0, w:250, h:1, wins:windows})
-		my moveAndResize({screen:macbookDisplay, x:1, y:1, w:0.6, h:0.75, wins:chat windows})
-		my keepInAllSpaces(chat windows, numScreens > 1)
+		my moveAndResize({screen:macbookDisplay, x:1, y:0, w:250, h:1,    wins:windows whose name is     "Contacts"})
+		my moveAndResize({screen:macbookDisplay, x:1, y:1, w:0.6, h:0.75, wins:windows whose name is not "Contacts"})
+		my keepInAllSpaces(windows, numScreens > 1)
 	end tell
 	
 	if my appIsRunning("Eclipse") then moveAndResize({x:0, y:0, w:1, h:1, wins:my getAppWindows("Eclipse")})

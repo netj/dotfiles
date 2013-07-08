@@ -7,6 +7,7 @@ log=~/.context-adapter.log
 osascript ~/Library/Scripts/"Adapt to Current Displays".scpt &>"$log" &
 
 ctx=$(tail -f "$log" | sed -n '/Detected context: / { s/.*: //p; q; }')
+! type growlnotify &>/dev/null ||
 growlnotify -a Automator -n "Context Adapter" \
     -t "$ctx" -m "Adapting to Context.." 
 
