@@ -79,6 +79,26 @@ defaults write -g NSNavPanelExpandedStateForSaveMode -boolean true      # Expand
 defaults write -g PMPrintingExpandedStateForPrint -bool true            # Expand printer panel by default
 defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
 
+# trackpad configs
+defaults -currentHost write -g com.apple.mouse.tapBehavior 3
+defaults -currentHost write -g com.apple.mouse.swapLeftRightButton -bool false
+defaults -currentHost write -g com.apple.trackpad.enableSecondaryClick -bool true
+defaults -currentHost write -g com.apple.trackpad.trackpadCornerClickBehavior -bool false
+defaults -currentHost write -g com.apple.trackpad.twoFingerDoubleTapGesture -bool true
+defaults -currentHost write -g com.apple.trackpad.scrollBehavior 2
+defaults -currentHost write -g com.apple.trackpad.momentumScroll -bool true
+defaults -currentHost write -g com.apple.trackpad.ignoreTrackpadIfMousePresent -bool false
+defaults -currentHost write -g com.apple.trackpad.twoFingerFromRightEdgeSwipeGesture 3
+defaults -currentHost write -g com.apple.trackpad.pinchGesture -bool true
+defaults -currentHost write -g com.apple.trackpad.rotateGesture -bool true
+defaults -currentHost write -g com.apple.trackpad.threeFingerTapGesture 2
+defaults -currentHost write -g com.apple.trackpad.threeFingerDragGesture -bool false
+defaults -currentHost write -g com.apple.trackpad.threeFingerHorizSwipeGesture 1
+defaults -currentHost write -g com.apple.trackpad.threeFingerVertSwipeGesture 1
+defaults -currentHost write -g com.apple.trackpad.fourFingerHorizSwipeGesture 2
+defaults -currentHost write -g com.apple.trackpad.fourFingerPinchSwipeGesture 2
+defaults -currentHost write -g com.apple.trackpad.fourFingerVertSwipeGesture 2
+
 defaults write com.apple.Safari WebKitDeveloperExtras -boolean true
 defaults write com.apple.Safari WebKitWebGLEnabled -boolean true
 defaults write com.apple.Safari IncludeDebugMenu -boolean true
@@ -89,6 +109,8 @@ defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebK
 defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DefaultFixedFontSize 16
 
 defaults write com.apple.mail AddressesIncludeNameOnPasteboard -bool false  # Copy email addresses without the names
+
+defaults write com.apple.Terminal SecureKeyboardEntry -bool true
 
 # How to show Dictionary definitions first in Spotlight results
 # See-Also: http://apple.stackexchange.com/a/52530
