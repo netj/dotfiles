@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import sys
+from Quartz import CGDisplayIsBuiltin # See: http://pydoc.net/Python/displays/0.1.0/displays.main/
 from AppKit import *
 
 def usage():
@@ -50,6 +51,19 @@ def screenDimOf(screen):
 matchedScreens = [s for s in screens if screenIdOf(s) in displaysInQuestion]
 if len(matchedScreens) == 0:
     matchedScreens = [s for s in screens if screenDimOf(s) in displaysInQuestion]
+if len(matchedScreens) == 0:
+    matchedScreens = []
+    for idx in displaysInQuestion:
+        try:
+            i = int(idx)
+            matchedScreens += [screens[i]]
+        except ValueError:
+            False
+
+if "builtin" in displaysInQuestion:
+    matchedScreens += [s for s in screens if CGDisplayIsBuiltin(int(screenIdOf(s)))]
+if len(matchedScreens) == 0:
+    sys.exit(1)
 
 for screen in matchedScreens:
     d = dict(screen.deviceDescription())

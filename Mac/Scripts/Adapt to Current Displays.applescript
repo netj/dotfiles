@@ -8,9 +8,7 @@ on Screen(w, h)
 	return {size:{w, h}, origin:{0, 0}, visibleSize:{w, h}, visibleOrigin:{0, 0}}
 end Screen
 
-#property macbookDisplay : Screen(1920, 1200) -- Retina MacBook Pro 15"
-property macbookDisplay : Screen(1680, 1050) -- MacBook Pro 15" HiRes
-#property macbookDisplay : Screen(1440, 900) -- MacBook Air 13"
+property macbookDisplay : Screen(1680, 1050)
 property syncmaster27inDisplay : Screen(1920, 1200)
 property syncmaster30inDisplay : Screen(2560, 1600)
 property cinema30inDisplay : Screen(2560, 1600)
@@ -197,9 +195,18 @@ end useConfiguration
 property actualWidth : null
 property actualHeight : null
 
+property macbookDisplayUncertain : true
+
 on determineCurrentConfiguration(args)
 	-- consider the screen size
 	tell application "Finder" to set {_x, _y, actualWidth, actualHeight} to bounds of window of desktop
+
+	-- detect the size of builtin display if needed
+	if macbookDisplayUncertain then
+		set {w,h} to my askNSScreen("builtin", "W H")
+		set macbookDisplay's size to {w as number, h as number}
+		set macbookDisplayUncertain to false
+	end if
 	
 	-- determine which configuration to use
 	set currentConfiguration to macbookConfiguration -- default
@@ -222,18 +229,12 @@ on determineCurrentConfiguration(args)
 		set screen to placement's screen
 		set {w, h} to screen's size
 		set screenDim to w & "x" & h
-		set screenNumber to ""
+		set screenIdentifier to ""
 		try
-			set screenNumber to screen's screenNumber
+			set screenIdentifier to screen's screenIdentifier
 		end try
-		set cmd to "~/Library/Scripts/NSScreen.py " & screenDim & " " & screenNumber & " -- X Y  Xvisible Yvisible  Wvisible Hvisible"
-		#log cmd
-		set screenInfo to do shell script cmd
-		set delimiter to the text item delimiters
-		set the text item delimiters to ASCII character 13
-		if (count (text items of screenInfo)) = 6 then
-			#log {cmd, text items of screenInfo}
-			set {x,y, xv,yv, wv,hv} to text items of screenInfo
+		try
+			set {x,y, xv,yv, wv,hv} to my askNSScreen(screenDim & " " & screenIdentifier, "X Y  Xvisible Yvisible  Wvisible Hvisible")
 			set xv to xv as number
 			set yv to yv as number
 			set wv to wv as number
@@ -247,8 +248,7 @@ on determineCurrentConfiguration(args)
 			set screen's visibleOrigin to {xv, yv}
 			set screen's visibleSize to {wv, hv}
 			set NSScreenWorked to true
-		end if
-		set the text item delimiters to delimiter
+		end try
 	end repeat
 	
 	set mainScreen to first item's screen of currentConfiguration's screenLayout
@@ -260,6 +260,24 @@ on determineCurrentConfiguration(args)
 	
 	return currentConfiguration
 end determineCurrentConfiguration
+
+-- A wrapper for NSScreen.py
+on askNSScreen(screenQuery, fieldsToReturn)
+	set numFields to count words of fieldsToReturn
+	set cmd to "~/Library/Scripts/NSScreen.py " & screenQuery & " -- " & fieldsToReturn
+	#log cmd
+	set screenInfo to do shell script cmd
+	set delimiter to the text item delimiters
+	set the text item delimiters to ASCII character 13
+	set values to text items of screenInfo
+	set the text item delimiters to delimiter
+	#log {cmd, values}
+	if (count values) = numFields then
+		return values
+	else
+		error "NSScreen could not retrieve all info for: " & screenQuery & " -- " & fieldsToReturn
+	end if
+end askNSScreen
 
 on showContextChangeNotification(currentConfiguration)
 	tell application "System Events" to set isRunning to ¬
@@ -275,7 +293,7 @@ on showContextChangeNotification(currentConfiguration)
 				icon of application "Automator"
 			notify with name "Context Change" ¬
 				title ctx ¬
-				description "Adapting to detected context: " & ctx & "..." ¬
+				description "Adapting to " & ctx & "" ¬
 				application name "Context Adapter"
 		end tell
 	end if
