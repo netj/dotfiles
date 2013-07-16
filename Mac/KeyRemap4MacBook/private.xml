@@ -93,4 +93,12 @@
             <!---->               KeyCode::ESCAPE,KeyCode::VK_CHANGE_INPUTMODE_ENGLISH </autogen>
         </block>
     </item>
+
+    <item>
+        <name>Power to F13</name>
+        <appendix>(+ Fn+Power to Power)</appendix>
+        <identifier>private.power_to_f13</identifier>
+        <modifier_not>ModifierFlag::FN</modifier_not>
+        <autogen>__ConsumerToKey__ ConsumerKeyCode::POWER, KeyCode::F13</autogen>
+    </item>
 </root>
