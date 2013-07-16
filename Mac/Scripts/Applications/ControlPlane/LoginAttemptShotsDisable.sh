@@ -1,0 +1,1 @@
+rm -f ~/.loginshots.monitorAttempts

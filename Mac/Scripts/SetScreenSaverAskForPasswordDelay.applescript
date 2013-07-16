@@ -18,28 +18,26 @@ on run args
 				tell first window
 					tell first tab group
 						# ensure we're on the first tab
-						click (first radio button whose title is "일반") -- "General"
+						click (first radio button whose title is "General" or title is "일반")
 
-						# 'require password' checkbox
-						set cb to (first checkbox whose description is "잠자기 또는 화면 보호기 시작 이후에 암호 요구 체크상자") -- "...?"
+						# expect failure here since checkbox may not exist when the Mac is using FileVault
+						try
+							# 'require password' checkbox
+							set cb to (first checkbox whose description is "Require password after sleep or screen saver checkbox" or description is "잠자기 또는 화면 보호기 시작 이후에 암호 요구 체크상자")
+							# always enable password
+							if value of cb is not 1 then
+								# password is currently disabled, enable it
+								click cb
+							end if
+						end try
 
 						# 'require password' popup button
 						set pb to pop up button 1
 
-						# always enable password
-						if value of cb is not 1 then
-							# password is currently disabled, enable it
-							click cb
-						end if
-
-						# if password is activated now, set the timeout
-						# this check is redundant, you can remove it
-						if value of cb is 1 then
-							# click pop up button to get menu
-							click pop up button 1
-							# select 'immedately', '5 seconds', ...
-							click menu item nthOption of menu of pb
-						end if
+						# click pop up button to get menu
+						click pop up button 1
+						# select 'immedately', '5 seconds', ...
+						click menu item nthOption of menu of pb
 					end tell
 				end tell
 			end tell
