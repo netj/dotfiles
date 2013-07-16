@@ -143,15 +143,18 @@ on run args
 	
 	-- move and resize some apps
 	if my appIsRunning("Mail") then tell application "Mail"
+		my rememberVisibility("Mail")
 		my moveAndResize({screen:macbookDisplay, x:0, y:0, w:1352, h:1, wins:windows of message viewers})
 		my switchToDesktopNumber(1)
 		activate
 		my keepInAllSpaces(message viewers, numScreens > 1)
+		my preserveVisibility("Mail")
 	end tell
 	set messagesAppName to "Messages"
 	if (get version of application "Finder") < "10.8" then set messagesAppName to "iChat"
 	if my appIsRunning(messagesAppName) then
 		if my appIsRunning("Mail") then tell application "Mail" to my moveAndResize({screen:macbookDisplay, h:0.9, wins:windows of message viewers})
+		my rememberVisibility(messagesAppName)
 		tell application messagesAppName
 			my moveAndResize({screen:macbookDisplay, x:0, y:1, h:700, wins:windows})
 			my keepInAllSpaces(windows, numScreens > 1)
@@ -161,15 +164,18 @@ on run args
 				my keepInAllSpaces(buddiesWindows, yes)
 			end try
 		end tell
+		my preserveVisibility(messagesAppName)
 	end if
 
 	-- 3rd party apps
 	if my appIsRunning("Twitter") then tell application "Twitter" to my moveAndResize({screen:macbookDisplay, x:1, y:0, h:1, wins:windows})
 	if my appIsRunning("Adium") then tell application "Adium"
 		if my appIsRunning("Mail") then tell application "Mail" to my moveAndResize({screen:macbookDisplay, h:0.9, wins:windows of message viewers})
+		my rememberVisibility("Adium")
 		my moveAndResize({screen:macbookDisplay, x:1, y:0, w:250, h:1,    wins:windows whose name is     "Contacts"})
 		my moveAndResize({screen:macbookDisplay, x:1, y:1, w:0.6, h:0.75, wins:windows whose name is not "Contacts"})
 		my keepInAllSpaces(windows, numScreens > 1)
+		my preserveVisibility("Adium")
 	end tell
 	
 	if my appIsRunning("Eclipse") then moveAndResize({x:0, y:0, w:1, h:1, wins:my getAppWindows("Eclipse")})
@@ -195,18 +201,14 @@ end useConfiguration
 property actualWidth : null
 property actualHeight : null
 
-property macbookDisplayUncertain : true
-
 on determineCurrentConfiguration(args)
 	-- consider the screen size
 	tell application "Finder" to set {_x, _y, actualWidth, actualHeight} to bounds of window of desktop
 
-	-- detect the size of builtin display if needed
-	if macbookDisplayUncertain then
+	-- detect the size of builtin display (TODO only if needed e.g., on differently scaled Retina displays)
 		set {w,h} to my askNSScreen("builtin", "W H")
 		set macbookDisplay's size to {w as number, h as number}
 		set macbookDisplayUncertain to false
-	end if
 	
 	-- determine which configuration to use
 	set currentConfiguration to macbookConfiguration -- default
@@ -654,5 +656,22 @@ on hideDock(hide)
 		end tell
 	end tell
 end hideDock
+
+
+-- shorthands for preserving visibility
+property lastAppWasVisible : false
+property lastAppsFrontWindowWasVisible : false
+on rememberVisibility(appName)
+	tell application "System Events" to set lastAppWasVisible to process appName's visible
+	if lastAppWasVisible then
+		tell application appName to set lastAppsFrontWindowWasVisible to front window's visible
+	end if
+end rememberVisibility
+on preserveVisibility(appName)
+	if lastAppWasVisible then
+		tell application appName to set front window's visible to lastAppsFrontWindowWasVisible
+	end if
+	tell application "System Events" to set process appName's visible to lastAppWasVisible
+end preserveVisibility
 
 # vim:ft=applescript:sw=4:ts=4:sts=4:noet
