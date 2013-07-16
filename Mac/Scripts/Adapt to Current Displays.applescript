@@ -295,7 +295,7 @@ on showContextChangeNotification(currentConfiguration)
 				icon of application "Automator"
 			notify with name "Context Change" ¬
 				title ctx ¬
-				description "Adapting to " & ctx & "" ¬
+				description "Adapting to Context.." ¬
 				application name "Context Adapter"
 		end tell
 	end if
