@@ -1,4 +1,26 @@
-﻿# AppleScript for organizing position and size of windows automatically in my Mac
+﻿#!/usr/bin/env osascript
+## HelloDisplays for MacBook
+# 
+# Are you manually rearranging a pile of windows to their ideal positions and
+# sizes every time you plug an external display to your MacBook? Free yourself
+# from such hassle with HelloDisplays and some AppleScript!
+# 
+# This AppleScript provides plenty of vocabularies for moving positions of
+# windows and resizing them.  You can define a number of display arrangement
+# configurations and have sophisticated rules attached to each of them, which
+# describes how you would have manually laid out windows of different apps
+# across displays.  HelloDisplays will detect which configuration you are in,
+# and apply the rules for that configuration.
+# 
+# With the help of another script called watch-syslog.sh, you can add the
+# following two lines to your crontab (see `crontab -e`) to automatatically
+# trigger HelloDisplays as you connect or disconnect external displays.
+# 
+#     */19 *   * * *   exec watch-syslog.sh 'WindowServer\[[0-9]\+\]: Display \(added\|removed\)'  ~/.HelloDisplays.pid  osascript ~/Library/Scripts/HelloDisplay.scpt' &>/dev/null &
+#     @reboot          exec watch-syslog.sh 'WindowServer\[[0-9]\+\]: Display \(added\|removed\)'  ~/.HelloDisplays.pid  osascript ~/Library/Scripts/HelloDisplay.scpt' &>/dev/null &
+# 
+# Enjoy!
+#
 # Author: Jaeho Shin <netj@sparcs.org>
 # Created: 2012-06-09
 
@@ -87,6 +109,12 @@ property mainScreen : macbookDisplay
 --------------------------------------------------------------------------------------------------------
 
 on run args
+
+	-- make sure args is a list, since the rest relies on that
+	if class of args is not list then
+		set args to {}
+	end if
+
 	tell application "System Events"
 		-- enable UI scripting
 		set UI elements enabled to true
@@ -100,6 +128,8 @@ on run args
 			delay 1
 		end repeat
 	end tell
+
+	showProgressNotification(null)
 	
 	-- remember current application
 	set curAppName to short name of (info for (path to frontmost application))
@@ -119,7 +149,7 @@ on run args
 	useConfiguration(mpkOfficeConfiguration)
 	determineCurrentConfiguration(args)
 	
-	showContextChangeNotification(currentConfiguration)
+	showProgressNotification(currentConfiguration)
 	
 	if args is not {} then log {"* Command-Line arguments: "} & args
 	log "* Detected context: " & currentConfiguration's name
@@ -281,25 +311,32 @@ on askNSScreen(screenQuery, fieldsToReturn)
 	end if
 end askNSScreen
 
-on showContextChangeNotification(currentConfiguration)
+on showProgressNotification(currentConfiguration)
 	tell application "System Events" to set isRunning to ¬
 		(count of (every process whose bundle identifier is "com.Growl.GrowlHelperApp")) > 0
 	if isRunning then
-		set ctx to get currentConfiguration's name
 		tell application id "com.Growl.GrowlHelperApp"
-			set the enabledNotificationsList to {"Context Change"}
+			set the enabledNotificationsList to {"Detecting Config", "Found Config"}
 			set the allNotificationsList to enabledNotificationsList & {}
-			register as application "Context Adapter"  ¬
+			register as application "HelloDisplays"  ¬
 				all notifications allNotificationsList  ¬
 				default notifications enabledNotificationsList  ¬
 				icon of application "Automator"
-			notify with name "Context Change" ¬
-				title ctx ¬
-				description "Adapting to Context.." ¬
-				application name "Context Adapter"
+			if currentConfiguration is null then
+				notify with name "Detecting Config" ¬
+					title "Detecting"  ¬
+					description "where we are..." ¬
+					application name "HelloDisplays"
+			else
+				set cfg to get currentConfiguration's name
+				notify with name "Found Config" ¬
+					title "At " & cfg & "" ¬
+					description "Rearranging windows for " & cfg & "..." ¬
+					application name "HelloDisplays"
+			end if
 		end tell
 	end if
-end showContextChangeNotification
+end showProgressNotification
 
 -- check if actual screen size matches config
 on actualScreensMatch(config)
