@@ -16,8 +16,8 @@
 # following two lines to your crontab (see `crontab -e`) to automatatically
 # trigger HelloDisplays as you connect or disconnect external displays.
 # 
-#     */19 *   * * *   exec watch-syslog.sh 'WindowServer\[[0-9]\+\]: Display \(added\|removed\)'  ~/.HelloDisplays.pid  osascript ~/Library/Scripts/HelloDisplay.scpt' &>/dev/null &
-#     @reboot          exec watch-syslog.sh 'WindowServer\[[0-9]\+\]: Display \(added\|removed\)'  ~/.HelloDisplays.pid  osascript ~/Library/Scripts/HelloDisplay.scpt' &>/dev/null &
+#     */19 *   * * *   exec watch-syslog.sh 'WindowServer\[[0-9]\+\]: Display \(added\|removed\)'  ~/.HelloDisplays.pid  exec ~/Library/Scripts/HelloDisplay.sh  &>/dev/null &
+#     @reboot          exec watch-syslog.sh 'WindowServer\[[0-9]\+\]: Display \(added\|removed\)'  ~/.HelloDisplays.pid  exec ~/Library/Scripts/HelloDisplay.sh  &>/dev/null &
 # 
 # Enjoy!
 #

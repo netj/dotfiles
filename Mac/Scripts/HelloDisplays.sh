@@ -1,2 +1,6 @@
 #!/usr/bin/env bash
-exec osascript "${0%.sh}.scpt"
+set -eu
+name=${0%.sh}
+log=~/.${name##*/}.log
+! [ -t 1 ] || tail -qF --pid=$$ $log &
+exec osascript "$name.scpt" &>>$log
