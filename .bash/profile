@@ -5,13 +5,12 @@
 # Reformed: 2004-05-28
 # Second-Reform: 2012-02-24
 
-. ~/.bash/plugins/bpm.sh vocabularies
-
-# load local settings and modules
-for s in ~/.bash_local
-do [ -r $s ] && . $s
-done
-
+# load bpm first
 . ~/.bash/plugins/bpm.sh load
+
+# load local configuration and modules
+for s in ~/.bash_local
+do ! [ -r $s ] || . $s
+done
 
 # vim:et:ts=4:sw=4:sts=4
