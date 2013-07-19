@@ -39,7 +39,7 @@ set Config to load script scriptFile
 script UI_en
 	property MenuItemHint : "Wi-Fi"
 	property TurnOnMenu : "Turn Wi-Fi On"
-	property CreateNetworkMenu : "Create Network¡¦"
+	property CreateNetworkMenu : "Create Networkâ€¦"
 	property CreateButton : "Create"
 	to LeaveNetworkMenu(NetworkName)
 		return "Disconnect from " & NetworkName
@@ -47,11 +47,11 @@ script UI_en
 end script
 script UI_ko
 	property MenuItemHint : "Wi-Fi"
-	property TurnOnMenu : "Wi-Fi ÄÑ±â"
-	property CreateNetworkMenu : "³×Æ®¿öÅ© »ı¼º¡¦"
-	property CreateButton : "»ı¼º"
+	property TurnOnMenu : "Wi-Fi ì¼œê¸°"
+	property CreateNetworkMenu : "ë„¤íŠ¸ì›Œí¬ ìƒì„±â€¦"
+	property CreateButton : "ìƒì„±"
 	to LeaveNetworkMenu(NetworkName)
-		return NetworkName & "¿¡¼­ ¿¬°á ÇØÁ¦"
+		return NetworkName & "ì—ì„œ ì—°ê²° í•´ì œ"
 	end LeaveNetworkMenu
 end script
 
