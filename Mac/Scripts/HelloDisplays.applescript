@@ -16,8 +16,8 @@
 # following two lines to your crontab (see `crontab -e`) to automatatically
 # trigger HelloDisplays as you connect or disconnect external displays.
 # 
-#     */19 *   * * *   exec watch-syslog.sh 'WindowServer\[[0-9]\+\]: Display \(added\|removed\)'  ~/.HelloDisplays.pid  exec ~/Library/Scripts/HelloDisplay.sh  &>/dev/null &
-#     @reboot          exec watch-syslog.sh 'WindowServer\[[0-9]\+\]: Display \(added\|removed\)'  ~/.HelloDisplays.pid  exec ~/Library/Scripts/HelloDisplay.sh  &>/dev/null &
+#     */19 *   * * *   watch-syslog.sh -e 1000 'WindowServer\[[0-9]\+\]: Display '  ~/.HelloDisplays.pid  exec ~/Library/Scripts/HelloDisplay.sh  &>/dev/null &
+#     @reboot          watch-syslog.sh -e 1000 'WindowServer\[[0-9]\+\]: Display '  ~/.HelloDisplays.pid  exec ~/Library/Scripts/HelloDisplay.sh  &>/dev/null &
 # 
 # Enjoy!
 #
@@ -651,7 +651,7 @@ on switchToDesktopNumber(num)
 					if not 0 = my BWAND(m, 2^18) then key down control
 					if not 0 = my BWAND(m, 2^19) then key down option
 					if not 0 = my BWAND(m, 2^20) then key down command
-					tell me to log "switching to desktop " & num
+					tell me to log "# switching to desktop " & num
 					key code code
 				on error err
 					tell me to log "Error: cannot switch to desktop " & num & ": " & err
@@ -686,6 +686,11 @@ end BWAND
 
 -- hideDock -- toggle autohide for Dock
 on hideDock(hide)
+	if hide then
+		log "# dock: autohiding"
+	else
+		log "# dock: always showing"
+	end if
 	tell application "System Events"
 		tell dock preferences
 			set autohide to hide
