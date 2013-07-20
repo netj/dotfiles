@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Watch /var/log/system.log and run commands whenever given pattern appears.
-# Usage: watch-syslog [-b MSECS | -e MSECS] GREP_PATTERN PID_PATH COMMAND [ARG]...
+# Usage: watch-syslog [-f] [-b MSECS | -e MSECS] GREP_PATTERN PID_PATH COMMAND [ARG]...
 # 
 # When -b MSECS is given, 
 #
@@ -10,8 +10,12 @@ set -eu
 
 invokeAtBeginning=true
 intervalMSEC=1000
-while getopts "b:e:" o; do
+forceStart=false
+while getopts "fb:e:" o; do
     case $o in
+        f)
+            forceStart=true
+            ;;
         b)
             invokeAtBeginning=true
             intervalMSEC=$OPTARG
@@ -33,12 +37,18 @@ timestamp=$pidfile.t
 # check pidfile if already watching
 if pid=$(cat "$pidfile" 2>/dev/null) && ps -o command= $pid 2>/dev/null |
         grep -F "$(basename "$0")" | grep -q -F "$(basename "$pidfile")"; then
-    echo >&2 "$pidfile: Already running as PID $pid"
-    exit 2
-else
-    echo $$ >"$pidfile"
+    if $forceStart; then
+        kill -TERM -$(ps -o pgid= $pid)
+    else
+        echo >&2 "$pidfile: Already running as PID $pid"
+        exit 2
+    fi
 fi
+# record pid
+echo $$ >"$pidfile"
 
+
+# decide how we throttle the invocation of given command
 if $invokeAtBeginning; then
     throttle() {
         timestampWithinInterval || "$@" &
@@ -57,7 +67,6 @@ else
         set +m
     }
 fi
-
 timestampWithinInterval() {
     local ts; read ts <"$timestamp" 2>/dev/null || ts=0
     [[ $(( $(date +%s%N) - $ts )) -le ${intervalMSEC}000000 ]] || {
@@ -67,7 +76,6 @@ timestampWithinInterval() {
 }
 
 # monitor system log to find the given pattern
-lasttime=
 tail -qF /var/log/system.log |
 grep --line-buffered "$greppatt" |
 while read -r line; do
