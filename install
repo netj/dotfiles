@@ -58,7 +58,7 @@ install() {
         echo "$dst installed"
         run ${n}_after "$@"
     else
-        if grep -qF "$dst" "$DotfilesSkipList" &>/dev/null; then
+        if grep -qxF "$dst" "$DotfilesSkipList" &>/dev/null; then
             echo "$dst skipped"
             return
         fi
