@@ -7,10 +7,12 @@
 set -u
 shopt -s extglob
 
+exec >~/.sleep.log 2>&1
+
 PATH=~/Library/Scripts:"$PATH"
 
 # Eject all external, backup volumes and disks
-"Eject All External or Backup Disks.sh"
+"Eject All External or Backup Disks.sh" &
 
 
 # To share Papers2 library over Dropbox, it has to be shut down
@@ -36,8 +38,11 @@ osascript -e '
             #key code 12 using command down
         end if
     end tell
-    '
+    ' &
 # TODO wait until Dropbox finishes syncing Papers2's library
+
+echo "Stopping Growl"
+osascript -e 'tell application "Growl" to quit' &
 
 wait # for everything we wanted to do
 #say "Sleeping..." # XXX any user interaction done here happens after wakeup
