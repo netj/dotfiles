@@ -15,7 +15,7 @@ tell application "Growl" to reopen
 repeat
     log (do shell script "date")
     try
-        tell application "Growl" to activate
+        tell application "Growl" to reopen
         tell application "System Events" to tell application process "Growl"
             if not frontmost then error "Growl not frontmost yet"
             keystroke "w" using command down
