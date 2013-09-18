@@ -47,7 +47,8 @@ script macbookConfiguration
 	property name : "MacBook"
 	property screenLayout : {use(macbookDisplay, 0, 0)}
 	on prepare()
-		my hideDock(true)
+		set {w,h} to macbookDisplay's size
+		my hideDock(w < 1680)
 	end prepare
 	on adapt()
 		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.98, wins:my getLargeEnoughWindows(windows)})
