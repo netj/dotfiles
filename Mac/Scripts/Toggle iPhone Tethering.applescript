@@ -28,9 +28,13 @@ script UI_ko
 		return NetworkName & "에서 연결 해제"
 	end LeaveNetworkMenu
 end script
+property supportedLanguages: { ¬
+        { lang: "ko", UI: UI_ko }, ¬
+        { lang: "en", UI: UI_en }  ¬
+    }
 
 -- and choose one from below
-property UI : UI_en
+property UI : missing value
 property Config : missing value
 property LastUsedPort : 20000
 
@@ -173,7 +177,19 @@ end switchToLocation
 
 on run {}
 	-- TODO determine UI based on AppleLanguage
-	set UI to UI_ko
+	set langs to do shell script "defaults read NSGlobalDomain AppleLanguages"
+	tell application "System Events" to set languages to value of (make new property list item with properties {text:langs})
+	set currentLanguage to first item of languages
+	set UI to missing value
+	repeat with supportedLanguage in supportedLanguages
+		if supportedLanguage's lang is currentLanguage then
+			set UI to supportedLanguage's UI
+			exit repeat
+		end if
+	end repeat
+	if UI is missing value then
+		error "Unsupported language: " & currentLanguage
+	end if
 	
 	-- Configuration is saved in user's home directory
 	set scriptFile to POSIX file ((POSIX path of (path to home folder)) & ".iPhoneTetherConfig.scpt")
@@ -248,4 +264,4 @@ on run {}
 	true
 end run
 
-# vim:ft=applescript:ts=4:sts=4:sw=4
+# vim:ft=applescript:ts=4:sts=4:sw=4:noet
