@@ -190,7 +190,8 @@ on run args
 			my moveAndResize({screen:macbookDisplay, x:0, y:1, h:700, wins:windows})
 			my keepInAllSpaces(windows, numScreens > 1)
 			try
-				set buddiesWindows to windows whose name is "대화 상대" or name is "Buddies"
+				set buddiesWindows to windows whose name is "Buddies" ¬
+				                                 or name is "대화 상대"
 				my moveAndResize({screen:macbookDisplay, x:1, y:0, h:1, wins:buddiesWindows})
 				my keepInAllSpaces(buddiesWindows, yes)
 			end try
@@ -595,7 +596,9 @@ to moveAndResize(args)
 		end if
 		
 		-- change the size and position of the window
-		log ("# moveAndResize "& _x &" "& _y &" "& _w &" "& _h &"\t"& (win's name))
+		log ("# moveAndResize "& _x &" "& _y &" "& _w &" "& _h ¬
+		                  &"\t"& (win's name) ¬
+		                  )
 		try
 			set bounds of win to {_x, _y, _x + _w, _y + _h}
 		on error
