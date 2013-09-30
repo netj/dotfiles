@@ -198,6 +198,16 @@ on run args
 		my preserveVisibility(messagesAppName)
 	end if
 
+	-- keep iTunes Mini Player on a corner of the MacBook screen
+	if my appIsRunning("iTunes") then tell application "iTunes"
+		my rememberVisibility("iTunes")
+		tell application "System Events" to tell process "iTunes" to ¬
+		    set miniPlayers to get windows whose title is "Mini Player" ¬
+		                                      or title is "미니 플레이어"
+		my moveAndResize({screen:macbookDisplay, x:0.95, y:0.95, wins:miniPlayers})
+		my preserveVisibility("iTunes")
+	end tell
+
 	-- 3rd party apps
 	if my appIsRunning("Twitter") then tell application "Twitter" to my moveAndResize({screen:macbookDisplay, x:1, y:0, h:1, wins:windows})
 	if my appIsRunning("Adium") then tell application "Adium"
