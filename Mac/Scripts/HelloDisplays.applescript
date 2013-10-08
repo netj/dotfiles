@@ -163,9 +163,9 @@ on run args
 		set screenIndex to screenIndex + 1
 	end repeat
 	set numScreens to screenIndex
-	
-	
-	
+
+
+
 	-- move and resize some apps (without knowing the environment)
 	if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({w:1321, wins:my getLargeEnoughWindows(windows)})
 	
@@ -210,6 +210,23 @@ on run args
 	end tell
 
 	-- 3rd party apps
+	if my appIsRunning("Things") then tell application "Things"
+		my rememberVisibility("Things")
+		my moveAndResize({screen:macbookDisplay, x:1, y:0, wins:windows})
+		my preserveVisibility("Things")
+	end tell
+	
+	if my appIsRunning("Skim") then tell application "Skim"
+		my rememberVisibility("Skim")
+		my moveAndResize({wins:windows, w:0.6, h:1})
+		my preserveVisibility("Skim")
+	end tell
+	if my appIsRunning("Papers2") then
+		my rememberVisibility("Papers2")
+		moveAndResize({x:0, y:0, wins:my getAppWindows("Papers2"), w:1, h:1})
+		my preserveVisibility("Papers2")
+	end if
+	
 	if my appIsRunning("Twitter") then tell application "Twitter" to my moveAndResize({screen:macbookDisplay, x:1, y:0, h:1, wins:windows})
 	if my appIsRunning("Adium") then tell application "Adium"
 		if my appIsRunning("Mail") then tell application "Mail" to my moveAndResize({screen:macbookDisplay, h:0.9, wins:windows of message viewers})
@@ -221,10 +238,7 @@ on run args
 	end tell
 	
 	if my appIsRunning("Eclipse") then moveAndResize({x:0, y:0, w:1, h:1, wins:my getAppWindows("Eclipse")})
-	
-	if my appIsRunning("Skim") then tell application "Skim" to my moveAndResize({wins:windows, w:0.6, h:1})
-	if my appIsRunning("Papers2") then moveAndResize({x:0, y:0, wins:my getAppWindows("Papers2"), w:1, h:1})
-	
+
 	-- get back to current application, and front window
 	--	tell application curAppName to activate
 	if curWinName is not null then my getAppWindowIntoView(curAppName, curWinName)
