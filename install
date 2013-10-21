@@ -136,6 +136,8 @@ bash_after() {
     (cd
     safeln .bash/profile .bash{rc,_profile}
     safeln .bash/logout .bash_logout
+    bpmrc=.bash/.bpmrc.$(uname)
+    [ ! -e $bpmrc ] || safeln $bpmrc .bpmrc
     plugins=(
         bash_completion
         alias_completion
