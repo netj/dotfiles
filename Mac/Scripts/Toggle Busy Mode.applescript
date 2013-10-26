@@ -7,7 +7,8 @@
 
 on run
 	tell application "System Events"
-		set UI elements enabled to yes
+		-- enable UI scripting
+		-- set UI elements enabled to true -- XXX unsupported in OS X >= 10.9
 		key up {command, option, control, shift}
 		try
 			set isDedicated to false
@@ -15,10 +16,10 @@ on run
 			-- Toggle Notification Center since 10.8 Mountain Lion
 			try
 				tell process "NotificationCenter"
+					set m to menu bar 2's menu bar item 1
 					key down option
-					set m to menu bar 1's menu bar item 1
 					click m
-					set isDedicated to exists (m's attribute "AXValue"'s value)
+					set isDedicated to (m's attribute "AXValue"'s value) is missing value
 				end tell
 			end try
 			key up option

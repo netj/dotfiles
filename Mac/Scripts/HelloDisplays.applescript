@@ -39,13 +39,13 @@ property detectionTolerance : 200 -- px of alignment error to tolerate
 
 --------------------------------------------------------------------------------------------------------
 
-on use(screen, x, y)
+on place(screen, x, y)
 	return {screen:screen, x:x, y:y}
-end use
+end place
 
 script macbookConfiguration
 	property name : "MacBook"
-	property screenLayout : {use(macbookDisplay, 0, 0)}
+	property screenLayout : {place(macbookDisplay, 0, 0)}
 	on prepare()
 		set {w,h} to macbookDisplay's size
 		my hideDock(w < 1680)
@@ -58,7 +58,7 @@ end script
 script homeConfiguration
 	property name : "Home"
 	-- a SyncMaster 275T is at my home desk
-	property screenLayout : {use(syncmaster27inDisplay, 0, 0), use(macbookDisplay, 133, 1200)}
+	property screenLayout : {place(syncmaster27inDisplay, 0, 0), place(macbookDisplay, 133, 1200)}
 	on prepare()
 		my hideDock(false)
 	end prepare
@@ -70,7 +70,7 @@ end script
 script gatesOfficeConfiguration
 	property name : "Gates Office"
 	-- I have a SyncMaster 305T in my office :)
-	property screenLayout : {use(syncmaster30inDisplay, 0, 0), use(macbookDisplay, 2560, 1315)}
+	property screenLayout : {place(syncmaster30inDisplay, 0, 0), place(macbookDisplay, 2560, 1315)}
 	on prepare()
 		my hideDock(false)
 	end prepare
@@ -82,7 +82,7 @@ end script
 script meyerConfiguration
 	property name : "Meyer Library"
 	-- There are 30-in Cinema Displays
-	property screenLayout : {use(cinema30inDisplay, 0, 0), use(macbookDisplay, 440, 1600)}
+	property screenLayout : {place(cinema30inDisplay, 0, 0), place(macbookDisplay, 440, 1600)}
 	on prepare()
 		my hideDock(false)
 	end prepare
@@ -94,7 +94,7 @@ end script
 script mpkOfficeConfiguration
 	property name : "MPK Office"
 	-- There's an Apple Thunderbolt Display at my workplace
-	property screenLayout : {use(thunderboltDisplay, 0, 0), use(macbookDisplay, 2560, 702)}
+	property screenLayout : {place(thunderboltDisplay, 0, 0), place(macbookDisplay, 2560, 702)}
 	on prepare()
 		my hideDock(false)
 	end prepare
@@ -118,7 +118,7 @@ on run args
 
 	tell application "System Events"
 		-- enable UI scripting
-		set UI elements enabled to true
+		-- set UI elements enabled to true -- XXX unsupported in OS X >= 10.9
 		-- wait while screen saver is there
 		repeat while true
 			try
