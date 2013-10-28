@@ -96,9 +96,15 @@
 
     <item>
         <name>Power to F13</name>
-        <appendix>(+ Fn+Power to Power)</appendix>
+        <appendix>(+ Fn+Power to Power, Only works in OS X prior to 10.9)</appendix>
         <identifier>private.power_to_f13</identifier>
         <modifier_not>ModifierFlag::FN</modifier_not>
         <autogen>__ConsumerToKey__ ConsumerKeyCode::POWER, KeyCode::F13</autogen>
+    </item>
+
+    <item>
+        <name>Fn+Esc to F13</name>
+        <identifier>private.fn_esc_to_f13</identifier>
+        <autogen>__KeyToKey__ KeyCode::ESCAPE, ModifierFlag::FN, KeyCode::F13</autogen>
     </item>
 </root>
