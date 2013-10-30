@@ -3,3 +3,14 @@
 
 # I keep Homebrew on /opt/homebrew
 bash_insert_path PATH /opt/homebrew/sbin /opt/homebrew/bin
+
+# exec into bash >= 4, when available (for login shells)
+if [[ $0 = -bash ]] && shopt -qp login_shell && [[ ${BASH_VERSINFO[0]} -lt 4 ]]; then
+    newVersion=$(bash --version | head -n1 | sed 's/.* version \([^ ]*\).*/\1/')
+    if [[ $newVersion > $BASH_VERSION ]]; then
+        # and try preserving all the invocation options
+        exec -l bash -l${-//[chimBH]/} # "$@"
+    fi
+    #exec bash -$- "${@:-$BASH_EXECUTION_STRING}" # for non-interactive
+fi
+
