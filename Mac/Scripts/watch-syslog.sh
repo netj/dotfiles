@@ -52,6 +52,7 @@ echo $$ >"$pidfile"
 if $invokeAtBeginning; then
     throttle() {
         timestampWithinInterval || "$@" &
+        sleep 0.1
     }
 else
     intervalS=$(bc <<<"scale=3; $intervalMSEC / 1000")
