@@ -12,7 +12,7 @@ exec >~/.sleep.log 2>&1
 PATH=~/Library/Scripts:"$PATH"
 
 # Eject all external, backup volumes and disks
-"Eject All External or Backup Disks.sh" &
+# XXX "Eject All External or Backup Disks.sh" &
 
 
 # To share Papers2 library over Dropbox, it has to be shut down
