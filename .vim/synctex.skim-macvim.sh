@@ -20,7 +20,9 @@ mvim=${3:-$(type -p mvim 2>/dev/null || bash -lc 'type -p mvim' 2>/dev/null)}
 # get the servername from the title of MacVim (in the current space)
 vimServer=$(
     osascript -e 'tell application "System Events"
-        get title of first window of process "MacVim"
+        if exists (processes whose name is "MacVim") then
+            get title of first window of process "MacVim"
+        end if
     end tell' 2>/dev/null | sed 's/.* - //'
 )
 
