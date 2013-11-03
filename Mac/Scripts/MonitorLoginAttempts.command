@@ -6,8 +6,9 @@
 export MinSecsBetweenShots
 
 PATH=~/Library/Scripts:"$PATH"
-exec watch-syslog.sh -b 5000 \
-    'loginwindow\[[0-9]\+\]: ' \
+exec watch-syslog.sh \
+    -w "watch-notes com.apple.screenLockUIIsShown" \
+    '.' \
     ~/.monitorLoginAttempts.pid  bash -c '
 TakeOneLoginShot.sh attempt &
 '

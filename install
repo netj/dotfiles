@@ -185,6 +185,7 @@ git_excludesfile_after() {
     git config --global core.excludesfile ~/.git-excludesfile
 }
 install .git-excludesfile
+git config --global color.ui auto
 fi
 
 ! has tmux ||
@@ -250,6 +251,16 @@ case $(uname) in Darwin)
         install .sleep  Mac/sleepwatcher/sleep
         install .wakeup Mac/sleepwatcher/wakeup
     fi
+
+    Library_Scripts_MonitorLoginAttempts_sh_after() {
+        if ! [ -x Library/Scripts/watch-notes ]; then
+            [ -d "$DotfilesRoot"/Mac/watch-notes/.git ] ||
+                git clone https://github.com/netj/watch-notes.git "$DotfilesRoot"/Mac/watch-notes
+            cd "$DotfilesRoot"/Mac/watch-notes
+            make
+            command install watch-notes ~/Library/Scripts/
+        fi
+    }
 
     # install shell/python/perl scripts
     for s in Mac/Scripts/{*.{sh,py,pl},Applications/ControlPlane/*.sh}; do

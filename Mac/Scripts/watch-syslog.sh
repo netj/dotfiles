@@ -1,8 +1,17 @@
 #!/usr/bin/env bash
 # Watch /var/log/system.log and run commands whenever given pattern appears.
-# Usage: watch-syslog [-f] [-b MSECS | -e MSECS] GREP_PATTERN PID_PATH COMMAND [ARG]...
+# Usage: watch-syslog [-OPTIONS] GREP_PATTERN PID_PATH COMMAND [ARG]...
 # 
-# When -b MSECS is given, 
+# Available OPTIONS are: [-f] [-b MSECS | -e MSECS] [-w WATCH_COMMAND]
+# 
+# When -b MSECS is given, trigger of COMMAND is throttled and it is executed
+# once every MSECS at the beginning when lines matching GREP_PATTERN are
+# observed.  On the otherhand, -e MSECS throttles COMMAND triggering similarly,
+# but once every MSECS at the end.
+# 
+# WATCH_COMMAND defaults to 'tail -f /var/log/system.log', but can be replaced to
+# any command that starts a long-running blocking process producing lines to
+# standard output.
 #
 # Author: Jaeho Shin <netj@sparcs.org>
 # Created: 2012-11-17
@@ -11,7 +20,8 @@ set -eu
 invokeAtBeginning=true
 intervalMSEC=1000
 forceStart=false
-while getopts "fb:e:" o; do
+watchCommand='tail -F /var/log/system.log'
+while getopts "fb:e:w:" o; do
     case $o in
         f)
             forceStart=true
@@ -23,6 +33,9 @@ while getopts "fb:e:" o; do
         e)
             invokeAtBeginning=false
             intervalMSEC=$OPTARG
+            ;;
+        w)
+            watchCommand=$OPTARG
             ;;
     esac
 done
@@ -77,7 +90,7 @@ timestampWithinInterval() {
 }
 
 # monitor system log to find the given pattern
-tail -qF /var/log/system.log |
+eval "$watchCommand" |
 grep --line-buffered "$greppatt" |
 while read -r line; do
     # launch the command with the line in env
