@@ -252,7 +252,7 @@ case $(uname) in Darwin)
         install .wakeup Mac/sleepwatcher/wakeup
     fi
 
-    Library_Scripts_MonitorLoginAttempts_sh_after() {
+    Library_Scripts_MonitorLoginAttempts_command_after() {
         if ! [ -x Library/Scripts/watch-notes ]; then
             [ -d "$DotfilesRoot"/Mac/watch-notes/.git ] ||
                 git clone https://github.com/netj/watch-notes.git "$DotfilesRoot"/Mac/watch-notes
@@ -263,7 +263,7 @@ case $(uname) in Darwin)
     }
 
     # install shell/python/perl scripts
-    for s in Mac/Scripts/{*.{sh,py,pl},Applications/ControlPlane/*.sh}; do
+    for s in Mac/Scripts/{*.{command,tool,sh,py,pl},Applications/ControlPlane/*.sh}; do
         [ -e "$s" ] || continue
         install Library/"${s#Mac/}" "$s" true true
     done
