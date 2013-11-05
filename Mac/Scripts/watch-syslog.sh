@@ -83,8 +83,15 @@ else
 fi
 timestampWithinInterval() {
     local ts; read ts <"$timestamp" 2>/dev/null || ts=0
-    [[ $(( $(date +%s%N) - $ts )) -le ${intervalMSEC}000000 ]] || {
-        date +%s%N >"$timestamp"
+    now_usec() {
+        perl -Mstrict -e '
+            use Time::HiRes qw( gettimeofday );
+            my ($secs, $usecs) = gettimeofday;
+            print $secs, $usecs, "\n";
+        '
+    }
+    [[ $(( $(now_usec) - $ts )) -le ${intervalMSEC}000 ]] || {
+        now_usec >"$timestamp"
         false
     }
 }
