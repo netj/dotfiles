@@ -261,6 +261,15 @@ case $(uname) in Darwin)
             command install watch-notes ~/Library/Scripts/
         fi
     }
+    Library_Scripts_TakeOneLoginShot_sh_after() {
+        if ! [ -x Library/Scripts/LocateMe ]; then
+            [ -d "$DotfilesRoot"/Mac/LocateMe/.git ] ||
+                git clone https://github.com/netj/LocateMe.git "$DotfilesRoot"/Mac/LocateMe
+            cd "$DotfilesRoot"/Mac/LocateMe
+            xcodebuild
+            command install build/Release/LocateMe ~/Library/Scripts/
+        fi
+    }
 
     # install shell/python/perl scripts
     for s in Mac/Scripts/{*.{command,tool,sh,py,pl},Applications/ControlPlane/*.sh}; do
