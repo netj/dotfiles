@@ -292,7 +292,9 @@ fun! SetupAddons()
   ActivateAddons markdown@tpope " Markdown vim-ft-markdown_fold
     " Marked
     au FileType markdown
-      \ setlocal spell |
+      \ call s:setLocalOptionsForWriting() |
+      \ let &l:formatprg = '~/.vim/format-latex.pl' | " abuse LaTeX formatter on Markdown
+      \ setlocal formatoptions+=n |
     if has("mac")
       au FileType markdown
         \ nnoremap <D-e> :exec "!open -a Marked ".shellescape(expand("%"))<CR><CR>|
@@ -337,17 +339,6 @@ fun! SetupAddons()
     command! LaTeXBuild        call s:LaTeX_Build()
     command! LaTeXBuildAndView call s:LaTeX_BuildAndView()
     fun! s:LaTeX_Setup()
-      setlocal spell autowrite textwidth=0 formatoptions-=t formatoptions-=c
-      if has("linebreak")
-        setlocal wrap linebreak showbreak=...\  cpoptions+=n
-        " See: http://stackoverflow.com/questions/5706820/using-vim-isnt-there-a-more-efficient-way-to-format-latex-paragraphs-according
-        if has("gui") | let &l:showbreak="\u21aa   " | endif " use a better unicode character:↪
-        " Move cursor based on displayed lines
-        for key in split("j k 0 $")
-          exec 'noremap <buffer>  '.key.' g'.key
-          exec 'noremap <buffer> g'.key.'  '.key
-        endfor
-      endif
       let suffixes = ".pdf,.dvi,.ps,.ps.gz"
                   \.",.aux,.bbl,.blg,.log,.out,.ent"
                   \.",.fdb_latexmk,.fls,.brf,.synctex.gz"
@@ -358,6 +349,7 @@ fun! SetupAddons()
         let g:NERDTreeSortOrder += [patt]
       endif
       " better LaTeX formatting, perhaps with a custom formatprg
+      call s:setLocalOptionsForWriting()
       "   See: http://stackoverflow.com/questions/5706820/using-vim-isnt-there-a-more-efficient-way-to-format-latex-paragraphs-according
       "   See: http://stackoverflow.com/questions/1451827/vim-make-gq-treat-as-the-end-of-a-sentence
       let &l:formatprg = '~/.vim/format-latex.pl'
@@ -414,6 +406,20 @@ fun! SetupAddons()
   "ActivateAddons AutomaticLaTeXPlugin
   "ActivateAddons LaTeX_Box
 
+endfun
+
+fun! s:setLocalOptionsForWriting()
+  setlocal spell autowrite textwidth=0 formatoptions-=t formatoptions-=c
+  if has("linebreak")
+    setlocal wrap linebreak showbreak=...\  cpoptions+=n
+    " See: http://stackoverflow.com/questions/5706820/using-vim-isnt-there-a-more-efficient-way-to-format-latex-paragraphs-according
+    if has("gui") | let &l:showbreak="\u21aa   " | endif " use a better unicode character:↪
+    " Move cursor based on displayed lines
+    for key in split("j k 0 $")
+      exec 'noremap <buffer>  '.key.' g'.key
+      exec 'noremap <buffer> g'.key.'  '.key
+    endfor
+  endif
 endfun
 
 fun! s:stripeLists(lists)
