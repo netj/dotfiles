@@ -44,3 +44,13 @@ after/plugin/abolish.vim:
 	mkdir -p $(@D) && cd $(@D) && \
 	curl -kRLO https://raw.github.com/tpope/tpope/master/.vim/$@
 
+# Set Skim's SyncTeX settings to MacVim
+synctex.skim-macvim: ##
+ifeq ($(shell uname),Darwin)
+	if mvim=`type -p mvim 2>/dev/null`; then \
+    defaults write net.sourceforge.skim-app.skim SKTeXEditorCommand "$(shell pwd)/synctex.skim-macvim.sh"; \
+    defaults write net.sourceforge.skim-app.skim SKTeXEditorArguments '"\"%file\" %line \"'"$$mvim"'\""'; \
+fi
+else
+	@# no-op
+endif
