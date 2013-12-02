@@ -8,29 +8,28 @@ set -u
 
 exec >~/.wakeup.log 2>&1
 
-# XXX Growl disabled for OS X >= 10.9
-#echo "Restart Growl"
-#osascript -e '
-#tell application "Growl" to reopen
-#
-#repeat
-#    log (do shell script "date")
-#    try
-#        tell application "Growl" to reopen
-#        tell application "System Events" to tell application process "Growl"
-#            if not frontmost then error "Growl not frontmost yet"
-#            keystroke "w" using command down
-#            #tell menu "Window" of menu bar item "Window" of menu bar 1
-#            #    click (first menu item whose title is "닫기" or title is "Close")
-#            #end tell
-#            exit repeat
-#        end tell
-#    on error e
-#        log e
-#    end try
-#    delay 1
-#end repeat
-#' &
+echo "Restart Growl"
+osascript -e '
+tell application "Growl" to reopen
+
+repeat
+    log (do shell script "date")
+    try
+        tell application "Growl" to reopen
+        tell application "System Events" to tell application process "Growl"
+            if not frontmost then error "Growl not frontmost yet"
+            keystroke "w" using command down
+            #tell menu "Window" of menu bar item "Window" of menu bar 1
+            #    click (first menu item whose title is "닫기" or title is "Close")
+            #end tell
+            exit repeat
+        end tell
+    on error e
+        log e
+    end try
+    delay 1
+end repeat
+' &
 
 # restore Papers2 if was running before we went to sleep
 if [ -e ~/.wakeup.Papers2 ]; then

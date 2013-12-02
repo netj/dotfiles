@@ -41,9 +41,8 @@ osascript -e '
     ' &
 # TODO wait until Dropbox finishes syncing Papers2's library
 
-# XXX Growl is less useful for OS X >= 10.9
-#echo "Stopping Growl"
-#osascript -e 'tell application "Growl" to quit' &
+echo "Stopping Growl"
+osascript -e 'tell application "Growl" to quit' &
 
 wait # for everything we wanted to do
 #say "Sleeping..." # XXX any user interaction done here happens after wakeup
