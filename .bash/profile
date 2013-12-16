@@ -6,7 +6,7 @@
 # Second-Reform: 2012-02-24
 
 # load bpm first
-. ~/.bash/plugins/bpm.sh load
+. ~/.bash/plugins/bpm.sh
 
 # load local configuration and modules
 for s in ~/.bash_local
