@@ -42,8 +42,8 @@ $(PowerlineFontPatcher):
 	true
 
 ## Nanum Fonts
-ifeq (,$(filter Darwin-10.7 Darwin-10.7.%,$(uname_version)))
-# Mac OS X Lion includes Nanum Fonts
+ifneq (,$(filter Darwin-10.6 Darwin-10.6.%,$(uname_version)))
+# Mac OS X Lion and later (Darwin-10.7+) includes Nanum Fonts
 NanumFontsURL := http://cdn.naver.com/naver/NanumFont/fontfiles/NanumFont_TTF_ALL.zip
 NanumFonts := \
     NanumGothic.ttf             \
