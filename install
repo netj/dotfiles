@@ -266,7 +266,10 @@ case $(uname) in Darwin)
             [ -d "$DotfilesRoot"/Mac/LocateMe/.git ] ||
                 git clone https://github.com/netj/LocateMe.git "$DotfilesRoot"/Mac/LocateMe
             cd "$DotfilesRoot"/Mac/LocateMe
-            xcodebuild
+            if ! xcodebuild; then
+                mkdir -p build/Release
+                clang -o build/Release/LocateMe LocateMe.m -framework foundation -framework corelocation
+            fi
             command install build/Release/LocateMe ~/Library/Scripts/
         fi
     }
