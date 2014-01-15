@@ -17,7 +17,7 @@ ejectDisk() {
 }
 ejectDisks() {
     while read diskname; do
-        ejectDisk $diskname &
+        ejectDisk "$diskname" &
     done
 }
 
