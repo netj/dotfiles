@@ -17,10 +17,10 @@ How to use (for the first time)
 Notes
 -----
 * Put any of your per-machine/per-account tweaks in a `.*_local` file.  For example,
-        * `.bash_local` for declaring aliases, adjusting `PATH`, or exporting environment variables.
-        * `.vim_local` for any local Vim configuration customization.
-        * `.tmux_local` for any local TMUX tweaks, e.g., wrapping the default-command with `reattach-to-user-namespace` in OS X.
-        * ...
+
+    * `.bash_local` for declaring aliases, adjusting `PATH`, or exporting environment variables.
+    * `.vim_local` for any local Vim configuration customization.
+    * `.tmux_local` for any local TMUX tweaks, e.g., wrapping the default-command with `reattach-to-user-namespace` in OS X.
 
 * You can run following commands later to stay up-to-date:
 
