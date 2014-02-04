@@ -16,6 +16,12 @@ How to use (for the first time)
 
 Notes
 -----
+* Put any of your per-machine/per-account tweaks in a `.*_local` file.  For example,
+        * `.bash_local` for declaring aliases, adjusting `PATH`, or exporting environment variables.
+        * `.vim_local` for any local Vim configuration customization.
+        * `.tmux_local` for any local TMUX tweaks, e.g., wrapping the default-command with `reattach-to-user-namespace` in OS X.
+        * ...
+
 * You can run following commands later to stay up-to-date:
 
         cd ~/.dotfiles
@@ -25,6 +31,7 @@ Notes
 * If you want to send me your modifications, please put them up in your
   [GitHub][] fork and send me a pull request at [my
   repo](https://github.com/netj/dotfiles).
+
 * I use a [zlib/libpng style license][license]. Consult the `COPYRIGHT` file
   for more information on using these files.
 
