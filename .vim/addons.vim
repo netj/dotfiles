@@ -306,6 +306,8 @@ fun! SetupAddons()
 
   ActivateAddons vim-coffee-script
     au BufEnter *.coffee syntax sync fromstart
+    " Search for CoffeeScript/JavaScript files, e.g., require "foo"
+    au BufRead,BufNewFile *.coffee setl suffixesadd+=.coffee,.js
     " CoffeeScript autocompilation
     "autocmd BufWritePost *.coffee silent CoffeeMake! | cwindow
   ActivateAddons jade
