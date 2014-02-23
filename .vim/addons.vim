@@ -153,6 +153,7 @@ fun! SetupAddons()
   ActivateAddons EasyMotion
     let g:EasyMotion_leader_key = '<Space>w'
   ActivateAddons matchit.zip
+  ActivateAddons closeb
   ActivateAddons rainbow_parentheses
     fun! RainbowParenthesesLoadAndToggleAll()
       exec 'RainbowParenthesesLoadRound'
