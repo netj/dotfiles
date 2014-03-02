@@ -69,10 +69,14 @@ if [[ $timediff -lt $MinSecsBetweenShots ]]; then
 fi
 
 # take a shot
-delay=4
+delay=8
 for i in $(seq $NumRetries); do
     imagesnap "$filename" & pid=$!
-    sleep $delay
+    t=0
+    until [ $t -ge $delay -o -s "$filename" ]; do
+        sleep 1
+        let ++t
+    done
     if [ -s "$filename" ]; then
         break
     elif ps -o pid= -p $pid &>/dev/null; then
@@ -101,7 +105,7 @@ if eval $(
     elif type whereami &>/dev/null; then
         whereami | grep 'Longitude\|Latitude' | sed 's/^/GPS/; s/: /=/'
     fi | tee /dev/stderr
-); then
+); [ -n "${GPSLatitude:-}" -a -n "${GPSLongitude:-}" ]; then
     GPSLatitudeRef=N GPSLongitudeRef=E
     case $GPSLatitude  in -*) GPSLatitudeRef=S  GPSLatitude=${GPSLatitude#-}   ;; esac
     case $GPSLongitude in -*) GPSLongitudeRef=W GPSLongitude=${GPSLongitude#-} ;; esac
