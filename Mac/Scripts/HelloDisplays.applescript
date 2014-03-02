@@ -122,7 +122,7 @@ on run args
 		-- wait while screen saver is there
 		repeat while true
 			try
-				get process "ScreenSaverEngine"
+				get first process whose name is "ScreenSaverEngine"
 			on error
 				exit repeat
 			end try
@@ -205,14 +205,14 @@ on run args
 		tell application "System Events" to tell process "iTunes" to ¬
 		    set miniPlayers to get windows whose title is "Mini Player" ¬
 		                                      or title is "미니 플레이어"
-		my moveAndResize({screen:macbookDisplay, x:0.95, y:0.95, wins:miniPlayers})
+		my moveAndResize({screen:macbookDisplay, x:0.45, y:0.97, wins:miniPlayers})
 		my preserveVisibility("iTunes")
 	end tell
 
 	-- 3rd party apps
 	if my appIsRunning("Things") then tell application "Things"
 		my rememberVisibility("Things")
-		my moveAndResize({screen:macbookDisplay, x:1, y:0, wins:windows})
+		my moveAndResize({screen:macbookDisplay, x:1, y:1, wins:windows})
 		my preserveVisibility("Things")
 	end tell
 	
