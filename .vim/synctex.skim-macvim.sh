@@ -10,6 +10,8 @@
 # Created: 2013-03-12
 set -eu
 
+#set -x; exec 2>>/tmp/"$(basename "$0")".debug
+
 # find the filename and line from arguments, or show usage
 [ $# -ge 2 ] || { sed -n '2,/^#$/ s/^# //p' <"$0"; exit 1; }
 file=$1 line=$2
