@@ -80,19 +80,20 @@ fun! SetupAddons()
         let g:mySetColors = g:mySetColorsNormal
         exec 'colorscheme' g:prior_colors_name
       endif
-      if exists("*Powerline") | doautoall Powerline BufEnter,ColorScheme | endif
+      if exists(":AirlineRefresh") | doautoall airline BufEnter,ColorScheme | endif
     endfun
     command! DetectDiffColorScheme call s:DetectDiffColorScheme()
     autocmd FilterWritePost,BufEnter,WinEnter,WinLeave *  DetectDiffColorScheme
     nnoremap <Space>d :diffoff \| DetectDiffColorScheme<CR>
-  if has("gui_running") && 0
-    ActivateAddons powerline
+  if has("gui_running")
+    ActivateAddons vim-airline
+    let g:airline_powerline_fonts = 1
 
     set laststatus=2 noshowmode showcmd
     let &guifont = join(map(split(&guifont,","),
           \ 'split(v:val,":")[0]." for Powerline:".split(v:val,":")[1]'),",")
     " using colorscheme from localvimrc can screw up powerline, hence below:
-    autocmd VimEnter * doautoall Powerline BufEnter,ColorScheme
+    autocmd VimEnter * doautoall airline BufEnter,ColorScheme
   endif
 
 
@@ -241,9 +242,6 @@ fun! SetupAddons()
   "if has("ruby")
   "  ActivateAddons tips
   "end
-  ActivateAddons localvimrc
-    let g:localvimrc_persistent = 1
-    let g:localvimrc_sandbox = 0
 
   """ Git, Github
   ActivateAddons fugitive
@@ -411,6 +409,9 @@ fun! SetupAddons()
   "ActivateAddons AutomaticLaTeXPlugin
   "ActivateAddons LaTeX_Box
 
+  ActivateAddons localvimrc
+    let g:localvimrc_persistent = 1
+    let g:localvimrc_sandbox = 0
 endfun
 
 fun! s:setLocalOptionsForWriting()
