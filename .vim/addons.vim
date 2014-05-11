@@ -319,6 +319,10 @@ fun! SetupAddons()
     au BufEnter *.scala setl formatprg=scalariform\ --forceOutput
   ActivateAddons octave%3600
     au BufEnter *.oct,*.m setlocal filetype=octave
+  ActivateAddons SQLUtilities
+    let g:sqlutil_keyword_case='\U'
+    let g:sqlutil_align_where=1
+    let g:sqlutil_align_comma=0
 
   " Vim-LaTeX is a comprehensive plugin for working with LaTeX
   " See: http://vim-latex.sourceforge.net/documentation/latex-suite/
