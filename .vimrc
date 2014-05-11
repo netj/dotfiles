@@ -223,10 +223,12 @@ au BufWinEnter *
 " Arrows for moving cursor based on displayed lines
 nnoremap <Up>   gk
 nnoremap <Down> gj
+nnoremap <Home> g0
+nnoremap <End>  g$
 
 " Window resize for Mac (to be mapped to pinch in/out gestures)
 if has("mac")
-  nnoremap <M-C-D-+>        16<C-w>>
+	  nnoremap <M-C-D-+>        16<C-w>>
   inoremap <M-C-D-+>   <C-o>16<C-w>>
   nnoremap <M-C-D-->        16<C-w><
   inoremap <M-C-D-->   <C-o>16<C-w><
