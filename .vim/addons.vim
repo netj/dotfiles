@@ -88,6 +88,7 @@ fun! SetupAddons()
   if has("gui_running")
     ActivateAddons vim-airline
     let g:airline_powerline_fonts = 1
+    let g:airline#extensions#whitespace#enabled = 0
 
     set laststatus=2 noshowmode showcmd
     let &guifont = join(map(split(&guifont,","),
