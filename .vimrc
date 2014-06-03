@@ -132,6 +132,14 @@ endif
 " Don't use Ex mode, use Q for formatting
 map Q gq
 
+" Quickly Explore directory with Netrw, positioning cursor to the last file
+" See: http://youtu.be/MGmIJyTf8pg for source of inspiration (tpope)
+" See: http://superuser.com/a/320514 for escaping
+nnoremap <silent> -  :let g:netrw_last_file = expand('%:t')<CR>
+                    \:Explore<CR>
+                    \:exec ':'.search('\V'.escape(g:netrw_last_file, '\'))<CR>
+" TODO improve it to make it also work for Netrw's "go up dir: -"
+
 " quickly display mappings of <C-\>, <Space>, <Leader>
 nnoremap <Space><C-l>   :map <S<BS>Space><CR>
 nnoremap <Leader><C-l>  :map <L<BS>Leader><CR>
