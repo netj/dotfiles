@@ -91,10 +91,10 @@ defaults -currentHost write -g com.apple.trackpad.ignoreTrackpadIfMousePresent -
 defaults -currentHost write -g com.apple.trackpad.twoFingerFromRightEdgeSwipeGesture 3
 defaults -currentHost write -g com.apple.trackpad.pinchGesture -bool true
 defaults -currentHost write -g com.apple.trackpad.rotateGesture -bool true
-defaults -currentHost write -g com.apple.trackpad.threeFingerTapGesture 2
+defaults -currentHost write -g com.apple.trackpad.threeFingerTapGesture 0
 defaults -currentHost write -g com.apple.trackpad.threeFingerDragGesture -bool false
-defaults -currentHost write -g com.apple.trackpad.threeFingerHorizSwipeGesture 1
-defaults -currentHost write -g com.apple.trackpad.threeFingerVertSwipeGesture 1
+defaults -currentHost write -g com.apple.trackpad.threeFingerHorizSwipeGesture 0
+defaults -currentHost write -g com.apple.trackpad.threeFingerVertSwipeGesture 0
 defaults -currentHost write -g com.apple.trackpad.fourFingerHorizSwipeGesture 2
 defaults -currentHost write -g com.apple.trackpad.fourFingerPinchSwipeGesture 2
 defaults -currentHost write -g com.apple.trackpad.fourFingerVertSwipeGesture 2
