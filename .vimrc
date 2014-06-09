@@ -65,6 +65,7 @@ if has("&wildignorecase")
 endif
 
 "  some by-product files
+set suffixes-=.h
 set suffixes+=.o,.a     " object and archive files
 set suffixes+=.class    " Java classes
 set suffixes+=#         " Emacs auto backups
@@ -131,14 +132,6 @@ endif
 
 " Don't use Ex mode, use Q for formatting
 map Q gq
-
-" Quickly Explore directory with Netrw, positioning cursor to the last file
-" See: http://youtu.be/MGmIJyTf8pg for source of inspiration (tpope)
-" See: http://superuser.com/a/320514 for escaping
-nnoremap <silent> -  :let g:netrw_last_file = expand('%:t')<CR>
-                    \:Explore<CR>
-                    \:exec ':'.search('\V'.escape(g:netrw_last_file, '\'))<CR>
-" TODO improve it to make it also work for Netrw's "go up dir: -"
 
 " quickly display mappings of <C-\>, <Space>, <Leader>
 nnoremap <Space><C-l>   :map <S<BS>Space><CR>
@@ -290,13 +283,6 @@ if has("autocmd")
 endif " has("autocmd")
 
 
-" let netrw use &suffixes for better file listings
-let g:netrw_sort_sequence = '[\/]$,*'
-for sfx in split(&suffixes, ',')
-    let g:netrw_sort_sequence .= ',' . substitute(sfx, "\\.", "\\\\\\0", "") . '$'
-endfor
-
-
 " vimpager has problem with <Space> mappings
 if exists("vimpager")
   set timeout timeoutlen=0
@@ -326,6 +312,28 @@ command! LoadAddons  silent! delfunction SetupAddons|
 noremap <Space><Space> :LoadAddons<CR>
 if has("gui_running") || exists("$VIMADDONS")
   LoadAddons
+endif
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Settings after loading addons
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Quickly explore directory with Netrw, positioning cursor to the last file
+" See: http://youtu.be/MGmIJyTf8pg for source of inspiration (tpope)
+" See: http://superuser.com/a/320514 for escaping
+" Apply some minimal fixes to netrw unless tpope's vinegar plugin is already loaded
+" See: https://github.com/tpope/vim-vinegar
+if !exists("g:loaded_vinegar") && empty(filter(split(&rtp, ','), "v:val =~ 'vinegar'"))
+  nnoremap <silent> -  :let g:netrw_last_file = expand('%:t')<CR>
+                      \:Explore<CR>
+                      \:exec ':'.search('\V'.escape(g:netrw_last_file, '\'))<CR>
+  let g:netrw_banner = 0
+  let g:netrw_sort_sequence = '*,\%(' . join(map(split(&suffixes, ','), 'escape(v:val, ".*$~")'), '\|') . '\)[*@]\=$'
+  " mix dotfiles with regular ones when sorting
+  au FileType netrw  let g:netrw_sort_options = 'i/['.g:netrw_sepchr.'._]\+/'
+                  \| let g:netrw_list_hide = '^\.\.\=/\=$,^\.'
+  let g:netrw_hide = 0
 endif
 
 

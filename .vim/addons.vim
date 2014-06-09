@@ -224,6 +224,16 @@ fun! SetupAddons()
     autocmd BufEnter NERD_tree_* map <buffer> <Space><Space> go
     autocmd BufEnter NERD_tree_* map <buffer> <Space>s       gi
     autocmd BufEnter NERD_tree_* map <buffer> <Space>v       gv
+  " tpope doesn't like complex/heavy NERD_tree, but recommends netrw
+  " Moreover, see what Drew Neil says about project drawer vs. explorer
+  " See: http://vimcasts.org/blog/2013/01/oil-and-vinegar-split-windows-and-project-drawer/
+    let g:vinegar_mix_dirs = 1
+    let g:vinegar_mix_dotfiles = 1
+    let g:vinegar_ignore_case = 1
+    let g:netrw_list_hide = '\(^\|\s\s\)\zs\.\S\+' " all dotfiles
+    let g:netrw_hide = 0
+  ActivateAddons vinegar
+    let g:NERDTreeHijackNetrw = 0
   "ActivateAddons FuzzyFinder
   "  nnoremap <Space>f :FufFileWithCurrentBufferDir<CR>
   "ActivateAddons Command-T
@@ -493,6 +503,7 @@ fun! SetupVAM()
   call extend(g:vim_addon_manager, {
         \'known_repos_activation_policy': 'yes',
         \'auto_install': 1,
+        \'force_loading_plugins_now': 1,
         \'shell_commands_run_method': 'system',
         \'log_to_buf': 0,
         \}, 'keep')
