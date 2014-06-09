@@ -220,6 +220,8 @@ fun! SetupAddons()
     let g:NERDTreeChDirMode  = 1
     let g:NERDTreeSortOrder = ['*', '\.swp$', '\.bak$', '\~$'] " don't put directories on top
     let g:NERDTreeIgnore = ['^.*\.sw[p-z]$', '^\..*\.un\~'] " ignore vim swap and undo files
+    let g:NERDTreeCaseSensitiveSort = 0
+    let g:NERDTreeSortHiddenFirst = 0
     " easier preview key mapping
     autocmd BufEnter NERD_tree_* map <buffer> <Space><Space> go
     autocmd BufEnter NERD_tree_* map <buffer> <Space>s       gi
@@ -227,9 +229,9 @@ fun! SetupAddons()
   " tpope doesn't like complex/heavy NERD_tree, but recommends netrw
   " Moreover, see what Drew Neil says about project drawer vs. explorer
   " See: http://vimcasts.org/blog/2013/01/oil-and-vinegar-split-windows-and-project-drawer/
-    let g:vinegar_mix_dirs = 1
-    let g:vinegar_mix_dotfiles = 1
-    let g:vinegar_ignore_case = 1
+    let g:netrw_sort_dirs_first = 0
+    let g:netrw_sort_dotfiles_first = 0
+    let g:netrw_sort_case_sensitive = 0
     let g:netrw_list_hide = '\(^\|\s\s\)\zs\.\S\+' " all dotfiles
     let g:netrw_hide = 0
   ActivateAddons vinegar
