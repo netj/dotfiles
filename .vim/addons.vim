@@ -1,9 +1,81 @@
 version 7.3
 set nocompatible
 
-if exists("*SetupAddons") | finish | endif
+if exists("*SetupVAM") | finish | endif
 
-fun! SetupAddons()
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" Default settings for VAM """""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+if !exists("g:vim_addon_manager") | let g:vim_addon_manager = {} | endif
+for vcs in ["git", "hg"]
+  let g:vim_addon_manager['drop_'.vcs.'_sources'] = !executable(vcs)
+endfor
+call extend(g:vim_addon_manager, {
+      \'log_to_buf': 1,
+      \'auto_install': 1,
+      \'force_loading_plugins_now': 1,
+      \'shell_commands_run_method': 'system',
+      \}, 'keep')
+
+try
+let more = &more | set nomore  " temporarily set nomore
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""" Recommended setup borrowed from :help VAM-installation """""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" put this line first in ~/.vimrc
+"set nocompatible | filetype indent plugin on | syn on
+
+fun! SetupVAM()
+  let c = get(g:, 'vim_addon_manager', {})
+  let g:vim_addon_manager = c
+  let c.plugin_root_dir = expand('$HOME', 1) . '/.vim/vim-addons'
+  let &rtp.=(empty(&rtp)?'':',').c.plugin_root_dir.'/vim-addon-manager'
+  " let g:vim_addon_manager = { your config here see "commented version" example and help
+  if !isdirectory(c.plugin_root_dir.'/vim-addon-manager/autoload')
+    execute '!git clone --depth=1 git://github.com/MarcWeber/vim-addon-manager '
+                \       shellescape(c.plugin_root_dir.'/vim-addon-manager', 1)
+    exec 'helptags '.fnameescape(c.plugin_root_dir.'/vim-addon-manager/doc')
+  endif
+  call vam#ActivateAddons([], {'auto_install' : 0})
+  " Also See "plugins-per-line" below
+endfun
+call SetupVAM()
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
+fun! s:setLocalOptionsForWriting()
+  setlocal spell autowrite textwidth=0 formatoptions-=t formatoptions-=c
+  if has("linebreak")
+    setlocal wrap linebreak showbreak=...\  cpoptions+=n
+    " See: http://stackoverflow.com/questions/5706820/using-vim-isnt-there-a-more-efficient-way-to-format-latex-paragraphs-according
+    if has("gui") | let &l:showbreak="\u21aa   " | endif " use a better unicode character:↪
+    " Move cursor based on displayed lines
+    for key in split("j k 0 $")
+      exec 'noremap <buffer>  '.key.' g'.key
+      exec 'noremap <buffer> g'.key.'  '.key
+    endfor
+  endif
+endfun
+
+fun! s:stripeLists(lists)
+  let stripedList = []
+  let added = 1
+  let i = 0
+  while added
+    let added = 0
+    for singleList in a:lists
+      if i < len(singleList)
+        call add(stripedList, singleList[i])
+        let added = 1
+      endif
+    endfor
+    let i += 1
+  endwhile
+  return stripedList
+endfun
+
+
   """ More info about Vim plugins
   " See Also: http://www.catonmat.net/series/vim-plugins-you-should-know-about
   " See Also: http://www.drchip.org/astronaut/vim/
@@ -19,14 +91,14 @@ fun! SetupAddons()
   " light-lo: spring autumn sienna
   " fun: matrix borland golden camo
   " bright: summerfruit256 buttercream PapayaWhip nuvola habiLight fruit eclipse earendel
-  ActivateAddons hybrid jellybeans molokai Colour_Sampler_Pack
+  VAMActivate hybrid jellybeans molokai Colour_Sampler_Pack
     let g:jellybeans_overrides = {
           \    'Todo': { 'guifg': '101010', 'guibg': 'fad07a',
           \              'ctermfg': 'Black', 'ctermbg': 'Yellow',
           \              'attr': 'bold' },
           \}
   " scroll among my favorites with VimTip341
-  ActivateAddons git:git://gist.github.com/1432015.git
+  VAMActivate git:git://gist.github.com/1432015.git
     let s:mySetColorsSet = []
     let s:mySetColorsSetDiff = []
     fun! s:addColorSet(reversed, name, ...)
@@ -60,7 +132,7 @@ fun! SetupAddons()
       endif
     endif
     " XXX tlib seems not working, so workaround
-    "ActivateAddons tlib
+    "VAMActivate tlib
     "let g:mySetColors = tlib#list#RemoveAll(tlib#list#Flatten(tlib#list#Zip(g:mySetColorsSet)),'')
     let g:mySetColorsNormal = s:stripeLists(s:mySetColorsSet)
     let g:mySetColorsDiff   = s:stripeLists(s:mySetColorsSetDiff)
@@ -86,7 +158,7 @@ fun! SetupAddons()
     autocmd FilterWritePost,BufEnter,WinEnter,WinLeave *  DetectDiffColorScheme
     nnoremap <Space>d :diffoff \| DetectDiffColorScheme<CR>
   if has("gui_running")
-    ActivateAddons vim-airline
+    VAMActivate vim-airline
     let g:airline_powerline_fonts = 1
     let g:airline#extensions#whitespace#enabled = 0
 
@@ -100,18 +172,18 @@ fun! SetupAddons()
 
   """ Productivity boosters
   if has("python")
-  ActivateAddons Gundo
+  VAMActivate Gundo
     let g:gundo_close_on_revert = 1
     nnoremap <Space>u :GundoToggle<CR>
   endif
-  ActivateAddons bufexplorer.zip
+  VAMActivate bufexplorer.zip
     nnoremap <Space>b :BufExplorerHorizontalSplit<CR>
-  "ActivateAddons tselectbuffer
+  "VAMActivate tselectbuffer
   "  nnoremap <Space>b :TSelectBuffer<CR>
-  ActivateAddons Tagbar
+  VAMActivate Tagbar
     nnoremap <Space>t :TagbarOpenAutoClose<CR>
     nnoremap <Space>T :TagbarToggle<CR>
-  ActivateAddons ack
+  VAMActivate ack
   fun! s:jumpToTagWithQuickFix(w)
     exec "ltag" a:w
     keepjumps call setqflist(getloclist(0))
@@ -132,7 +204,7 @@ fun! SetupAddons()
     noremap <C-RightMouse> <C-\><C-N><LeftMouse>:call <SID>ackWord(expand("<cword>"))<CR>
   endif
   " unimpaired quickfix access with [q, ]q, [Q, ]Q
-  ActivateAddons unimpaired
+  VAMActivate unimpaired
     " Eclipse-style movement
     nmap <M-Up>   V<M-Up>
     nmap <M-Down> V<M-Down>
@@ -145,20 +217,20 @@ fun! SetupAddons()
     endif
 
   " exchange.vim for cx, cxx, cxc, v_X. See: http://vimcasts.org/episodes/swapping-two-regions-of-text-with-exchange-vim/
-  ActivateAddons vim-exchange
+  VAMActivate vim-exchange
 
     " Align%294's \m= collides with Mark%2666 unless already mapped
     map <Leader>tm= <Plug>AM_m=
-  ActivateAddons Align%294
-  ActivateAddons surround repeat
-  ActivateAddons speeddating
-  ActivateAddons commentary
-  ActivateAddons vim-visual-star-search
-  ActivateAddons EasyMotion
+  VAMActivate Align%294
+  VAMActivate surround repeat
+  VAMActivate speeddating
+  VAMActivate commentary
+  VAMActivate vim-visual-star-search
+  VAMActivate EasyMotion
     let g:EasyMotion_leader_key = '<Space>w'
-  ActivateAddons matchit.zip
-  ActivateAddons closeb  " CTRL-_ to close complex brackets/tags
-  ActivateAddons rainbow_parentheses
+  VAMActivate matchit.zip
+  VAMActivate closeb  " CTRL-_ to close complex brackets/tags
+  VAMActivate rainbow_parentheses
     fun! RainbowParenthesesLoadAndToggleAll()
       exec 'RainbowParenthesesLoadRound'
       exec 'RainbowParenthesesLoadSquare'
@@ -169,11 +241,11 @@ fun! SetupAddons()
     nnoremap <C-\>0      :call RainbowParenthesesLoadAndToggleAll()<CR>
     inoremap <C-\>0 <C-o>:call RainbowParenthesesLoadAndToggleAll()<CR>
 
-  " ActivateAddons RltvNmbr
-  ActivateAddons DrawIt
-  " ActivateAddons MixCase
+  " VAMActivate RltvNmbr
+  VAMActivate DrawIt
+  " VAMActivate MixCase
 
-  ActivateAddons Mark%2666
+  VAMActivate Mark%2666
     let g:mwHistAdd       = '' " '/@'
     let g:mwAutoLoadMarks = 1
     let g:mwAutoSaveMarks = 1
@@ -188,7 +260,7 @@ fun! SetupAddons()
   """ CamelCase stuff
   " Shougo's NeoComplCache is really nice!
   if $USER != "root"
-  ActivateAddons neocomplcache vimproc
+  VAMActivate neocomplcache vimproc
     let g:acp_enableAtStartup = 0
     " XXX Rather than enabling at startup, I use special key combo Cmd-Shift-D to turn it on
     "let g:neocomplcache_enable_at_startup = 1
@@ -204,16 +276,16 @@ fun! SetupAddons()
     autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
   endif
   " CamelCaseComplete is less convenient (CTRL-X CTRL-C), yet lightweight
-  ActivateAddons CamelCaseComplete CompleteHelper
-  ActivateAddons camelcasemotion
+  VAMActivate CamelCaseComplete CompleteHelper
+  VAMActivate camelcasemotion
     " recover default ,
     nnoremap ,, ,
     xnoremap ,, ,
     onoremap ,, ,
-  ActivateAddons abolish
+  VAMActivate abolish
 
-  "ActivateAddons slime
-  ActivateAddons The_NERD_tree
+  "VAMActivate slime
+  VAMActivate The_NERD_tree
     nnoremap <Space>e :NERDTreeFind<CR>
     let g:NERDTreeQuitOnOpen = 1
     let g:NERDTreeShowHidden = 1
@@ -234,30 +306,30 @@ fun! SetupAddons()
     let g:netrw_sort_case_sensitive = 0
     let g:netrw_list_hide = '\(^\|\s\s\)\zs\.\S\+' " all dotfiles
     let g:netrw_hide = 0
-  ActivateAddons vinegar
+  VAMActivate vinegar
     let g:NERDTreeHijackNetrw = 0
-  "ActivateAddons FuzzyFinder
+  "VAMActivate FuzzyFinder
   "  nnoremap <Space>f :FufFileWithCurrentBufferDir<CR>
-  "ActivateAddons Command-T
+  "VAMActivate Command-T
   "  nnoremap <Space>f :CommandT<CR>
-  ActivateAddons ctrlp
+  VAMActivate ctrlp
     let g:ctrlp_map = '<c-p>'
     let g:ctrlp_cmd = 'CtrlPMixed'
     let g:ctrlp_mruf_relative = 1
     let g:ctrlp_custom_ignore = {
           \ "dir": '\v[\/]\@prefix\@$'
           \ }
-  ActivateAddons renamer
-  ActivateAddons recover
-  "ActivateAddons snipmate
-  "ActivateAddons vmark.vim_Visual_Bookmarking " XXX beware: <F2>/<F3> is overrided
+  VAMActivate renamer
+  VAMActivate recover
+  "VAMActivate snipmate
+  "VAMActivate vmark.vim_Visual_Bookmarking " XXX beware: <F2>/<F3> is overrided
   " TODO let b:vm_guibg = yellow
   "if has("ruby")
-  "  ActivateAddons tips
+  "  VAMActivate tips
   "end
 
   """ Git, Github
-  ActivateAddons fugitive
+  VAMActivate fugitive
     " tips from vimcasts.org
     autocmd User fugitive
       \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
@@ -274,18 +346,18 @@ fun! SetupAddons()
     nnoremap <Space>gL :Glog --<CR>
     nnoremap <Space>ge :Gedit<CR>
     nnoremap <Space>gE :Gedit 
-  ActivateAddons gitv
+  VAMActivate gitv
     nnoremap <Space>gv :Gitv --all<CR>
     nnoremap <Space>gV :Gitv! --all<CR>
     vnoremap <Space>gV :Gitv! --all<CR>
     set lazyredraw
-  ActivateAddons git:git://github.com/airblade/vim-gitgutter.git
+  VAMActivate git:git://github.com/airblade/vim-gitgutter.git
     let g:gitgutter_enabled = 1
     nnoremap <Space><C-g><C-g> :GitGutterToggle<CR>
     nnoremap <Space><C-g>g     :GitGutterLineHighlightsToggle<CR>
     nnoremap ]g :GitGutterNextHunk<CR>
     nnoremap [g :GitGutterPrevHunk<CR>
-  ActivateAddons Gist WebAPI
+  VAMActivate Gist WebAPI
     let g:gist_clip_command = 'pbcopy'
     let g:gist_open_browser_after_post = 1
     nnoremap <Space>GL :Gist -l<CR>
@@ -297,13 +369,13 @@ fun! SetupAddons()
   let g:sparkup = {}
     let g:sparkup.lhs_expand = '<C-\><C-e>'
     let g:sparkup.lhs_jump_next_empty_tag = '<C-\><C-f>'
-  ActivateAddons sparkup
-  ActivateAddons vim-less
-  ActivateAddons xmledit
+  VAMActivate sparkup
+  VAMActivate vim-less
+  VAMActivate xmledit
     let g:xml_jump_string = "`"
-  ActivateAddons ragtag
+  VAMActivate ragtag
 
-  ActivateAddons markdown@tpope " Markdown vim-ft-markdown_fold
+  VAMActivate markdown@tpope " Markdown vim-ft-markdown_fold
     " Marked
     au FileType markdown
       \ call s:setLocalOptionsForWriting() |
@@ -315,31 +387,31 @@ fun! SetupAddons()
         \ noremap! <D-e> <C-\><C-N><D-e>gi|
         \ call sparkup#Setup()|
     endif
-  ActivateAddons JSON
+  VAMActivate JSON
     au BufEnter *.json setfiletype json
 
-  ActivateAddons vim-coffee-script
+  VAMActivate vim-coffee-script
     au BufEnter *.coffee syntax sync fromstart
     " Search for CoffeeScript/JavaScript files, e.g., require "foo"
     au BufRead,BufNewFile *.coffee setl suffixesadd+=.coffee,.js
     " CoffeeScript autocompilation
     "autocmd BufWritePost *.coffee silent CoffeeMake! | cwindow
-  ActivateAddons jade
-  ActivateAddons applescript
+  VAMActivate jade
+  VAMActivate applescript
     au BufEnter *.applescript setfiletype applescript
-  ActivateAddons vim-addon-scala
+  VAMActivate vim-addon-scala
     " Scala (See: http://mdr.github.com/scalariform/)
     au BufEnter *.scala setl formatprg=scalariform\ --forceOutput
-  ActivateAddons octave%3600
+  VAMActivate octave%3600
     au BufEnter *.oct,*.m setlocal filetype=octave
-  ActivateAddons SQLUtilities
+  VAMActivate SQLUtilities
     let g:sqlutil_keyword_case='\U'
     let g:sqlutil_align_where=1
     let g:sqlutil_align_comma=0
 
   " Vim-LaTeX is a comprehensive plugin for working with LaTeX
   " See: http://vim-latex.sourceforge.net/documentation/latex-suite/
-  ActivateAddons LaTeX-Suite_aka_Vim-LaTeX
+  VAMActivate LaTeX-Suite_aka_Vim-LaTeX
     let g:Tex_IgnoreLevel = 0
     let g:Tex_IgnoreUnmatched = 0
     let g:Tex_Folding = 1
@@ -423,128 +495,15 @@ fun! SetupAddons()
   " latexmk directly, vim-like motions, mappings, etc.  but I find it a little
   " premature yet (e.g., ShowErrors didn't work for me)
   " See: http://atp-vim.sourceforge.net
-  "ActivateAddons AutomaticLaTeXPlugin
-  "ActivateAddons LaTeX_Box
+  "VAMActivate AutomaticLaTeXPlugin
+  "VAMActivate LaTeX_Box
 
-  ActivateAddons localvimrc
+  VAMActivate localvimrc
     let g:localvimrc_persistent = 1
     let g:localvimrc_sandbox = 0
-endfun
 
-fun! s:setLocalOptionsForWriting()
-  setlocal spell autowrite textwidth=0 formatoptions-=t formatoptions-=c
-  if has("linebreak")
-    setlocal wrap linebreak showbreak=...\  cpoptions+=n
-    " See: http://stackoverflow.com/questions/5706820/using-vim-isnt-there-a-more-efficient-way-to-format-latex-paragraphs-according
-    if has("gui") | let &l:showbreak="\u21aa   " | endif " use a better unicode character:↪
-    " Move cursor based on displayed lines
-    for key in split("j k 0 $")
-      exec 'noremap <buffer>  '.key.' g'.key
-      exec 'noremap <buffer> g'.key.'  '.key
-    endfor
-  endif
-endfun
-
-fun! s:stripeLists(lists)
-  let stripedList = []
-  let added = 1
-  let i = 0
-  while added
-    let added = 0
-    for singleList in a:lists
-      if i < len(singleList)
-        call add(stripedList, singleList[i])
-        let added = 1
-      endif
-    endfor
-    let i += 1
-  endwhile
-  return stripedList
-endfun
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""" Rest of this file borrowed from :help VAM-installation """""""""""""""""""""
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-fun! EnsureVamIsOnDisk(vam_install_path)
-  " windows users may want to use http://mawercer.de/~marc/vam/index.php
-  " to fetch VAM, VAM-known-repositories and the listed plugins
-  " without having to install curl, 7-zip and git tools first
-  " -> BUG [4] (git-less installation)
-  if !filereadable(a:vam_install_path.'/vim-addon-manager/.git/config')
-    " \&& 1 == confirm("Clone VAM into ".a:vam_install_path."?","&Y\n&N")
-    "" I'm sorry having to add this reminder. Eventually it'll pay off.
-    "call confirm("Remind yourself that most plugins ship with ".
-    "            \"documentation (README*, doc/*.txt). It is your ".
-    "            \"first source of knowledge. If you can't find ".
-    "            \"the info you're looking for in reasonable ".
-    "            \"time ask maintainers to improve documentation")
-    call mkdir(a:vam_install_path, 'p')
-    call system('git clone --depth=1 git://github.com/MarcWeber/vim-addon-manager '.shellescape(a:vam_install_path, 1).'/vim-addon-manager')
-    " VAM runs helptags automatically when you install or update 
-    " plugins
-    exec 'helptags '.fnameescape(a:vam_install_path.'/vim-addon-manager/doc')
-  endif
-endf
-
-fun! SetupVAM()
-  " Set advanced options like this:
-  " let g:vim_addon_manager = {}
-  " let g:vim_addon_manager['key'] = value
-
-  " Example: drop git sources unless git is in PATH. Same plugins can
-  " be installed from www.vim.org. Lookup MergeSources to get more control
-  " let g:vim_addon_manager['drop_git_sources'] = !executable('git')
-
-  " Default VAM settings
-  if !exists("g:vim_addon_manager") | let g:vim_addon_manager = {} | endif
-  for vcs in ["git", "hg"]
-    let g:vim_addon_manager['drop_'.vcs.'_sources'] = !executable(vcs)
-  endfor
-  call extend(g:vim_addon_manager, {
-        \'known_repos_activation_policy': 'yes',
-        \'auto_install': 1,
-        \'force_loading_plugins_now': 1,
-        \'shell_commands_run_method': 'system',
-        \'log_to_buf': 0,
-        \}, 'keep')
-
-  " VAM install location:
-  let vam_install_path = expand('$HOME') . '/.vim/vim-addons'
-  call EnsureVamIsOnDisk(vam_install_path)
-  exec 'set runtimepath+='.vam_install_path.'/vim-addon-manager'
-
-  " Tell VAM which plugins to fetch & load:
-  let more = &more | set nomore
-  call vam#ActivateAddons(['vim-addon-manager'])
-  call SetupAddons()
-  let &more = more
-  " sample: call vam#ActivateAddons(['pluginA','pluginB', ...], {'auto_install' : 0})
-
-  " Addons are put into vam_install_path/plugin-name directory
-  " unless those directories exist. Then they are activated.
-  " Activating means adding addon dirs to rtp and do some additional
-  " magic
-
-  " How to find addon names?
-  " - look up source from pool
-  " - (<c-x><c-p> complete plugin names):
-  " You can use name rewritings to point to sources:
-  "    ..ActivateAddons(["github:foo", .. => github://foo/vim-addon-foo
-  "    ..ActivateAddons(["github:user/repo", .. => github://user/repo
-  " Also see section "2.2. names of addons and addon sources" in VAM's documentation
-endfun
-try
-call SetupVAM()
+finally
+let &more = more  " restore options
 endtry
-" experimental [E1]: load plugins lazily depending on filetype, See
-" NOTES
-" experimental [E2]: run after gui has been started (gvim) [3]
-" option1:  au VimEnter * call SetupVAM()
-" option2:  au GUIEnter * call SetupVAM()
-" See BUGS sections below [*]
-" Vim 7.0 users see BUGS section [3]
-
 
 " vim:sw=2:undofile

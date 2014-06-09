@@ -306,7 +306,7 @@ au FileType man nnoremap <buffer> q <C-w>q
 "   export EDITOR="$HOME/.vim/vim+addons"
 "   alias vim='VIMADDONS=1 vim'
 "<
-command! LoadAddons  silent! delfunction SetupAddons|
+command! LoadAddons  silent! delfunction SetupVAM|
       \source ~/.vim/addons.vim|
 "      \silent! norm :unmap <S<BS>Space><S<BS>Space><CR>|
 noremap <Space><Space> :LoadAddons<CR>
