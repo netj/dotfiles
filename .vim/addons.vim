@@ -152,7 +152,10 @@ VAMActivate git:git://gist.github.com/1432015.git
       let g:mySetColors = g:mySetColorsNormal
       exec 'colorscheme' g:prior_colors_name
     endif
-    if exists(":AirlineRefresh") | doautoall airline BufEnter,ColorScheme | endif
+    if &diff && exists(":AirlineRefresh") && !exists("w:AirlineRefreshed")
+      let w:AirlineRefreshed = 1
+      AirlineRefresh
+    endif
   endfun
   command! DetectDiffColorScheme call s:DetectDiffColorScheme()
   autocmd FilterWritePost,BufEnter,WinEnter,WinLeave *  DetectDiffColorScheme
