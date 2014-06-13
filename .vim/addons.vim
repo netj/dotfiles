@@ -33,7 +33,7 @@ fun! SetupVAM()
   let &rtp.=(empty(&rtp)?'':',').c.plugin_root_dir.'/vim-addon-manager'
   " let g:vim_addon_manager = { your config here see "commented version" example and help
   if !isdirectory(c.plugin_root_dir.'/vim-addon-manager/autoload')
-    execute '!git clone --depth=1 git://github.com/MarcWeber/vim-addon-manager '
+    execute '!git clone --depth=1 https://github.com/MarcWeber/vim-addon-manager '
                 \       shellescape(c.plugin_root_dir.'/vim-addon-manager', 1)
     exec 'helptags '.fnameescape(c.plugin_root_dir.'/vim-addon-manager/doc')
   endif
@@ -98,7 +98,7 @@ VAMActivate hybrid jellybeans molokai Colour_Sampler_Pack
         \              'attr': 'bold' },
         \}
 " scroll among my favorites with VimTip341
-VAMActivate git:git://gist.github.com/1432015.git
+VAMActivate git:https://gist.github.com/1432015.git
   let s:mySetColorsSet = []
   let s:mySetColorsSetDiff = []
   fun! s:addColorSet(reversed, name, ...)
@@ -330,6 +330,7 @@ VAMActivate recover
 "if has("ruby")
 "  VAMActivate tips
 "end
+VAMActivate eunuch " for :Move, :SudoWrite, etc.
 
 """ Git, Github
 VAMActivate fugitive
@@ -349,12 +350,13 @@ VAMActivate fugitive
   nnoremap <Space>gL :Glog --<CR>
   nnoremap <Space>ge :Gedit<CR>
   nnoremap <Space>gE :Gedit 
+VAMActivate git:https://github.com/tpope/vim-rhubarb.git
 VAMActivate gitv
   nnoremap <Space>gv :Gitv --all<CR>
   nnoremap <Space>gV :Gitv! --all<CR>
   vnoremap <Space>gV :Gitv! --all<CR>
   set lazyredraw
-VAMActivate git:git://github.com/airblade/vim-gitgutter.git
+VAMActivate git:https://github.com/airblade/vim-gitgutter.git
   let g:gitgutter_enabled = 1
   nnoremap <Space><C-g><C-g> :GitGutterToggle<CR>
   nnoremap <Space><C-g>g     :GitGutterLineHighlightsToggle<CR>
@@ -369,6 +371,7 @@ VAMActivate Gist WebAPI
 
 
 """ Some file types
+VAMActivate endwise
 let g:sparkup = {}
   let g:sparkup.lhs_expand = '<C-\><C-e>'
   let g:sparkup.lhs_jump_next_empty_tag = '<C-\><C-f>'
@@ -392,6 +395,7 @@ VAMActivate markdown@tpope " Markdown vim-ft-markdown_fold
   endif
 VAMActivate JSON
   au BufEnter *.json setfiletype json
+VAMActivate jdaddy " for aj and ij text objects
 
 VAMActivate vim-coffee-script
   au BufEnter *.coffee syntax sync fromstart
@@ -400,6 +404,7 @@ VAMActivate vim-coffee-script
   " CoffeeScript autocompilation
   "autocmd BufWritePost *.coffee silent CoffeeMake! | cwindow
 VAMActivate jade
+VAMActivate vim-classpath
 VAMActivate applescript
   au BufEnter *.applescript setfiletype applescript
 VAMActivate vim-addon-scala
