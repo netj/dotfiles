@@ -12,11 +12,17 @@ exec >~/.sleep.log 2>&1
 PATH=~/Library/Scripts:"$PATH"
 
 # Eject all external, backup volumes and disks
-# XXX "Eject All External or Backup Disks.sh" &
+# XXX Disabling as it conflicts with PowerNap's TimeMachine backup
+# "Eject All External or Backup Disks.sh" &
 
+[ -e ~/.wakeup.apps ] || {
+    cat >~/.wakeup.apps <<-EOF
+	Papers2  # To share Papers2 library over Dropbox, it has to be shut down
+	EOF
+}
 
-# To share Papers2 library over Dropbox, it has to be shut down
-echo "Quitting Papers2"
+appsToRestart=($(sed 's/#.*$//' <~/.wakeup.apps))
+echo "Quitting ${appsToRestart[*]}"
 osascript -e '
     # keep track of last active application
     set curAppPath to the path to the frontmost application
@@ -24,21 +30,23 @@ osascript -e '
     do shell script "ln -sfn " & (quoted form of POSIX path of curAppPath) & " ~/.wakeup.activate.app"
     do shell script "echo " & (quoted form of (name of the front window of application curAppName as text)) & " >~/.wakeup.activate.app.window"
 
-    # shut down Papers2
+    '"$(for app in "${appsToRestart[@]}"; do echo '
+    # shut down '"$app"'
     tell application "System Events"
-        if exists process "Papers2" then
-            do shell script "touch ~/.wakeup.Papers2"
-            # keep track of in which Space/Desktop Papers2 were
-            tell application "Papers2" to activate
-            tell process "Papers2"
+        if exists process "'"$app"'" then
+            do shell script "echo "& (visible of application process "'"$app"'") &">~/.wakeup.apps.'"$app"'"
+            # keep track of in which Space/Desktop '"$app"' were
+            tell application "'"$app"'" to activate
+            tell process "'"$app"'"
                 set windowMenu to (first menu bar item whose title is "Window" or title is "윈도우") of menu bar 1
                 click last menu item of menu 1 of windowMenu
             end tell
-            tell application "Papers2" to quit
+            tell application "'"$app"'" to quit
             #key code 12 using command down
         end if
     end tell
-    ' &
+    '; done)" &
+
 # TODO wait until Dropbox finishes syncing Papers2's library
 
 #echo "Stopping Growl"
