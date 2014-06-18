@@ -8,7 +8,7 @@ ${Prefix}FontsFiles   := \$(${Prefix}Fonts:%=\$(FONTSDIR)/%)
 ${Prefix}FontsArchive ?= \$(shell basename \$(${Prefix}FontsURL))
 
 \$(${Prefix}FontsFiles): \$(${Prefix}FontsArchive)
-	@./extract "$<" \$(FONTSDIR) "\$(@F)"
+	@-./extract "$<" \$(FONTSDIR) "\$(@F)"
 
 \$(${Prefix}FontsArchive):
 	curl -# -C- -LRo \$@ \$(${Prefix}FontsURL)

@@ -24,22 +24,31 @@ all: install
 EnvyCodeRFontsURL := http://download.damieng.com/fonts/original/EnvyCodeR-PR7.zip
 EnvyCodeRFontsArchive := EnvyCodeR.zip
 EnvyCodeRFonts := \
-    Envy?Code?R?Bold.ttf   \
-    Envy?Code?R?Italic.ttf \
-    Envy?Code?R.ttf        \
+    Envy*Code*R*Bold.ttf   \
+    Envy*Code*R*Italic.ttf \
+    Envy*Code*R.ttf        \
     #
 include EnvyCodeRFonts.mk
 
 # patch font for Powerline
-PowerlineFontPatcher = ../.vim/vim-addons/powerline/font/fontpatcher.py
+PowerlineFontPatcher = vim-powerline/fontpatcher/fontpatcher
 EnvyCodeRForPowerline = Envy\ Code\ R\ for\ Powerline.otf
+EnvyCodeRForPowerlineGenerated = Envy\ Code\ R-Powerline.otf
 InstalledFiles += $(FONTSDIR)/$(EnvyCodeRForPowerline)
-$(FONTSDIR)/$(EnvyCodeRForPowerline): $(EnvyCodeRForPowerline)
+$(FONTSDIR)/$(EnvyCodeRForPowerline): $(EnvyCodeRForPowerlineGenerated)
 	-ln -fv "$<" "$@"
-$(EnvyCodeRForPowerline): $(FONTSDIR)/Envy\ Code\ R.ttf $(PowerlineFontPatcher)
+$(EnvyCodeRForPowerlineGenerated): $(FONTSDIR)/Envy\ Code\ R.ttf $(PowerlineFontPatcher)
 	-fontforge -script $(PowerlineFontPatcher) "$<"
 $(PowerlineFontPatcher):
-	true
+	git clone https://github.com/Lokaltog/vim-powerline.git
+
+# More powerline fonts
+PowerlineFonts = powerline-fonts
+InstalledFiles += $(FONTSDIR)/$(PowerlineFonts)
+$(FONTSDIR)/$(PowerlineFonts): $(PowerlineFonts)
+	-ln -sfnv "$<" "$@"
+$(PowerlineFonts):
+	git clone https://github.com/Lokaltog/powerline-fonts.git
 
 ## Nanum Fonts
 ifneq (,$(filter Darwin-10.6 Darwin-10.6.%,$(uname_version)))

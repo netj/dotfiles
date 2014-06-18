@@ -28,7 +28,7 @@ case "$Archive" in
                 ;;
 
             *)
-                unzip -o "$Archive" "$@" -d "$DestDir"
+                unzip -o -I UTF-8 -O UTF-8 -j "$Archive" "$@" "${@/#/**/}" -d "$DestDir"
                 (
                     mkdir -p "$DestDir"
                     cd "$DestDir"
