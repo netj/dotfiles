@@ -38,8 +38,10 @@ case "$Archive" in
         esac
         ;;
 
+    *.ttf|*.otf)
+        ;;
+
     *)
         echo $Archive: Unsupported archive type >&2
         exit 2
-        ;;
 esac

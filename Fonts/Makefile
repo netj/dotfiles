@@ -20,7 +20,7 @@ all: install
 %Fonts.mk: genFontsFetchRules Makefile; @./$< $* >$@
 
 ## Envy Code R, Damien Guard's coding font
-## See: http://damieng.com/blog/2008/05/26/envy-code-r-preview-7-coding-font-released
+## See: http://damieng.com/fonts/envy-code-r
 EnvyCodeRFontsURL := http://download.damieng.com/fonts/original/EnvyCodeR-PR7.zip
 EnvyCodeRFontsArchive := EnvyCodeR.zip
 EnvyCodeRFonts := \
@@ -30,15 +30,21 @@ EnvyCodeRFonts := \
     #
 include EnvyCodeRFonts.mk
 
-# patched fonts for powerline/vim-airline
-PowerlineFonts = powerline-fonts
+# Powerline/vim-airline fonts
+PowerlineSymbolsFontsURL := https://github.com/Lokaltog/powerline/raw/develop/font/PowerlineSymbols.otf
+PowerlineSymbolsFontsArchive := PowerlineSymbols.otf
+PowerlineSymbolsFonts := \
+    PowerlineSymbols.otf \
+    #
+include PowerlineSymbolsFonts.mk
+# pre-patched versions
+PowerlineFonts := powerline-fonts
 InstalledFiles += $(FONTSDIR)/$(PowerlineFonts)
 $(FONTSDIR)/powerline-fonts: $(PowerlineFonts)
 	cd $(PowerlineFonts) && git pull
 	rsync -avH --exclude=/.git $</ $@/
 $(PowerlineFonts):
 	git clone https://github.com/netj/powerline-fonts.git $@
-
 
 ## Nanum Fonts
 ifneq (,$(filter Darwin-10.6 Darwin-10.6.%,$(uname_version)))
