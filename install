@@ -210,7 +210,7 @@ fi
 if [ -n "${DISPLAY:-}" ] || running WindowServer; then
 fonts_d_after() { make -C .fonts.d; }
 install .fonts.conf
-install .fonts.d .fonts
+install .fonts.d fonts
 fi
 
 
