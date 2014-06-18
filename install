@@ -208,9 +208,9 @@ fi
 
 # GUI
 if [ -n "${DISPLAY:-}" ] || running WindowServer; then
-fonts_after() { make -C .fonts; }
+fonts_d_after() { make -C .fonts.d; }
 install .fonts.conf
-install .fonts
+install .fonts.d .fonts
 fi
 
 

@@ -166,8 +166,20 @@ if has("gui_running")
   let g:airline#extensions#whitespace#enabled = 0
 
   set laststatus=2 noshowmode showcmd
-  let &guifont = join(map(split(&guifont,","),
-        \ 'split(v:val,":")[0]." for Powerline:".split(v:val,":")[1]'),",")
+  fun! s:fontname(nameSize)
+    return substitute(a:nameSize, "\\(:h\\|  *\\)[0-9]\\+$", "", "i")
+  endfun
+  let guifonts = reverse(map(split(&guifont,","), '[s:fontname(v:val), v:val[len(s:fontname(v:val)):]]'))
+  let suffixes = reverse([
+        \  " for Powerline",
+        \  " Powerline",
+        \  " derivative Powerline",
+        \])
+  for [name,size] in guifonts
+    for suffix in suffixes
+      let &guifont = name.suffix.size .",". &guifont
+    endfor
+  endfor
   " using colorscheme from localvimrc can screw up powerline, hence below:
   autocmd VimEnter * doautoall airline BufEnter,ColorScheme
 endif

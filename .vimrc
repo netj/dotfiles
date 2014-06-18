@@ -101,7 +101,36 @@ if has("gui_running")
   set guioptions-=b
   set guioptions-=t
   set guioptions-=T
-  set guifont=Envy_Code_R:h16,Consolas:h16,Menlo:h15,Monaco:h14
+  " Fonts for MacVim/GVim
+  let g:guifonts = []
+  call add(g:guifonts, ["Envy Code R"     , 16]) " favorite
+  call add(g:guifonts, ["Anonymous Pro"   , 16]) " serif style fixed-width
+  call add(g:guifonts, ["Inconsolata-dz"  , 14]) " good sharp dense
+  call add(g:guifonts, ["Ubuntu Mono"     , 18]) " good bold but maybe too dense
+  call add(g:guifonts, ["Consolas"        , 16]) " good
+  call add(g:guifonts, ["Monaco"          , 14]) " okay but fat
+  call add(g:guifonts, ["Menlo"           , 15]) " too fat
+  "call add(g:guifonts, ["Inconsolata"     , 16]) " good sharp dense but silly fonts for quotes
+  "call add(g:guifonts, ["Dejavu Sans Mono", 16]) " okay but too fat
+  "call add(g:guifonts, ["Liberation Mono" , 16]) " so so too fat
+  "call add(g:guifonts, ["Source Code Pro" , 15]) " okay but sparse
+  "call add(g:guifonts, ["Droid Sans Mono" , 14]) " bad (0Oo) and a bit wide/fat
+  "  adjusting font preference based on OS
+  if has("gui_macvim")
+    call insert(g:guifonts, ["Envy Code R", 16])
+  elseif has("gui_win32")
+    call insert(g:guifonts, ["Consolas"   , 16])
+  else
+    call insert(g:guifonts, ["Ubuntu Mono", 18])
+    call insert(g:guifonts, ["Inconsolata-dz", 14])
+  endif
+  if has("gui_macvim") || has("gui_win32")
+    let guifontfmt = 'v:val[0].":h".v:val[1]'
+  else
+    let guifontfmt = 'v:val[0]." ".v:val[1]'
+  endif
+  let &guifont = join(map(guifonts, guifontfmt), ",")
+  " Colors
   set t_Co=256
   if has("gui_macvim")
     set transparency=5

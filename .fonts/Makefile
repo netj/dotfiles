@@ -9,7 +9,7 @@ ifeq ($(uname),Darwin)
     FONTSDIR := ~/Library/Fonts
 else
     uname_version := $(uname)
-    FONTSDIR := .
+    FONTSDIR := ~/.fonts
 endif
 
 
@@ -24,31 +24,21 @@ all: install
 EnvyCodeRFontsURL := http://download.damieng.com/fonts/original/EnvyCodeR-PR7.zip
 EnvyCodeRFontsArchive := EnvyCodeR.zip
 EnvyCodeRFonts := \
-    Envy*Code*R*Bold.ttf   \
-    Envy*Code*R*Italic.ttf \
-    Envy*Code*R.ttf        \
+    Envy?Code?R?Bold.ttf   \
+    Envy?Code?R?Italic.ttf \
+    Envy?Code?R.ttf        \
     #
 include EnvyCodeRFonts.mk
 
-# patch font for Powerline
-PowerlineFontPatcher = vim-powerline/fontpatcher/fontpatcher
-EnvyCodeRForPowerline = Envy\ Code\ R\ for\ Powerline.otf
-EnvyCodeRForPowerlineGenerated = Envy\ Code\ R-Powerline.otf
-InstalledFiles += $(FONTSDIR)/$(EnvyCodeRForPowerline)
-$(FONTSDIR)/$(EnvyCodeRForPowerline): $(EnvyCodeRForPowerlineGenerated)
-	-ln -fv "$<" "$@"
-$(EnvyCodeRForPowerlineGenerated): $(FONTSDIR)/Envy\ Code\ R.ttf $(PowerlineFontPatcher)
-	-fontforge -script $(PowerlineFontPatcher) "$<"
-$(PowerlineFontPatcher):
-	git clone https://github.com/Lokaltog/vim-powerline.git
-
-# More powerline fonts
+# patched fonts for powerline/vim-airline
 PowerlineFonts = powerline-fonts
 InstalledFiles += $(FONTSDIR)/$(PowerlineFonts)
-$(FONTSDIR)/$(PowerlineFonts): $(PowerlineFonts)
-	-ln -sfnv "$<" "$@"
+$(FONTSDIR)/powerline-fonts: $(PowerlineFonts)
+	cd $(PowerlineFonts) && git pull
+	rsync -avH --exclude=/.git $</ $@/
 $(PowerlineFonts):
-	git clone https://github.com/Lokaltog/powerline-fonts.git
+	git clone https://github.com/netj/powerline-fonts.git $@
+
 
 ## Nanum Fonts
 ifneq (,$(filter Darwin-10.6 Darwin-10.6.%,$(uname_version)))
@@ -100,7 +90,8 @@ include NanumGothicLightFonts.mk
 
 
 ## Seoul Fonts
-SeoulFontsURL := http://design.seoul.go.kr/ds_soft/fileDown.php?f=L2ZpbGVzX3VwbG9hZC9wb2xpY3kvZGF0YXMvMjAxMS8xMi8yMC8wLzA5NmM3ZDA5OWJiY2YxOTUyMzU4MTk3ZjUyZGRjZWI4LnppcA==&f2=VjJsdVpHOTNjMSs4OXJXL3ZMUEVvUzU2YVhBPQ==
+# See: http://www.seoul.go.kr/v2012/seoul/symbol/font.html
+SeoulFontsURL := http://www.seoul.go.kr/v2012/seoul/symbol/download.php?div=Zm9udDAy
 SeoulFontsArchive := SeoulFonts_TTF.zip
 SeoulFonts := \
     SeoulHangangB.ttf   \

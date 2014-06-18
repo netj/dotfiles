@@ -10,8 +10,22 @@ commercially or redistribution.
 
 - [Nanum Fonts](http://hangeul.naver.com/font) (Korean)
 - [Nanum Gothic Coding Font](http://dev.naver.com/projects/nanumfont) (Korean)
-- [Seoul Fonts](http://design.seoul.go.kr/n_dscontent/designseoul.php?MenuID=521&pgID=506) (Korean)
+- [Seoul Fonts](http://www.seoul.go.kr/v2012/seoul/symbol/font.html) (Korean)
 
 - [Microsoft TrueType Core Fonts](http://corefonts.sourceforge.net/)
 
 Run `make` to download and install them.
+
+
+## Judging Quality of Coding Fonts
+Characters that are commonly rendered ambiguously by many fonts not appropriate for coding:
+
+    80oODQ@
+    Il1|!ij
+    `'":;.,~-_=#
+
+And some other interesting characters:
+
+    a@ gqd hbp nm
+    A4 T7J S5 9g
+    []{}()<>
