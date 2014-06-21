@@ -106,7 +106,7 @@ if has("gui_running")
   call add(g:guifonts, ["Envy Code R"     , 16]) " favorite
   call add(g:guifonts, ["Anonymous Pro"   , 16]) " serif style fixed-width
   call add(g:guifonts, ["Inconsolata-dz"  , 14]) " good sharp dense
-  call add(g:guifonts, ["Ubuntu Mono"     , 18]) " good bold but maybe too dense
+  call add(g:guifonts, ["Ubuntu Mono"     , 16]) " good bold but maybe too dense
   call add(g:guifonts, ["Consolas"        , 16]) " good
   call add(g:guifonts, ["Monaco"          , 14]) " okay but fat
   call add(g:guifonts, ["Menlo"           , 15]) " too fat
@@ -121,8 +121,8 @@ if has("gui_running")
   elseif has("gui_win32")
     call insert(g:guifonts, ["Consolas"   , 16])
   else
-    call insert(g:guifonts, ["Ubuntu Mono", 18])
     call insert(g:guifonts, ["Inconsolata-dz", 14])
+    call insert(g:guifonts, ["Ubuntu Mono", 16])
   endif
   if has("gui_macvim") || has("gui_win32")
     let guifontfmt = 'v:val[0].":h".v:val[1]'
@@ -365,6 +365,18 @@ if !exists("g:loaded_vinegar") && empty(filter(split(&rtp, ','), "v:val =~ 'vine
   let g:netrw_hide = 0
 endif
 
+" Adjust GVim's &guifont for GTK2
+if has("gui_running") && has("gui_gtk2")
+  let existing_font = "monospace"
+  for font in split(&guifont, ",")
+    let fontname = substitute(font, " \\+\\d\\+", "", "")
+    if system("fc-list ".shellescape(fontname)." | wc -l") > 0
+      let existing_font = font
+      break
+    endif
+  endfor
+  let &guifont = existing_font
+endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Local settings                                                              "
