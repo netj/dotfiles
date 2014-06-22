@@ -17,9 +17,9 @@ case "$Archive" in
                     mkdir -p $tmp
                     ditto -xk "$Archive" $tmp || true # XXX ditto sometimes fails
                 fi
-                findopts=(-name "$1"); shift
+                findopts=(-type f -name "$1"); shift
                 for FileName; do
-                    findopts+=(-o -name "$FileName")
+                    findopts+=(-o -type f -name "$FileName")
                 done
                 find $tmp \( "${findopts[@]}" \) \
                     -exec chmod -x {} \; \
@@ -39,6 +39,7 @@ case "$Archive" in
         ;;
 
     *.ttf|*.otf)
+        ln -vf "$Archive" "$DestDir"/
         ;;
 
     *)

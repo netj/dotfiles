@@ -24,8 +24,18 @@ Characters that are commonly rendered ambiguously by many fonts not appropriate 
     Il1|!ij
     `'":;.,~-_=#
 
-And some other interesting characters:
+And most of the ASCII characters:
+
+    ABCDEFGHIJKLMNOPQRSTUVWXYZ
+    abcdefghijklmnopqrstuvwxyz
+    !@#$%^&*()_+-=,./?<>[]\{}|
+    1234567890
+
+Or some characters to look at side-by-side:
 
     a@ gqd hbp nm
     A4 T7J S5 9g
     []{}()<>
+
+Here are some good readings regarding typefaces for programming:
+* [Dan Benjamin's Top 10 Programming Fonts](http://hivelogic.com/articles/top-10-programming-fonts)
