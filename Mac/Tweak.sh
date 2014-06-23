@@ -7,7 +7,7 @@
 # See-Also: https://github.com/mathiasbynens/dotfiles/blob/master/.osx
 set -eu
 
-fontSerif='Envy Code R'
+fontSerif='Palatino'
 fontSansSerif='Lucida Grande'
 fontMonospace='Envy Code R'
 
