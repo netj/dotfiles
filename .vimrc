@@ -21,6 +21,9 @@ fun! SourceOptional(files)
 endfun
 command! -nargs=* SourceOptional :call SourceOptional([<f-args>])
 
+" Source a local configuration (if available) that's supposed to come before filetype plugin.
+SourceOptional ~/.vim_local.before
+
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 
@@ -258,7 +261,7 @@ nnoremap <End>  g$
 
 " Window resize for Mac (to be mapped to pinch in/out gestures)
 if has("mac")
-	  nnoremap <M-C-D-+>        16<C-w>>
+  nnoremap <M-C-D-+>        16<C-w>>
   inoremap <M-C-D-+>   <C-o>16<C-w>>
   nnoremap <M-C-D-->        16<C-w><
   inoremap <M-C-D-->   <C-o>16<C-w><
@@ -280,6 +283,26 @@ iab jshin>   Jaeho.Shin@Stanford.EDU
 
 " Frequently typed lines.
 iab Created:    Created: <C-R>=system("date +%Y-%m-%d")
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Vim Addons/Scripts/Plugins                                                  "
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Command and key combo for loading the vim-addon-manager aka VAM
+" VAM's auto_install can interrupt many scripts relying on vim, so loading
+" only when used interactively.  You could add LoadAddons to ~/.vim_local, but
+" adding an alias to the shell is recommended: >
+"   export EDITOR="$HOME/.vim/vim+addons"
+"   alias vim='VIMADDONS=1 vim'
+"<
+command! LoadAddons  silent! delfunction SetupVAM|
+      \source ~/.vim/addons.vim|
+"      \silent! norm :unmap <S<BS>Space><S<BS>Space><CR>|
+noremap <Space><Space> :LoadAddons<CR>
+if has("gui_running") || exists("$VIMADDONS")
+  LoadAddons
+endif
+
 
 
 "------------------------------------------------------------------------------
@@ -326,22 +349,10 @@ au FileType man nnoremap <buffer> q <C-w>q
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Vim Addons/Scripts/Plugins                                                  "
+" Local settings                                                              "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Command and key combo for loading the vim-addon-manager aka VAM
-" VAM's auto_install can interrupt many scripts relying on vim, so loading
-" only when used interactively.  You could add LoadAddons to ~/.vim_local, but
-" adding an alias to the shell is recommended: >
-"   export EDITOR="$HOME/.vim/vim+addons"
-"   alias vim='VIMADDONS=1 vim'
-"<
-command! LoadAddons  silent! delfunction SetupVAM|
-      \source ~/.vim/addons.vim|
-"      \silent! norm :unmap <S<BS>Space><S<BS>Space><CR>|
-noremap <Space><Space> :LoadAddons<CR>
-if has("gui_running") || exists("$VIMADDONS")
-  LoadAddons
-endif
+" Source a local configuration file if available.
+SourceOptional ~/.vim_local
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -378,12 +389,8 @@ if has("gui_running") && has("gui_gtk2")
   let &guifont = existing_font
 endif
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Local settings                                                              "
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Source a local configuration file if available.
-SourceOptional ~/.vim_local
-
+" Source a local configuration file at the very end if available.
+SourceOptional ~/.vim_local.after
 
 delcommand SourceOptional | delfunction SourceOptional
 
