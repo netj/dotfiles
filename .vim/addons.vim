@@ -182,6 +182,13 @@ if has("gui_running")
   endfor
   " using colorscheme from localvimrc can screw up powerline, hence below:
   autocmd VimEnter * doautoall airline BufEnter,ColorScheme
+
+  if has("gui_gtk2")
+    " quick font resize for GVim
+    VAMActivate fontsize
+      nmap <silent> <M-=> <Leader><Leader>+
+      nmap <silent> <M--> <Leader><Leader>-
+  endif
 endif
 
 
