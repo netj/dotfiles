@@ -186,6 +186,15 @@ git_excludesfile_after() {
 }
 install .git-excludesfile
 git config --global color.ui auto
+
+if has ctags; then
+# Update tags file after commit/checkout/merge/rebase
+# See: http://tbaggery.com/2011/08/08/effortless-ctags-with-git.html
+git_template_after() {
+    git config --global init.templatedir ~/.git-template
+}
+install .git-template
+fi
 fi
 
 ! has tmux ||

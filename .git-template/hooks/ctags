@@ -1,0 +1,5 @@
+#!/bin/sh
+set -e
+trap "rm -f .git/tags.$$" EXIT
+ctags --tag-relative -R -f.git/tags.$$ --links=no --exclude=.git
+mv .git/tags.$$ .git/tags
