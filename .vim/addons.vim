@@ -160,12 +160,12 @@ VAMActivate git:https://gist.github.com/1432015.git
   command! DetectDiffColorScheme call s:DetectDiffColorScheme()
   autocmd FilterWritePost,BufEnter,WinEnter,WinLeave *  DetectDiffColorScheme
   nnoremap <Space>d :diffoff \| DetectDiffColorScheme<CR>
-if has("gui_running")
-  VAMActivate vim-airline
-  let g:airline_powerline_fonts = 1
-  let g:airline#extensions#whitespace#enabled = 0
 
+  VAMActivate vim-airline
+  let g:airline#extensions#whitespace#enabled = 0
   set laststatus=2 noshowmode showcmd
+if has("gui_running")
+  let g:airline_powerline_fonts = 1
   fun! s:fontname(nameSize)
     return substitute(a:nameSize, "\\(:h\\|  *\\)[0-9]\\+$", "", "i")
   endfun
