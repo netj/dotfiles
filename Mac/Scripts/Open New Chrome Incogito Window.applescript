@@ -1,10 +1,21 @@
-# AppleScript for opening a new Chrome Incogito window
+# AppleScript for opening a new Chrome Incogito window (for the current web page in Safari/Chrome)
 # Author: Jaeho Shin <netj@sparcs.org>
 # Created: 2014-07-04
 
-# TODO detect and copy URL if Safari or Chrome is the current application
+#tell application "Google Chrome" to activate # XXX just for easier debugging
 
-# find the app's icon from Dock
+# First, detect and copy URL if a known web browser is the current application
+set theURL to missing value
+try
+    tell application "System Events" to set currentAppName to name of first application process whose frontmost is true
+    if currentAppName is "Safari" then
+        tell application "Safari" to set theURL to URL of front document
+    else if currentAppName is "Google Chrome" then
+        tell application "Google Chrome"'s front window to set theURL to URL of tab (active tab index)
+    end if
+end try
+
+# Find the app's icon from Dock
 set appName to "Google Chrome"
 property appNamesOnDock : {"Chrome"}
 to findAppIcon()
@@ -25,7 +36,7 @@ to findAppIcon()
 end findAppIcon
 set appIcon to findAppIcon()
 if appIcon is missing value then
-	# if not found, activate the app, then search for the icon again
+	# If not found, activate the app, then search for the icon again
 	tell application appName to activate
 	delay 1
 	set appIcon to findAppIcon()
@@ -35,16 +46,22 @@ if appIcon is missing value then
 	end if
 end if
 
-# finally, click the item from its Dock menu
+# Then, click the Incogito item from its Dock menu
 tell application "System Events"
 	try
 		perform action "AXShowMenu" of appIcon
 		click menu item -9 of menu 1 of appIcon
-		return
 	on error err
 		display alert err
 		return 2
 	end try
 end tell
 
-# TODO paste URL into the new window
+# Finally, open the URL into the new window
+if theURL is not missing value then
+    delay 1
+    tell application "Google Chrome"'s front window to set URL of tab (active tab index) to theURL
+end if
+
+
+# vim:ft=applescript:sw=4:sts=4:ts=4
