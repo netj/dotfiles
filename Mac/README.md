@@ -27,11 +27,9 @@ workaround is to select all lines from the first column and trim the first and
 last line afterwards.
 
 
-## KeyRemap4MacBook .xml
-[KeyRemap4MacBook][] is a great tool that allows you to remap keyboard in OS X.
-I'm using it to remap left command as option key except a few Mac key
-combinations in Terminal.app, and Esc to switch back to English IM in Vim to
-make life easier.
+## Karabiner private.xml
+[Karabiner][] (or formerly KeyRemap4MacBook) is a great tool that allows you to remap keyboard in OS X.
+I'm using it to remap left command as option key except a few Mac key combinations in Terminal.app, and Esc to switch back to English IM in Vim to make life easier.
 
 
 ## Many Scripts
@@ -60,6 +58,7 @@ allows you to switch your Mac's default font fallbacks.
 [Ben Stiglitz's talk]: http://totalterminal.binaryage.com/#special-guest
 [Envy Code R font]: http://damieng.com/blog/2008/05/26/envy-code-r-preview-7-coding-font-released
 [MouseTerm plus]: https://github.com/saitoha/mouseterm-plus#readme
+[Karabiner]: https://pqrs.org/osx/karabiner/
 [KeyRemap4MacBook]: http://pqrs.org/macosx/keyremap4macbook/
 [FastScripts]: http://www.red-sweater.com/fastscripts/
 [Control Plane]: http://www.controlplaneapp.com/

@@ -239,7 +239,22 @@ case $(uname) in Darwin)
     # See: http://www.hcs.harvard.edu/~jrus/site/cocoa-text.html
     install Library/KeyBindings/DefaultKeyBinding.dict Mac/KeyBindings/DefaultKeyBinding.dict true
 
-    # install KeyRemap4MacBook settings
+    # install Karabiner settings (formerly known as KeyRemap4MacBook, prior to version 10.0.0)
+    if running-app Karabiner; then
+        for xml in Mac/Karabiner/*.xml; do
+            [ -e "$xml" ] || continue
+            Library_Application_Support_Karabiner_private_xml_after() {
+                local x="$(
+                app=/Applications/Karabiner.app
+                if [ -d "$app" ]; then echo $app
+                else mdfind Karabiner.app | head -n 1
+                fi)/Contents/Library/bin/karabiner"
+                ! [ -x "$x" ] || "$x" reloadxml
+            }
+            install Library/"Application Support"/"${xml#Mac/}" "$xml"
+        done
+    fi
+    # install KeyRemap4MacBook settings # FIXME remove below after a while
     if running-app KeyRemap4MacBook; then
         for xml in Mac/KeyRemap4MacBook/*.xml; do
             [ -e "$xml" ] || continue

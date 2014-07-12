@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<root>
+    <block>
+        <include path="/Applications/Karabiner.app/Contents/Resources/include/checkbox/commons/wrap_keys/alphabet.xml" />
+        <include path="/Applications/Karabiner.app/Contents/Resources/include/checkbox/commons/wrap_keys/number.xml"   />
+        <include path="/Applications/Karabiner.app/Contents/Resources/include/checkbox/commons/wrap_keys/symbol.xml"   />
+        <include path="/Applications/Karabiner.app/Contents/Resources/include/checkbox/commons/wrap_keys/special.xml"  />
+        <include path="/Applications/Karabiner.app/Contents/Resources/include/checkbox/commons/wrap_keys/keypad.xml"   />
+    </block>
+</root>
