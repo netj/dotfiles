@@ -1,8 +1,12 @@
 #!/usr/bin/perl -w
 # format-latex.pl -- a filter LaTeX format program to keep a sentence per line
-# Usage: From vim, :set formatprg=/path/to/format-latex.pl and use `gq'
+# Usage:
+#   From Vim, :set formatprg=/path/to/format-latex.pl and use `gq'
+#   From Emacs, See: http://stackoverflow.com/questions/206806/filtering-text-through-a-shell-command-in-emacs
+#   From Sublime, See: https://github.com/technocoreai/SublimeExternalCommand#readme
 # 
 # See-Also: http://stackoverflow.com/questions/5706820/using-vim-isnt-there-a-more-efficient-way-to-format-latex-paragraphs-according
+# 
 #
 # Author: Jaeho Shin <netj@cs.stanford.edu>
 # Created: 2013-02-18
