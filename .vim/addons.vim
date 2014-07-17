@@ -423,6 +423,9 @@ VAMActivate vim-coffee-script
   " CoffeeScript autocompilation
   "autocmd BufWritePost *.coffee silent CoffeeMake! | cwindow
 VAMActivate jade
+VAMActivate altr
+  nmap <Space><Tab>    <Plug>(altr-forward)
+  nmap <Space><S-Tab>  <Plug>(altr-backward)
 VAMActivate vim-classpath
 VAMActivate applescript
   au BufEnter *.applescript setfiletype applescript
