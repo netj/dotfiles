@@ -248,7 +248,7 @@ nnoremap <Space>*      :nohlsearch<CR>
 nnoremap <Space>q      :copen<CR>
 nnoremap <Space>l      :lopen<CR>
 au BufWinEnter *
-      \ if &buftype == "quickfix" |
+      \ if index(["quickfix", "nofile"], &buftype) >= 0 |
       \   nnoremap <buffer> <silent> q :close<CR>|
       \ endif
 " XXX is above the best way to close with q? why don't BufAdd, BufNew work?
