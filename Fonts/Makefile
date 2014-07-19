@@ -20,6 +20,23 @@ all: install
 %Fonts.mk: genFontsFetchRules Makefile; @./$< $* >$@
 
 
+## Noto Fonts by Google (Pan-CJK Sans-serif)
+# See: http://www.google.com/get/noto/
+ifeq ($(uname),Darwin) # OS X (Mac)
+    NotoFontsArchive := Noto.zip
+else
+ifeq ($(patsubst CYGWIN_NT*,,$(uname)),) # Windows
+    NotoFontsArchive := Noto-windows.zip
+else # Linux, etc.
+    NotoFontsArchive := Noto-hinted.zip
+endif
+endif
+NotoFontsURL := http://www.google.com/get/noto/pkgs/$(NotoFontsArchive)
+NotoFonts := \
+    Noto*.ttf \
+    #
+include NotoFonts.mk
+
 
 ## Envy Code R, Damien Guard's coding font (monospace)
 # See: http://damieng.com/fonts/envy-code-r
