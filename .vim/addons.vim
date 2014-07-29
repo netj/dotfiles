@@ -250,6 +250,7 @@ VAMActivate commentary
 VAMActivate vim-visual-star-search
 VAMActivate EasyMotion
   let g:EasyMotion_leader_key = '<Space>w'
+VAMActivate glowshi-ft
 VAMActivate matchit.zip
 VAMActivate closeb  " CTRL-_ to close complex brackets/tags
 VAMActivate rainbow_parentheses
