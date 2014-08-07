@@ -372,7 +372,10 @@ include BubblegumSansFonts.mk
 ## Microsoft free fonts
 msttcorefonts:
 ifneq ($(uname),Darwin)
-	! type apt-get >/dev/null 2>&1 || dpkg -L msttcorefonts >/dev/null 2>&1 || sudo apt-get install msttcorefonts
+	! type apt-get >/dev/null 2>&1 || \
+	dpkg -L msttcorefonts >/dev/null 2>&1 || \
+	dpkg -L ttf-mscorefonts-installer >/dev/null 2>&1 || \
+	sudo apt-get install msttcorefonts
 endif
 
 
