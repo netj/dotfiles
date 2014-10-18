@@ -30,19 +30,11 @@ vim-addons-bash_local: ##
 	    +wq \
 	    #
 
-# CoffeeTags + TagBar + Vim
-# See: https://github.com/lukaszkorecki/CoffeeTags#readme
-coffeetags: ##
-	! type coffeetags || { \
-	    mkdir -p ftplugin/coffee && \
-	    coffeetags --vim-conf >ftplugin/coffee/tagbar-coffee.vim; \
-	}
-
 # tpope's spelling fixes using :Abolish
-tpopes-abbrevs: after/plugin/abolish.vim ##
-after/plugin/abolish.vim:
+tpopes-abbrevs: after/plugin/abolish_tpope.vim ##
+after/plugin/abolish_tpope.vim:
 	mkdir -p $(@D) && cd $(@D) && \
-	curl -kRLO https://raw.github.com/tpope/tpope/master/.vim/$@
+	curl -kRLO https://github.com/tpope/tpope/raw/master/.vim/$@
 
 # Set Skim's SyncTeX settings to MacVim
 synctex.skim-macvim: ##

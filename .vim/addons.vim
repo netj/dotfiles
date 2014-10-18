@@ -422,6 +422,7 @@ VAMActivate vim-coffee-script
   au BufRead,BufNewFile *.coffee setl suffixesadd+=.coffee,.js
   " CoffeeScript autocompilation
   "autocmd BufWritePost *.coffee silent CoffeeMake! | cwindow
+VAMActivate git:https://github.com/lukaszkorecki/CoffeeTags.git
 VAMActivate jade
 VAMActivate altr
   nmap <Space><Tab>    <Plug>(altr-forward)
