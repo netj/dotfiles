@@ -9,9 +9,13 @@ tell application "Safari" to set theURL to URL of front document
 # Find if there are existing Chrome windows in the current space.
 # This can't be done by simply telling application "Google Chrome" to check exists windows.
 tell application "System Events"
-	tell application process "Google Chrome"
-		set titles to get title of windows whose value of attribute "AXMinimized" is not true
-	end tell
+	try
+		tell application process "Google Chrome"
+			set titles to get title of windows whose value of attribute "AXMinimized" is not true
+		end tell
+	on error
+		set titles to {}
+	end try
 end tell
 set windowAlreadyExistsInCurrentSpace to (count titles) > 0
 
