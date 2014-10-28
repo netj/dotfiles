@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import sys
 from Quartz import CGDisplayIsBuiltin # See: http://pydoc.net/Python/displays/0.1.0/displays.main/
-from AppKit import *
+from AppKit import NSScreen,NSApplication,NSApp
 
 def usage():
     print """Usage: %(name)s [SCREEN_NUMBER | WIDTHxHEIGHT]... --  ATTRIBUTE...
