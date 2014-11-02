@@ -529,9 +529,7 @@ VAMActivate LaTeX-Suite_aka_Vim-LaTeX
 "VAMActivate AutomaticLaTeXPlugin
 "VAMActivate LaTeX_Box
 
-VAMActivate localvimrc
-  let g:localvimrc_persistent = 1
-  let g:localvimrc_sandbox = 0
+VAMActivate vim-addon-local-vimrc
 
 finally
 let &more = more  " restore options
