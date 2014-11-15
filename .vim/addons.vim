@@ -422,7 +422,9 @@ VAMActivate vim-coffee-script
   au BufRead,BufNewFile *.coffee setl suffixesadd+=.coffee,.js
   " CoffeeScript autocompilation
   "autocmd BufWritePost *.coffee silent CoffeeMake! | cwindow
-VAMActivate git:https://github.com/lukaszkorecki/CoffeeTags.git
+if has("ruby")
+  VAMActivate git:https://github.com/lukaszkorecki/CoffeeTags.git
+endif
 VAMActivate jade
 VAMActivate altr
   nmap <Space><Tab>    <Plug>(altr-forward)
@@ -529,7 +531,10 @@ VAMActivate LaTeX-Suite_aka_Vim-LaTeX
 "VAMActivate AutomaticLaTeXPlugin
 "VAMActivate LaTeX_Box
 
-VAMActivate vim-addon-local-vimrc
+VAMActivate localvimrc  " vim-addon-local-vimrc
+  let g:localvimrc_name = [ ".lvimrc", ".vimrc" ]
+  let g:localvimrc_persistent = 1
+  let g:localvimrc_sandbox = 0
 
 finally
 let &more = more  " restore options
