@@ -416,6 +416,15 @@ VAMActivate JSON
   au BufEnter *.json setfiletype json
 VAMActivate jdaddy " for aj and ij text objects
 
+if executable("clang-format")
+  VAMActivate git:https://github.com/kana/vim-operator-user.git " vim-operator-user
+  VAMActivate git:https://github.com/rhysd/vim-clang-format.git " vim-clang-format
+  let g:clang_format#code_style = "google"
+  au FileType c,cpp,objc,objcpp
+        \| nmap <Space><C-K> :ClangFormatAutoToggle<CR>
+        \| map <C-K> <Plug>(operator-clang-format)
+endif
+VAMActivate cocoa vim-objc
 VAMActivate vim-coffee-script
   au BufEnter *.coffee syntax sync fromstart
   " Search for CoffeeScript/JavaScript files, e.g., require "foo"
@@ -436,7 +445,7 @@ VAMActivate vim-addon-scala
   " Scala (See: http://mdr.github.com/scalariform/)
   au BufEnter *.scala setl formatprg=scalariform\ --forceOutput
 VAMActivate octave%3600
-  au BufEnter *.oct,*.m setlocal filetype=octave
+  au BufEnter *.oct setlocal filetype=octave  " XXX *.m could be an Objective-C file
 VAMActivate SQLUtilities
   let g:sqlutil_keyword_case='\U'
   let g:sqlutil_align_where=1
