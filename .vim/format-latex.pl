@@ -33,6 +33,7 @@ sub sentence {
     my $sentence = shift;
     # clean up whitespace in each sentence
     $sentence =~ s/\s+/ /g;
+    $sentence =~ s/^\s+|\s+$//g;
     return $sentence;
 }
 sub breakLine {
@@ -42,13 +43,49 @@ sub breakLine {
     if ($nesting == 0) {
         # break the buffered into multiple lines for each sentence
         while ($buf =~ /
-            (.*?( [\p{Letter}\$\\{}]+ | \S*\$ )[\.\?!:;])
-            \s+
-            ([\p{Uppercase Letter}\p{Hangul_Syllables}])
+                # Now, we try to recognize the end of a sentence scanning through the buffer considering the special cases first.
+                (
+                    # Sentences may appear between parentheses.
+                    \s*\(\s* .*? [\.\?!] \s*\)
+                |
+                    # Most sentences simply end with a period, question mark, or an exclamation.
+                    # Other punctuations can also end a sentence, but we need to look at what follows a little more carefully.
+                    .*? [\.\?!:;]
+                )
+                # We assume there's always a punctuation followed by white spaces between two sentences.
+                # Otherwise, we can't even distinguish punctuations at the end of a sentence from those appearing in the middle of ordinary words or terms.
+                (\s+)
+                (\S)
             /gx) {
-            # each sentence ends with a period, and begins with an upper case
-            print sentence($1), "\n";
-            substr($buf, 0, length($&)) = "$3";
+            my $tail = $1; # end of the first sentence
+            my $restpos = pos($buf) - length($3); # beginning position of the next sentence
+            my $headlen = length($2);
+            ## Check if we're breaking the line too soon, and look beyond for another sentence boundary if needed.
+            # Try not to mistake etc., i.e., e.g., or et al. as the end of sentence.
+            if ($tail =~ /(?: etc | i\.e | e\.g | et\s+al )\.$/x) {
+                #print STDERR "% incomplete sentence=[$tail]\n% as it ends with=[$&]\n"; # XXX for debugging
+                next;
+            }
+            # Try not to recognize colon or semicolon as end of sentence,
+            # unless the next sentence begins with the following cases:
+            elsif ($tail =~ /[:;]$/ and substr($buf, $restpos) !~ /^\s*(:?
+                    # an uppercase letter.
+                    [\p{Uppercase Letter}]
+                |
+                    # a fully composed Korean letter.
+                    [\p{Hangul_Syllables}]
+                |
+                    # sentences surrounded by parentheses.
+                    \( .+? \)
+                )/x) {
+                #print STDERR "% incomplete sentence=[$tail]\n% as next will start with=[", substr($buf, $restpos, 1), "]\n"; # XXX for debugging
+                next;
+            }
+            ## Okay, a sentence was found from the buffer, output it and throw it away.
+            my $sentence = substr($buf, 0, $restpos - $headlen);
+            print sentence($sentence), "\n";
+            #print STDERR "% sentence=[$sentence]\n% rest=[", substr($buf, $restpos, 20), "...]\n"; # XXX for debugging
+            substr($buf, 0, $restpos) = "";
         }
     }
     print sentence($buf), $comment, "\n" if $buf ne "";
