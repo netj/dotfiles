@@ -66,8 +66,12 @@ sub breakLine {
                 #print STDERR "% incomplete sentence=[$tail]\n% as it ends with=[$&]\n"; # XXX for debugging
                 next;
             }
-            # Try not to recognize colon or semicolon as end of sentence,
-            # unless the next sentence begins with the following cases:
+            # Don't treat numbered list items ending with period as an end of sentence, e.g.: "1. Blah blah. 2. Foo bar."
+            elsif (substr($buf, 0, $restpos - $headlen) =~ /^\s*\d+\.$/) {
+                print STDERR "% incomplete sentence=[$tail]\n% as it just began with a number=[$&]\n"; # XXX for debugging
+                next;
+            }
+            # Try not to recognize colon or semicolon as end of sentence, unless the next sentence begins with the following cases:
             elsif ($tail =~ /[:;]$/ and substr($buf, $restpos) !~ /^\s*(:?
                     # an uppercase letter.
                     [\p{Uppercase Letter}]
