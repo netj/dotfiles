@@ -465,11 +465,15 @@ VAMActivate LaTeX-Suite_aka_Vim-LaTeX
     let &more=oldmore
     norm m]g``
   endfun
-  fun! s:LaTeX_BuildAndView()
-    call s:LaTeX_Build()
+  fun! s:LaTeX_View()
     set filetype=tex
     call Tex_ForwardSearchLaTeX()
   endfun
+  fun! s:LaTeX_BuildAndView()
+    call s:LaTeX_Build()
+    call s:LaTeX_View()
+  endfun
+  command! LaTeXView         call s:LaTeX_View()
   command! LaTeXBuild        call s:LaTeX_Build()
   command! LaTeXBuildAndView call s:LaTeX_BuildAndView()
   fun! s:LaTeX_Setup()
@@ -499,7 +503,9 @@ VAMActivate LaTeX-Suite_aka_Vim-LaTeX
     endfor
     if has("mac")
       " Use Skim as our PDF viewer and latexmk to compile
-      TCTarget pdf
+      if exists(":TCTarget")
+        TCTarget pdf
+      endif
       let g:Tex_ViewRule_pdf="Skim"
       " In Skim's preferences, use the following for Custom PDF-TeX Sync support
       " Command: /Users/YOURUSERNAME/.vim/synctex.skim-macvim.sh
@@ -522,8 +528,9 @@ VAMActivate LaTeX-Suite_aka_Vim-LaTeX
       map! <buffer><silent> <D-k> <Plug>IMAP_JumpBack
       " and ones for quick compile/view/sync with latexmk
       let keyMappings = {}
-      let keyMappings[  '<D-CR>'] = 'LaTeXBuild'
-      let keyMappings['<S-D-CR>'] = 'LaTeXBuildAndView'
+      let keyMappings[    '<D-CR>'] = 'LaTeXBuild'
+      let keyMappings[  '<S-D-CR>'] = 'LaTeXView'
+      let keyMappings['<C-S-D-CR>'] = 'LaTeXBuildAndView'
       for [key,cmd] in items(keyMappings)
         exec 'nnoremap <buffer> '.key.'           :'.cmd.'<CR>:cwindow<CR>'
         exec 'xnoremap <buffer> '.key.' <C-\><C-N>:'.cmd.'<CR><CR>gv'
