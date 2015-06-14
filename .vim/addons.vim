@@ -381,9 +381,12 @@ VAMActivate git:https://github.com/airblade/vim-gitgutter.git
   nnoremap <Space><C-g>g     :GitGutterLineHighlightsToggle<CR>
   nnoremap ]g :GitGutterNextHunk<CR>
   nnoremap [g :GitGutterPrevHunk<CR>
+  nnoremap [G :GitGutterStageHunk<CR>
+  nnoremap ]G :GitGutterRevertHunk<CR>
 VAMActivate Gist WebAPI
   let g:gist_clip_command = 'pbcopy'
   let g:gist_open_browser_after_post = 1
+  let g:gist_get_multiplefile = 1
   nnoremap <Space>GL :Gist -l<CR>
   nnoremap <Space>GA :Gist -la<CR>
   nnoremap <Space>GS :Gist -ls<CR>
