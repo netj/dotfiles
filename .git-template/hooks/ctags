@@ -1,5 +1,7 @@
 #!/bin/sh
 set -e
+exit # XXX comment this line if you want to keep .git/tags up to date
+
 trap "rm -f .git/tags.$$" EXIT
 ctags --tag-relative -R -f.git/tags.$$ --links=no --exclude=.git
 mv .git/tags.$$ .git/tags
