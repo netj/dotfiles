@@ -5,9 +5,28 @@
 set -eu
 
 DotfilesRoot=$(cd "$(dirname "$0")" >/dev/null; pwd -P)
-Home=$(cd >/dev/null; pwd -P)
+
+### oneliner installer: bash <(curl -fsSL git.io/netj.files) ##################
+
+if ! [[ -d "$DotfilesRoot"/.git ]]; then
+    echo >&2 "### netj's dotfiles installer ###"
+    # make sure git is there
+    type git &>/dev/null || {
+        echo >&2 "ERROR: git must be installed first"
+        exit 2
+    }
+    # clone git repo to the right place unless the currently running script is the one inside the right git
+    [[ -d "$DotfilesRoot"/.git ]] &&
+    [[ $(cd "$DotfilesRoot" && git config --get remote.origin.url) = *github.com[:/]netj/dotfiles.git ]] || {
+        [[ -x ~/.dotfiles/install ]] ||
+            git clone https://github.com/netj/dotfiles.git ~/.dotfiles
+        ~/.dotfiles/install
+        exec -l bash -l
+    }
+fi
 
 ### some vocabularies first ###################################################
+Home=$(cd >/dev/null; pwd -P)
 
 # install symlinks
 #  determine relative path to DotfilesRoot from Home
@@ -88,7 +107,7 @@ install() {
                     break
                     ;;
                 [Qq]) # quit, abort installation
-                    exit 2
+                    exit 0
                     ;;
                 *) # pardon me?
                     ;;
