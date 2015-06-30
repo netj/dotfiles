@@ -531,7 +531,7 @@ VAMActivate LaTeX-Suite_aka_Vim-LaTeX
       map! <buffer><silent> <D-k> <Plug>IMAP_JumpBack
       " and ones for quick compile/view/sync with latexmk
       let keyMappings = {}
-      let keyMappings[    '<D-CR>'] = 'LaTeXBuild'
+      let keyMappings[  '<C-D-CR>'] = 'LaTeXBuild'
       let keyMappings[  '<S-D-CR>'] = 'LaTeXView'
       let keyMappings['<C-S-D-CR>'] = 'LaTeXBuildAndView'
       for [key,cmd] in items(keyMappings)
