@@ -273,6 +273,26 @@ if has("mac")
   inoremap <C-D-->      <C-o>8<C-w>-
 endif
 
+" Enhance "goto file" (gf, <C-W>f, <C-W>gf) for nonexistent files
+if !exists("*s:gotoFileOrEditNew")
+  fun! s:gotoFileOrEditNew(keysGoto, cmdEditNew)
+    let fname = expand("<cfile>")
+    if findfile(fname) != ""
+      " XXX need double exec to support special key syntax, e.g., <C-W>
+      exec 'exec "normal! '.escape(a:keysGoto,"<").'f"'
+    else
+      if fname[0] != "/"
+        " resolve relative paths with current file's directory
+        let fname = expand("%:h")."/".fname
+      endif
+      exec a:cmdEditNew." ".fnameescape(fname)
+    endif
+  endfun
+  nnoremap      gf :call <SID>gotoFileOrEditNew(        "g",    "edit")<CR>
+  nnoremap  <C-W>f :call <SID>gotoFileOrEditNew( "<"."C-W>",   "split")<CR>
+  nnoremap <C-W>gf :call <SID>gotoFileOrEditNew("<"."C-W>g", "tabedit")<CR>
+endif
+
 
 "------------------------------------------------------------------------------
 " Abbreviations                                                               -
