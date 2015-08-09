@@ -176,27 +176,13 @@ bash_after() {
 install .bash
 install .inputrc
 
+! has tmux ||
+install .tmux.conf
+
 if has vim; then
 vim_after() { make -C .vim; }
 install .vimrc
 install .vim
-fi
-
-if has ssh; then
-ssh_Makefile_after() {
-    # install ssh config blocks
-    for c in .dotfiles/.ssh/config.d/*; do
-        install ${c#.dotfiles/}
-    done
-    # backup original and enable everything if this is the first time
-    if ! [ -d .ssh/config.enabled ]; then
-        ! [ -e .ssh/config ] || mv -iv .ssh/config .ssh/config.orig
-        make -C .ssh enable
-    fi
-    # generate .ssh/config
-    make -C .ssh config
-}
-install .ssh/Makefile
 fi
 
 if has git; then
@@ -216,16 +202,31 @@ install .git-template
 fi
 fi
 
-! has tmux ||
-install .tmux.conf
-! has screen ||
-install .screenrc
-
 ! top -v 2>&1 | grep -q 'procps version' ||
 install .toprc
 
 ! has curl ||
 install .curlrc
+
+if has ssh; then
+ssh_Makefile_after() {
+    # install ssh config blocks
+    for c in .dotfiles/.ssh/config.d/*; do
+        install ${c#.dotfiles/}
+    done
+    # backup original and enable everything if this is the first time
+    if ! [ -d .ssh/config.enabled ]; then
+        ! [ -e .ssh/config ] || mv -iv .ssh/config .ssh/config.orig
+        make -C .ssh enable
+    fi
+    # generate .ssh/config
+    make -C .ssh config
+}
+install .ssh/Makefile
+fi
+
+! has screen ||
+install .screenrc
 
 if has emacs; then
 emacs_d_elisp_Makefile_after() { make -C .emacs.d/elisp; }
