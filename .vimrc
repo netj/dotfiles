@@ -281,7 +281,7 @@ if !exists("*s:gotoFileOrEditNew")
       exec 'exec "normal! '.escape(a:keysGoto,"<").'f"'
     catch /^Vim\%((\a\+)\)\=:E447/
       let fname = expand("<cfile>")
-      if fname[0] != "/"
+      if index(["/", "~"], fname[0]) == -1
         " resolve relative paths with current file's directory
         let fname = expand("%:h")."/".fname
       endif
