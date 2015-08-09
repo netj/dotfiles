@@ -1,7 +1,7 @@
 version 7.3
 set nocompatible
 
-if exists("*SetupVAM") | finish | endif
+if exists("*s:SetupVAM") | finish | endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """ Default settings for VAM """""""""""""""""""""""""""""""""""""""""""""""""""
@@ -26,7 +26,7 @@ let more = &more | set nomore  " temporarily set nomore
 " put this line first in ~/.vimrc
 "set nocompatible | filetype indent plugin on | syn on
 
-fun! SetupVAM()
+fun! s:SetupVAM()
   let c = get(g:, 'vim_addon_manager', {})
   let g:vim_addon_manager = c
   let c.plugin_root_dir = expand('$HOME', 1) . '/.vim/vim-addons'
@@ -40,7 +40,7 @@ fun! SetupVAM()
   call vam#ActivateAddons([], {'auto_install' : 0})
   " Also See "plugins-per-line" below
 endfun
-call SetupVAM()
+call s:SetupVAM()
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 

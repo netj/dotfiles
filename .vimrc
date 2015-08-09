@@ -105,7 +105,7 @@ if has("gui_running")
   set guioptions-=t
   set guioptions-=T
   " Fonts for MacVim/GVim
-  if !exists("guifonts")
+  if !exists("g:guifonts")
     let g:guifonts = []
     call add(g:guifonts, ["Envy Code R"     , 16]) " favorite
     call add(g:guifonts, ["Anonymous Pro"   , 16]) " serif style fixed-width
