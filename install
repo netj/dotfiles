@@ -6,15 +6,39 @@ set -eu
 
 DotfilesRoot=$(cd "$(dirname "$0")" >/dev/null; pwd -P)
 
-### oneliner installer: bash <(curl -fsSL git.io/netj.files) ##################
+### oneliner installer: bash <(u=git.io/netj.files;curl -fsSL $u||wget -qO- $u)
 
+# some shorthands first
+notOnCloud() {
+    # a quick way to check whether the system is an instance on the cloud
+    case $(hostname -f 2>/dev/null) in
+        # AWS EC2 seems to use special hostnames
+        *.ec2.internal) return 1 ;;
+    esac
+    true
+}
+has() { type "$1" &>/dev/null; }
+running() { pgrep "$1" &>/dev/null; }
+
+# we're in a oneliner if this isn't running off of a git repo
 if ! [[ -d "$DotfilesRoot"/.git ]]; then
     echo >&2 "### netj's dotfiles installer ###"
     # make sure git is there
-    type git &>/dev/null || {
-        echo >&2 "ERROR: git must be installed first"
-        exit 2
-    }
+    has git ||
+        if ! notOnCloud && has apt-get; then
+            # automatically install git on Debian/Ubuntu cloud instances
+            (
+            set -x
+            sudo apt-get install -y git || {
+                # retry once after an update
+                sudo apt-get update
+                sudo apt-get install -y git
+            }
+            )
+        else
+            echo >&2 "ERROR: git must be installed first"
+            exit 2
+        fi
     # clone git repo to the right place unless the currently running script is the one inside the right git
     [[ -d "$DotfilesRoot"/.git ]] &&
     [[ $(cd "$DotfilesRoot" && git config --get remote.origin.url) = *github.com[:/]netj/dotfiles.git ]] || {
@@ -134,8 +158,20 @@ safeln() {
         [ -e "$tgt" ] || ln -sfnv "$src" "$tgt"
     done
 }
-has() { type "$1" &>/dev/null; }
-running() { pgrep "$1" &>/dev/null; }
+
+### essential stuffs for cloud instance #######################################
+
+notOnCloud ||
+    # automatically install some essential stuffs when running on cloud instances
+    if has apt-get; then # only on Debian/Ubuntu instances for now
+        echo >&2 "# cloud instance detected, suggesting essential tools to install..."
+        pkgsToInstall=()
+        for pkg in vim bash-completion tmux mosh curl
+        do has $pkg || pkgsToInstall+=("$pkg")
+        done
+        [[ ${#pkgsToInstall[@]} -eq 0 ]] ||
+            (set -x; sudo apt-get install "${pkgsToInstall[@]}") || true
+    fi
 
 ###############################################################################
 

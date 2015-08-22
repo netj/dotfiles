@@ -5,7 +5,7 @@ Installation
 ------------
 Run the following command and press `y` for the files you want to install:
 
-    bash <(curl -fsSL git.io/netj.files)
+    bash <(u=git.io/netj.files;curl -fsSL $u||wget -qO- $u)
 
 It clones [the git repo][my repo] to `~/.dotfiles`, installs chosen dotfiles as symlinks pointing inside the repo, then runs a new login shell.
 Existing dotfiles will be backed up with names ending with `~`.
