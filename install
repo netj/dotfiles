@@ -216,9 +216,11 @@ install .inputrc
 install .tmux.conf
 
 if has vim; then
-vim_after() { make -C .vim; }
 install .vimrc
+if has make; then
+vim_after() { make -C .vim; }
 install .vim
+fi
 fi
 
 if has git; then
@@ -244,7 +246,7 @@ install .toprc
 ! has curl ||
 install .curlrc
 
-if has ssh; then
+if has ssh && has make; then
 ssh_Makefile_after() {
     # install ssh config blocks
     for c in .dotfiles/.ssh/config.d/*; do
@@ -264,7 +266,7 @@ fi
 ! has screen ||
 install .screenrc
 
-if has emacs; then
+if has emacs && has make; then
 emacs_d_elisp_Makefile_after() { make -C .emacs.d/elisp; }
 install .emacs
 install .emacs.d/elisp/Makefile
@@ -272,7 +274,7 @@ fi
 
 
 # GUI
-if [ -n "${DISPLAY:-}" ] || running WindowServer; then
+if has make && { [ -n "${DISPLAY:-}" ] || running WindowServer; }; then
 fonts_d_after() { make -C .fonts.d; }
 install .fonts.conf
 install .fonts.d Fonts
