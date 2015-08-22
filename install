@@ -6,7 +6,7 @@ set -eu
 
 DotfilesRoot=$(cd "$(dirname "$0")" >/dev/null; pwd -P)
 
-### oneliner installer: bash <(u=git.io/netj.files;curl -fsSL $u||wget -qO- $u)
+### oneliner installer: bash <(u=git.io/netj.files; curl -fsSL $u || wget -nv -O- $u)
 
 # some shorthands first
 notOnCloud() {

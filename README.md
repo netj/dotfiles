@@ -5,17 +5,17 @@ Installation
 ------------
 Run the following command and press `y` for the files you want to install:
 
-    bash <(u=git.io/netj.files;curl -fsSL $u||wget -qO- $u)
+    bash <(u=git.io/netj.files; curl -fsSL $u || wget -nv -O- $u)
 
 It clones [the git repo][my repo] to `~/.dotfiles`, installs chosen dotfiles as symlinks pointing inside the repo, then runs a new login shell.
 Existing dotfiles will be backed up with names ending with `~`.
-Make sure you have [Git][] and [curl][] on your system.
-You could use `wget -nv -O-` instead of `curl -fsSL` if you have [Wget][].
+Make sure you have [Git][] and [curl][] or [Wget][] on your system.
+When run on a Debian-based OS in the cloud, such as AWS EC2, Git will be automatically installed and other essential packages related to the dotfiles will be suggested for installation.
 
 ### Trying out
 If you want to simply explore what my dotfiles do, setting a temporary path for `HOME` does the job:
 
-    HOME=/tmp/home  bash <(curl -fsSL git.io/netj.files)
+    HOME=/tmp/home  bash <(u=git.io/netj.files; curl -fsSL $u || wget -nv -O- $u)
 
 
 
