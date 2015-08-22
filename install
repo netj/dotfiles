@@ -165,12 +165,17 @@ notOnCloud ||
     # automatically install some essential stuffs when running on cloud instances
     if has apt-get; then # only on Debian/Ubuntu instances for now
         echo >&2 "# cloud instance detected, suggesting essential tools to install..."
-        pkgsToInstall=()
-        for pkg in vim bash-completion tmux mosh curl
-        do has $pkg || pkgsToInstall+=("$pkg")
-        done
-        [[ ${#pkgsToInstall[@]} -eq 0 ]] ||
-            (set -x; sudo apt-get install "${pkgsToInstall[@]}") || true
+        (
+        set -x
+        sudo apt-get install \
+            bash-completion \
+            vim \
+            tmux \
+            mosh \
+            make \
+            curl \
+            #
+        ) || true
     fi
 
 ###############################################################################
