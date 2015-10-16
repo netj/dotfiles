@@ -25,7 +25,7 @@ vimServer=$(
         if exists (processes whose name is "MacVim") then
             get title of first window of process "MacVim"
         end if
-    end tell' 2>/dev/null | sed 's/.* - //'
+    end tell' | sed 's/.* - //'
 )
 
 # or, generate a new one
