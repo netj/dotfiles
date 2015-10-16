@@ -411,7 +411,7 @@ VAMActivate markdown@tpope " Markdown vim-ft-markdown_fold
     \ setlocal formatoptions+=n |
   if has("mac")
     au FileType markdown
-      \ nnoremap <D-e> :exec "!open -a Marked ".shellescape(expand("%"))<CR><CR>|
+      \ nnoremap <D-e> :exec "!open -a \"Marked 2\" ".shellescape(expand("%"))<CR><CR>|
       \ noremap! <D-e> <C-\><C-N><D-e>gi|
       \ call sparkup#Setup()|
   endif
