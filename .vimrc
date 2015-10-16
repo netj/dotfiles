@@ -155,7 +155,7 @@ endif
 "  See: /private/etc/bashrc's update_terminal_cwd
 if !has("gui_running") && &term !~ "^screen.*" && $TERM_PROGRAM == "Apple_Terminal" && $TERM_PROGRAM_VERSION >= 297
   set title titlestring=%(%m\ %)%((%{expand(\"%:~:h\")})%)%a
-  set icon iconstring=%{&t_IE}]7;file://%{hostname()}%{expand(\"%:p\")}%{&t_IS}
+  set icon iconstring=%{&t_IE}]6;file://%{hostname()}%{expand(\"%:p\")}%{&t_IS}
   set iconstring+=VIM
 endif
 
