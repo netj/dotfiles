@@ -10,4 +10,5 @@ tell application "System Events"
 	end repeat
 end tell
 -- TODO set as default
+delay 4  # wait until tickets are refreshed
 tell application "Ticket Viewer" to quit
