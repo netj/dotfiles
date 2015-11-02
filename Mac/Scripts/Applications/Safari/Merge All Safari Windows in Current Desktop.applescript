@@ -20,9 +20,11 @@ tell application "Safari"
 	set windowToMerge to front window
 	log "Merging visible Safari windows to: window id " & windowToMerge's id & " (" & windowToMerge's name & " )"
 	repeat with w in (get windows whose id is not windowToMerge's id)
-		if titles contains w's name then
-			log "Merging " & (count w's tabs) & " tabs from window id " & w's id & " (" & w's name & ")"
-			move w's tabs to end of windowToMerge's tabs
-		end if
+		try
+			if titles contains w's name then
+				log "Merging " & (count w's tabs) & " tabs from window id " & w's id & " (" & w's name & ")"
+				move w's tabs to end of windowToMerge's tabs
+			end if
+		end try
 	end repeat
 end tell
