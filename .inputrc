@@ -6,6 +6,7 @@
 set completion-ignore-case On
 set completion-map-case On
 set visible-stats On
+set colored-stats On
 set mark-symlinked-directories On
 
 #set mark-modified-lines On
@@ -16,6 +17,7 @@ set show-all-if-ambiguous On
 set show-all-if-unmodified Off
 set menu-complete-display-prefix Off
 Tab:      menu-complete
+set completion-query-items -1  # without disabling this, menu-complete may not work when there are too many possible completions
 #  a la <S-Tab>, <C-L> and <C-D>
 # XXX menu-complete-backward is available for bash >= 4
 #"\e[Z":   menu-complete-backward
