@@ -131,6 +131,8 @@ VAMActivate git:https://gist.github.com/1432015.git
       AddColorSet 'diff'  default
     endif
   endif
+  " TODO key for switching background between dark and bright
+  set background=dark
   " XXX tlib seems not working, so workaround
   "VAMActivate tlib
   "let g:mySetColors = tlib#list#RemoveAll(tlib#list#Flatten(tlib#list#Zip(g:mySetColorsSet)),'')
