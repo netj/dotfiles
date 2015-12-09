@@ -9,12 +9,13 @@ This shell script includes some preference tweaks I use on my Macs.
 Open any `.terminal` file to load configuration into Mac OS X's Terminal app.
 You should use Mac's default terminal unless you have a strong reason to do
 otherwise even after watching [the talk given by Terminal.app's author][Ben Stiglitz's talk].
-[TotalTerminal][] is another reason why you should use the default one.  I
-recommend using [Envy Code R font][] for your terminal if you want something
+I recommend using [Envy Code R font][] for your terminal if you want something
 different from Apple's default, Menlo or Monaco.  You can find more fonts from
 my [.fonts directory](../../../tree/master/.fonts#readme).
 
 ### MouseTerm plus
+(OS X 10.11 El Capitan now ships a Terminal app that has superior mouse reporting capability which can be enabled from menu View > Allow Mouse Reporting, this plugin is no longer necessary! :)
+
 [MouseTerm plus][] is a great SIMBL plugin, which passes mouse events to programs
 running in Mac OS X's Terminal.app, e.g., tmux, vim, or emacs.  I [highly
 recommend installing it](http://superuser.com/a/595284/45702) because there's

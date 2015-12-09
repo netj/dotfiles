@@ -84,7 +84,7 @@
 	<data>
 	YnBsaXN0MDDUAQIDBAUGFRZYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3AS
 	AAGGoKMHCA9VJG51bGzTCQoLDA0OVU5TUkdCXE5TQ29sb3JTcGFjZVYkY2xhc3NPEBEx
-	IDEgMC4xNTgzMjE3OTc4ABABgALSEBESE1okY2xhc3NuYW1lWCRjbGFzc2VzV05TQ29s
+	IDEgMC4xMDc3ODU5MTA0ABABgALSEBESE1okY2xhc3NuYW1lWCRjbGFzc2VzV05TQ29s
 	b3KiEhRYTlNPYmplY3RfEA9OU0tleWVkQXJjaGl2ZXLRFxhUcm9vdIABCBEaIy0yNztB
 	SE5bYnZ4en+Kk5uep7m8wQAAAAAAAAEBAAAAAAAAABkAAAAAAAAAAAAAAAAAAADD
 	</data>
@@ -135,7 +135,7 @@
 	<data>
 	YnBsaXN0MDDUAQIDBAUGFRZYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3AS
 	AAGGoKMHCA9VJG51bGzTCQoLDA0OVU5TUkdCXE5TQ29sb3JTcGFjZVYkY2xhc3NPEBww
-	Ljk1Mzc2MDkwMTIgMC43NjMwMDg3MjA5IDAAEAKAAtIQERITWiRjbGFzc25hbWVYJGNs
+	Ljc0NzgxODU2MTYgMC41OTgyNTQ4NDkyIDAAEAKAAtIQERITWiRjbGFzc25hbWVYJGNs
 	YXNzZXNXTlNDb2xvcqISFFhOU09iamVjdF8QD05TS2V5ZWRBcmNoaXZlctEXGFRyb290
 	gAEIERojLTI3O0FITltigYOFipWepqmyxMfMAAAAAAAAAQEAAAAAAAAAGQAAAAAAAAAA
 	AAAAAAAAAM4=
@@ -177,7 +177,7 @@
 	<key>Linewrap</key>
 	<true/>
 	<key>ProfileCurrentVersion</key>
-	<real>2.02</real>
+	<real>2.04</real>
 	<key>RunCommandAsShell</key>
 	<true/>
 	<key>SelectionColor</key>
@@ -190,10 +190,14 @@
 	AAAAAAAAABkAAAAAAAAAAAAAAAAAAADe
 	</data>
 	<key>ShowActiveProcessInTitle</key>
-	<false/>
+	<true/>
 	<key>ShowCommandKeyInTitle</key>
-	<false/>
+	<true/>
+	<key>ShowComponentsWhenTabHasCustomTitle</key>
+	<true/>
 	<key>ShowDimensionsInTitle</key>
+	<false/>
+	<key>ShowRepresentedURLPathInTabTitle</key>
 	<false/>
 	<key>ShowShellCommandInTitle</key>
 	<false/>
@@ -227,6 +231,8 @@
 	<false/>
 	<key>VisualBell</key>
 	<true/>
+	<key>VisualBellOnlyWhenMuted</key>
+	<false/>
 	<key>WindowTitle</key>
 	<string></string>
 	<key>blackColour</key>

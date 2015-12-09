@@ -141,22 +141,22 @@
 	<key>BackgroundAlphaInactive</key>
 	<real>0.81557049418604655</real>
 	<key>BackgroundBlur</key>
-	<real>0.20000000000000001</real>
+	<real>0.40000000000000002</real>
 	<key>BackgroundBlurInactive</key>
 	<real>0.096729651162790697</real>
 	<key>BackgroundColor</key>
 	<data>
 	YnBsaXN0MDDUAQIDBAUGFRZYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3AS
-	AAGGoKMHCA9VJG51bGzTCQoLDA0OVU5TUkdCXE5TQ29sb3JTcGFjZVYkY2xhc3NPECMw
-	LjA0OTQ5NTUwNzAzIDAuMDY1ODMxMzI1OTUgMCAwLjk2ABABgALSEBESE1okY2xhc3Nu
-	YW1lWCRjbGFzc2VzV05TQ29sb3KiEhRYTlNPYmplY3RfEA9OU0tleWVkQXJjaGl2ZXLR
-	FxhUcm9vdIABCBEaIy0yNztBSE5bYoiKjJGcpa2wucvO0wAAAAAAAAEBAAAAAAAAABkA
-	AAAAAAAAAAAAAAAAAADV
+	AAGGoKMHCA9VJG51bGzTCQoLDA0OVU5TUkdCXE5TQ29sb3JTcGFjZVYkY2xhc3NPEB4w
+	LjA0OTQ5NTUwNzAzIDAuMDY1ODMxMzI1OTUgMAAQAYAC0hAREhNaJGNsYXNzbmFtZVgk
+	Y2xhc3Nlc1dOU0NvbG9yohIUWE5TT2JqZWN0XxAPTlNLZXllZEFyY2hpdmVy0RcYVHJv
+	b3SAAQgRGiMtMjc7QUhOW2KDhYeMl6Coq7TGyc4AAAAAAAABAQAAAAAAAAAZAAAAAAAA
+	AAAAAAAAAAAA0A==
 	</data>
 	<key>BackgroundSettingsForInactiveWindows</key>
 	<false/>
 	<key>CommandString</key>
-	<string></string>
+	<string>title Console</string>
 	<key>CursorBlink</key>
 	<integer>1</integer>
 	<key>CursorColor</key>
@@ -173,21 +173,19 @@
 	<data>
 	YnBsaXN0MDDUAQIDBAUGGBlYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3AS
 	AAGGoKQHCBESVSRudWxs1AkKCwwNDg8QVk5TU2l6ZVhOU2ZGbGFnc1ZOU05hbWVWJGNs
-	YXNzI0A4AAAAAAAAEBCAAoADWUVudnlDb2RlUtITFBUWWiRjbGFzc25hbWVYJGNsYXNz
-	ZXNWTlNGb250ohUXWE5TT2JqZWN0XxAPTlNLZXllZEFyY2hpdmVy0RobVHJvb3SAAQgR
-	GiMtMjc8QktSW2JpcnR2eIKHkpuipa7Aw8gAAAAAAAABAQAAAAAAAAAcAAAAAAAAAAAA
-	AAAAAAAAyg==
+	YXNzI0AoAAAAAAAAEBCAAoADWFByb0ZvbnRY0hMUFRZaJGNsYXNzbmFtZVgkY2xhc3Nl
+	c1ZOU0ZvbnSiFRdYTlNPYmplY3RfEA9OU0tleWVkQXJjaGl2ZXLRGhtUcm9vdIABCBEa
+	Iy0yNzxCS1JbYmlydHZ4gYaRmqGkrb/CxwAAAAAAAAEBAAAAAAAAABwAAAAAAAAAAAAA
+	AAAAAADJ
 	</data>
 	<key>FontAntialias</key>
 	<true/>
-	<key>FontHeightSpacing</key>
-	<real>1</real>
 	<key>Linewrap</key>
 	<true/>
 	<key>ProfileCurrentVersion</key>
 	<real>2.04</real>
 	<key>RunCommandAsShell</key>
-	<true/>
+	<false/>
 	<key>SelectionColor</key>
 	<data>
 	YnBsaXN0MDDUAQIDBAUGFRZYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3AS
@@ -197,20 +195,30 @@
 	b290gAEIERojLTI3O0FITltihIaIjZihqay1x8rPAAAAAAAAAQEAAAAAAAAAGQAAAAAA
 	AAAAAAAAAAAAANE=
 	</data>
+	<key>ShowActiveProcessInTabTitle</key>
+	<true/>
 	<key>ShowActiveProcessInTitle</key>
-	<true/>
+	<false/>
 	<key>ShowCommandKeyInTitle</key>
-	<true/>
+	<false/>
 	<key>ShowComponentsWhenTabHasCustomTitle</key>
 	<true/>
 	<key>ShowDimensionsInTitle</key>
 	<false/>
+	<key>ShowRepresentedURLInTabTitle</key>
+	<true/>
+	<key>ShowRepresentedURLInTitle</key>
+	<false/>
 	<key>ShowRepresentedURLPathInTabTitle</key>
+	<false/>
+	<key>ShowRepresentedURLPathInTitle</key>
 	<false/>
 	<key>ShowShellCommandInTitle</key>
 	<false/>
 	<key>ShowTTYNameInTitle</key>
 	<false/>
+	<key>ShowTerminalInDockIcon</key>
+	<true/>
 	<key>ShowWindowSettingsNameInTitle</key>
 	<false/>
 	<key>TerminalType</key>
@@ -293,6 +301,8 @@
 	BAtzdHJlYW10eXBlZIHoA4QBQISEhAdOU0NvbG9yAISECE5TT2JqZWN0AIWEAWMBhARm
 	ZmZmAQGDzcxMPgGG
 	</data>
+	<key>columnCount</key>
+	<integer>132</integer>
 	<key>cyanColour</key>
 	<data>
 	BAtzdHJlYW10eXBlZIHoA4QBQISEhAdOU0NvbG9yAISECE5TT2JqZWN0AIWEAWMChARm
@@ -401,38 +411,7 @@
 	ZWN0AIWEASqEhAFjlwGG
 	</data>
 	<key>name</key>
-	<string>Dosanim</string>
-	<key>noWarnProcesses</key>
-	<array>
-		<dict>
-			<key>ProcessName</key>
-			<string>rlogin</string>
-		</dict>
-		<dict>
-			<key>ProcessName</key>
-			<string>telnet</string>
-		</dict>
-		<dict>
-			<key>ProcessName</key>
-			<string>ssh</string>
-		</dict>
-		<dict>
-			<key>ProcessName</key>
-			<string>slogin</string>
-		</dict>
-		<dict>
-			<key>ProcessName</key>
-			<string>screen</string>
-		</dict>
-		<dict>
-			<key>ProcessName</key>
-			<string>tmux</string>
-		</dict>
-		<dict>
-			<key>ProcessName</key>
-			<string>mosh-client</string>
-		</dict>
-	</array>
+	<string>Console</string>
 	<key>redColour</key>
 	<data>
 	BAtzdHJlYW10eXBlZIHoA4QBQISEhAdOU0NvbG9yAISECE5TT2JqZWN0AIWEAWMChARm
@@ -446,6 +425,8 @@
 	<string>Window Settings</string>
 	<key>useOptionAsMetaKey</key>
 	<integer>1</integer>
+	<key>warnOnShellCloseAction</key>
+	<integer>0</integer>
 	<key>whiteColour</key>
 	<data>
 	BAtzdHJlYW10eXBlZIHoA4QBQISEhAdOU0NvbG9yAISECE5TT2JqZWN0AIWEAWMDhAJm
