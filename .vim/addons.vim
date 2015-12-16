@@ -419,7 +419,9 @@ VAMActivate markdown@tpope " Markdown vim-ft-markdown_fold
   endif
 VAMActivate JSON
   au BufEnter *.json setfiletype json
+VAMActivate git:https://github.com/vito-c/jq.vim.git  " jq query language for JSON
 VAMActivate jdaddy " for aj and ij text objects
+VAMActivate git:https://github.com/GEverding/vim-hocon  " for HOCON (Human Optimized Configuration Object Notation)
 
 if executable("clang-format")
   VAMActivate git:https://github.com/kana/vim-operator-user.git " vim-operator-user
