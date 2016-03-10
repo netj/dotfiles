@@ -400,7 +400,6 @@ let g:sparkup = {}
   let g:sparkup.lhs_expand = '<C-\><C-e>'
   let g:sparkup.lhs_jump_next_empty_tag = '<C-\><C-f>'
 VAMActivate sparkup
-VAMActivate vim-less
 VAMActivate xmledit
   let g:xml_jump_string = "`"
 VAMActivate ragtag
@@ -450,7 +449,7 @@ VAMActivate applescript
   au BufEnter *.applescript setfiletype applescript
 VAMActivate vim-addon-scala
   " Scala (See: http://mdr.github.com/scalariform/)
-  au BufEnter *.scala setl formatprg=scalariform\ --forceOutput
+  "au BufEnter *.scala setl formatprg=scalariform\ --forceOutput
 VAMActivate octave%3600
   au BufEnter *.oct setlocal filetype=octave  " XXX *.m could be an Objective-C file
 VAMActivate SQLUtilities
