@@ -37,10 +37,12 @@ osascript -e '
             do shell script "echo "& (visible of application process "'"$app"'") &">~/.wakeup.apps.'"$app"'"
             # keep track of in which Space/Desktop '"$app"' were
             tell application "'"$app"'" to activate
-            tell process "'"$app"'"
-                set windowMenu to (first menu bar item whose title is "Window" or title is "윈도우") of menu bar 1
-                click last menu item of menu 1 of windowMenu
-            end tell
+            try
+                tell process "'"$app"'"
+                    set windowMenu to (first menu bar item whose title is "Window" or title is "윈도우") of menu bar 1
+                    click last menu item of menu 1 of windowMenu
+                end tell
+            end try
             tell application "'"$app"'" to quit
             #key code 12 using command down
         end if

@@ -218,7 +218,7 @@
 	<key>ShowTTYNameInTabTitle</key>
 	<false/>
 	<key>ShowTTYNameInTitle</key>
-	<false/>
+	<true/>
 	<key>ShowWindowSettingsNameInTitle</key>
 	<false/>
 	<key>TerminalType</key>

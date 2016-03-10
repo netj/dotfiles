@@ -43,6 +43,7 @@ for app in $(sed 's/#.*$//' <~/.wakeup.apps); do
         do shell script "rm -f ~/.wakeup.apps.'"$app"'"
         '
 done
+appsToRestart+=(Knock MacID)  # always restart these upon wakeup
 if [ ${#appsToRestart[@]} -gt 0 ]; then
     echo "Restoring ${appsToRestart[*]}"
     osascript -e "$scpt"'
@@ -72,3 +73,10 @@ system_profiler SPUSBDataType | grep 'BSD Name: disk\d+$' | sed 's/.*: //' | xar
 
 # mount all time machine destinations
 tmutil destinationinfo | grep "Name" | sed 's/.*: //' | xargs -L1 diskutil mount &
+
+# restart Bluetooth
+PATH="$PATH":/usr/local/bin
+if type blueutil &>/dev/null; then
+    blueutil off
+    blueutil on
+fi
