@@ -1,0 +1,43 @@
+/* AppleGothic 명시적으로 쓰는 사이트까지 다른 글꼴로 대체하기 */
+@font-face {
+    font-family: AppleGothic;
+    src:
+    local("Apple SD Gothic Neo"),
+    local("HCR Dotum LVT"), local("HCR Dotum"),
+    local("Nanum Gothic"),
+    local("AppleGothic");
+}
+@font-face {
+    font-family: Gulim;
+    src:
+    local("Apple SD Gothic Neo"),
+    local("HCR Dotum LVT"), local("HCR Dotum"),
+    local("Nanum Gothic");
+}
+@font-face {
+    font-family: 굴림;
+    src:
+    local("Apple SD Gothic Neo"),
+    local("HCR Dotum LVT"), local("HCR Dotum"),
+    local("Nanum Gothic");
+}
+@font-face {
+    font-family: Dotum;
+    src:
+    local("Apple SD Gothic Neo"),
+    local("HCR Dotum LVT"), local("HCR Dotum"),
+    local("Nanum Gothic");
+}
+@font-face {
+    font-family: 돋움;
+    src:
+    local("Apple SD Gothic Neo"),
+    local("HCR Dotum LVT"), local("HCR Dotum"),
+    local("Nanum Gothic");
+}
+
+/*
+html {
+    font-family: sans-serif;
+}
+*/
