@@ -248,9 +248,6 @@ fi
 ! top -v 2>&1 | grep -q 'procps version' ||
 install .toprc
 
-! has curl ||
-install .curlrc
-
 if has ssh && has make; then
 ssh_Makefile_after() {
     # install ssh config blocks
