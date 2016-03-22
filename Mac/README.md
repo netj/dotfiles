@@ -59,7 +59,6 @@ whole new level.
 [Envy Code R font]: http://damieng.com/blog/2008/05/26/envy-code-r-preview-7-coding-font-released
 [MouseTerm plus]: https://github.com/saitoha/mouseterm-plus#readme
 [Karabiner]: https://pqrs.org/osx/karabiner/
-[KeyRemap4MacBook]: http://pqrs.org/macosx/keyremap4macbook/
 [FastScripts]: http://www.red-sweater.com/fastscripts/
 [Control Plane]: http://www.controlplaneapp.com/
 [BetterTouchTool]: http://blog.boastr.net/

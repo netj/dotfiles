@@ -314,21 +314,6 @@ case $(uname) in Darwin)
             install Library/"Application Support"/"${xml#Mac/}" "$xml"
         done
     fi
-    # install KeyRemap4MacBook settings # FIXME remove below after a while
-    if running-app KeyRemap4MacBook; then
-        for xml in Mac/KeyRemap4MacBook/*.xml; do
-            [ -e "$xml" ] || continue
-            Library_Application_Support_KeyRemap4MacBook_private_xml_after() {
-                local x="$(
-                cli=/Applications/KeyRemap4MacBook.app/Contents/Applications/KeyRemap4MacBook_cli.app
-                if [ -d "$cli" ]; then echo $cli
-                else mdfind KeyRemap4MacBook_cli.app | head -n 1
-                fi)/Contents/MacOS/KeyRemap4MacBook_cli"
-                ! [ -x "$x" ] || "$x" reloadxml
-            }
-            install Library/"Application Support"/"${xml#Mac/}" "$xml"
-        done
-    fi
 
     # install sleepwatcher scripts
     if has sleepwatcher || running sleepwatcher; then # || has-executable sleepwatcher; then
