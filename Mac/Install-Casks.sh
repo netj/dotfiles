@@ -61,19 +61,17 @@ get papers
 get djview
 get adobe-reader
 
-get emacs
-get eclipse-java
-get java6
-
-get adium
 get skype
 get teamviewer
+
+get adium
 get firefox
 get opera
 get flash
 
-get fstream
+get airfoil
 get linein
+get fstream
 get ffmpegx
 get flip4mac
 get air-video-server-hd
@@ -81,9 +79,6 @@ get paparazzi
 get inkscape
 get powerphotos
 get google-earth
-
-get virtualbox
-get vmware-fusion
 
 get alfred
 get keycue
@@ -104,6 +99,13 @@ get appcleaner
 get appfresh
 get grandperspective
 get omnidisksweeper
+
+get virtualbox
+get vmware-fusion
+
+get emacs
+get eclipse-java
+get java6
 
 get graphviz
 get gephi
