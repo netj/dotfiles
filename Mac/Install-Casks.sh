@@ -19,6 +19,11 @@ get() {
     done
 }
 
+# taps
+brew tap caskroom/versions
+# updates
+brew cask update
+
 # Essential ###########################
 get bartender
 get bettertouchtool
