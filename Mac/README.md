@@ -44,8 +44,7 @@ to fit your need.  Feel free to copy and modify them, or include in your
 scripts.
 
 ### Automatically Organizing Window Layouts
-I'm using `Adapt to Environment.applescript` with [Control Plane][] for
-repositioning and resizing windows as I move around.
+I'm using [`HelloDisplay.applescript`](Scripts/HelloDisplays.applescript) with [Control Plane][] for repositioning and resizing windows as I move around.
 
 
 ## BetterTouchToolGestures
