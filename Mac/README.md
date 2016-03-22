@@ -1,7 +1,10 @@
 Mac Configurations
 ==================
 
-## Tweak.sh
+## [Install-Casks.sh](Install-Casks.sh)
+This shell script helps install a bunch of apps from [Homebrew Casks](http://caskroom.io)
+
+## [Tweak.sh](Tweak.sh)
 This shell script includes some preference tweaks I use on my Macs.
 
 
