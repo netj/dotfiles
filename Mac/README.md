@@ -53,10 +53,6 @@ repositioning and resizing windows as I move around.
 whole new level.
 
 
-## [Change Default Font Fallbacks][MacOSXDefaultFontFallbacksChanger]
-`DefaultFontFallbacksChanger` directory contains a `.command` script which
-allows you to switch your Mac's default font fallbacks.
-
 
 [TotalTerminal]: http://totalterminal.binaryage.com 
 [Ben Stiglitz's talk]: http://totalterminal.binaryage.com/#special-guest
