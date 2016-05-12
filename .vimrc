@@ -308,22 +308,9 @@ iab Created:    Created: <C-R>=system("date +%Y-%m-%d")
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Vim Addons/Scripts/Plugins                                                  "
+" Vim Scripts/Plugins managed by Vundle                                       "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Command and key combo for loading the vim-addon-manager aka VAM
-" VAM's auto_install can interrupt many scripts relying on vim, so loading
-" only when used interactively.  You could add LoadAddons to ~/.vim_local, but
-" adding an alias to the shell is recommended: >
-"   export EDITOR="$HOME/.vim/vim+addons"
-"   alias vim='VIMADDONS=1 vim'
-"<
-command! LoadAddons  silent! delfunction SetupVAM|
-      \source ~/.vim/addons.vim|
-"      \silent! norm :unmap <S<BS>Space><S<BS>Space><CR>|
-noremap <Space><Space> :LoadAddons<CR>
-if has("gui_running") || exists("$VIMADDONS")
-  LoadAddons
-endif
+SourceOptional ~/.vim/bundle.vim
 
 
 
