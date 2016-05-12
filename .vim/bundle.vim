@@ -369,6 +369,9 @@ Plugin 'vito-c/jq.vim'  " jq query language for JSON
 Plugin 'tpope/vim-jdaddy' " for aj and ij text objects
 Plugin 'GEverding/vim-hocon'  " for HOCON (Human Optimized Configuration Object Notation)
 
+" C/C++ development essentials
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'rdnetto/YCM-Generator'
 if executable("clang-format")
   Plugin 'kana/vim-operator-user' " vim-operator-user
   Plugin 'rhysd/vim-clang-format' " vim-clang-format
