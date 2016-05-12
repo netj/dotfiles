@@ -1,5 +1,7 @@
 " netj's Vim plugins
 version 7.3
+if exists("s:LoadedBundles") | finish | endif
+try
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 if !isdirectory($HOME.'/.vim/bundle/Vundle.vim/autoload')
@@ -16,7 +18,6 @@ if !isdirectory($HOME.'/.vim/bundle/Vundle.vim/autoload')
   finish
 endif
 
-try
 fun! s:setLocalOptionsForWriting()
   setlocal spell autowrite textwidth=0 formatoptions-=t formatoptions-=c
   if has("linebreak")
@@ -580,6 +581,6 @@ command! DetectDiffColorScheme call s:DetectDiffColorScheme()
 autocmd FilterWritePost,BufEnter,WinEnter,WinLeave *  DetectDiffColorScheme
 nnoremap <Space>d :diffoff \| DetectDiffColorScheme<CR>
 
+let s:LoadedBundles = 1
 endtry
-
 " vim:sw=2:undofile
