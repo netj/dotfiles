@@ -198,6 +198,13 @@ on run args
 		end tell
 		my preserveVisibility(messagesAppName)
 	end if
+	if my appIsRunning("Slack") then
+		-- my rememberVisibility("Slack") -- XXX causes an error
+		tell application "Slack"
+			tell application "System Events" to tell application process "Slack" to set ws to windows
+			my moveAndResize({screen:macbookDisplay, x:1, y:0, w:0.67, h:1, wins:ws})
+		end tell
+	end if
 
 	-- keep iTunes Mini Player on a corner of the MacBook screen
 	if my appIsRunning("iTunes") then tell application "iTunes"
