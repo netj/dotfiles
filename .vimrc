@@ -69,7 +69,7 @@ endif
 
 "  some by-product files
 set suffixes-=.h
-set suffixes+=.o,.a     " object and archive files
+set suffixes+=.o,.d,.a  " object, dependencies, and archive files
 set suffixes+=.class    " Java classes
 set suffixes+=#         " Emacs auto backups
 set suffixes+=.hi       " Haskell intermediates

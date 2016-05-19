@@ -259,7 +259,9 @@ Plugin 'scrooloose/nerdtree'
   let g:NERDTreeQuitOnOpen = 1
   let g:NERDTreeShowHidden = 1
   let g:NERDTreeChDirMode  = 1
-  let g:NERDTreeSortOrder = ['*', '\.swp$', '\.bak$', '\~$'] " don't put directories on top
+  " take &suffixes option into account
+  let s:suffixesAsRegexes = map(split(&suffixes, ','), 'escape(v:val, '."'".'\\/.*$^~[]'."'".') . "$"')
+  let g:NERDTreeSortOrder = ['*'] + s:suffixesAsRegexes + ['\.swp$', '\.bak$', '\~$']
   let g:NERDTreeIgnore = ['^.*\.sw[p-z]$', '^\..*\.un\~'] " ignore vim swap and undo files
   let g:NERDTreeCaseSensitiveSort = 0
   let g:NERDTreeSortHiddenFirst = 0
