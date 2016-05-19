@@ -338,6 +338,17 @@ on askNSScreen(screenQuery, fieldsToReturn)
 end askNSScreen
 
 on showProgressNotification(currentConfiguration)
+	if currentConfiguration is null then
+		display notification "HelloDisplays"  ¬
+			with title "Detecting Config"  ¬
+			subtitle "where we are..."
+	else
+		set cfg to get currentConfiguration's name
+		display notification "HelloDisplays"  ¬
+			with title "Found Config"  ¬
+			subtitle "Rearranging windows for " & cfg & "..."
+	end if
+	(* XXX below need Growl to be installed
 	tell application "System Events" to set isRunning to ¬
 		(count of (every process whose bundle identifier is "com.Growl.GrowlHelperApp")) > 0
 	if isRunning then
@@ -362,6 +373,7 @@ on showProgressNotification(currentConfiguration)
 			end if
 		end tell
 	end if
+	*)
 end showProgressNotification
 
 -- check if actual screen size matches config
