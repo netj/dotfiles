@@ -741,7 +741,7 @@ on hideDock(hide)
 	tell application "System Events"
 		tell dock preferences
 			set autohide to hide
-			set magnification to (not hide)
+			-- set magnification to (not hide) -- do not touch the option
 		end tell
 	end tell
 end hideDock
