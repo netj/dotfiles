@@ -73,14 +73,9 @@ Plugin 'Colour-Sampler-Pack'
 " scroll among my favorites with VimTip341
 Plugin 'https://gist.github.com/1432015.git'
   let s:mySetColorsSet = []
-  let s:mySetColorsSetDiff = []
   fun! s:addColorSet(reversed, name, ...)
     let colors = a:000 | if a:reversed | let colors = reverse(copy(colors)) | endif
-    if stridx(a:name, "'diff") >= 0
-      let s:mySetColorsSetDiff += [colors]
-    else
-      let s:mySetColorsSet += [colors]
-    endif
+    let s:mySetColorsSet += [colors]
   endfun
   command! -nargs=+ -bar -bang AddColorSet  call s:addColorSet(<bang>0, <f-args>)
   if has("gui_running")
@@ -89,19 +84,15 @@ Plugin 'https://gist.github.com/1432015.git'
     AddColorSet  'darkHi'     fruity         oceanblack  jammy        northland lettuce    molokai         " neon       vibrantink  vividchalk colorer  torte
     AddColorSet  'bright'     summerfruit256 buttercream PapayaWhip   nuvola    habiLight  fruit           " eclipse    earendel
     AddColorSet! 'precision'  autumn         railscasts  Guardian     candycode inkpot     ChocolateLiquor
-    AddColorSet  'diff'       xoria256       candycode   hybrid                                            " jellybeans inkpot          ChocolateLiquor lucius     railscasts  northland  blacksea
-    AddColorSet  'diffLight'  PapayaWhip     taqua       silent
   else
     if &t_Co >= 256
       " many color schemes only work well on GUI
       AddColorSet 'lo'     hybrid         wombat256       lettuce    dante
       AddColorSet 'hi'     jellybeans     inkpot          molokai    navajo-night
       AddColorSet 'bright' summerfruit256 lucius          tabula
-      AddColorSet 'diff'   xoria256       calmar256-light maroloccio inkpot       ChocolateLiquor " candycode calmar256-dark PapayaWhip lettuce blacksea
       " desertEx colorer vividchalk candycode nuvola earendel
     else
       AddColorSet 'fallback' default
-      AddColorSet 'diff'  default
     endif
   endif
 
@@ -553,35 +544,10 @@ set background=dark
 " XXX tlib seems not working, so workaround
 "Plugin 'tlib'
 "let g:mySetColors = tlib#list#RemoveAll(tlib#list#Flatten(tlib#list#Zip(g:mySetColorsSet)),'')
-let g:mySetColorsNormal = s:stripeLists(s:mySetColorsSet)
-let g:mySetColorsDiff   = s:stripeLists(s:mySetColorsSetDiff)
-let g:mySetColors       = g:mySetColorsNormal
+let g:mySetColors       = s:stripeLists(s:mySetColorsSet)
 try
 exec 'silent! colorscheme' g:mySetColors[0]
 endtry
-" use separate colorscheme for viewing diffs
-" See: http://superuser.com/questions/157676/change-color-scheme-when-calling-vimdiff-inside-vim
-let g:diff_colors_name  = g:mySetColorsDiff[0]
-if !exists("g:colors_name") | let g:colors_name = [] | endif
-let g:prior_colors_name = g:colors_name
-fun! s:DetectDiffColorScheme()
-  if &diff && g:mySetColors is g:mySetColorsNormal
-    let g:prior_colors_name = g:colors_name
-    let g:mySetColors = g:mySetColorsDiff
-    exec 'silent! colorscheme' g:diff_colors_name
-  elseif !&diff && g:mySetColors is g:mySetColorsDiff
-    let g:diff_colors_name = g:colors_name
-    let g:mySetColors = g:mySetColorsNormal
-    exec 'silent! colorscheme' g:prior_colors_name
-  endif
-  if &diff && exists(":AirlineRefresh") && !exists("w:AirlineRefreshed")
-    let w:AirlineRefreshed = 1
-    AirlineRefresh
-  endif
-endfun
-command! DetectDiffColorScheme call s:DetectDiffColorScheme()
-autocmd FilterWritePost,BufEnter,WinEnter,WinLeave *  DetectDiffColorScheme
-nnoremap <Space>d :diffoff \| DetectDiffColorScheme<CR>
 
 let s:LoadedBundles = 1
 endtry
