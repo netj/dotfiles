@@ -30,7 +30,7 @@ on Screen(w, h)
 	return {size:{w, h}, origin:{0, 0}, visibleSize:{w, h}, visibleOrigin:{0, 0}}
 end Screen
 
-property macbookDisplay : Screen(1680, 1050)
+property macbookDisplay : Screen(1920, 1200)
 property syncmaster27inDisplay : Screen(1920, 1200)
 property syncmaster30inDisplay : Screen(2560, 1600)
 property cinema30inDisplay : Screen(2560, 1600)
@@ -59,7 +59,7 @@ end script
 script homeConfiguration
 	property name : "Home"
 	-- a SyncMaster 275T is at my home desk
-	property screenLayout : {place(syncmaster27inDisplay, 0, 0), place(macbookDisplay, 133, 1200)}
+	property screenLayout : {place(macbookDisplay, 0, 0), place(syncmaster27inDisplay, 0, -1200)}
 	on prepare()
 		my hideDock(false)
 	end prepare
