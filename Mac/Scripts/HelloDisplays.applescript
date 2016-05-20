@@ -196,7 +196,7 @@ on run args
 		my preserveVisibility("Mail")
 	end tell
 	set messagesAppName to "Messages"
-	if (get version of application "Finder") < "10.8" then set messagesAppName to "iChat"
+	-- if (get version of application "Finder") < "10.8" then set messagesAppName to "iChat" # XXX broken since 10.10
 	if my appIsRunning(messagesAppName) then
 		if my appIsRunning("Mail") then tell application "Mail" to my moveAndResize({screen:macbookDisplay, h:0.9, wins:windows of message viewers})
 		my rememberVisibility(messagesAppName)
@@ -248,6 +248,7 @@ on run args
 		my preserveVisibility("Papers2")
 	end if
 	
+	(*
 	if my appIsRunning("Twitter") then tell application "Twitter" to my moveAndResize({screen:macbookDisplay, x:1, y:0, h:1, wins:windows})
 	if my appIsRunning("Adium") then tell application "Adium"
 		if my appIsRunning("Mail") then tell application "Mail" to my moveAndResize({screen:macbookDisplay, h:0.9, wins:windows of message viewers})
@@ -257,6 +258,7 @@ on run args
 		my keepInAllSpaces(windows, numScreens > 1)
 		my preserveVisibility("Adium")
 	end tell
+	*)
 	
 	if my appIsRunning("Eclipse") then moveAndResize({x:0, y:0, w:1, h:1, wins:my getAppWindows("Eclipse")})
 
