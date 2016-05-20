@@ -247,6 +247,7 @@ Plugin 'tpope/vim-abolish'
 "Plugin 'slime'
 Plugin 'scrooloose/nerdtree'
   nnoremap <Space>e :NERDTreeFind<CR>
+  nnoremap <Space>E :let g:NERDTreeQuitOnOpen=!g:NERDTreeQuitOnOpen<CR>:NERDTreeFind<CR>
   let g:NERDTreeQuitOnOpen = 1
   let g:NERDTreeShowHidden = 1
   let g:NERDTreeChDirMode  = 1
