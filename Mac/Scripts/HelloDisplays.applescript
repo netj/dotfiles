@@ -283,6 +283,7 @@ property actualHeight : null
 on determineCurrentConfiguration(args)
 	-- consider the screen size
 	tell application "Finder" to set {_x, _y, actualWidth, actualHeight} to bounds of window of desktop
+	set {actualWidth, actualHeight} to {actualWidth - _x, actualHeight - _y}
 
 	-- detect the size of builtin display (TODO only if needed e.g., on differently scaled Retina displays)
 		set {w,h} to my askNSScreen("builtin", "W H")
