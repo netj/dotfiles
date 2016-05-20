@@ -35,6 +35,7 @@ property syncmaster27inDisplay : Screen(1920, 1200)
 property syncmaster30inDisplay : Screen(2560, 1600)
 property cinema30inDisplay : Screen(2560, 1600)
 property thunderboltDisplay : Screen(2560, 1440)
+property dellUhdWideDisplay : Screen(3440, 1440)
 property detectionTolerance : 200 -- px of alignment error to tolerate
 
 --------------------------------------------------------------------------------------------------------
@@ -64,6 +65,18 @@ script homeConfiguration
 	end prepare
 	on adapt()
 		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.95, wins:my getLargeEnoughWindows(windows)})
+	end adapt
+end script
+
+script latticeOfficeConfiguration
+	property name : "Lattice Office"
+	-- There's an Dell U3415W display at my workplace
+	property screenLayout : {place(dellUhdWideDisplay, 0, 0), place(macbookDisplay, 3440, 1440/2)}
+	on prepare()
+		my hideDock(false)
+	end prepare
+	on adapt()
+		--if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.8, wins:my getLargeEnoughWindows(windows)})
 	end adapt
 end script
 
@@ -145,6 +158,7 @@ on run args
 	set configurations to {}
 	useConfiguration(macbookConfiguration)
 	useConfiguration(homeConfiguration)
+	useConfiguration(latticeOfficeConfiguration)
 	useConfiguration(gatesOfficeConfiguration)
 	useConfiguration(meyerConfiguration)
 	useConfiguration(mpkOfficeConfiguration)
