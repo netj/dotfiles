@@ -341,7 +341,7 @@ Plugin 'tpope/vim-endwise'
 let g:sparkup = {}
   let g:sparkup.lhs_expand = '<C-\><C-e>'
   let g:sparkup.lhs_jump_next_empty_tag = '<C-\><C-f>'
-Plugin 'chrisgeo/sparkup'
+Plugin 'chrisgeo/sparkup', {'rtp': 'vim/'}
 Plugin 'xmledit'
   let g:xml_jump_string = "`"
 Plugin 'tpope/vim-ragtag'
