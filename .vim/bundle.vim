@@ -269,7 +269,7 @@ Plugin 'scrooloose/nerdtree'
   let g:netrw_sort_case_sensitive = 0
   let g:netrw_list_hide = '\(^\|\s\s\)\zs\.\S\+' " all dotfiles
   let g:netrw_hide = 0
-Plugin 'tpope/vim-vinegar'
+Plugin 'netj/vim-vinegar'  " XXX using personal fork of 'tpope/vim-vinegar'
   let g:NERDTreeHijackNetrw = 0
 "Plugin 'FuzzyFinder'
 "  nnoremap <Space>f :FufFileWithCurrentBufferDir<CR>
