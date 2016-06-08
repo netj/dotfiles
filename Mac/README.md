@@ -3,24 +3,24 @@ Mac Configurations
 
 ## [Install-Casks.sh](Install-Casks.sh)
 This shell script helps install a bunch of apps from [Homebrew Casks](http://caskroom.io)
+For more apps and Safari extensions, see my pinboard links tagged with [Mac Essential](https://pinboard.in/u:netj/t:mac/t:essential/).
 
 ## [Tweak.sh](Tweak.sh)
 This shell script includes some preference tweaks I use on my Macs.
 
-
 ## Terminal.app
-Open any `.terminal` file to load configuration into Mac OS X's Terminal app.
+Open any `.terminal` file to load configuration into OS X's Terminal app.
 You should use Mac's default terminal unless you have a strong reason to do
 otherwise, even after watching [the talk given by the author of Terminal.app (Ben Stiglitz)][Ben Stiglitz's talk] I found from [TotalTerminal's website in the past][TotalTerminal special guest].
 I recommend using [Envy Code R font][] for your terminal if you want something
 different from Apple's default, Menlo or Monaco.  You can find more fonts from
-my [.fonts directory](../../../tree/master/.fonts#readme).
+my [Fonts directory](../Fonts#readme).
 
 ### MouseTerm plus
 (OS X 10.11 El Capitan now ships a Terminal app that has superior mouse reporting capability which can be enabled from menu View > Allow Mouse Reporting, this plugin is no longer necessary! :)
 
 [MouseTerm plus][] is a great SIMBL plugin, which passes mouse events to programs
-running in Mac OS X's Terminal.app, e.g., tmux, vim, or emacs.  I [highly
+running in OS X's Terminal.app, e.g., tmux, vim, or emacs.  I [highly
 recommend installing it](http://superuser.com/a/595284/45702) because there's
 nothing to lose.
 
@@ -47,10 +47,13 @@ scripts.
 I'm using [`HelloDisplay.applescript`](Scripts/HelloDisplays.applescript) with [Control Plane][] for repositioning and resizing windows as I move around.
 
 
-## BetterTouchToolGestures
+## BetterTouchTool Gestures
 [BetterTouchTool][] is another awesome tool that lets me use trackpad on a
 whole new level.
 
+
+## iStat Menus
+[iStat Menus][] is pretty essential to have an eye on what's going on your Mac, and I have [settings to keep it compact](iStat%20Menus%20Settings.ismp).
 
 
 [TotalTerminal]: http://totalterminal.binaryage.com 
@@ -62,4 +65,4 @@ whole new level.
 [FastScripts]: http://www.red-sweater.com/fastscripts/
 [Control Plane]: http://www.controlplaneapp.com/
 [BetterTouchTool]: http://blog.boastr.net/
-[MacOSXDefaultFontFallbacksChanger]: https://github.com/netj/MacOSXDefaultFontFallbacksChanger
+[iStat Menus]: https://bjango.com/mac/istatmenus/
