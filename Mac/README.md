@@ -11,7 +11,7 @@ This shell script includes some preference tweaks I use on my Macs.
 ## Terminal.app
 Open any `.terminal` file to load configuration into Mac OS X's Terminal app.
 You should use Mac's default terminal unless you have a strong reason to do
-otherwise even after watching [the talk given by Terminal.app's author][Ben Stiglitz's talk].
+otherwise, even after watching [the talk given by the author of Terminal.app (Ben Stiglitz)][Ben Stiglitz's talk] I found from [TotalTerminal's website in the past][TotalTerminal special guest].
 I recommend using [Envy Code R font][] for your terminal if you want something
 different from Apple's default, Menlo or Monaco.  You can find more fonts from
 my [.fonts directory](../../../tree/master/.fonts#readme).
@@ -54,7 +54,8 @@ whole new level.
 
 
 [TotalTerminal]: http://totalterminal.binaryage.com 
-[Ben Stiglitz's talk]: http://totalterminal.binaryage.com/#special-guest
+[TotalTerminal special guest]: http://web.archive.org/web/20140805045750/http://totalterminal.binaryage.com/#special-guest
+[Ben Stiglitz's talk]: https://confreaks.tv/videos/rubyconf2008-terminal-app
 [Envy Code R font]: http://damieng.com/blog/2008/05/26/envy-code-r-preview-7-coding-font-released
 [MouseTerm plus]: https://github.com/saitoha/mouseterm-plus#readme
 [Karabiner]: https://pqrs.org/osx/karabiner/
