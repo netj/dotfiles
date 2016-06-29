@@ -58,8 +58,8 @@ end script
 
 script homeConfiguration
 	property name : "Home"
-	-- a SyncMaster 275T is at my home desk
-	property screenLayout : {place(macbookDisplay, 0, 0), place(syncmaster27inDisplay, 0, -1200)}
+	-- an iMac 27" (equiv. to a Thunderbolt Display) is at my home desk
+	property screenLayout : {place(macbookDisplay, 0, 0), place(thunderboltDisplay, 440, 1440)}
 	on prepare()
 		my hideDock(false)
 	end prepare
@@ -83,31 +83,7 @@ end script
 script gatesOfficeConfiguration
 	property name : "Gates Office"
 	-- I have a SyncMaster 305T in my office :)
-	property screenLayout : {place(syncmaster30inDisplay, 0, 0), place(macbookDisplay, 2560, 1315)}
-	on prepare()
-		my hideDock(false)
-	end prepare
-	on adapt()
-		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.8, wins:my getLargeEnoughWindows(windows)})
-	end adapt
-end script
-
-script meyerConfiguration
-	property name : "Meyer Library"
-	-- There are 30-in Cinema Displays
-	property screenLayout : {place(cinema30inDisplay, 0, 0), place(macbookDisplay, 440, 1600)}
-	on prepare()
-		my hideDock(false)
-	end prepare
-	on adapt()
-		if my appIsRunning("Safari") then tell application "Safari" to my moveAndResize({h:0.8, wins:my getLargeEnoughWindows(windows)})
-	end adapt
-end script
-
-script mpkOfficeConfiguration
-	property name : "MPK Office"
-	-- There's an Apple Thunderbolt Display at my workplace
-	property screenLayout : {place(thunderboltDisplay, 0, 0), place(macbookDisplay, 2560, 702)}
+	property screenLayout : {place(syncmaster30inDisplay, 0, 0), place(macbookDisplay, 440, 1600)}
 	on prepare()
 		my hideDock(false)
 	end prepare
@@ -160,8 +136,6 @@ on run args
 	useConfiguration(homeConfiguration)
 	useConfiguration(latticeOfficeConfiguration)
 	useConfiguration(gatesOfficeConfiguration)
-	useConfiguration(meyerConfiguration)
-	useConfiguration(mpkOfficeConfiguration)
 	determineCurrentConfiguration(args)
 	
 	showProgressNotification(currentConfiguration)
