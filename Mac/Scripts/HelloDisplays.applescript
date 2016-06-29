@@ -186,13 +186,15 @@ on run args
 		end tell
 		my preserveVisibility(messagesAppName)
 	end if
-	if my appIsRunning("Slack") then
-		-- my rememberVisibility("Slack") -- XXX causes an error
-		tell application "Slack"
-			tell application "System Events" to tell application process "Slack" to set ws to windows
-			my moveAndResize({screen:macbookDisplay, x:1, y:0, w:0.67, h:1, wins:ws})
-		end tell
-	end if
+	try
+		if my appIsRunning("Slack") then
+			-- my rememberVisibility("Slack") -- XXX causes an error
+			tell application "Slack"
+				tell application "System Events" to tell application process "Slack" to set ws to windows
+				my moveAndResize({screen:macbookDisplay, x:1, y:0, w:0.67, h:1, wins:ws})
+			end tell
+		end if
+	end try
 
 	-- keep iTunes Mini Player on a corner of the MacBook screen
 	if my appIsRunning("iTunes") then tell application "iTunes"
@@ -205,22 +207,28 @@ on run args
 	end tell
 
 	-- 3rd party apps
-	if my appIsRunning("Things") then tell application "Things"
-		my rememberVisibility("Things")
-		my moveAndResize({screen:macbookDisplay, x:1, y:1, wins:windows})
-		my preserveVisibility("Things")
-	end tell
+	try
+		if my appIsRunning("Things") then tell application "Things"
+			my rememberVisibility("Things")
+			my moveAndResize({screen:macbookDisplay, x:1, y:1, wins:windows})
+			my preserveVisibility("Things")
+		end tell
+	end try
 	
-	if my appIsRunning("Skim") then tell application "Skim"
-		my rememberVisibility("Skim")
-		my moveAndResize({wins:windows, w:0.6, h:1})
-		my preserveVisibility("Skim")
-	end tell
-	if my appIsRunning("Papers2") then
-		my rememberVisibility("Papers2")
-		moveAndResize({x:0, y:0, wins:my getAppWindows("Papers2"), w:1, h:1})
-		my preserveVisibility("Papers2")
-	end if
+	try
+		if my appIsRunning("Skim") then tell application "Skim"
+			my rememberVisibility("Skim")
+			my moveAndResize({wins:windows, w:0.6, h:1})
+			my preserveVisibility("Skim")
+		end tell
+	end try
+	try
+		if my appIsRunning("Papers") then
+			my rememberVisibility("Papers")
+			moveAndResize({x:0, y:0, wins:my getAppWindows("Papers"), w:1, h:1})
+			my preserveVisibility("Papers")
+		end if
+	end try
 	
 	(*
 	if my appIsRunning("Twitter") then tell application "Twitter" to my moveAndResize({screen:macbookDisplay, x:1, y:0, h:1, wins:windows})
@@ -234,7 +242,9 @@ on run args
 	end tell
 	*)
 	
-	if my appIsRunning("Eclipse") then moveAndResize({x:0, y:0, w:1, h:1, wins:my getAppWindows("Eclipse")})
+	try
+		if my appIsRunning("Eclipse") then moveAndResize({x:0, y:0, w:1, h:1, wins:my getAppWindows("Eclipse")})
+	end try
 
 	-- get back to current application, and front window
 	--	tell application curAppName to activate
