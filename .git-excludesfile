@@ -4,3 +4,7 @@
 .*.sw?
 .#*
 .DS_Store
+*.pyc
+
+.lvimrc
+.ycm_extra_conf.py
