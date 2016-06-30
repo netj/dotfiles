@@ -59,7 +59,7 @@ end script
 script homeConfiguration
 	property name : "Home"
 	-- an iMac 27" (equiv. to a Thunderbolt Display) is at my home desk
-	property screenLayout : {place(macbookDisplay, 0, 0), place(thunderboltDisplay, 440, 1440)}
+	property screenLayout : {place(thunderboltDisplay, 0, 0), place(macbookDisplay, 100, 1440)}
 	on prepare()
 		my hideDock(false)
 	end prepare
