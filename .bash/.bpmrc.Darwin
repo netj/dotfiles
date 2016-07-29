@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 # bash plugin manager configuration for my Mac
 
+# load system bashrc
+! [ -r /etc/bashrc ] || . /etc/bashrc
+
 # I keep Homebrew on /opt/homebrew
 bash_insert_path PATH /opt/homebrew/sbin /opt/homebrew/bin
 
