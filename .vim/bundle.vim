@@ -202,6 +202,7 @@ Plugin 'kien/rainbow_parentheses.vim'
 " Plugin 'RltvNmbr'
 Plugin 'DrawIt'
 " Plugin 'MixCase'
+Plugin 'junegunn/vim-emoji'
 
 Plugin 'Mark'
   let g:mwHistAdd       = '' " '/@'
@@ -522,6 +523,14 @@ filetype plugin indent on    " required
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" git-gutter with vim-emojis
+  if emoji#available()
+    let g:gitgutter_sign_added = emoji#for('bulb')
+    let g:gitgutter_sign_modified = emoji#for('boom')
+    let g:gitgutter_sign_removed = emoji#for('fire')
+    let g:gitgutter_sign_modified_removed = emoji#for('collision')
+  endif
 
 fun! s:stripeLists(lists)
   let stripedList = []
