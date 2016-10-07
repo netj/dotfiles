@@ -13,6 +13,9 @@ vundle-update: ##
 	case $$REPLY in [yY]) echo "updating .vim/bundle/..." ;; *) exit 0 ;; esac; \
 	vim +PluginInstall +qa
 
+spell: ##
+	git clone https://github.com/netj/spell.git
+
 # tpope's spelling fixes using :Abolish
 tpopes-abbrevs: after/plugin/abolish_tpope.vim ##
 after/plugin/abolish_tpope.vim:
