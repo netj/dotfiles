@@ -74,6 +74,7 @@ set suffixes+=.class    " Java classes
 set suffixes+=#         " Emacs auto backups
 set suffixes+=.hi       " Haskell intermediates
 set suffixes+=.cmi,.cmo,.cmx,.cma,.cmxa,.blg,.annot " OCaml intermediates
+set suffixes+=DS_Store " macOS Finder remnants
 
 " keep swap, undo in ~/.vim/tmp/
 if isdirectory($HOME."/.vim/tmp") == 0

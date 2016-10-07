@@ -433,7 +433,8 @@ Plugin 'vim-latex/vim-latex'
   fun! s:LaTeX_Setup()
     let suffixes = ".pdf,.dvi,.ps,.ps.gz"
                 \.",.aux,.bbl,.blg,.log,.out,.ent"
-                \.",.fdb_latexmk,.fls,.brf,.synctex.gz"
+                \.",.toc,.lot,.lof"
+                \.",.latexmain,.fdb_latexmk,.fls,.brf,.synctex.gz"
     if stridx(&suffixes, suffixes) == -1
       exec "setlocal suffixes+=".suffixes
       let patt = '\('. join(map(split(suffixes,','),
@@ -449,6 +450,7 @@ Plugin 'vim-latex/vim-latex'
     "   See: http://superuser.com/questions/422214/vim-gq-command-to-re-wrap-paragraph-and-latex
     let &l:formatlistpat = '^\s*\\\ze\(end\|item\)\>'
     setlocal formatoptions+=n
+    setlocal wrap
     " Use LaTeX folds
     nmap <buffer><silent> <Space>z  <Plug>Tex_RefreshFolds
     " Use latexmk and enable synctex
