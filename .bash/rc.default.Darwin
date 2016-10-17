@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# bash plugin manager configuration for my Mac
+# a bashrc for macOS
 
-# load system bashrc
+# load Apple's bashrc
 ! [ -r /etc/bashrc ] || . /etc/bashrc
 
-# I keep Homebrew on /opt/homebrew
-bash_insert_path PATH /opt/homebrew/sbin /opt/homebrew/bin
+# Homebrew is kept on /opt/homebrew
+PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
 
-# exec into bash >= 4, when available (for login shells)
+# prefer brewed bash >= 4 when available (for login shells)
 if [[ $0 = -bash ]] && shopt -qp login_shell && [[ ${BASH_VERSINFO[0]} -lt 4 ]]; then
     newVersion=$(bash --version | head -n1 | sed 's/.* version \([^ ]*\).*/\1/')
     if [[ $newVersion > $BASH_VERSION ]]; then
@@ -17,3 +17,6 @@ if [[ $0 = -bash ]] && shopt -qp login_shell && [[ ${BASH_VERSINFO[0]} -lt 4 ]];
     #exec bash -$- "${@:-$BASH_EXECUTION_STRING}" # for non-interactive
 fi
 
+# use bash plugin manager (https://github.com/netj/bpm)
+. ~/.bash/plugins/bpm.sh
+################################################################################

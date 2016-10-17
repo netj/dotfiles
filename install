@@ -111,7 +111,7 @@ install() {
                 [Yy]) # yes, install
                     run ${n}_before "$@"
                     # backup previous one
-                    ! [ -e ~/"$dst" ] || $nobackup || mv -iv ~/"$dst" ~/"$dst"~
+                    ! [ -e ~/"$dst" ] || $nobackup || mv -Tiv ~/"$dst" ~/"$dst"~
                     # create a symlink or a hardlink
                     if $nosymlink; then
                         ln -fv "$src" ~/"$dst"
@@ -153,7 +153,7 @@ safeln() {
     for tgt in "$@"; do
         if [ -e "$tgt" ]; then
             [ "`readlink "$tgt"`" != "$src" ] || continue
-            mv -iv "$tgt" "$tgt~"
+            mv -Tiv "$tgt" "$tgt~"
         fi
         [ -e "$tgt" ] || ln -sfnv "$src" "$tgt"
     done
@@ -192,12 +192,31 @@ fi
 
 # core
 bash_after() {
-    # .bash{rc,_profile} symlinks
     (cd
-    safeln .bash/profile .bash{rc,_profile}
-    safeln .bash/logout .bash_logout
-    bpmrc=.bash/.bpmrc.$(uname)
-    [ ! -e $bpmrc ] || safeln $bpmrc .bpmrc
+    # migrate from old style if needed
+    if [[ -L .bashrc && -L .bash_profile &&
+        $(readlink .bashrc) = .bash/profile ]]; then
+        rm -fv .bash{rc,_{profile,logout}} .bpmrc
+    fi
+    # ensure .bashrc is there
+    [[ -e .bashrc ]] ||
+        cp -v .bash/rc.default.$(uname) .bashrc ||
+        cp -v .bash/rc.default          .bashrc ||
+        touch .bashrc
+    # migrate .bash_local if exists
+    if [[ -e .bash_local ]]; then
+        {
+            echo
+            cat .bash_local
+        } >>.bashrc
+        mv -iv .bash_local .bash_local~
+    fi
+    # keep both rc file variants in sync
+    safeln .bashrc .bash_profile
+    # install bpm
+    [[ -e .bash/plugins/bpm.sh ]] ||
+        git clone https://github.com/netj/bpm.git .bash/plugins
+    # enable a few essential bpm plugins
     plugins=(
         bash_completion
         alias_completion
@@ -209,9 +228,16 @@ bash_after() {
         tmux-cwd-title
         tmux-cwd-sync
         git-helper
+        logout-clear
     )
     [ -d .bash/plugins/enabled ] ||
     . .bash/plugins/bpm.sh enable "${plugins[@]}"
+    # have bpm load in every interactive shell sessions
+    grep -q '^\. ~/\.bash/plugins/bpm\.sh' .bashrc || {
+        echo
+        echo '. ~/.bash/plugins/bpm.sh'
+        echo '###############################################################################'
+    } >>.bashrc
     )
 }
 install .bash

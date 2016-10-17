@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# load system bashrc
+! [ -r /etc/bashrc ] || . /etc/bashrc
+
+# use bash plugin manager (https://github.com/netj/bpm)
+. ~/.bash/plugins/bpm.sh
+################################################################################
