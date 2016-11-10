@@ -71,7 +71,7 @@ end script
 script latticeOfficeConfiguration
 	property name : "Lattice Office"
 	-- There's an Dell U3415W display at my workplace
-	property screenLayout : {place(dellUhdWideDisplay, 0, 0), place(macbookDisplay, 3440, 1440/2)}
+	property screenLayout : {place(dellUhdWideDisplay, 0, 0), place(macbookDisplay, 3440-300, 1440)}
 	on prepare()
 		my hideDock(false)
 	end prepare
