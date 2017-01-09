@@ -90,8 +90,7 @@ endif
 " use all spell files in ~/.vim/spell/
 let &spellfile=substitute(glob("~/.vim/spell/*.utf-8.add"), "\n", ",", "g")
 " and load them as dictionaries as well
-set dict=spell
-set dict+=~/.vim/spell/*.add
+let &dict=join(["spell"]+split(glob("~/.vim/spell/*.add"), "\n"), ",")
 
 " let xterm title work even in screen or tmux
 " From http://vim.wikia.com/wiki/Automatically_set_screen_title
