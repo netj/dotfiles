@@ -378,6 +378,10 @@ if executable("clang-format")
 endif
 Plugin 'msanders/cocoa.vim' 
 Plugin 'b4winckler/vim-objc'
+Plugin 'leafgarland/typescript-vim'
+Plugin 'ianks/vim-tsx'
+Plugin 'Shougo/vimproc.vim'
+Plugin 'Quramy/tsuquyomi'
 Plugin 'kchmck/vim-coffee-script'
   au BufEnter *.coffee syntax sync fromstart
   " Search for CoffeeScript/JavaScript files, e.g., require "foo"
