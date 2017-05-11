@@ -367,6 +367,11 @@ Plugin 'GEverding/vim-hocon'  " for HOCON (Human Optimized Configuration Object 
 
 " C/C++ development essentials
 Plugin 'Valloric/YouCompleteMe'
+" See: https://github.com/Valloric/YouCompleteMe#options
+" only activate YCM on a select filetypes (defaults to '*')
+let g:ycm_filetype_whitelist = {
+      \ 'cpp': 1,
+      \}
 Plugin 'rdnetto/YCM-Generator'
 if executable("clang-format")
   Plugin 'kana/vim-operator-user' " vim-operator-user
