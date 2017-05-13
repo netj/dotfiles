@@ -538,17 +538,18 @@ filetype plugin indent on    " required
 " Put your non-Plugin stuff after this line
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" git-gutter with vim-emojis
-try
-  if emoji#available()
-    let g:gitgutter_sign_added = emoji#for('bulb')
-    let g:gitgutter_sign_modified = emoji#for('boom')
-    let g:gitgutter_sign_removed = emoji#for('fire')
-    let g:gitgutter_sign_modified_removed = emoji#for('collision')
-  endif
-catch /.*/
-  " silence any error
-endtry
+" XXX probably not a good idea as it sometimes crashes tmux and macOS Terminal.app
+"" git-gutter with vim-emojis
+"try
+"  if emoji#available()
+"    let g:gitgutter_sign_added = emoji#for('bulb')
+"    let g:gitgutter_sign_modified = emoji#for('boom')
+"    let g:gitgutter_sign_removed = emoji#for('fire')
+"    let g:gitgutter_sign_modified_removed = emoji#for('collision')
+"  endif
+"catch /.*/
+"  " silence any error
+"endtry
 
 fun! s:stripeLists(lists)
   let stripedList = []
