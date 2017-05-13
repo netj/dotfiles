@@ -65,7 +65,7 @@ set completion-query-items -1  # without disabling this, menu-complete may not w
 $if Bash
 
     # Do history expansion ! when space is pressed
-    Space: magic-space
+    "\C-Space": magic-space
 
     # Insert-Option Macro (enhanced to handle multi-word commands)
     "\eo": "\C-p\C-a\eF\C-f"
