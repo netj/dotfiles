@@ -362,6 +362,10 @@ nnoremap gK K
 au FileType man nnoremap <buffer> q <C-w>q
 
 
+" More natural split direction
+set splitbelow splitright
+
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Local settings                                                              "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

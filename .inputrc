@@ -60,6 +60,10 @@ set completion-query-items -1  # without disabling this, menu-complete may not w
 "\e\C-f": "\e]/"
 
 
+# Quickly repeat last history item
+"\e\C-m": "\C-p\C-m"
+
+
 # Bash-specific READLINE Tweaks
 # See-Also: http://www.ukuug.org/events/linux2003/papers/bash_tips/
 $if Bash
