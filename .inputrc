@@ -53,7 +53,7 @@ set completion-query-items -1  # without disabling this, menu-complete may not w
 # backward/forward words by space with Meta-Shift-B/F
 "\eB": "\C-b\e\C-] \C-f"
 "\eF": "\e] "
-"\e|": delete-horizontal-space
+"\e^": delete-horizontal-space
 
 # easier backward/forward path components with Meta-Ctrl-B/F
 "\e\C-b": "\C-b\e\C-]/\C-f"
