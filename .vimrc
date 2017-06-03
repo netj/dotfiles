@@ -362,8 +362,9 @@ nnoremap gK K
 au FileType man nnoremap <buffer> q <C-w>q
 
 
-" More natural split direction
-set splitbelow splitright
+" Tmux like split direction (which feels very unintuitive for long-time Vim
+" users, hence changing .tmux.conf is recommended for long time Vim users)
+"set splitbelow splitright
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
