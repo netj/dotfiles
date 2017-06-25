@@ -367,6 +367,12 @@ au FileType man nnoremap <buffer> q <C-w>q
 "set splitbelow splitright
 
 
+" Selecting right after pasting text
+" See: http://vim.wikia.com/wiki/Selecting_your_pasted_text
+nnoremap <expr> gp 'p`[' . strpart(getregtype(), 0, 1) . '`]'
+nnoremap <expr> gP 'P`[' . strpart(getregtype(), 0, 1) . '`]'
+
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Local settings                                                              "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
