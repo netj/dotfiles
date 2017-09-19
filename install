@@ -21,7 +21,7 @@ has() { type "$1" &>/dev/null; }
 running() { pgrep "$1" &>/dev/null; }
 
 # we're in a oneliner if this isn't running off of a git repo
-if ! [[ -d "$DotfilesRoot"/.git ]]; then
+if ! [[ -e "$DotfilesRoot"/.git ]]; then
     echo >&2 "### netj's dotfiles installer ###"
     # make sure git is there
     has git ||
