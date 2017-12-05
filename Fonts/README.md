@@ -6,6 +6,9 @@ fonts for personal use.  Beware: some may have restrictions on using them
 commercially or redistribution.
 
 - [Envy Code R](http://damieng.com/blog/2008/05/26/envy-code-r-preview-7-coding-font-released)
+    
+    ![](EnvyCodeR-2048x2048.jpeg)
+
 - [Dijkstra](http://www.fonts101.com/fonts/view/Uncategorized/34398/Dijkstra.aspx)
 
 - [Nanum Fonts](http://hangeul.naver.com/font) (Korean)
