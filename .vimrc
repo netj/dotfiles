@@ -390,9 +390,6 @@ SourceOptional ~/.vim_local
 " Apply some minimal fixes to netrw unless tpope's vinegar plugin is already loaded
 " See: https://github.com/tpope/vim-vinegar
 if !exists("g:loaded_vinegar") && empty(filter(split(&rtp, ','), "v:val =~ 'vinegar'"))
-  nnoremap <silent> -  :let g:netrw_last_file = expand('%:t')<CR>
-                      \:Explore<CR>
-                      \:exec ':'.search('\V'.escape(g:netrw_last_file, '\'))<CR>
   let g:netrw_banner = 0
   let g:netrw_sort_sequence = '*,\%(' . join(map(split(&suffixes, ','), 'escape(v:val, ".*$~")'), '\|') . '\)[*@]\=$'
   " mix dotfiles with regular ones when sorting
