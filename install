@@ -255,13 +255,18 @@ fi
 fi
 
 if has git; then
+git config --global color.ui auto
+
+# do you even rerere? https://hackernoon.com/fix-conflicts-only-once-with-git-rerere-7d116b2cec67
+git config --global rerere.enabled true
+git config --global rerere.autoupdate true
+
 git_excludesfile_after() {
     git config --global core.excludesfile ~/.git-excludesfile
 }
 install .git-excludesfile
-git config --global color.ui auto
 
-# git MUST HAVE: brew install diff-so-fancy
+# no work possible w/o git + diff-so-fancy
 # See: https://github.com/so-fancy/diff-so-fancy#readme
 if has diff-so-fancy; then
     git config --global core.pager "diff-so-fancy | less --tabs=4 -RFX"
@@ -287,6 +292,9 @@ git_template_after() {
 }
 install .git-template
 fi
+# TODO shared .git/rr-cache in .git-template
+
+
 fi
 
 ! top -v 2>&1 | grep -q 'procps version' ||
