@@ -34,7 +34,7 @@ config: Makefile config.enabled config.enabled/*
   echo; \
   cat $(filter-out Makefile config.enabled,$^) | \
   grep -v '^#[[:space:]]*vim:'; \
-} >$@.tmp; [ -e $@ ] && mv -f $@ $@~; mv -f $@.tmp $@
+} >$@.tmp.$$$$; mv -f $@ $@~ 2>/dev/null || true; mv -f $@.tmp.$$$$ $@
 
 
 C ?= *
@@ -42,7 +42,7 @@ C ?= *
 enable: $(C:%=config.d/%)
 	# enabling $(^F)
 	@mkdir -pv config.enabled
-	@for c in $^; do ln -sfnv ../$$c config.enabled/$${c##*/}; done
+	@for c in $^; do en="config.enabled/$${c##*/}"; test "$$(readlink $$en)" = "../$$c" || ln -sfnv ../$$c $$en; done
 	@find config.enabled/ -type l -exec test ! -e {} \; -exec rm -fv {} +
 
 disable: $(C:%=config.enabled/%)
