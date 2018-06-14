@@ -261,6 +261,24 @@ git_excludesfile_after() {
 install .git-excludesfile
 git config --global color.ui auto
 
+# git MUST HAVE: brew install diff-so-fancy
+# See: https://github.com/so-fancy/diff-so-fancy#readme
+if has diff-so-fancy; then
+    git config --global core.pager "diff-so-fancy | less --tabs=4 -RFX"
+
+    git config --global color.diff-highlight.oldNormal    "red bold"
+    git config --global color.diff-highlight.oldHighlight "red bold 52"
+    git config --global color.diff-highlight.newNormal    "green bold"
+    git config --global color.diff-highlight.newHighlight "green bold 22"
+
+    git config --global color.diff.meta       "yellow"
+    git config --global color.diff.frag       "magenta bold"
+    git config --global color.diff.commit     "yellow bold"
+    git config --global color.diff.old        "red bold"
+    git config --global color.diff.new        "green bold"
+    git config --global color.diff.whitespace "red reverse"
+fi
+
 if has ctags; then
 # Update tags file after commit/checkout/merge/rebase
 # See: http://tbaggery.com/2011/08/08/effortless-ctags-with-git.html
