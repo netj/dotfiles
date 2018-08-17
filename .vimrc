@@ -266,6 +266,14 @@ nnoremap <Down> gj
 nnoremap <Home> g0
 nnoremap <End>  g$
 
+" Opt/Alt+Left/Right similar to macOS's behavior
+noremap <Esc><Left>  <C-\><C-N>b
+noremap <Esc><Right> <C-\><C-N>w
+if has("mac")
+  noremap <M-Left>  <C-\><C-N>b
+  noremap <M-Right> <C-\><C-N>w
+endif
+
 " Window resize for Mac (to be mapped to pinch in/out gestures)
 if has("mac")
   nnoremap <M-C-D-+>        16<C-w>>
