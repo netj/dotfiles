@@ -4,7 +4,7 @@
 # Created: 2006-05-21
 set -eu
 
-DotfilesRoot=$(cd "$(dirname "$0")" >/dev/null; pwd -P)
+DotfilesRoot=$(cd "$(dirname "$(test -L "$0" && readlink "$0" || echo "$0")")" >/dev/null; pwd -P)
 
 ### oneliner installer: bash <(u=git.io/netj.files; curl -fsSL $u || wget -nv -O- $u)
 
