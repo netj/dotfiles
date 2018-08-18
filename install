@@ -181,15 +181,6 @@ notOnCloud ||
 ###############################################################################
 
 
-# make sure we have all the git submodules in place
-if has git; then
-(
-cd "$DotfilesRoot"
-git submodule | grep ^- | awk '{print $2}' | xargs git submodule update --init
-)
-fi
-
-
 # core
 bash_after() {
     (cd
