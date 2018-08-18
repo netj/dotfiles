@@ -1,0 +1,192 @@
+#!/usr/bin/env bash
+# xterm dynamic title support
+# 
+# Usage:
+#   # give this shell a fixed xterm title, TITLE
+#   title TITLE...
+# 
+# Options:
+#   # set for a fixed default title (modified by the `title` command)
+#   xtermtitle_label=TITLE
+#
+#   # set false to disable OS X Terminal.app's icon support (since Lion)
+#   xtermtitle_mac_terminal=[|false|true]
+# 
+#
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2004-05-28
+# Requires: bpm.utils bpm.events environment
+################################################################################
+
+bash_plugin_interactive() {
+    _xtermtitle_postfix=
+    bash_default xtermtitle_label ""
+    bash_default xtermtitle_mac_terminal ""
+    # xterm's dynamic title for some terminal types
+    case $TERM in
+        xterm* | cygwin* | screen*)
+        if [[ -n "$TMUX" || -n "$STY" || "$TERM_PROGRAM" = "Apple_Terminal" ]]; then
+            # in tmux or screen or local Terminal.app we need not much details
+            _xtermtitle_postfix=
+        else
+            # plain terminal
+            local tty=`tty`
+            tty=${tty#/dev/}
+            _xtermtitle_postfix="$tty^$hostnickname"
+        fi
+        # Mac OS X Terminal.app's enhanced DnD support since Lion
+        # See: http://www.macosxautomation.com/lion/terminal.html
+        # See also: /private/etc/bashrc's update_terminal_cwd
+        if ${xtermtitle_mac_terminal:-false} ||
+            [[ -z $TMUX && $TERM_PROGRAM = "Apple_Terminal" && ! ${TERM_PROGRAM_VERSION:-0} < 297 ]]; then
+            xtermtitle_mac_terminal=true
+            -xtermtitle_mac_terminal_clear_document_url() {
+                # make sure the document URL (OSC sequence with Ps = 6) is cleared, or the
+                # iconstring set by a suspended VIM for example can interfere even after it exits
+                printf '\e]6;\a'
+            }
+            bash_add_prompt -xtermtitle_mac_terminal_clear_document_url
+            -xtermtitle_mac_terminal_set_url() {
+                # OSC sequence for setting the working directory (Ps = 7)
+                printf '\e]7;%s\a' "$1"
+            }
+            -xtermtitle_mac_terminal_update() {
+                local pwd_url=
+                case $xtermtitle_label in
+                    "")
+                        pwd_url="file://$HOSTNAME$PWD";
+                        # check if the URL contains any unsafe characters
+                        [[ -z "${pwd_url//[A-Za-z0-9_:.\/-]/}" ]] ||
+                        # URL escaping from command-line: http://stackoverflow.com/questions/296536/urlencode-from-a-bash-script
+                        pwd_url=$(perl -MURI::Escape -e 'print uri_escape($ARGV[0],"^[:alpha:][:digit:]\-\._~:/");' "$pwd_url")
+                        # display URL for the title bar icon
+                        ;;
+                esac
+                -xtermtitle_mac_terminal_set_url "$pwd_url"
+            }
+            bash_add_chpwd -xtermtitle_mac_terminal_update
+            
+            # disable these feature when accessing remote hosts w/ ssh, mosh, etc.
+            ! type -P ssh &>/dev/null ||
+            ssh()  { -xtermtitle_mac_terminal_disable_for_sshish ssh  "$@"; }
+            ! type -P mosh &>/dev/null ||
+            mosh() { -xtermtitle_mac_terminal_disable_for_sshish mosh "$@"; }
+            ! type -P tmux &>/dev/null ||
+            tmux() { -xtermtitle_mac_terminal_disable_for     "" tmux "$@"; }
+            -xtermtitle_mac_terminal_disable_for() {
+                # look for hostname
+                local url=$1; shift
+                local cmd=$1; shift
+                local oldlabel=$xtermtitle_label; [ -n "$xtermtitle_label" ] || { title "$cmd"; -xtermtitle_update; }
+                -xtermtitle_mac_terminal_set_url "$url"
+                command "$cmd" "$@"
+                title "$oldlabel"
+            }
+            -xtermtitle_mac_terminal_disable_for_sshish() {
+            local remotehost="$(shift; -xtermtitle_mac_terminal_find_hostname "$@")"
+                if [[ -n "$remotehost" ]]; then
+                    -xtermtitle_mac_terminal_disable_for "file://$remotehost/${remotehost%%.*}" "$@"
+                else
+                    command "$@"
+                fi
+            }
+            -xtermtitle_mac_terminal_find_hostname() {
+                local arg= skip=false hostname=
+                for arg; do
+                    ! $skip || { skip=false; continue; }
+                    case $arg in
+                        # skip ssh options with args
+                        -[bcDeFIilmOopRSWw]) skip=true ;;
+                        -*) continue ;;
+                        *)
+                            if [[ -z "$hostname" ]]; then
+                                hostname=$arg
+                            else # supposedly a command is following
+                                hostname= # do not report hostname
+                                break
+                            fi
+                            ;;
+                    esac
+                done
+                echo "$hostname"
+            }
+            # WIP: an alternative (but inefficient) way to wrapping commands is using DEBUG trap as below:
+            #-xtermtitle_mac_terminal_update_hook() {
+            #    case $BASH_COMMAND in
+            #        @(ssh|mosh)" "*)
+            #            (
+            #            set -- $BASH_COMMAND
+            #            # TODO find hostname from $BASH_COMMAND
+            #            -xtermtitle_mac_terminal_set_remote $2
+            #            echo notitle
+            #            )
+            #            ;;
+            #        *)
+            #            ;;
+            #    esac
+            #    echo "DEBUG: $BASH_COMMAND"
+            #}
+            ##trap -xtermtitle_mac_terminal_update_hook DEBUG
+        else
+            xtermtitle_mac_terminal=false
+        fi
+        # xterm title controller
+        title() {
+            xtermtitle_label="$*"
+            case $xtermtitle_label in
+                "")
+                    if ${xtermtitle_mac_terminal:-true}; then # Apple Terminal.app
+                        -xtermtitle_update_title_icon() {
+                            local path=$PWD
+                            local name=${path##*/}
+                            local dir=${PWD/#$HOME/"~"}
+                            dir=${dir%/$name}
+                            title="(${dir:-/})"
+                            #title+=${_xtermtitle_postfix:+ - $_xtermtitle_postfix}
+                            icon=$_xtermtitle_postfix
+                            # TODO show name and dir only when the tab bar is shown
+                            # local showtabbar=$(defaults read com.apple.Terminal ShowTabBar)
+                            # local nrtabs=$(osascript -e 'tell application "Terminal" to number of tabs of front window')
+                            # TODO can we cache $nrtabs results? check every ??s or ??times
+                            # [ $nrtabs -gt 1 -o $showtabbar = 1 ] || return
+                            # icon="${name:-/} - ${title}"
+                        }
+                    else # Default behavior
+                        -xtermtitle_update_title_icon() {
+                            local path=$PWD
+                            local name=${path##*/}
+                            local dir=${PWD/#$HOME/"~"}
+                            dir=${dir%/$name}
+                            title+="${name:-/} - "
+                            title+="(${dir:-/})"
+                            title+=${_xtermtitle_postfix:+ - $_xtermtitle_postfix}
+                        }
+                    fi
+                    ;;
+                *)
+                    -xtermtitle_update_title_icon() {
+                        title=$(eval echo "$xtermtitle_label")
+                        #title+=${_xtermtitle_postfix:+ - $_xtermtitle_postfix}
+                    }
+                    ;;
+            esac
+            ! ${xtermtitle_mac_terminal:-true} || -xtermtitle_mac_terminal_update
+        }
+        # xterm title updater
+        -xtermtitle_update() {
+            local title= icon=
+            -xtermtitle_update_title_icon
+            # display both: title and icon string
+            printf '\e]0;%s\a' "$title"
+            # then override icon string if necessary
+            [ -z "$icon" ] || printf '\e]1;%s\a' "$icon"
+        }
+        # use default if necessary
+        title "$xtermtitle_label"
+        # register it
+        bash_add_prompt -xtermtitle_update
+        ;;
+    esac
+}
+
+# vim:et:ts=8:sw=4:sts=4

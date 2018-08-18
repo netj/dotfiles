@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Make tmux use the current working directory when creating a new window
+# 
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2013-05-13
+# See-Also: http://unix.stackexchange.com/questions/12032/create-new-window-with-current-directory-in-tmux
+# Requires: bpm.events
+################################################################################
+
+bash_plugin_interactive() {
+    if [ -n "$TMUX" ]; then
+        # find the TMUX_PWD environment variable from tmux
+        local decl=$(tmux show-environment TMUX_PWD 2>/dev/null | grep -v '^-')
+        [[ -z "$decl" ]] || export "$decl"
+        [[ -z "${TMUX_PWD:-}" || ! -d "$TMUX_PWD" ]] ||
+            # unless atmux-respawn-windows is in progress,
+            tmux show-environment TMUX_RESPAWNING &>/dev/null || {
+            # change working directory to TMUX_PWD
+            cd "$TMUX_PWD"
+        }
+        # and reflect the last PWD to tmux's TMUX_PWD environment
+        -tmux-sync-default-path() {
+            tmux set-environment TMUX_PWD "$PWD"
+        }
+        bash_insert_prompt -tmux-sync-default-path
+    fi
+}

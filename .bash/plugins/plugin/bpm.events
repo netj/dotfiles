@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# Vocabularies for handling events, such as prompt, exit, $PWD change.
+# 
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2011-12-24
+# Requires: bpm.utils
+################################################################################
+
+bash_plugin_load() {
+
+## hooks for EXIT
+ONEXIT_COMMAND=$(trap() { echo "$2"; }; eval "$(builtin trap -p EXIT)")
+bash_add_unloader()    { bash_add_command    ONEXIT_COMMAND "$@"; }
+bash_remove_unloader() { bash_remove_command ONEXIT_COMMAND "$@"; }
+bash_insert_unloader() { bash_insert_command ONEXIT_COMMAND "$@"; }
+trap 'eval -- "$ONEXIT_COMMAND"' EXIT
+
+}
+
+bash_plugin_interactive() {
+
+## hooks for $PWD change (chpwd a la zsh's)
+CHPWD_COMMAND= _chpwd_lastpwd=
+bash_add_chpwd()    { bash_add_command    CHPWD_COMMAND "$@"; }
+bash_remove_chpwd() { bash_remove_command CHPWD_COMMAND "$@"; }
+bash_insert_chpwd() { bash_insert_command CHPWD_COMMAND "$@"; }
+-chpwd-detect() {
+    if [[ ! $PWD = $_chpwd_lastpwd ]]; then
+        eval -- "$CHPWD_COMMAND"
+        _chpwd_lastpwd=$PWD
+    fi
+}
+
+
+## hooks for prompt change (PROMPT_COMMAND)
+PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND;}-chpwd-detect"
+bash_add_prompt()    { bash_add_command    PROMPT_COMMAND "$@"; }
+bash_remove_prompt() { bash_remove_command PROMPT_COMMAND "$@"; }
+bash_insert_prompt() {
+    bash_remove_command PROMPT_COMMAND      -chpwd-detect
+    bash_insert_command PROMPT_COMMAND "$@" -chpwd-detect
+}
+
+}

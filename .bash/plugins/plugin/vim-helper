@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Vim for various tasks.
+#
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2013-05-13
+# Requires: bpm.utils
+################################################################################
+
+bash_plugin_interactive() {
+    # we can use one of Vim's ftplugin to see man pages in a nice way
+    man() {
+        if [[ -t 1 && -t 0 ]] && PAGER=false man "$@" &>/dev/null; then
+            vim +"runtime! ftplugin/man.vim" \
+                +"Man $(bash_escape "$@")" \
+                +"setlocal readonly nomodifiable" +only
+        else
+            command man "$@"
+        fi
+    }
+}

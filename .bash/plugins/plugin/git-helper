@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+# Git aliases and etc.
+#
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2012-06-13
+# Requires: bpm.utils
+################################################################################
+
+bash_plugin_interactive() {
+    bash_default_alias g    "git status --untracked=no"
+    bash_default_alias G    "git status"
+    bash_default_alias gd   "git diff --find-copies-harder"
+    bash_default_alias gds  "gd --staged"
+    bash_default_alias gD   "gd HEAD"
+    bash_default_alias ga   "git add"
+    bash_default_alias gau  "ga -u"
+    bash_default_alias gl   "git log --decorate --graph"
+    bash_default_alias gb   "git branch -v"
+    bash_default_alias gc   "git checkout"
+    bash_default_alias gcb  "gc -b"
+    bash_default_alias gfcb "gf origin; gc origin/HEAD -b"
+    bash_default_alias gC   "git commit"
+    bash_default_alias gCA  "gC --amend"
+    bash_default_alias gp   "git pull"
+    bash_default_alias gP   "git push"
+    bash_default_alias gf   "git fetch"
+    bash_default_alias gfp  "gf --prune"
+    bash_default_alias gr   "git remote -v"
+    bash_default_alias gru  "git remote update"
+    bash_default_alias grup "git remote update --prune"
+    bash_default_alias gR   "git rebase"
+    bash_default_alias gRI  "gR -i"
+    bash_default_alias gss  "git submodule summary"
+    bash_default_alias gsu  "git submodule update --init"
+    bash_default_alias gh   "hub browse"
+    # launch Vim with fugitive :Gstatus
+    bash_default_alias gg   '_git_dir=$(git rev-parse --git-dir) && vim "$_git_dir"/index'
+
+    #bash_default_alias gt git-tether-remote  # XXX use: github.com/netj/remocon
+
+    bash_default_alias gsp "git subrepo -v pull"
+    bash_default_alias gsP "git subrepo -v push"
+    bash_default_alias gsb "git subrepo -v branch"
+    bash_default_alias gsC "git subrepo -v commit"
+    bash_default_alias gsc "git subrepo -v clean"
+
+}
+
+bash_plugin_load() {
+    # a handy way to patch remote
+    git-tether-remote() {
+        (
+        set -euo pipefail
+        hostpath=$1; shift
+        case $hostpath in
+            (*:*) host=${hostpath%%:*} dir=${hostpath#*:};;
+            (*) echo >&2 "$hostpath: host:path required"; false;;
+        esac
+        commit=$(git rev-parse HEAD)
+        branch=$(git symbolic-ref --short HEAD)
+        git push -q -f "$host:$dir" HEAD:"$branch" || {
+            ssh "$host" "
+                set -eux
+                mkdir -p $(printf %q "$dir")
+                cd $(printf %q "$dir")
+                [[ -e .git ]] || git init
+            "
+            git push -f "$host:$dir" HEAD:"$branch"
+        }
+        git diff HEAD | ssh "$host" "
+            set -eu
+            branch=$(printf %q "$branch")
+            commit=$(printf %q "$commit")
+            cd $(printf %q "$dir")
+            # reverse any previous patch for tethering
+            if [[ -e .git/tethered.patch ]]; then
+                git apply -R <.git/tethered.patch || git stash
+                mv .git/tethered.patch{,~}
+            fi
+            # and keep a copy of the current patch
+            cat >.git/tethered.patch
+            # preserve any outstanding/untethered changes
+            git diff --quiet --exit-code || git stash
+            # make sure we're on the tethered branch and commit
+            [[ \$(git symbolic-ref --short HEAD) = \$branch ]] || git checkout -f \$branch --
+            git reset --hard \$commit
+            # with the same outstanding changes on top of the current commit
+            ! [[ -s .git/tethered.patch ]] || git apply --apply --stat <.git/tethered.patch
+            "
+        )
+    }
+}

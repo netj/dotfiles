@@ -1,0 +1,176 @@
+#!/usr/bin/env bash
+# Bash plugin manager utilities and vocabularies.
+# 
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2011-12-24
+################################################################################
+
+bash_plugin_load() {
+
+## for setting defaults
+bash_default() {
+    local name=$1
+    local value=$2
+    if declare -p "$name" &>/dev/null; then
+        false
+    else
+        export -n "$name=$value"
+    fi
+}
+bash_default_env() {
+    bash_default "$@"
+    export -- "$1"
+}
+bash_default_alias() {
+    alias -- "$1" 2>/dev/null >&2 || alias -- "$1=$2"
+}
+
+
+## for manipulating strings
+# bash_escape will escape all the arguments so it can be used as a flat string,
+#  e.g., sh -c "foo; bar $(bash_escape "$@")"
+bash_escape() {
+    local s= a= e=
+    for a; do
+        e="'"${a//"'"/"'\\''"}"'"
+        e=${e//[
+]/\'\$\'\\n\'\'}
+        e=${e//[]/\'\$\'\\r\'\'}
+        s+=" $e"
+    done
+    echo "${s# }"
+}
+
+
+## for manipulating variables with any separator, e.g. PATH, CLASSPATH, PROMPT_COMMAND
+# bash_add_with_separator will insert all given strings with separator to the variable
+#  Usage: bash_add_with_separator : FIGNORE .o .svn
+bash_add_with_separator() {
+    local sep=$1; shift
+    local name=$1; shift
+    local flg=; [[ $(declare -p $name 2>/dev/null) =~ ^declare\ -x ]] || flg=-n
+    local val=
+    for val in "$@"; do
+        if [[ -n "${!name}" ]]; then
+            ! [[ "${!name}" =~ $sep$val$sep ||
+                 "${!name}" =~ $sep$val$ ||
+                 "${!name}" =~ ^$val$sep ||
+                 "${!name}" =~ ^$val$ ]] || continue
+            export $flg $name="${!name}$sep$val"
+        else
+            export $flg $name=$val
+        fi
+    done
+}
+
+# bash_insert_with_separator will insert all given strings with separator to the variable
+#  Usage: bash_insert_with_separator : FIGNORE .o .svn
+bash_insert_with_separator() {
+    local sep=$1; shift
+    local name=$1; shift
+    local flg=; [[ $(declare -p $name 2>/dev/null) =~ ^declare\ -x ]] || flg=-n
+    local val=
+    for val in "$@"; do
+        if [[ -n "${!name}" ]]; then
+            ! [[ "${!name}" =~ $sep$val$sep ||
+                 "${!name}" =~ $sep$val$ ||
+                 "${!name}" =~ ^$val$sep ||
+                 "${!name}" =~ ^$val$ ]] || continue
+            export $flg $name="$val$sep${!name}"
+        else
+            export $flg $name=$val
+        fi
+    done
+}
+
+# bash_remove_with_separator will remove all given strings with separator from the variable
+#  Usage: bash_remove_with_separator : FIGNORE .o .svn
+bash_remove_with_separator() {
+    local sep=$1; shift
+    local name=$1; shift
+    local flg=; [[ $(declare -p $name 2>/dev/null) =~ ^declare\ -x ]] || flg=-n
+    local val=
+    for val in "$@"; do
+        ! [[ "${!name}" =~ $sep$val$sep ]] ||
+            export $flg $name="${!name//$sep$val$sep/$sep}"
+        ! [[ "${!name}" =~ ^$val$sep ]] ||
+            export $flg $name="${!name#$val$sep}"
+        ! [[ "${!name}" =~ $sep$val$ ]] ||
+            export $flg $name="${!name%$sep$val}"
+        ! [[ "${!name}" =~ ^$val$ ]] ||
+            export $flg $name=
+    done
+}
+
+
+## for manipulating variables with paths, e.g. PATH, LD_LIBRARY_PATH, ...
+# bash_only_with_existent_paths will run given command (up to -- arg) with the existing paths given after -- arg
+#  Usage: bash_only_with_existent_paths bash_insert_path -- /usr/local/bin
+bash_only_with_existent_paths() {
+    local c=$1; shift
+    local p= as= ps=
+    as=(); for p in "$@"; do [[ $p != "--" ]] || break; as+=("$p"); shift; done
+    shift
+    ps=(); for p in "$@"; do [[ -e "$p" ]] || continue; ps+=("$p"); done
+    "$c" "${as[@]}" "${ps[@]}"
+}
+
+# bash_remove_path will remove all the paths in the variable
+#  Usage: bash_remove_path PATH /usr/local/bin
+bash_remove_path() { bash_remove_with_separator : "$@"; }
+
+# bash_add_path_if_not will only add paths not present in the variable
+#  Usage: bash_add_path_if_not PATH /usr/local/bin
+bash_add_path_if_not() {
+    local name=$1; shift
+    bash_only_with_existent_paths \
+    bash_add_with_separator : "$name" -- "$@"
+}
+
+# bash_add_path will put given paths at the end of the variable
+#  Usage: bash_add_path PATH /usr/local/bin
+bash_add_path() { bash_remove_path "$@"; bash_add_path_if_not "$@"; }
+
+# bash_insert_path_if_not will only insert paths not present in the variable
+#  Usage: bash_insert_path_if_not PATH /usr/local/bin
+bash_insert_path_if_not() {
+    local name=$1; shift
+    bash_only_with_existent_paths \
+    bash_insert_with_separator : "$name" -- "$@"
+}
+
+# bash_insert_path will put given paths at the beginning of the variable avoiding duplicates separated by :
+#  Usage: bash_insert_path PATH /usr/local/bin
+bash_insert_path() { bash_remove_path "$@"; bash_insert_path_if_not "$@"; }
+
+
+## for manipulating variables with commands, e.g., PROMPT_COMMAND
+-normalize_commands() {
+    eval -- "shopt -s extglob
+        $1=\${$1//*( );*( )/;}
+        $1=\${$1//;;/;}
+        $1=\${$1//; ;/;}
+        "
+}
+bash_add_command_if_not() {
+    -normalize_commands "$1"
+    bash_add_with_separator ';' "$@"
+}
+bash_remove_command() {
+    -normalize_commands "$1"
+    bash_remove_with_separator ';' "$@"
+}
+bash_insert_command_if_not() {
+    -normalize_commands "$1"
+    bash_insert_with_separator ';' "$@"
+}
+bash_add_command() {
+    bash_remove_command "$@"
+    bash_add_command_if_not "$@"
+}
+bash_insert_command() {
+    bash_remove_command "$@"
+    bash_insert_command_if_not "$@"
+}
+
+}

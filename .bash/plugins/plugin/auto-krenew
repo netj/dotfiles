@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+# auto-krenew -- Automatic krenew support to care less about
+#                expiring Kerberos tickets and AFS tokens
+# 
+# See-Also: http://www.eyrie.org/~eagle/software/kstart/readme.html
+# See-Also: https://itservices.stanford.edu/service/afs/learningmore/tokens
+#
+# Requires: bpm.events bpm.interactive
+# Author: Jaeho Shin <netj@cs.stanford.edu>
+# Created: 2013-01-08
+
+# TODO separate login stuffs from interactive
+bash_plugin_login() {
+    if type krenew &>/dev/null && [ -t 0 -a -t 1 ]; then
+        _auto_krenew_dir="${TMPDIR:-/tmp}/auto-krenew.$USER"
+        _auto_krenew_pidfile="$_auto_krenew_dir"/krenew.pid
+        _auto_krenew_initialized=false
+        -akrenew-pid() {
+            [ -d "$_auto_krenew_dir" ]
+            local pid=$(cat "$_auto_krenew_pidfile" 2>/dev/null)
+            [ -n "$pid" ] && ps -p $pid &>/dev/null && echo $pid
+        }
+        -akrenew-is-ticket-valid() { klist -5s; }
+        -akrenew-check() {
+            -akrenew-is-ticket-valid ||
+                echo >&2 'auto-krenew: Kerberos ticket expired; to renew: akrenew-restart'
+        }
+        akrenew-start() {
+            # see if we can reuse valid Kerberos ticket
+            case $KRB5CCNAME in
+                FILE:*)
+                    KRB5CCNAME=${KRB5CCNAME#FILE:}
+                    ;;
+            esac
+            mkdir -p "$_auto_krenew_dir"; chmod go= "$_auto_krenew_dir"
+            if [ -e "$KRB5CCNAME" -a \
+                x"$KRB5CCNAME" != x"$_auto_krenew_dir"/krb5cc ]; then
+                \cp -pf "$KRB5CCNAME" "$_auto_krenew_dir"/krb5cc
+            fi
+            export KRB5CCNAME="$_auto_krenew_dir"/krb5cc
+            if ! kinit -R &&
+                { [ -z "$TMUX" ] || $_auto_krenew_initialized; }; then # do not kinit while starting new tmux windows/panes
+                echo 'auto-krenew: running kinit for renewable tickets...'
+                kinit
+            fi
+            ! -akrenew-is-ticket-valid || aklog
+            if ! -akrenew-pid >/dev/null; then
+                echo 'auto-krenew: launching krenew in background...'
+                AKLOG='tmux has-session && tmux new-window -d aklog || aklog' \
+                krenew -K 60 -i -b -t -p "$_auto_krenew_pidfile"
+            fi
+        }
+        akrenew-stop() {
+            pid=$(-akrenew-pid) && kill -TERM $pid || true
+            rm -rf "$_auto_krenew_dir"
+        }
+        akrenew-restart() {
+            akrenew-stop
+            akrenew-start
+        }
+        # initialize
+        confirmed() {
+            local r=
+            bash_getkey r 'auto-krenew: [k]eep your AFS tokens refreshed automatically, or [n]ot? ' 1 n
+            case $r in
+                [kK]) # accepted
+                    return 0 ;;
+                ""|[nNqQ]) # canceled
+                    echo "auto-krenew: to start it later: akrenew-start"
+                    return 1 ;;
+            esac
+        }
+        local pid= start_akrenew=false
+        if pid=$(-akrenew-pid); then
+            # detect if krenew is already running
+            echo "auto-krenew: using krenew PID $pid"
+            export KRB5CCNAME="$_auto_krenew_dir"/krb5cc
+            start_akrenew=true
+        elif [ -z "$TMUX" ] && confirmed; then
+            # or when user confirms to do so, but don't ask inside tmux
+            start_akrenew=true
+        fi
+        if $start_akrenew; then
+            akrenew-start
+            bash_add_prompt -akrenew-check
+        fi
+        _auto_krenew_initialized=true
+        unset confirmed
+    fi
+}
+

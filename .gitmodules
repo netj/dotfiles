@@ -1,3 +1,0 @@
-[submodule ".bash/plugins"]
-	path = .bash/plugins
-	url = https://github.com/netj/bpm.git

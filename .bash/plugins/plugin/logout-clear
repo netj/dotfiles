@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Clear screen upon logout
+#
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2007-03-11
+# Requires: bpm.events
+################################################################################
+
+bash_plugin_login() {
+    # clear screen upon logout
+    bash_add_unloader clear
+}
+
+# vim:et:ts=8:sw=4:sts=4

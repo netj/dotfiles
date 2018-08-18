@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# Make tmux reflect the name of current working directory on window title
+# 
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2013-05-13
+# See-Also: http://www.commandlinefu.com/commands/view/10046/automatically-rename-tmux-window-using-the-current-working-directory 
+# Requires: bpm.events
+################################################################################
+
+bash_plugin_interactive() {
+    if [ -n "$TMUX" ]; then
+        -tmux-cwd-title-update() {
+            local title="${PWD##*/}"
+            local prevtitle=$(tmux list-pane -F "#{window_name}" | head -n 1)
+            [[ $prevtitle = ${OLDPWD##*/} || $prevtitle = bash && $({
+                    tmux show-window-options    | grep automatic-rename ||
+                    tmux show-window-options -g | grep automatic-rename
+                } | head -1) = "automatic-rename on" ]] ||
+                return
+            case $PWD in
+                "$HOME") # home
+                    title= ;;
+                /) # root
+                    title="/" ;;
+            esac
+            if [ -n "$title" ]; then
+                tmux rename-window "$title"
+                # XXX Above renames the currently active window, instead of the one under which the shell is running.
+                # XXX This gets problematic when we do a `tmux neww -d -c /` for example.
+                # XXX Need a reliable way to determine current tmux window.
+                # tmux rename-window -t "$(tmux lsp -F '#{window_index}' | head -n 1)" "$title"
+            else
+                tmux set-window-option automatic-rename on
+            fi | cat >/dev/null # XXX tmux hangs without cat, -q is only available >= 1.7
+        }
+        bash_add_chpwd -tmux-cwd-title-update
+    fi
+}

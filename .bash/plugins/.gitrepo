@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/netj/bpm.git
+	branch = master
+	commit = bf9cac2c368381417b67c9f9112fe5d11bf2721c
+	parent = b94f3060a22d14273b8021ffde54432a25b1585f
+	cmdver = 0.3.1

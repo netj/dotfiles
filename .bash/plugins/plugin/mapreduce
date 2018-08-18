@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# MapReduce in Bash
+# 
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2006-06-14
+################################################################################
+
+bash_plugin_load() {
+
+    mapreduce() {
+        local idfy=$1 comb=$2; shift 2
+        if ! [ -n "$idfy" -a -n "$comb" ]; then
+            echo "mapreduce: (a -> k) -> ([a] -> v) -> [a] -> [(k,v)]"
+            return 2
+        fi
+        (
+        set -e
+        local tmp=`mktemp -d ${TMPDIR:-/tmp}/bash.abst.XXXXXX`
+        cleanup() { r=$?; rm -rf $tmp; exit $r; }
+        trap cleanup EXIT ERR INT HUP TERM
+        local id= idf=
+        while read; do
+            id=`$idfy "$REPLY"`
+            idf="$tmp/$(set `md5sum <<<"$id"`; echo "$1")"
+            [ -f "$idf" ] || echo "$id" >"$idf"
+            echo "$REPLY" >>"$idf"
+        done
+        cd $tmp
+        for idf in *; do
+            id=`head -1 "$idf"`
+            echo "$id	`tail -n +2 "$idf" | eval "$comb"`"
+        done
+        )
+    }
+
+}

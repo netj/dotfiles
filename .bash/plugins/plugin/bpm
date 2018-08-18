@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Bash plugin manager user "run commands" (~/.bpmrc) loader
+# 
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2013-12-15
+# Requires: bpm.utils
+################################################################################
+
+bash_plugin_load() {
+
+    # source bpm run commands
+    ! [ -r ~/.bpmrc ] || . ~/.bpmrc
+
+}
+
+# vim:ft=sh

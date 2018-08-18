@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# try and repeat commands
+# 
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2006-06-14
+################################################################################
+
+bash_plugin_load() {
+
+    try() {
+        local delay=$1
+        if expr "$delay" : "[0-9]*" >/dev/null; then
+            shift
+        else
+            delay=1
+        fi
+        while ! "$@"; do
+            sleep $delay
+        done
+    }
+
+    repeat() {
+        local delay=$1
+        if expr "$delay" : "[0-9]*" >/dev/null; then
+            shift
+        else
+            delay=1
+        fi
+        while true; do
+            "$@"
+            sleep $delay
+        done
+    }
+
+}
+
+# vim:et:ts=8:sw=4:sts=4

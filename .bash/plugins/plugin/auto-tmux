@@ -1,0 +1,260 @@
+#!/usr/bin/env bash
+# Automatic tmux session support
+# 
+# This plugin automatically adjusts the environment variables and Kerberos+AFS
+# tokens of the shells running inside tmux sessions with the ones from the ssh
+# connection or the shell that reattaches to tmux.
+# 
+# If you don't want to automatically attach to tmux on every login, but
+# explicitly do so with the `atmux' command, then add the following line to
+# your ~/.bash_local file:
+# 
+#     auto_tmux_attach_at_login=false
+# 
+#
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2010-12-16
+# Requires: bpm.utils bpm.events bpm.interactive environment
+# Conflicts: screen
+################################################################################
+
+# TODO separate login stuffs from interactive
+bash_plugin_login() {
+    # we can't do much if tmux is not available
+    type tmux &>/dev/null || return
+    # use a dedicated $TMUX_TMPDIR for current $HOME for better isolation
+    export TMUX_TMPDIR="${TMPDIR:-/tmp}/tmux-$UID$HOME"
+    mkdir -p "$TMUX_TMPDIR"
+    chmod a=,u+rwX "${TMUX_TMPDIR%$HOME}"
+    bash_default auto_tmux_env_root /tmp/auto-tmux.${SUDO_USER:-$LOGNAME}
+    # a shorthand for enabling auto-tmux
+    atmux() { auto_tmux_attach_at_login=true bash -l; }
+    # load values from tmux environment snapshot
+    atmux-reset() {
+        [ -f "$auto_tmux_link" ] || return
+        . "$auto_tmux_link"
+    }
+    # save current environment to tmux snapshot
+    atmux-save() {
+        [ -f "$auto_tmux_link" ] || return
+        chmod +w "$auto_tmux_link"
+        { echo "# Saved: $(date +%FT%T)"
+        local n=
+        for n in SSH_CLIENT SSH_CONNECTION SSH_TTY \
+            SSH_AUTH_SOCK SSH_AGENT_PID \
+            KRB5CCNAME \
+            XAUTHORITY DISPLAY SESSION_MANAGER
+        do  local v=${!n}
+            if [ -n "$v" ]; then
+                echo "export $n='${v//"'"/"'\\''"}'"
+            else
+                echo "unset $n"
+            fi
+        done
+        } >"$auto_tmux_link" 2>/dev/null
+        chmod a-w "$auto_tmux_link"
+    }
+    -atmux-all() {
+        # all connections
+        (cd "$auto_tmux_env_root" && \ls -t) 2>/dev/null
+    }
+    -atmux-alive() {
+        # live connections
+        (cd "$auto_tmux_env_root" &&
+        \ls -t $(ps -o pid= -p `-atmux-all`)) 2>/dev/null
+    }
+    -atmux-cleanup() {
+        # remove stale connections
+        local patt= pid=
+        for pid in $(-atmux-alive); do patt+="${patt:+\\|}$pid"; done
+        local stalePids=$(-atmux-all | grep -v "^\\($patt\\)$")
+        (cd "$auto_tmux_env_root" && rm -f $stalePids)
+        # remove stale links
+        find -L "$auto_tmux_env_root" -type l -exec rm -f {} \;
+    }
+    if [ -z "$TMUX" -a -z "$SSH_CONNECTION" -a -z "$auto_tmux_attach_at_login" ]; then
+        # local shell, but auto-tmux wasn't explicitly configured
+        # skip attaching to the tmux session
+        unset -v auto_tmux_env_root
+        unset -f atmux-{reset,save} -atmux-{all,alive,cleanup}
+    elif [ -n "$TMUX" ]; then
+        # working inside tmux, prepare stuffs
+        auto_tmux_link="$auto_tmux_env_root/.$$"
+        unset TERM_PROGRAM TERM_PROGRAM_VERSION
+        unset atmux
+        
+        # set useful tmux related commands
+        -atmux-current() {
+            # current connection
+            readlink "$auto_tmux_link"
+        }
+        -atmux-ok() {
+            [ -e "$auto_tmux_link" ]
+        }
+        -atmux-poll() {
+            -atmux-ok || atmux-use
+        }
+        atmux-ls() {
+            local c=
+            for c in `-atmux-alive`; do
+                echo "= $([[ x"$c" = x"`-atmux-current`" ]] && echo \#)$c ="
+                cat "$auto_tmux_env_root/$c"
+            done
+        }
+        atmux-use() {
+            local conn=$1
+            # determine $conn unless given
+            if [ -z "$conn" ]; then
+                if -atmux-ok; then
+                    # cycle through connections
+                    conn=$(-atmux-alive |
+                        grep -A1 ^`-atmux-current`$ | tail -n +2)
+                    [ -n "$conn" ] || conn=`-atmux-alive | head -1`
+                else
+                    # use the most recent one
+                    conn=`-atmux-alive | head -1`
+                fi
+            fi
+            # use $conn
+            if [ -n "$conn" ]; then
+                if { (cd "$auto_tmux_env_root" && ln -sf $conn "$auto_tmux_link") &&
+                    atmux-reset; } 2>/dev/null; then
+                    echo "auto-tmux: using connection #$conn"
+                else
+                    echo "auto-tmux: cannot use $conn"
+                fi
+            else
+                echo "auto-tmux: no connection available"
+                return 1
+            fi
+        }
+        atmux-only() {
+            -atmux-poll || return 1
+            local pids=$(-atmux-alive | grep -v ^`-atmux-current`$)
+            if [ -n "$pids" ]; then
+                kill -HUP $pids
+                (cd "$auto_tmux_env_root" && rm -f $pids)
+            fi 2>/dev/null
+        }
+
+        atmux-record-windows() {
+            local f=${1:-~/.tmux.windows}
+            # try to save at which dirs panes were
+            # If there's only one window, it's very likely user's trying to respawn windows.
+            # Confirm and make sure we don't overwrite existing sessions.
+            [[ $(tmux lsp -s | wc -l) -gt 1 ]] ||
+                read -p "auto-tmux: There's only one tmux window. Are you sure you want to record?"$'\n'"Press ENTER to continue..."
+            # XXX storing working dir only
+            # TODO can we remember env, command, args and restore it as well?
+            # See: http://stackoverflow.com/a/1727031/390044
+            tmux lsp -s -F'#{window_index} #{pane_pid}' |
+            while read -r index pid; do
+                lsof -a -p "$pid" -d cwd -Fn |
+                sed -n '/^n/ s/^n//p' |
+                sed "s/^/$index /"
+            done >"$f"
+        }
+        atmux-respawn-windows() {
+            local f=${1:-~/.tmux.windows}
+            if tmux move-window -t 0; then
+                # make sure tmux-cwd-sync plugin don't get in the way
+                tmux set-environment TMUX_RESPAWNING true
+                # create new windows based on the recorded state
+                local index= cwd=
+                while read -r index cwd; do
+                    # and passing the right options to tmux new-window
+                    set --; ! type -- -tmux-cwd-title-update &>/dev/null || set -- -n "${cwd##*/}"
+                    tmux new-window -t :"$index" -c "$cwd" "$@" ||
+                        # try splitting if window already exists
+                        tmux split-window -t :"$index" -c "$cwd"
+                done <"$f"
+                # mark respawning as done after a while (XXX 10s may not make
+                # sense in some cases, but works fine most of the time)
+                (sleep 10; tmux set-environment -u TMUX_RESPAWNING) & disown
+                exit
+            fi
+        }
+        
+        # prepare hooks for prompt, cleanup
+        bash_insert_prompt -atmux-poll
+        -atmux-unload() { rm -f "$auto_tmux_link"; }
+        bash_add_unloader -atmux-unload
+    else
+        # working outside tmux,
+        # create a environment snapshot for shells inside tmux
+        if ! [ -d "$auto_tmux_env_root" ]; then
+            mkdir -p "$auto_tmux_env_root"
+            chmod a=,u=rwx "$auto_tmux_env_root"
+        fi
+        # clean up stale environment snapshots first
+        -atmux-cleanup
+        local conn=$$
+        auto_tmux_env="$auto_tmux_env_root/$conn"
+        rm -f "$auto_tmux_env"
+        touch "$auto_tmux_env"
+        chmod a=,u=rw "$auto_tmux_env"
+        auto_tmux_link=$auto_tmux_env atmux-save
+        # before exiting, clean it up
+        -atmux-unload() { rm -f "$auto_tmux_env"; }
+        bash_add_unloader -atmux-unload
+        
+        echo "auto-tmux: connection #$conn"
+        
+        # if it seems we're relying on Kerberos+AFS, put tmux in its own PAG
+        # with a fresh AFS token to cope with file access problems in the
+        # resumed tmux sessions.
+        local hasKerberosAndAFS=false
+        [ -z "${KRB5CCNAME:-}" ] || ! type aklog &>/dev/null || ! type pagsh &>/dev/null || ! klist &>/dev/null || {
+            hasKerberosAndAFS=true
+            tmux() { pagsh -c "aklog; exec tmux $(bash_escape "$@")"; }
+        }
+
+        -atmux-loop() {
+        # decide default behavior (to resume or just enter the shell)
+        local default_key=r; ${auto_tmux_attach_at_login:-true} || default_key=s
+        # a wrapper for invoking tmux
+        tmux_() {
+            tmux -2 "$@"
+        }
+        
+        # ask what to do
+        local key=
+        bash_getkey key "auto-tmux: [r]esume, create a [n]ew tmux session, or [s*]hell? " 1 $default_key
+        # new session should be started if there are no sessions yet
+        [ x"$key" != x"r" ] || [ $(tmux list-sessions 2>/dev/null | wc -l) -gt 0 ] || key=n
+        # take action depending on user input
+        while true; do
+            case $key in
+                [nN]) # start a new one per request
+                    echo "auto-tmux: starting new session"
+                    tmux_ new-session
+                    ;;
+                [rR]) # otherwise, default is to resume
+                    echo "auto-tmux: resuming previous session"
+                    ! $hasKerberosAndAFS || {
+                        # refresh AFS token before attaching
+                        tmux set-environment -g KRB5CCNAME "$KRB5CCNAME"
+                        tmux new-window -d aklog
+                    } &>/dev/null
+                    tmux_ attach-session
+                    ;;
+                [xX])
+                    # exit the shell
+                    exit
+                    ;;
+                [qQsS]|*) # if any other key was pressed, abort
+                    unset tmux_
+                    bash_remove_prompt -atmux-loop
+                    return
+                    ;;
+            esac
+            # after a tmux session ends, give a chance to visit the shell
+            bash_getkey key "auto-tmux: e[x]iting.. [r]esume | [n]ew | [s*]hell? " 1 x
+        done
+        }
+        # get into auto tmux loop after loading everything (hence, showing prompt)
+        bash_add_prompt -atmux-loop
+    fi
+}
+
+# vim:et:ts=8:sw=4:sts=4

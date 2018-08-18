@@ -1,0 +1,222 @@
+#!/usr/bin/env bash
+# A usable configuration for various OS environments
+# 
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2002-07-15
+# Requires: bpm.utils bpm.events
+################################################################################
+
+bash_plugin_load() {
+    # variables
+    hostnickname=${HOSTNAME%%.*}
+    hostdomain=${HOSTNAME#*.}
+    local uname=`uname`
+    # platform specific settings
+    case $uname in
+        Darwin) # Mac OS X
+            # XXX path_helper does not set MANPATH unless it was already in the env
+            # XXX some say MANPATH in MacOS X >= 10.2 became deprecated, but
+            # XXX you need it anyway to search for non-standrad places.
+            : ${MANPATH:=}
+            export MANPATH
+            # XXX and since path_helper messes up with your PATH, let's preserve it
+            local PATH_orig=$PATH
+            eval "$(/usr/libexec/path_helper -s)"
+            PATH=$PATH_orig
+            # some stuffs get installed on /usr/local
+            bash_insert_path PATH /usr/local/sbin /usr/local/bin
+            bash_insert_path MANPATH /usr/local/man /usr/local/share/man
+            if type brew &>/dev/null; then
+                # Prefer Homebrew (http://mxcl.github.com/homebrew/)
+                local brew_prefix=${brew_prefix:-$(brew --prefix)}
+                bash_insert_path PATH "$brew_prefix"/sbin "$brew_prefix"/bin
+                bash_insert_path MANPATH "$brew_prefix"/man "$brew_prefix"/share/man
+                # prefer GNU coreutils to BSD ones
+                bash_insert_path PATH "$brew_prefix/opt/coreutils/libexec/gnubin"
+                bash_insert_path MANPATH "$brew_prefix/opt/coreutils/libexec/gnuman"
+            elif [ -x /opt/local/bin/port ]; then
+                # Paths for MacPorts (http://www.macports.org/)
+                bash_insert_path PATH /opt/local/sbin /opt/local/libexec/gnubin /opt/local/bin
+                bash_insert_path MANPATH /opt/local/man /opt/local/share/man
+            fi
+        ;;
+    esac
+    # add ~/bin to PATH
+    bash_insert_path PATH ~/bin
+}
+
+bash_plugin_interactive() {
+    # environment variables
+    bash_default_env EDITOR vim
+    bash_default_env PAGER less
+    bash_default_env LESS "-XFRiMW" # --no-init --quit-if-one-screen --RAW-CONTROL-CHARS --ignore-case --LONG-PROMPT --HILITE_UNREAD
+    env_names_ordered() {
+        command printenv -0 | xargs -0 bash -c '
+            for pair; do
+                name=${pair%%=*}
+                echo "$name"
+            done' -- |
+        LC_ALL=C sort --ignore-case
+    }
+    env() { # sorted env
+        if [[ $# -gt 0 ]]; then
+            command env "$@"
+        else
+            # use printenv -0 to cope with multi-line values as well
+            local name=
+            for name in $(env_names_ordered); do echo "$name=$(printenv "$name")"; done
+        fi
+    }
+    eenv() { # change env with editor
+        local t=$(mktemp -d ${TMPDIR:-/tmp}/eenv.XXXXXX)
+        # snapshot the environment
+        local names=$(
+            if [[ $# -gt 0 ]]; then
+                env_names_ordered | grep -iF "$(printf '%s\n' "$@")"
+            else
+                env_names_ordered
+            fi
+        )
+        local name= value=
+        for name in $names; do
+            case $name in
+                # skip some special non-editable environment variables
+                _) continue
+            esac
+            ! declare -F "$name" &>/dev/null || {
+                # XXX skip exported functions
+                echo >&2 "$name: skipping exported function"
+                continue
+            }
+            value=$(printenv "$name")
+            case $value in
+                \$*|+(*[$'\n']*))
+                    #printf "%s=='%s'\n" "$name" "${value//"'"/"'\\\''"}"
+                    value=$(printf %q "$value"$'\n')
+                    value=${value%"\n'"}\'
+            esac
+            echo "$name=$value"
+        done >$t/env
+        eenv_varnames() { sed 's/=.*//' | LC_ALL=C sort; }
+        eenv_varnames <$t/env >$t/vars.old
+        # open editor for it and act only when modified
+        if ${EDITOR:-vim} $t/env && [[ $t/env -nt $t/vars.old ]]; then
+            # and apply the changes to environment
+            local name= value=
+            while IFS="=" read -r name value; do
+                # (some values may need to be interpreted)
+                case $value in \$*) eval "value=$value"; esac
+                [ x"${!name}" != x"$value" ] || continue
+                export "$name"="$value"
+                echo "$name=$value"
+            done <$t/env
+            # take care of variable removals
+            eenv_varnames <$t/env >$t/vars.new
+            LC_ALL=C comm -13 $t/vars.new $t/vars.old >$t/vars.unset
+            while read -r name; do
+                unset "$name"
+                echo "unset $name"
+            done <$t/vars.unset
+        fi
+        # cleanup
+        unset eenv_varnames
+        rm -rf $t
+    }
+    # some usability options
+    # See-Also: http://wiki.bash-hackers.org/internals/shell_options
+    shopt -s nocaseglob extglob \
+             cdspell \
+             cmdhist histappend histreedit lithist \
+             #
+    if ! [[ $BASH_VERSION < 4 ]]; then
+        shopt -s globstar autocd checkjobs
+        # Use menu-complete-backward (only in bash >= 4)
+        # if Shift-TAB is already bound to something similar
+        ! bind -s | grep -q -F '"\e[Z": "\e-1\C-i"' ||
+            bind '"\e[Z": menu-complete-backward'
+    else
+        bash_default_alias .. "cd .."
+    fi
+    # smarter cd that accepts path to files not just dirs
+    cd() {
+        local d= args=; args=()
+        for d; do
+            case $d in
+                -*) # passthru options
+                    ;;
+                *) # use dirname of non-directories
+                    [[ ! -e "$d" || -d "$d" ]] || d=$(dirname "$d")
+            esac
+            args+=("$d")
+        done
+        builtin cd "${args[@]}"
+    }
+    local uname=`uname`
+    # ls on several platforms
+    local ls_o=
+    if ls --version 2>&1 | grep 'Free Software Foundation' >/dev/null; then
+        # GNU ls
+        ls_o="-F --color=auto"
+        [ -n "$LS_COLORS" ] || eval "`dircolors -b 2>/dev/null`"
+        # platform specific configs
+        case $uname in
+            CYGWIN*) ls_o="$ls_o --show-control-chars" ;;
+        esac
+    else
+        # platform specific ls
+        case $uname in
+            *BSD|Darwin) ls_o="-FG" ;;
+        esac
+    fi
+    bash_default_alias ls "ls $ls_o"
+    # ls idioms
+    bash_default_alias ll "ls -l"
+    bash_default_alias la "ls -A"
+    bash_default_alias lal "la -l"
+    bash_default_alias lt "ls -t"
+    bash_default_alias llt "ll -t"
+    bash_default_alias lalt "lal -t"
+    bash_default_alias laltr "lal -tr"
+    # frequently used abbreviations
+    bash_default_alias cp "cp -i"
+    bash_default_alias mv "mv -i"
+    bash_default_alias rm "rm -i"
+    bash_default_alias -  "cd -"
+    bash_default_alias dirs "dirs -p"
+    # keep history clean and long enough
+    # See: http://briancarper.net/blog/248/
+    # See: https://sanctum.geek.nz/arabesque/better-bash-history/
+    [[ -n ${SHELL_SESSION_DID_INIT:-} ]] ||
+        # unless /etc/bashrc_Apple_Terminal on macOS is managing the history
+        bash_add_prompt "history -a" # immediately append history to file
+    #shopt -s cmdhist # keep multiline as a single history entry  # already done above
+    bash_default HISTSIZE     1048576
+    bash_default HISTFILESIZE 1048576
+    bash_default HISTTIMEFORMAT '%F %T  '
+    bash_default HISTCONTROL erasedups
+    bash_add_with_separator : HISTIGNORE \
+        "&" "[bf]g" cd .. - \
+        "l[salt]" lal llt lalt \
+        history \
+        #
+    # ignore some annoying files when completing
+    bash_add_with_separator : FIGNORE \
+        .o "~" \
+        .svn .git \
+        .DS_Store \
+        #
+    # pstree is too long to type, make a smart alias
+    if type pstree &>/dev/null && ! type pst &>/dev/null; then
+        pst() {
+            case "${1:-}" in
+                -*)                    ;;
+                [0-9]*) set -- -p "$@" ;;
+                "")     set -- -p $$   ;;
+                *)      set -- -s "$@" ;;
+            esac
+            pstree "$@"
+        }
+    fi
+}
+
+# vim:et:ts=8:sw=4:sts=4
