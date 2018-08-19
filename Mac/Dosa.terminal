@@ -139,11 +139,11 @@
 	SE5bYnZ4en+Kk5uep7m8wQAAAAAAAAEBAAAAAAAAABkAAAAAAAAAAAAAAAAAAADD
 	</data>
 	<key>BackgroundAlphaInactive</key>
-	<real>0.81557049418604655</real>
+	<real>0.5</real>
 	<key>BackgroundBlur</key>
 	<real>0.20000000000000001</real>
 	<key>BackgroundBlurInactive</key>
-	<real>0.096729651162790697</real>
+	<real>0.50374819364161849</real>
 	<key>BackgroundColor</key>
 	<data>
 	YnBsaXN0MDDUAQIDBAUGFRZYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3AS
@@ -169,11 +169,13 @@
 	</data>
 	<key>DisableANSIColor</key>
 	<false/>
+	<key>EastAsianAmbiguousWide</key>
+	<false/>
 	<key>Font</key>
 	<data>
 	YnBsaXN0MDDUAQIDBAUGGBlYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3AS
 	AAGGoKQHCBESVSRudWxs1AkKCwwNDg8QVk5TU2l6ZVhOU2ZGbGFnc1ZOU05hbWVWJGNs
-	YXNzI0AsAAAAAAAAEBCAAoADWUVudnlDb2RlUtITFBUWWiRjbGFzc25hbWVYJGNsYXNz
+	YXNzI0AxAAAAAAAAEBCAAoADWUVudnlDb2RlUtITFBUWWiRjbGFzc25hbWVYJGNsYXNz
 	ZXNWTlNGb250ohUXWE5TT2JqZWN0XxAPTlNLZXllZEFyY2hpdmVy0RobVHJvb3SAAQgR
 	GiMtMjc8QktSW2JpcnR2eIKHkpuipa7Aw8gAAAAAAAABAQAAAAAAAAAcAAAAAAAAAAAA
 	AAAAAAAAyg==
@@ -183,8 +185,10 @@
 	<key>Linewrap</key>
 	<true/>
 	<key>ProfileCurrentVersion</key>
-	<real>2.04</real>
+	<real>2.0600000000000001</real>
 	<key>RunCommandAsShell</key>
+	<true/>
+	<key>ScrollAlternateScreen</key>
 	<true/>
 	<key>SelectionColor</key>
 	<data>
@@ -195,19 +199,23 @@
 	b290gAEIERojLTI3O0FITltihIaIjZihqay1x8rPAAAAAAAAAQEAAAAAAAAAGQAAAAAA
 	AAAAAAAAAAAAANE=
 	</data>
+	<key>ShowActiveProcessArgumentsInTabTitle</key>
+	<true/>
 	<key>ShowActiveProcessArgumentsInTitle</key>
 	<true/>
 	<key>ShowActiveProcessInTabTitle</key>
-	<true/>
+	<false/>
 	<key>ShowActiveProcessInTitle</key>
-	<true/>
+	<false/>
 	<key>ShowCommandKeyInTitle</key>
-	<true/>
+	<false/>
 	<key>ShowComponentsWhenTabHasCustomTitle</key>
 	<true/>
 	<key>ShowDimensionsInTitle</key>
 	<false/>
 	<key>ShowRepresentedURLInTabTitle</key>
+	<true/>
+	<key>ShowRepresentedURLInTitle</key>
 	<true/>
 	<key>ShowRepresentedURLPathInTabTitle</key>
 	<false/>
@@ -218,7 +226,7 @@
 	<key>ShowTTYNameInTabTitle</key>
 	<false/>
 	<key>ShowTTYNameInTitle</key>
-	<true/>
+	<false/>
 	<key>ShowWindowSettingsNameInTitle</key>
 	<false/>
 	<key>TerminalType</key>
@@ -246,9 +254,9 @@
 	<key>UseBrightBold</key>
 	<true/>
 	<key>VisualBell</key>
-	<true/>
-	<key>VisualBellOnlyWhenMuted</key>
 	<false/>
+	<key>VisualBellOnlyWhenMuted</key>
+	<true/>
 	<key>WindowTitle</key>
 	<string></string>
 	<key>blackColour</key>
@@ -302,7 +310,7 @@
 	ZmZmAQGDzcxMPgGG
 	</data>
 	<key>columnCount</key>
-	<integer>80</integer>
+	<integer>132</integer>
 	<key>cyanColour</key>
 	<data>
 	BAtzdHJlYW10eXBlZIHoA4QBQISEhAdOU0NvbG9yAISECE5TT2JqZWN0AIWEAWMChARm
@@ -449,7 +457,7 @@
 	ZmZmg83MTD+DzcxMPgABhg==
 	</data>
 	<key>rowCount</key>
-	<integer>32</integer>
+	<integer>40</integer>
 	<key>shellExitAction</key>
 	<integer>0</integer>
 	<key>type</key>
