@@ -312,7 +312,7 @@ if exists("$TMUX")  " activate only in a tmux session
   Plugin 'benmills/vimux'
   noremap <silent> <Esc><C-]>    :wall\|VimuxPromptCommand<CR>
   noremap <silent> <Esc><Return> :wall\|VimuxRunLastCommand<CR>
-  noremap <silent> <Esc><C-[>    :VimuxInspectRunner<CR>
+  noremap <silent> <Esc><C-x>    :VimuxInspectRunner<CR>
   " vimux zooming tmux pane and returning, a la suspending Vim w/ Ctrl-Z
   noremap <silent> <Esc><C-z>    :VimuxZoomRunner<CR>
 
