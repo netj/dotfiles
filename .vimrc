@@ -172,6 +172,9 @@ endif
 " Don't use Ex mode, use Q for formatting
 map Q gq
 
+" Esc key is becoming scarce, let's get used to a combo that'll never go away
+inoremap kj <Esc>
+
 " quickly display mappings of <C-\>, <Space>, <Leader>
 nnoremap <Space><C-l>   :map <S<BS>Space><CR>
 nnoremap <Leader><C-l>  :map <L<BS>Leader><CR>
