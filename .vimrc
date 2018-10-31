@@ -175,6 +175,12 @@ map Q gq
 " Esc key is becoming scarce, let's get used to a combo that'll never go away
 inoremap kj <Esc>
 
+" Shorthand for github.com/netj/remocon
+if executable("remocon")
+  nnoremap <Space>r  <C-\><C-N>:!remocon put<CR>
+  nnoremap <Space>R  <C-\><C-N>:!remocon<CR>
+endif
+
 " quickly display mappings of <C-\>, <Space>, <Leader>
 nnoremap <Space><C-l>   :map <S<BS>Space><CR>
 nnoremap <Leader><C-l>  :map <L<BS>Leader><CR>
@@ -359,6 +365,8 @@ if has("autocmd")
 
 endif " has("autocmd")
 
+" use bash highlighting by default (see also: https://stackoverflow.com/questions/47563208/vim-bash-syntax-highlighting-with-modeline)
+let g:is_bash = 1
 
 " vimpager has problem with <Space> mappings
 if exists("vimpager")
