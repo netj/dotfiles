@@ -28,7 +28,10 @@ bash_plugin_load() {
         fi
         while true; do
             "$@"
-            sleep $delay
+            read -t $delay -p "$ $* " || true
+            case $REPLY in
+                [qQ]) break ;;
+            esac
         done
     }
 
