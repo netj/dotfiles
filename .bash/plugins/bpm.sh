@@ -20,9 +20,9 @@
 
 case ${BASH:-} in */bash)
 BPM=${BASH_SOURCE:-$0}
-BPM_HOME=$(cd $(dirname "$BPM") >/dev/null; pwd -P)
+BPM_HOME=$(cd "$(dirname "$BPM")" >/dev/null; pwd -P)
 BPM_TMPDIR=${BPM_TMPDIR:-$(
-        d="${TMPDIR:-/tmp}/bpm-$USER"
+        d="${TMPDIR:-/tmp}/bpm-${USER:-$(id -un)}"
         mkdir -p "$d"
         chmod go= "$d"
         echo "$d"
@@ -139,7 +139,7 @@ __bpmcomp() {
     local cur prev
     COMPREPLY=()
     _get_comp_words_by_ref cur prev
-    if [[ ${#COMP_WORDS[@]} > 2 ]]; then
+    if [[ ${#COMP_WORDS[@]} -gt 2 ]]; then
         case ${COMP_WORDS[1]} in
             find|info)
                 COMPREPLY=($(compgen -W "$(bpm find)" -- "$cur"))
@@ -163,12 +163,12 @@ complete -F __bpmcomp bpm
 # compile all enabled plugins
 __bpm_list_enabled_by_deps() {
     (
-    [[ -d "$BPM_HOME"/enabled ]] || return 1
+    mkdir -p "$BPM_HOME"/enabled
     cd "$BPM_HOME"/enabled >/dev/null
-    local latest=$(command ls -tdL . * | head -n 1)
-    # echo $latest >&2
+    # find the latest enabled to detect bpm on/off or any updated plugins (which may have new Requires:) to decide if enabled.deps need be refreshed
+    local latest=$(shopt -s nullglob; command ls -tdL . ./* 2>/dev/null | head -n 1)
     deps="$BPM_TMPDIR"/enabled.deps
-    if [[ "$deps" -nt $latest ]]; then
+    if [[ "$deps" -nt "$latest" ]]; then
         cat "$deps"
     else
         __bpm_info "computing dependencies..." >&2

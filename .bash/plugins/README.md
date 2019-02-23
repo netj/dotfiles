@@ -17,7 +17,7 @@ Installation
 
 2. Add following line to your `~/.bashrc` and `~/.bash_profile`:
 
-        . ~/.bpm/bpm.sh load
+        . ~/.bpm/bpm.sh
 
 3. To use `bpm` command, run the line above with your current shell or start a
    new one.

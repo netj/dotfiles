@@ -6,6 +6,7 @@
 [subrepo]
 	remote = https://github.com/netj/bpm.git
 	branch = master
-	commit = bf9cac2c368381417b67c9f9112fe5d11bf2721c
+	commit = 1765a9e483e29491357dd87f216ac5fb06cb090a
 	parent = b94f3060a22d14273b8021ffde54432a25b1585f
-	cmdver = 0.3.1
+	cmdver = 0.4.0
+	method = merge
