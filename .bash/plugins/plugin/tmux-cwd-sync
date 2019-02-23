@@ -10,8 +10,9 @@
 bash_plugin_interactive() {
     if [ -n "$TMUX" ]; then
         # find the TMUX_PWD environment variable from tmux
-        local decl=$(tmux show-environment TMUX_PWD 2>/dev/null | grep -v '^-')
-        [[ -z "$decl" ]] || export "$decl"
+        decl=$(tmux show-environment TMUX_PWD 2>/dev/null | grep -v '^-')
+        [[ -z "$decl" ]] || export -- "$decl"
+        unset decl
         [[ -z "${TMUX_PWD:-}" || ! -d "$TMUX_PWD" ]] ||
             # unless atmux-respawn-windows is in progress,
             tmux show-environment TMUX_RESPAWNING &>/dev/null || {

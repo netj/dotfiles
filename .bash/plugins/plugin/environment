@@ -10,9 +10,8 @@ bash_plugin_load() {
     # variables
     hostnickname=${HOSTNAME%%.*}
     hostdomain=${HOSTNAME#*.}
-    local uname=`uname`
     # platform specific settings
-    case $uname in
+    case $(uname) in
         Darwin) # Mac OS X
             # XXX path_helper does not set MANPATH unless it was already in the env
             # XXX some say MANPATH in MacOS X >= 10.2 became deprecated, but
@@ -20,7 +19,7 @@ bash_plugin_load() {
             : ${MANPATH:=}
             export MANPATH
             # XXX and since path_helper messes up with your PATH, let's preserve it
-            local PATH_orig=$PATH
+            PATH_orig=$PATH
             eval "$(/usr/libexec/path_helper -s)"
             PATH=$PATH_orig
             # some stuffs get installed on /usr/local
@@ -28,7 +27,7 @@ bash_plugin_load() {
             bash_insert_path MANPATH /usr/local/man /usr/local/share/man
             if type brew &>/dev/null; then
                 # Prefer Homebrew (http://mxcl.github.com/homebrew/)
-                local brew_prefix=${brew_prefix:-$(brew --prefix)}
+                brew_prefix=${brew_prefix:-$(brew --prefix)}
                 bash_insert_path PATH "$brew_prefix"/sbin "$brew_prefix"/bin
                 bash_insert_path MANPATH "$brew_prefix"/man "$brew_prefix"/share/man
                 # prefer GNU coreutils to BSD ones
@@ -151,9 +150,9 @@ bash_plugin_interactive() {
         done
         builtin cd "${args[@]}"
     }
-    local uname=`uname`
+    uname=`uname`
     # ls on several platforms
-    local ls_o=
+    ls_o=
     if ls --version 2>&1 | grep 'Free Software Foundation' >/dev/null; then
         # GNU ls
         ls_o="-F --color=auto"
@@ -169,6 +168,8 @@ bash_plugin_interactive() {
         esac
     fi
     bash_default_alias ls "ls $ls_o"
+    unset ls_o
+    unset uname
     # ls idioms
     bash_default_alias ll "ls -l"
     bash_default_alias la "ls -A"

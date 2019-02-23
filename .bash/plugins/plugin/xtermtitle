@@ -30,9 +30,10 @@ bash_plugin_interactive() {
             _xtermtitle_postfix=
         else
             # plain terminal
-            local tty=`tty`
+            tty=`tty`
             tty=${tty#/dev/}
             _xtermtitle_postfix="$tty^$hostnickname"
+            unset tty
         fi
         # Mac OS X Terminal.app's enhanced DnD support since Lion
         # See: http://www.macosxautomation.com/lion/terminal.html

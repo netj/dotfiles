@@ -10,6 +10,7 @@
 # TODO separate login stuffs from interactive
 bash_plugin_login() {
     # check whether we can use screen
+    _screen_enabled() {
     if ! type screen >/dev/null 2>&1; then
         if ! $bash_autoload; then
             echo "screen: no screen found from PATH" >&2
@@ -20,7 +21,10 @@ bash_plugin_login() {
         # skip attaching to the screen session
         return 1
     fi
-    
+    true
+    }
+
+    if _screen_enabled; then
     # OK, screen is enabled
     bash_default screen_env_root /tmp/${SUDO_USER:-$LOGNAME}.screens
     bash_default screen_name main
@@ -46,7 +50,7 @@ bash_plugin_login() {
     }
     if [ -z "$STY" ]; then # outside screen
         # determine STY, the screen session id
-        local STY=$(screen -ls | grep "(Attached\|Detached)" \
+        STY=$(screen -ls | grep "(Attached\|Detached)" \
             | grep "\\.$screen_name" | head -1 | cut -f 2)
         [ -n "$STY" ] || STY=$screen_name
         # create a screen environment snapshot
@@ -54,21 +58,21 @@ bash_plugin_login() {
             mkdir -p "$screen_env_root"
             chmod a=,u=rwx "$screen_env_root"
         fi
-        local conn=$$
-        local screen_env="$screen_env_root/$conn"
+        screen_conn=$$
+        screen_env="$screen_env_root/$conn"
         rm -f "$screen_env"
         touch "$screen_env"
         chmod a=,u=rw "$screen_env"
         screen_save
         
         echo "screen: connection #$conn"
-        local attach=true
+        screen_attach=true
         REPLY=
-        trap "attach=false" INT
+        trap "screen_attach=false" INT
         read -n 1 -t 1
         trap - INT
-        [ "${REPLY#[ 	]}" = "" ] || attach=false
-        $attach || return
+        [ "${REPLY#[ 	]}" = "" ] || screen_attach=false
+        if $screen_attach; then
         
         # finally, attach to the session
         screen -xR $STY
@@ -76,6 +80,7 @@ bash_plugin_login() {
         # before exiting, clean up the screen environment snapshot
         rm -f "$screen_env"
         exit
+        fi
     else # inside screen
         # set useful screen related commands
         screen_all() {
@@ -148,6 +153,7 @@ bash_plugin_login() {
         bash_insert_prompt screen_poll
         screen_cleanup() { rm -f "$screen_env"; }
         bash_add_unloader screen_cleanup
+    fi
     fi
 }
 

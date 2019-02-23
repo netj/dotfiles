@@ -9,27 +9,24 @@
 bash_plugin_interactive() {
     ## Check for bash (and that we haven't already been sourced).
     #[ -z "$BASH_VERSION" -o -n "$BASH_COMPLETION" ] && return
-    [ -z "$BASH_COMPLETION" ] || return
+    if [ -z "$BASH_COMPLETION" ]; then
 
     # Check for recent enough version of bash.
-    local bash bmajor bminor
-    bash=${BASH_VERSION%.*}; bmajor=${bash%.*}; bminor=${bash#*.}
-    if [ $bmajor -eq 2 -a $bminor '>' 04 ] || [ $bmajor -gt 2 ]; then
-        local bash_completions bash_completions_more
+    _bash_version_major_minor=${BASH_VERSION%.*}; _bash_version_major=${_bash_version_major_minor%.*} _bash_version_minor=${_bash_version_major_minor#*.}
+    if [ $_bash_version_major -eq 2 -a $_bash_version_minor '>' 04 ] || [ $_bash_version_major -gt 2 ]; then
         bash_completions=()
         bash_completions_more=()
         # load completion for Homebrew
         if type brew &>/dev/null; then
-            local brew_prefix=${brew_prefix:-$(brew --prefix)}
+            brew_prefix=${brew_prefix:-$(brew --prefix)}
             bash_completions+=("$brew_prefix"/etc/bash_completion)
-            [ $bmajor -lt 4 ] || bash_completions+=("$brew_prefix"/share/bash-completion/bash_completion)
+            [ $_bash_version_major -lt 4 ] || bash_completions+=("$brew_prefix"/share/bash-completion/bash_completion)
             bash_completions_more+=(
                 "$brew_prefix"/Library/Contributions/brew_bash_completion.sh
             )
         fi
         # look for other standard places
         bash_completions+=({/opt/local/etc,/usr/local/etc,/etc}/bash_completion)
-        local f=
         for f in "${bash_completions[@]}"; do
             if [ -r "$f" ]; then
                 BASH_COMPLETION=$f
@@ -37,11 +34,17 @@ bash_plugin_interactive() {
                 break
             fi
         done
+        unset bash_completions
         # once BASH_COMPLETION is available, source more
-        [ -n "$BASH_COMPLETION" ] || return
+        if [ -n "$BASH_COMPLETION" ]; then
         for f in "${bash_completions_more[@]}"; do
             [ ! -r "$f" ] || . "$f"
         done
+        fi
+        unset bash_completions_more
+    fi
+    unset _bash_version_{major_minor,major,minor}
+
     fi
 }
 

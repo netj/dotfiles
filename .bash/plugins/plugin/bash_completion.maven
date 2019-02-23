@@ -3,10 +3,11 @@
 # Requires: bash_completion
 
 bash_plugin_interactive() {
-    local repoPath="$BPM_HOME"/extern/maven-bash-completion
+    repoPath="$BPM_HOME"/extern/maven-bash-completion
     if ! [ -e "$repoPath"/.git ]; then
         mkdir -p "$repoPath"
         git clone https://github.com/netj/maven-bash-completion.git "$repoPath"
     fi
     . "$repoPath"/bash_completion.bash
+    unset repoPath
 }

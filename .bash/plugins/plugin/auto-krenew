@@ -70,17 +70,17 @@ bash_plugin_login() {
                     return 1 ;;
             esac
         }
-        local pid= start_akrenew=false
-        if pid=$(-akrenew-pid); then
+        _auto_krenew_pid= _auto_krenew_start=false
+        if _auto_krenew_pid=$(-akrenew-pid); then
             # detect if krenew is already running
-            echo "auto-krenew: using krenew PID $pid"
+            echo "auto-krenew: using krenew PID $_auto_krenew_pid"
             export KRB5CCNAME="$_auto_krenew_dir"/krb5cc
-            start_akrenew=true
+            _auto_krenew_start=true
         elif [ -z "$TMUX" ] && confirmed; then
             # or when user confirms to do so, but don't ask inside tmux
-            start_akrenew=true
+            _auto_krenew_start=true
         fi
-        if $start_akrenew; then
+        if $_auto_krenew_start; then
             akrenew-start
             bash_add_prompt -akrenew-check
         fi
