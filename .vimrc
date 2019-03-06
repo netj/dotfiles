@@ -181,6 +181,11 @@ if executable("remocon")
   nnoremap <Space>R  <C-\><C-N>:!remocon<CR>
 endif
 
+" Shorthand for running shell script in current buffer and capturing its output in a new buffer
+nnoremap <Space>!  <C-\><C-N>:%yank<CR><C-W>n:put<CR>i<C-G>u<C-\><C-N>:%!bash -s 2>/dev/null<CR>:set nomodified<CR>
+nnoremap <Space>@  <C-\><C-N>:%yank<CR><C-W>n:put<CR>i<C-G>u<C-\><C-N>:%!bash -s<CR>:set nomodified<CR>
+nnoremap <Space>#  <C-\><C-N>:%yank<CR><C-W>n:put<CR>i<C-G>u<C-\><C-N>:%!bash -sx<CR>:set nomodified<CR>
+
 " quickly display mappings of <C-\>, <Space>, <Leader>
 nnoremap <Space><C-l>   :map <S<BS>Space><CR>
 nnoremap <Leader><C-l>  :map <L<BS>Leader><CR>
