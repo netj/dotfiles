@@ -182,9 +182,13 @@ if executable("remocon")
 endif
 
 " Shorthand for running shell script in current buffer and capturing its output in a new buffer
-nnoremap <Space>!  <C-\><C-N>:%yank<CR><C-W>n:put<CR>i<C-G>u<C-\><C-N>:%!bash -s 2>/dev/null<CR>:set nomodified<CR>
-nnoremap <Space>@  <C-\><C-N>:%yank<CR><C-W>n:put<CR>i<C-G>u<C-\><C-N>:%!bash -s<CR>:set nomodified<CR>
-nnoremap <Space>#  <C-\><C-N>:%yank<CR><C-W>n:put<CR>i<C-G>u<C-\><C-N>:%!bash -sx<CR>:set nomodified<CR>
+nnoremap <Space>!  <C-\><C-N>:%yank<CR><C-W>n:put<CR>i<C-G>u<C-\><C-N>:%!bash -s 2>/dev/null<CR>:call <SID>setupShellOutputBuffer()<CR>
+nnoremap <Space>@  <C-\><C-N>:%yank<CR><C-W>n:put<CR>i<C-G>u<C-\><C-N>:%!bash -s<CR>:call <SID>setupShellOutputBuffer()<CR>
+nnoremap <Space>#  <C-\><C-N>:%yank<CR><C-W>n:put<CR>i<C-G>u<C-\><C-N>:%!bash -sx<CR>:call <SID>setupShellOutputBuffer()<CR>
+fun! s:setupShellOutputBuffer()
+  set nomodified
+  nnoremap <buffer> q :unmap <buffer> q<CR>:close<CR>
+endfun
 
 " quickly display mappings of <C-\>, <Space>, <Leader>
 nnoremap <Space><C-l>   :map <S<BS>Space><CR>
