@@ -393,6 +393,7 @@ Plugin 'tpope/vim-jdaddy' " for aj and ij text objects
 Plugin 'GEverding/vim-hocon'  " for HOCON (Human Optimized Configuration Object Notation)
 
 " C/C++ development essentials
+if has("python")
 Plugin 'Valloric/YouCompleteMe'
 " See: https://github.com/Valloric/YouCompleteMe#options
 " only activate YCM on a select filetypes (defaults to '*')
@@ -400,6 +401,7 @@ let g:ycm_filetype_whitelist = {
       \ 'cpp': 1,
       \}
 Plugin 'rdnetto/YCM-Generator'
+endif
 if executable("clang-format")
   Plugin 'kana/vim-operator-user' " vim-operator-user
   Plugin 'rhysd/vim-clang-format' " vim-clang-format
