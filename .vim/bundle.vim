@@ -352,8 +352,9 @@ Plugin 'airblade/vim-gitgutter.git'
   nnoremap <Space><C-g>g     :GitGutterLineHighlightsToggle<CR>
   nnoremap ]g :GitGutterNextHunk<CR>
   nnoremap [g :GitGutterPrevHunk<CR>
+  nnoremap <Space>gh :GitGutterPreviewHunk<CR>
   nnoremap [G :GitGutterStageHunk<CR>
-  nnoremap ]G :GitGutterRevertHunk<CR>
+  nnoremap ]G :GitGutterUndoHunk<CR>
 Plugin 'mattn/gist-vim'
 Plugin 'mattn/webapi-vim'
   let g:gist_clip_command = 'pbcopy'
