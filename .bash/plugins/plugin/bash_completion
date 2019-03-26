@@ -20,7 +20,10 @@ bash_plugin_interactive() {
         if type brew &>/dev/null; then
             brew_prefix=${brew_prefix:-$(brew --prefix)}
             bash_completions+=("$brew_prefix"/etc/bash_completion)
-            [ $_bash_version_major -lt 4 ] || bash_completions+=("$brew_prefix"/share/bash-completion/bash_completion)
+            [ $_bash_version_major -lt 4 ] || {
+                BASH_COMPLETION_COMPAT_DIR="$brew_prefix"/etc/bash_completion.d  # XXX bash_completions@2.8 was broken, pointing to its own Cellar
+                bash_completions+=("$brew_prefix"/share/bash-completion/bash_completion)
+            }
             bash_completions_more+=(
                 "$brew_prefix"/Library/Contributions/brew_bash_completion.sh
             )
