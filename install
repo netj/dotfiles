@@ -275,6 +275,14 @@ if has diff-so-fancy; then
     git config --global color.diff.whitespace "red reverse"
 fi
 
+# merge.tool
+for tool in opendiff meld; do
+if has $tool; then
+git config --global merge.tool $tool
+break
+fi
+done
+
 if has ctags; then
 # Update tags file after commit/checkout/merge/rebase
 # See: http://tbaggery.com/2011/08/08/effortless-ctags-with-git.html
