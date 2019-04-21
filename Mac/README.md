@@ -1,13 +1,6 @@
 Mac Configurations
 ==================
 
-## [Install-Casks.sh](Install-Casks.sh)
-This shell script helps install a bunch of apps from [Homebrew Casks](http://caskroom.io).
-For more apps and Safari extensions, see my pinboard links tagged with [Mac Essential](https://pinboard.in/u:netj/t:mac/t:essential/).
-
-## [Tweak.sh](Tweak.sh)
-This shell script includes some preference tweaks I use on my Macs.
-
 ## Terminal.app
 Open any `.terminal` file to load configuration into OS X's Terminal app.
 You should use Mac's default terminal unless you have a strong reason to do otherwise, even after watching [the talk given by the author of Terminal.app (Ben Stiglitz)][Ben Stiglitz's talk] I found from [TotalTerminal's website in the past][TotalTerminal special guest].
@@ -45,6 +38,15 @@ Notes and configs below are kept for historical interest.
 I'm using it to remap left command as option key except a few Mac key combinations in Terminal.app, and Esc to switch back to English IM in Vim to make life easier.
 
 
+## BetterTouchTool Gestures
+[BetterTouchTool][] is another awesome tool that lets me use trackpad on a whole new level.
+[BetterTouchTool/ folder](BetterTouchTool) has most of my gestures I find essential.
+
+
+## iStat Menus
+[iStat Menus][] is pretty essential to have an eye on what's going on your Mac, and I have [settings to keep it compact](iStat%20Menus%20Settings.ismp).
+
+
 ## Many Scripts
 In the `Scripts` directory, there are various AppleScripts I use for many purposes.
 I bind them to global and application-specific shortcut keys with [FastScripts][].
@@ -54,14 +56,12 @@ Feel free to copy and modify them, or include in your scripts.
 ### Automatically Organizing Window Layouts
 I'm using [`HelloDisplay.applescript`](Scripts/HelloDisplays.applescript) with [Control Plane][] for repositioning and resizing windows as I move around.
 
+### [Install-Casks.sh](Install-Casks.sh)
+This shell script helps install a bunch of apps from [Homebrew Casks](http://caskroom.io).
+For more apps and Safari extensions, see my pinboard links tagged with [Mac Essential](https://pinboard.in/u:netj/t:mac/t:essential/).
 
-## BetterTouchTool Gestures
-[BetterTouchTool][] is another awesome tool that lets me use trackpad on a whole new level.
-[BetterTouchTool/ folder](BetterTouchTool) has most of my gestures I find essential.
-
-
-## iStat Menus
-[iStat Menus][] is pretty essential to have an eye on what's going on your Mac, and I have [settings to keep it compact](iStat%20Menus%20Settings.ismp).
+### [Tweak.sh](Tweak.sh)
+This shell script includes some preference tweaks I use on my Macs.
 
 
 [TotalTerminal]: http://totalterminal.binaryage.com 
