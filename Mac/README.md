@@ -27,7 +27,7 @@ I used to remap left command as option key except a few macOS standard key combi
 But while KarabinerElements was being developed I had no choice but to switch to BetterTouchTool for mapping a select few frequently used meta key combos to left command key.
 However, KarabinerElements is still essential.
 It enables correct key combos spanning across multiple keyboards (e.g., <kbd>Command</kbd> on an external HappyHacking Keyboard and <kbd>C</kbd> on the MacBook builtin keyboard).
-And <a href="karabiner://karabiner/assets/complex_modifications/import?url=https://github.com/netj/dotfiles/raw/master/Mac/KarabinerElements/vim_esc_to_input_source_abc.json">mapping Esc to switch back to English input source in Vim and Terminal</a> is quite convenient if you use more than one language or input source in Terminals or [MacVim][].
+And [mapping Esc to switch back to English input source in Vim and Terminal](karabiner://karabiner/assets/complex_modifications/import?url=https://github.com/netj/dotfiles/raw/master/Mac/KarabinerElements/vim_esc_to_input_source_abc.json) is quite convenient if you use more than one language or input source in Terminals or [MacVim][].
 
 
 ### Karabiner private.xml
