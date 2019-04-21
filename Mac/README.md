@@ -10,11 +10,11 @@ This shell script includes some preference tweaks I use on my Macs.
 
 ## Terminal.app
 Open any `.terminal` file to load configuration into OS X's Terminal app.
-You should use Mac's default terminal unless you have a strong reason to do
-otherwise, even after watching [the talk given by the author of Terminal.app (Ben Stiglitz)][Ben Stiglitz's talk] I found from [TotalTerminal's website in the past][TotalTerminal special guest].
-I recommend using [Envy Code R font][] for your terminal if you want something
-different from Apple's default, Menlo or Monaco.  You can find more fonts from
-my [Fonts directory](../Fonts#readme).
+You should use Mac's default terminal unless you have a strong reason to do otherwise, even after watching [the talk given by the author of Terminal.app (Ben Stiglitz)][Ben Stiglitz's talk] I found from [TotalTerminal's website in the past][TotalTerminal special guest].
+I recommend using [Envy Code R font][] for your terminal if you want something different from Apple's default, Menlo or Monaco.
+You can find more fonts from my [Fonts directory](../Fonts#readme).
+
+Some of my `.terminal` profiles are converted into other formats mainly for iOS terminal apps such as [Blink.sh][] (highly recommended) and [Shelly.app][].
 
 ### MouseTerm plus
 (OS X 10.11 El Capitan now ships a Terminal app that has superior mouse reporting capability which can be enabled from menu View > Allow Mouse Reporting, this plugin is no longer necessary! :)
@@ -81,3 +81,5 @@ I'm using [`HelloDisplay.applescript`](Scripts/HelloDisplays.applescript) with [
 [BetterTouchTool]: https://folivora.ai/
 [iStat Menus]: https://bjango.com/mac/istatmenus/
 [MacVim]: https://macvim-dev.github.io/macvim/
+[Blink.sh]: https://www.blink.sh/
+[Shelly.app]: https://itunes.apple.com/us/app/shelly-ssh-client/id989642999?mt=8
