@@ -61,8 +61,8 @@ I'm using [`HelloDisplay.applescript`](Scripts/HelloDisplays.applescript) with [
 
 
 ## BetterTouchTool Gestures
-[BetterTouchTool][] is another awesome tool that lets me use trackpad on a
-whole new level.
+[BetterTouchTool][] is another awesome tool that lets me use trackpad on a whole new level.
+[BetterTouchTool/ folder](BetterTouchTool) has most of my gestures I find essential.
 
 
 ## iStat Menus
@@ -78,6 +78,6 @@ whole new level.
 [Karabiner]: https://pqrs.org/osx/karabiner/document_v10.html
 [FastScripts]: http://www.red-sweater.com/fastscripts/
 [Control Plane]: http://www.controlplaneapp.com/
-[BetterTouchTool]: http://blog.boastr.net/
+[BetterTouchTool]: https://folivora.ai/
 [iStat Menus]: https://bjango.com/mac/istatmenus/
 [MacVim]: https://macvim-dev.github.io/macvim/
