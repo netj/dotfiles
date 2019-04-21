@@ -31,7 +31,20 @@ workaround is to select all lines from the first column and trim the first and
 last line afterwards.
 
 
-## Karabiner private.xml
+## Karabiner
+
+### KarabinerElements complex modifications
+[KarabinerElements][] is a great tool that lets you remap keyboard combos in macOS.
+I used to remap left command as option key except a few macOS standard key combinations in Terminal.app with the original [Karabiner][] (or formerly KeyRemap4MacBook) app.
+But while KarabinerElements was being developed I had no choice but to switch to BetterTouchTool for mapping a select few frequently used meta key combos to left command key.
+However, KarabinerElements is still essential.
+It enables correct key combos spanning across multiple keyboards (e.g., <kbd>Command</kbd> on an external HappyHacking Keyboard and <kbd>C</kbd> on the MacBook builtin keyboard)
+And [mapping Esc to switch back to English input source in Vim and Terminal](karabiner://karabiner/assets/complex_modifications/import?url=https://github.com/netj/dotfiles/raw/master/Mac/KarabinerElements/vim_esc_to_input_source_abc.json) is quite convenient if you use more than one language or input source in Terminals or [MacVim][].
+
+
+### Karabiner private.xml
+NOTE [KarabinerElements.app][KarabinerElements] superseded Karabiner.app since macOS Sierra 10.12.  Notes and configs below are kept for historical interest.
+
 [Karabiner][] (or formerly KeyRemap4MacBook) is a great tool that allows you to remap keyboard in OS X.
 I'm using it to remap left command as option key except a few Mac key combinations in Terminal.app, and Esc to switch back to English IM in Vim to make life easier.
 
@@ -61,8 +74,10 @@ whole new level.
 [Ben Stiglitz's talk]: https://confreaks.tv/videos/rubyconf2008-terminal-app
 [Envy Code R font]: http://damieng.com/blog/2008/05/26/envy-code-r-preview-7-coding-font-released
 [MouseTerm plus]: https://github.com/saitoha/mouseterm-plus#readme
-[Karabiner]: https://pqrs.org/osx/karabiner/
+[KarabinerElements]: https://pqrs.org/osx/karabiner/
+[Karabiner]: https://pqrs.org/osx/karabiner/document_v10.html
 [FastScripts]: http://www.red-sweater.com/fastscripts/
 [Control Plane]: http://www.controlplaneapp.com/
 [BetterTouchTool]: http://blog.boastr.net/
 [iStat Menus]: https://bjango.com/mac/istatmenus/
+[MacVim]: https://macvim-dev.github.io/macvim/

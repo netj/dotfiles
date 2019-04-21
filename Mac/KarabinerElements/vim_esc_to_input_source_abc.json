@@ -1,0 +1,50 @@
+{
+    "title": "(Mac)Vim Modifications by netj",
+    "rules": [
+        {
+            "description": "Esc switches input source to English/ABC for smoother Vim normal mode in MacVim and Terminal",
+            "manipulators": [
+                {
+                    "type": "basic",
+                    "conditions": [
+                        {
+                            "type": "input_source_unless",
+                            "input_sources": [
+                                {
+                                    "language": "en"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "frontmost_application_if",
+                            "bundle_identifiers": [
+                                "org.vim.MacVim",
+                                "com.apple.Terminal"
+                            ]
+                        }
+                    ],
+                    "from": {
+                        "key_code": "escape",
+                        "modifiers": {
+                            "optional": [
+                                "any"
+                            ]
+                        }
+                    },
+                    "to": [
+                        {
+                            "key_code": "escape"
+                        }
+                    ],
+                    "to_if_alone": [
+                        {
+                            "select_input_source": {
+                                "input_source_id": "com.apple.keylayout.ABC"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
