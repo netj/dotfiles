@@ -140,6 +140,7 @@ Plugin 'bufexplorer.zip'
 Plugin 'majutsushi/tagbar'
   nnoremap <Space>t :TagbarOpenAutoClose<CR>
   nnoremap <Space>T :TagbarToggle<CR>
+  " See also: https://ctags.io or brew install --HEAD universal-ctags/universal-ctags/universal-ctags
 Plugin 'ack.vim'
 fun! s:jumpToTagWithQuickFix(w)
   exec "ltag" a:w
