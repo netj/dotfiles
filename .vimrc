@@ -279,10 +279,11 @@ au BufWinEnter *
 " XXX is above the best way to close with q? why don't BufAdd, BufNew work?
 
 " Arrows for moving cursor based on displayed lines
-nnoremap <Up>   gk
-nnoremap <Down> gj
-nnoremap <Home> g0
-nnoremap <End>  g$
+" (v:count idea from https://www.hillelwayne.com/post/intermediate-vim/)
+nnoremap <expr> <Up>   (v:count == 0 ? 'gk' : '<Up>')
+nnoremap <expr> <Down> (v:count == 0 ? 'gj' : '<Down>')
+nnoremap <expr> <Home> (v:count == 0 ? 'g0' : '<Home>')
+nnoremap <expr> <End>  (v:count == 0 ? 'g$' : '<End>')
 
 " Opt/Alt+Left/Right similar to macOS's behavior
 noremap <Esc><Left>  <C-\><C-N>b
