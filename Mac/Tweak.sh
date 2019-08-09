@@ -35,8 +35,11 @@ qlmanage -r >/dev/null
 defaults write -g NSRepeatCountBinding -string "^u"
 defaults write -g NSTextKillRingSize 4
 defaults write -g NSTextShowsControlCharacters -bool true
-# defaults write -g InitialKeyRepeat 15;
-# defaults write -g KeyRepeat 1;
+
+# https://apple.stackexchange.com/questions/10467/how-to-increase-keyboard-key-repeat-rate-on-os-x
+# https://github.com/tekezo/Karabiner-Elements/issues/1046
+defaults write -g InitialKeyRepeat -int 15
+defaults write -g KeyRepeat -int 1
 defaults write -g ApplePressAndHoldEnabled -boolean false
 defaults write -g NSAutomaticSpellingCorrectionEnabled -bool false
 defaults write -g AppleShowAllExtensions -boolean true
