@@ -22,27 +22,30 @@ get() {
 # taps
 brew tap caskroom/versions
 # updates
-brew cask update
+brew update
 
 # Essential ###########################
-get bartender
+get thingsmacsandboxhelper  # Things.app
+get 1password
 get bettertouchtool
-get controlplane
-get fastscripts
-get flux
-get gfxcardstatus
-get istat-menus
-get karabiner
-get macid
-get knock
-get language-switcher
-
+get karabiner-elements
 get macvim
-get github-desktop
+# get controlplane
+get fastscripts
+get flycut
+# get flux
+# get gfxcardstatus
+get istat-menus
+get bartender
+
+get dropbox
+
+# get github-desktop
 get osxfuse
-get sshfs
+# get sshfs
 get xquartz
 
+# TODO force
 get betterzipql
 get provisionql
 get qlcolorcode
@@ -54,41 +57,58 @@ get quicklook-json
 get suspicious-package
 get webpquicklook
 
-get gpgtools
-get cleanarchiver
+# Other nice ones ######################
+
+# get gpgtools
+# get cleanarchiver
 get tnefs-enough
 get shrinkit
 
-# Other nice ones ######################
+# get skype
+# get teamviewer
+
+# get adium
+get firefox
+get opera
+# get flash
+
+get docker
+get virtualbox
+get vmware-fusion
+
+get emacs
+get intellij-idea
+# get eclipse-java
+# get java6
+# get gephi
+# get ghc
+get r
+# get processing
+# get dbvisualizer
+get postico
 
 get mactex
 get papers
 get djview
-get adobe-reader
+# get adobe-reader
 
-get skype
-get teamviewer
-
-get adium
-get firefox
-get opera
-get flash
-
-get airfoil
-get linein
-get fstream
-get ffmpegx
-get flip4mac
+# get airfoil
+# get linein
+# get fstream
+# get ffmpegx
+# get flip4mac
 get air-video-server-hd
 get paparazzi
 get inkscape
 get powerphotos
-get google-earth
+# get google-earth
 
-get alfred
-get keycue
-get shortcat
-get synergy
+# Misc. ################################
+
+# get alfred
+# get keycue
+# get shortcat
+# get synergy
 get omnidazzle
 get bonjour-browser
 get key-codes
@@ -98,51 +118,41 @@ get onyx
 #get secrets
 get pref-setter
 get rcdefaultapp
-get launchpad-manager-yosemite
+# get launchpad-manager-yosemite
 get launchrocket
 get appcleaner
 get appfresh
-get grandperspective
+# get grandperspective  # using DaisyDisk from AppStore
 get omnidisksweeper
 
-get virtualbox
-get vmware-fusion
+# get fantastical
 
-get emacs
-get eclipse-java
-get java6
-
-get graphviz
-get gephi
-get ghc
-get r
-get processing
-get dbvisualizer
-
-# Misc. ################################
+get macid
+# get knock
+get language-switcher
 
 get transmission
-get cyberduck
+# get cyberduck
 get dictunifier
-get bitcoin-core
-get bittorrent-sync
+# get bitcoin-core
+# get bittorrent-sync
 
-get mp3gain-express
+# get mp3gain-express
 #get perian maddthesane-perian
 #get quicktime-player7
 get vlc
-get jubler
-get wireshark
+# get jubler
+# get wireshark
 
-get boxer
-get dolphin
-get dosbox
 get snes9x
-get wjoy
+# get boxer
+# get dosbox
+# get dolphin
+# get wjoy
 
 get eyetv
 get wacom-graphire4-tablet
-get yubikey-personalization-gui
-get iphone-backup-extractor
-get phoneclean
-get delicious-library
+# get yubikey-personalization-gui
+# get iphone-backup-extractor
+# get phoneclean
+# get delicious-library
