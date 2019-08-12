@@ -87,6 +87,7 @@ get r
 # get dbvisualizer
 get postico
 
+get skim
 get mactex
 get papers
 get djview
