@@ -39,6 +39,7 @@ brew_pkgs=(
     lynx
     lz4
     lzip
+    markdown
     maven
     mercurial
     mobile-shell
