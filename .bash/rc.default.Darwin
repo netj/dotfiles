@@ -4,9 +4,6 @@
 # load Apple's bashrc
 ! [ -r /etc/bashrc ] || . /etc/bashrc
 
-# Homebrew is kept on /opt/homebrew
-PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
-
 # prefer brewed bash >= 4 when available (for login shells)
 if [[ $0 = -bash ]] && shopt -qp login_shell && [[ ${BASH_VERSINFO[0]} -lt 4 ]]; then
     newVersion=$(bash --version | head -n1 | sed 's/.* version \([^ ]*\).*/\1/')
