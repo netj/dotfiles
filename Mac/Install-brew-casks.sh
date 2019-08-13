@@ -37,6 +37,7 @@ get flycut
 # get gfxcardstatus
 get istat-menus
 get bartender
+get bitbar
 
 get dropbox
 
