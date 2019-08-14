@@ -3,20 +3,19 @@
 
 # first, a shorthand for an interactive `brew cask install`
 get() {
-    local p=
-    for p; do
-        ! brew cask ls $p &>/dev/null || {
-            echo "Skipping $p as it's already installed."
-            continue
-        }
-        read -s -n 1 -p "Install or upgrade $p? [y]es, [N]o, or [q]uit: "
-        echo $REPLY
-        case $REPLY in
-            [yY]) brew cask install $p ;;
-            [qQ]) exit 0 ;;
-            *) # skip
-        esac
-    done
+    local p=$1; shift
+    [[ $# -eq 0 ]] || { local u=${1:-$p}; shift; }
+    ! brew cask ls $p &>/dev/null || {
+        echo "Skipping $p as it's already installed."
+        return
+    }
+    read -s -n 1 -p "Install or upgrade $p? [y]es, [N]o, or [q]uit: "
+    echo $REPLY
+    case $REPLY in
+        [yY]) brew cask install $u ;;
+        [qQ]) exit 0 ;;
+        *) # skip
+    esac
 }
 
 # taps
@@ -38,6 +37,7 @@ get flycut
 get istat-menus
 get bartender
 get bitbar
+get macid https://github.com/Homebrew/homebrew-cask/raw/b905b5fabf6218f8e740807ca8fd510519cd8b72/Casks/macid.rb
 
 get dropbox
 
@@ -129,7 +129,6 @@ get omnidisksweeper
 
 # get fantastical
 
-get macid
 # get knock
 get language-switcher
 
