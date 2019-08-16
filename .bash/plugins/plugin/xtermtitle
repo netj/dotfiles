@@ -55,12 +55,19 @@ bash_plugin_interactive() {
                 local pwd_url=
                 case $xtermtitle_label in
                     "")
-                        pwd_url="file://$HOSTNAME$PWD";
-                        # check if the URL contains any unsafe characters
-                        [[ -z "${pwd_url//[A-Za-z0-9_:.\/-]/}" ]] ||
-                        # URL escaping from command-line: http://stackoverflow.com/questions/296536/urlencode-from-a-bash-script
-                        pwd_url=$(perl -MURI::Escape -e 'print uri_escape($ARGV[0],"^[:alpha:][:digit:]\-\._~:/");' "$pwd_url")
+                        pwd_url="$HOSTNAME$PWD"
+                        [[ -z "${pwd_url//[A-Za-z0-9_:.\/-]/}" ]] ||  # check if the URL contains any unsafe characters
+                            pwd_url="$HOSTNAME/$(  # try URL escaping via various methods
+                                p=${PWD#/}
+                                exec 2>/dev/null
+                                jq -Rr @uri <<<"$p" ||
+                                # https://www.urlencoder.io/python/
+                                python -c 'import sys, urllib.parse; print(urllib.parse.quote(sys.argv[1]))' "$p" ||
+                                python -c 'import sys, urllib; print(urllib.quote(sys.argv[1]))' "$p" ||
+                                echo "$p"  # XXX give up escaping
+                            )"
                         # display URL for the title bar icon
+                        pwd_url="file://$pwd_url"
                         ;;
                 esac
                 -xtermtitle_mac_terminal_set_url "$pwd_url"
