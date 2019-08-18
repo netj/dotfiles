@@ -100,6 +100,7 @@ get djview
 # get ffmpegx
 # get flip4mac
 get air-video-server-hd
+get airserver
 get paparazzi
 get inkscape
 get powerphotos
