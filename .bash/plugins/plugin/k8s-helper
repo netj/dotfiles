@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# Kubernetes aliases and etc.
+#
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2019-08-28
+# Requires: bpm.utils
+################################################################################
+
+bash_plugin_interactive() {
+    if type kubectl &>/dev/null; then
+        source <(kubectl completion bash)
+        bash_default_alias kcg    "kubectl get"
+        bash_default_alias kcd    "kubectl describe"
+        bash_default_alias kcE    "kubectl edit"
+        bash_default_alias kcS    "kubectl set"
+
+        bash_default_alias kcC    "kubectl create"
+        bash_default_alias kcA    "kubectl apply"
+        bash_default_alias kcP    "kubectl patch"
+        bash_default_alias kcdi   "kubectl diff"
+        bash_default_alias kcX    "kubectl expose"
+        bash_default_alias kcD    "kubectl delete"
+
+        bash_default_alias kcr    "kubectl run"
+        bash_default_alias kcx    "kubectl exec"
+        bash_default_alias kcpf   "kubectl port-forward"
+        bash_default_alias kcpx   "kubectl proxy"
+
+        bash_default_alias kcl    "kubectl logs"
+        bash_default_alias kca    "kubectl attach"
+
+        bash_default_alias kcRO   "kubectl rollout"
+        bash_default_alias kcSC   "kubectl scale"
+        bash_default_alias kcAS   "kubectl autoscale"
+
+        bash_default_alias kcci   "kubectl cluster-info"
+        bash_default_alias kct    "kubectl top"
+        bash_default_alias kcOn   "kubectl cordon"
+        bash_default_alias kcOff  "kubectl uncordon"
+        bash_default_alias kcDR   "kubectl drain"
+        bash_default_alias kcTT   "kubectl taint"
+
+        bash_default_alias kcK    "kubectl kustomize"
+        bash_default_alias kcc    "kubectl config"
+        bash_default_alias kce    "kubectl explain"
+        bash_default_alias kchr   "kubectl api-resources"
+        bash_default_alias kch    "kubectl help"
+    fi
+}
