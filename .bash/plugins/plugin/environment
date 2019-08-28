@@ -38,10 +38,13 @@ bash_plugin_load() {
                 bash_insert_path PATH /opt/local/sbin /opt/local/libexec/gnubin /opt/local/bin
                 bash_insert_path MANPATH /opt/local/man /opt/local/share/man
             fi
+            # for scripts and console entrypoints of pip install --user or easy_install --user
+            bash_insert_path PATH ~/Library/Python/{2,3}.*/bin
         ;;
     esac
-    # add ~/bin to PATH
-    bash_insert_path PATH ~/bin
+    # ensure ~/bin and ~/.local/bin are on PATH if exists
+    # See also: https://unix.stackexchange.com/questions/316765/which-distributions-have-home-local-bin-in-path
+    bash_insert_path PATH ~/.local/bin ~/bin
 }
 
 bash_plugin_interactive() {
