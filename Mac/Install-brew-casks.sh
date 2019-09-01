@@ -1,19 +1,28 @@
 #!/usr/bin/env bash
 # A list of useful OS X packages from Homebrew Cask (http://caskroom.io)
 
-# first, a shorthand for an interactive `brew cask install`
+# first, a shorthand for a fancy, interactive `brew cask install`
+CaskSkipList=$(cd "$(dirname "$0")"; echo "$PWD"/skip.brew-casks)
 get() {
     local p=$1; shift
     local u=$p
     [[ $# -eq 0 ]] || { u=${1:-$p}; shift; }
+    ! grep -qxF "$p" "$CaskSkipList" &>/dev/null || {
+        echo "Skipping $p as it's already skipped/excluded."
+        return
+    }
     ! brew cask ls $p &>/dev/null || {
         echo "Skipping $p as it's already installed."
         return
     }
-    read -s -n 1 -p "Install or upgrade $p? [y]es, [N]o, or [q]uit: "
+    read -s -n 1 -p "Install or upgrade $p? [y]es, [s]kip/e[x]clude, [N]o, or [q]uit: "
     echo $REPLY
     case $REPLY in
         [yY]) brew cask install $u || brew cask install -f $u ;;
+        [sSxX])
+            echo "$p" >>"$CaskSkipList"
+            echo "$p skipped.  To undo, run: sed -i~ '/^$p$/d' $CaskSkipList"
+            ;;
         [qQ]) exit 0 ;;
         *) # skip
     esac
