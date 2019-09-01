@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 # A list of useful OS X packages from Homebrew Cask (http://caskroom.io)
 
++() {
+    local o=$(exec 2>&1; set -x; : "$@")
+    echo >&2 "${o%% : *} ${o#* : }"
+    "$@"
+}
+
 # first, a shorthand for a fancy, interactive `brew cask install`
 CaskSkipList=$(cd "$(dirname "$0")"; echo "$PWD"/skip.brew-casks)
 get() {
@@ -11,29 +17,31 @@ get() {
         echo "Skipping $p as it's already skipped/excluded."
         return
     }
-    ! brew cask ls $p &>/dev/null || {
+    ! { grep -qxF "$p" <<<"$CasksInstalled" &>/dev/null || brew cask ls $p &>/dev/null; } || {
         echo "Skipping $p as it's already installed."
         return
     }
     read -s -n 1 -p "Install or upgrade $p? [y]es, [s]kip/e[x]clude, [N]o, or [q]uit: "
     echo $REPLY
     case $REPLY in
-        [yY]) brew cask install $u || brew cask install -f $u ;;
+        [yY]) + brew cask install $u || + brew cask install -f $u ;;
         [sSxX])
             echo "$p" >>"$CaskSkipList"
             echo "$p skipped.  To undo, run: sed -i~ '/^$p$/d' $CaskSkipList"
             ;;
-        [qQ]) exit 0 ;;
+        [qQ]) + exit 0 ;;
         *) # skip
     esac
 }
 
 # taps
-brew tap caskroom/cask
-brew tap caskroom/cask-drivers
-brew tap caskroom/versions
++ brew tap caskroom/cask
++ brew tap caskroom/cask-drivers
++ brew tap caskroom/versions
 # updates
-brew update
++ brew update
+
+CasksInstalled=$(+ brew cask list)
 
 # Essential ###########################
 get thingsmacsandboxhelper  # Things.app
