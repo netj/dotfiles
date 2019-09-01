@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -eu
 
+type brew || ! open https://brew.sh
+
 brew_cask_pkgs=(
     adoptopenjdk
 )
