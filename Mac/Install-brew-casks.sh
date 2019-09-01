@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
-# A list of useful OS X packages from Homebrew Cask (http://caskroom.io)
+# Installs interactively a list of useful macOS packages via Homebrew Cask (http://caskroom.io)
+#
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2016-03-22
+##
+set -euo pipefail
 
 +() {
     local o=$(exec 2>&1; set -x; : "$@")
