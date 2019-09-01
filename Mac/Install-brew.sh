@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+# Installs essential Homebrew (https://brew.sh) packages
+#
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2019-08-12
+##
 set -eu
 
 type brew || ! open https://brew.sh
@@ -80,9 +85,11 @@ brew_pkgs=(
     xz
     youtube-dl
 )
-brew install "${brew_pkgs[@]}"
+brew install "${brew_pkgs[@]}" ||
+brew upgrade "${brew_pkgs[@]}"
 
 brew_pkgs_HEAD=(
     universal-ctags/universal-ctags/universal-ctags 
 )
-brew install --HEAD "${brew_pkgs_HEAD[@]}"
+brew install --HEAD "${brew_pkgs_HEAD[@]}" ||
+brew upgrade --HEAD "${brew_pkgs_HEAD[@]}"
