@@ -4,7 +4,8 @@
 # first, a shorthand for an interactive `brew cask install`
 get() {
     local p=$1; shift
-    [[ $# -eq 0 ]] || { local u=${1:-$p}; shift; }
+    local u=$p
+    [[ $# -eq 0 ]] || { u=${1:-$p}; shift; }
     ! brew cask ls $p &>/dev/null || {
         echo "Skipping $p as it's already installed."
         return
@@ -19,6 +20,7 @@ get() {
 }
 
 # taps
+brew tap caskroom/cask
 brew tap caskroom/versions
 # updates
 brew update
