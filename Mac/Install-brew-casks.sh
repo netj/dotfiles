@@ -21,6 +21,7 @@ get() {
 
 # taps
 brew tap caskroom/cask
+brew tap caskroom/cask-drivers
 brew tap caskroom/versions
 # updates
 brew update
@@ -155,7 +156,7 @@ get snes9x
 # get wjoy
 
 get eyetv
-get wacom-graphire4-tablet
+get wacom-graphire4-tablet https://github.com/Homebrew/homebrew-cask-drivers/raw/52fe6d023de31110957c7a851cfd67f23f27842d/Casks/wacom-graphire4-tablet.rb
 # get yubikey-personalization-gui
 # get iphone-backup-extractor
 # get phoneclean
