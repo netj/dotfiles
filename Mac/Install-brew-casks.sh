@@ -39,6 +39,8 @@ get() {
     esac
 }
 
+type brew || ! open https://brew.sh
+
 # taps
 + brew tap caskroom/cask
 + brew tap caskroom/cask-drivers
