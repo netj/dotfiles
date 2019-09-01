@@ -72,6 +72,7 @@ get shrinkit
 
 # get adium
 get firefox
+get google-chrome
 get opera
 # get flash
 
