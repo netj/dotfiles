@@ -13,7 +13,7 @@ get() {
     read -s -n 1 -p "Install or upgrade $p? [y]es, [N]o, or [q]uit: "
     echo $REPLY
     case $REPLY in
-        [yY]) brew cask install $u ;;
+        [yY]) brew cask install $u || brew cask install -f $u ;;
         [qQ]) exit 0 ;;
         *) # skip
     esac
@@ -48,8 +48,7 @@ get osxfuse
 # get sshfs
 get xquartz
 
-# TODO force
-get betterzipql
+#GONE get betterzipql
 get provisionql
 get qlcolorcode
 get qlmarkdown
@@ -127,9 +126,9 @@ get rcdefaultapp
 # get launchpad-manager-yosemite
 get launchrocket
 get appcleaner
-get appfresh
+#GONE get appfresh
 # get grandperspective  # using DaisyDisk from AppStore
-get omnidisksweeper
+# get omnidisksweeper
 
 # get fantastical
 
@@ -138,7 +137,7 @@ get language-switcher
 
 get transmission
 # get cyberduck
-get dictunifier
+# get dictunifier
 # get bitcoin-core
 # get bittorrent-sync
 
