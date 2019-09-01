@@ -5,6 +5,7 @@ type brew || ! open https://brew.sh
 
 brew_cask_pkgs=(
     adoptopenjdk
+    osxfuse
 )
 brew cask install "${brew_cask_pkgs[@]}"
 
