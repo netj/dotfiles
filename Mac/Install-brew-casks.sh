@@ -49,7 +49,7 @@ get osxfuse
 # get sshfs
 get xquartz
 
-#GONE get betterzipql
+get betterzip
 get provisionql
 get qlcolorcode
 get qlmarkdown
