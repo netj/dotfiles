@@ -153,6 +153,20 @@ bash_plugin_interactive() {
         done
         builtin cd "${args[@]}"
     }
+    # easier/definitive cd that does mkdir -p if given path do not exist to ensure cd works
+    CD() {
+        local d= args=; args=()
+        for d; do
+            case $d in
+                -*) # passthru options
+                    ;;
+                *) # use dirname of non-directories
+                    [[ -d "$d" ]] || mkdir -p "$d" || return
+            esac
+            args+=("$d")
+        done
+        builtin cd "${args[@]}"
+    }
     uname=`uname`
     # ls on several platforms
     ls_o=
