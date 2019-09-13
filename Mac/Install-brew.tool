@@ -62,6 +62,7 @@ brew_pkgs=(
     osxutils
     pbzip2
     pdf2svg
+    pstree
     pv
     pypy
     python3
