@@ -18,7 +18,7 @@ bash_plugin_interactive() {
     bash_default_alias gb   "git branch -v"
     bash_default_alias gc   "git checkout"
     bash_default_alias gcb  "gc -b"
-    bash_default_alias gfcb "gf origin; gc origin/HEAD -b"
+    bash_default_alias gfcb "gf origin; gc FETCH_HEAD -b"
     bash_default_alias gC   "git commit"
     bash_default_alias gCA  "gC --amend"
     bash_default_alias gp   "git pull"
