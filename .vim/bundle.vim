@@ -396,7 +396,7 @@ Plugin 'GEverding/vim-hocon'  " for HOCON (Human Optimized Configuration Object 
 
 " C/C++ development essentials
 if has("python")
-Plugin 'Valloric/YouCompleteMe'
+"Plugin 'Valloric/YouCompleteMe'
 " See: https://github.com/Valloric/YouCompleteMe#options
 " only activate YCM on a select filetypes (defaults to '*')
 let g:ycm_filetype_whitelist = {
