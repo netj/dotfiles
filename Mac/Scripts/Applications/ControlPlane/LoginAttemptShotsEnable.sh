@@ -1,1 +1,0 @@
-touch ~/.loginshots.monitorAttempts
