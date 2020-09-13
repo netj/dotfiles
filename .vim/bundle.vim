@@ -128,6 +128,11 @@ endif
 
 
 """ Productivity boosters
+" open-browser for broken netrw gx (cf. https://github.com/vim/vim/issues/4738)
+Plugin 'tyru/open-browser.vim'
+let g:netrw_nogx = 1 " disable netrw's gx mapping.
+nmap gx <Plug>(openbrowser-smart-search)
+vmap gx <Plug>(openbrowser-smart-search)
 if has("python")
 Plugin 'Gundo'
   let g:gundo_close_on_revert = 1
