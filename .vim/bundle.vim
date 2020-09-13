@@ -551,11 +551,12 @@ Plugin 'vim-latex/vim-latex'
 "Plugin 'AutomaticLaTeXPlugin'
 "Plugin 'LaTeX_Box'
 
-Plugin 'embear/vim-localvimrc'
-"Plugin 'MarcWeber/vim-addon-local-vimrc'
-  let g:localvimrc_name = [ ".lvimrc", ".vimrc" ]
-  let g:localvimrc_persistent = 1
-  let g:localvimrc_sandbox = 0
+"Plugin 'embear/vim-localvimrc'
+"  let g:localvimrc_name = [ ".lvimrc", ".vimrc" ]
+"  let g:localvimrc_persistent = 1
+"  let g:localvimrc_sandbox = 0
+Plugin 'MarcWeber/vim-addon-local-vimrc'
+  let g:local_vimrc = {'names':['.lvimrc', '.vimrc'],'hash_fun':'LVRHashOfFile'}
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " All of your Plugins must be added before the following line
