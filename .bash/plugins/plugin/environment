@@ -12,7 +12,7 @@ bash_plugin_load() {
     hostdomain=${HOSTNAME#*.}
     # platform specific settings
     case $(uname) in
-        Darwin) # Mac OS X
+        Darwin) # macOS 11, 10, Mac OS X
             # XXX path_helper does not set MANPATH unless it was already in the env
             # XXX some say MANPATH in MacOS X >= 10.2 became deprecated, but
             # XXX you need it anyway to search for non-standrad places.
@@ -33,6 +33,8 @@ bash_plugin_load() {
                 # prefer GNU coreutils to BSD ones
                 bash_insert_path PATH "$brew_prefix/opt/coreutils/libexec/gnubin"
                 bash_insert_path MANPATH "$brew_prefix/opt/coreutils/libexec/gnuman"
+                # unversioned python (See: https://docs.brew.sh/Homebrew-and-Python)
+                bash_insert_path PATH "$brew_prefix"/opt/python/libexec/bin
             elif [ -x /opt/local/bin/port ]; then
                 # Paths for MacPorts (http://www.macports.org/)
                 bash_insert_path PATH /opt/local/sbin /opt/local/libexec/gnubin /opt/local/bin
