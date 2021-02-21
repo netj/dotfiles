@@ -141,7 +141,7 @@ bash_plugin_interactive() {
     fi
     # smarter cd that accepts path to files not just dirs
     cd() {
-        local d= args=; args=()
+        local d= args=; args=(cd)
         for d; do
             case $d in
                 -*) # passthru options
@@ -151,11 +151,11 @@ bash_plugin_interactive() {
             esac
             args+=("$d")
         done
-        builtin cd "${args[@]}"
+        builtin "${args[@]}"
     }
     # easier/definitive cd that does mkdir -p if given path do not exist to ensure cd works
     CD() {
-        local d= args=; args=()
+        local d= args=; args=(cd)
         for d; do
             case $d in
                 -*) # passthru options
@@ -165,7 +165,7 @@ bash_plugin_interactive() {
             esac
             args+=("$d")
         done
-        builtin cd "${args[@]}"
+        builtin "${args[@]}"
     }
     uname=`uname`
     # ls on several platforms
