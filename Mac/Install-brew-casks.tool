@@ -22,14 +22,14 @@ get() {
         echo "Skipping $p as it's already skipped/excluded."
         return
     }
-    ! { grep -qxF "$p" <<<"$CasksInstalled" &>/dev/null || brew cask ls $p &>/dev/null; } || {
+    ! { grep -qxF "$p" <<<"$CasksInstalled" &>/dev/null || brew ls --casks $p &>/dev/null; } || {
         echo "Skipping $p as it's already installed."
         return
     }
     read -s -n 1 -p "Install or upgrade $p? [y]es, [s]kip/e[x]clude, [N]o, or [q]uit: "
     echo $REPLY
     case $REPLY in
-        [yY]) + brew cask install $u || + brew cask install -f $u ;;
+        [yY]) + brew install $u || + brew install -f $u ;;
         [sSxX])
             echo "$p" >>"$CaskSkipList"
             echo "$p skipped.  To undo, run: sed -i~ '/^$p$/d' $CaskSkipList"
@@ -42,146 +42,145 @@ get() {
 type brew || ! open https://brew.sh
 
 # taps
-+ brew tap caskroom/cask
-+ brew tap caskroom/cask-drivers
-+ brew tap caskroom/versions
++ brew tap homebrew/cask
++ brew tap homebrew/cask-drivers
 # updates
 + brew update
 
-CasksInstalled=$(+ brew cask list)
+CasksInstalled=$(+ brew list | grep cask || true)
 
 # Essential ###########################
-get thingsmacsandboxhelper  # Things.app
-get 1password
-get bettertouchtool
-get karabiner-elements
-get macvim
-# get controlplane
-get fastscripts
-get flycut
-# get flux
-# get gfxcardstatus
-get istat-menus
-get bartender
-get bitbar
-get macid https://github.com/Homebrew/homebrew-cask/raw/b905b5fabf6218f8e740807ca8fd510519cd8b72/Casks/macid.rb
+get homebrew/cask/thingsmacsandboxhelper  # Things.app
+get homebrew/cask/1password
+get homebrew/cask/bettertouchtool
+get homebrew/cask/karabiner-elements
+get homebrew/cask/macvim
+# get homebrew/cask/controlplane
+# get homebrew/cask/fastscripts
+get homebrew/cask/flycut
+# get homebrew/cask/flux
+# get homebrew/cask/gfxcardstatus
+get homebrew/cask/istat-menus
+get homebrew/cask/bartender
+get homebrew/cask/bitbar
+# get homebrew/cask/macid https://github.com/Homebrew/homebrew-cask/raw/b905b5fabf6218f8e740807ca8fd510519cd8b72/Casks/macid.rb
 
-get dropbox
+# get homebrew/cask/dropbox
 
-# get github-desktop
-get osxfuse
-# get sshfs
-get xquartz
+# get homebrew/cask/github-desktop
+get homebrew/cask/osxfuse
+# get homebrew/cask/sshfs
+get homebrew/cask/xquartz
 
-get betterzip
-get provisionql
-get qlcolorcode
-get qlmarkdown
-get qlprettypatch
-get qlvideo
-get quicklook-csv
-get quicklook-json
-get suspicious-package
-get webpquicklook
+get homebrew/cask/betterzip
+get homebrew/cask/provisionql
+get homebrew/cask/qlcolorcode
+get homebrew/cask/qlmarkdown
+get homebrew/cask/qlprettypatch
+get homebrew/cask/qlvideo
+get homebrew/cask/quicklook-csv
+get homebrew/cask/quicklook-json
+get homebrew/cask/suspicious-package
+get homebrew/cask/webpquicklook
 
 # Other nice ones ######################
 
-# get gpgtools
-# get cleanarchiver
-get tnefs-enough
-get shrinkit
+# get homebrew/cask/gpgtools
+# get homebrew/cask/cleanarchiver
+# get homebrew/cask/tnefs-enough
+# get homebrew/cask/shrinkit
 
-# get skype
-# get teamviewer
+# get homebrew/cask/skype
+# get homebrew/cask/teamviewer
 
-# get adium
-get firefox
-get google-chrome
-get opera
-# get flash
+# get homebrew/cask/adium
+get homebrew/cask/firefox
+get homebrew/cask/google-chrome
+get homebrew/cask/opera
+# get homebrew/cask/flash
 
-get docker
-get virtualbox
-get vmware-fusion
+get homebrew/cask/docker
+# get homebrew/cask/virtualbox
+# get homebrew/cask/vmware-fusion
 
-get emacs
-get intellij-idea
-# get eclipse-java
-# get java6
-# get gephi
-# get ghc
-get r
-# get processing
-# get dbvisualizer
-get postico
+get homebrew/cask/emacs
+get homebrew/cask/intellij-idea
+# get homebrew/cask/eclipse-java
+# get homebrew/cask/java6
+# get homebrew/cask/gephi
+# get homebrew/cask/ghc
+get homebrew/cask/r
+# get homebrew/cask/processing
+# get homebrew/cask/dbvisualizer
+# get homebrew/cask/postico
 
-get skim
-get mactex
-get papers
-get djview
-# get adobe-reader
+get homebrew/cask/skim
+# get homebrew/cask/mactex
+get homebrew/cask/papers
+get homebrew/cask/djview
+# get homebrew/cask/adobe-reader
 
-# get airfoil
-# get linein
-# get fstream
-# get ffmpegx
-# get flip4mac
-get air-video-server-hd
-get airserver
-get paparazzi
-get inkscape
-get powerphotos
-# get google-earth
+# get homebrew/cask/airfoil
+# get homebrew/cask/linein
+# get homebrew/cask/fstream
+# get homebrew/cask/ffmpegx
+# get homebrew/cask/flip4mac
+get homebrew/cask/air-video-server-hd
+get homebrew/cask/airserver
+get homebrew/cask/paparazzi
+get homebrew/cask/inkscape
+# get homebrew/cask/powerphotos
+# get homebrew/cask/google-earth
 
 # Misc. ################################
 
-# get alfred
-# get keycue
-# get shortcat
-# get synergy
-get omnidazzle
-get bonjour-browser
-get key-codes
-get keyboardcleantool
-get pixel-check
-get onyx
+# get homebrew/cask/alfred
+# get homebrew/cask/keycue
+# get homebrew/cask/shortcat
+# get homebrew/cask/synergy
+get homebrew/cask/omnidazzle
+get homebrew/cask/bonjour-browser
+# get homebrew/cask/key-codes
+get homebrew/cask/keyboardcleantool
+get homebrew/cask/pixel-check
+get homebrew/cask/onyx
 #get secrets
-get pref-setter
-get rcdefaultapp
-# get launchpad-manager-yosemite
-get launchrocket
-get appcleaner
-#GONE get appfresh
-# get grandperspective  # using DaisyDisk from AppStore
-# get omnidisksweeper
+# get homebrew/cask/pref-setter
+# get homebrew/cask/rcdefaultapp
+# get homebrew/cask/launchpad-manager-yosemite
+# get homebrew/cask/launchrocket
+# get homebrew/cask/appcleaner
+#GONE get homebrew/cask/appfresh
+# get homebrew/cask/grandperspective  # using DaisyDisk from AppStore
+# get homebrew/cask/omnidisksweeper
 
-# get fantastical
+# get homebrew/cask/fantastical
 
-# get knock
-get language-switcher
+# get homebrew/cask/knock
+# get homebrew/cask/language-switcher
 
-get transmission
-# get cyberduck
-# get dictunifier
-# get bitcoin-core
-# get bittorrent-sync
+get homebrew/cask/transmission
+# get homebrew/cask/cyberduck
+# get homebrew/cask/dictunifier
+# get homebrew/cask/bitcoin-core
+# get homebrew/cask/bittorrent-sync
 
-# get mp3gain-express
-#get perian maddthesane-perian
-#get quicktime-player7
-get vlc
-# get jubler
-# get wireshark
+# get homebrew/cask/mp3gain-express
+#get homebrew/cask/perian homebrew/cask/maddthesane-perian
+#get homebrew/cask/quicktime-player7
+# get homebrew/cask/vlc
+# get homebrew/cask/jubler
+# get homebrew/cask/wireshark
 
-get snes9x
-# get boxer
-# get dosbox
-# get dolphin
-# get wjoy
+# get homebrew/cask/snes9x
+# get homebrew/cask/boxer
+# get homebrew/cask/dosbox
+# get homebrew/cask/dolphin
+# get homebrew/cask/wjoy
 
-get eyetv
-get wacom-graphire4-tablet https://github.com/Homebrew/homebrew-cask-drivers/raw/52fe6d023de31110957c7a851cfd67f23f27842d/Casks/wacom-graphire4-tablet.rb
-# get yubikey-personalization-gui
-# get iphone-backup-extractor
-# get phoneclean
-# get delicious-library
+# get homebrew/cask/eyetv
+# get homebrew/cask-drivers/wacom-graphire4-tablet https://github.com/Homebrew/homebrew-cask-drivers/raw/52fe6d023de31110957c7a851cfd67f23f27842d/Casks/wacom-graphire4-tablet.rb
+# get homebrew/cask/yubikey-personalization-gui
+# get homebrew/cask/iphone-backup-extractor
+# get homebrew/cask/phoneclean
+# get homebrew/cask/delicious-library
