@@ -55,7 +55,7 @@ bash_plugin_interactive() {
     bash_default_env PAGER less
     bash_default_env LESS "-XFRiMW" # --no-init --quit-if-one-screen --RAW-CONTROL-CHARS --ignore-case --LONG-PROMPT --HILITE_UNREAD
     env_names_ordered() {
-        command printenv -0 | xargs -0 bash -c '
+        command printenv | xargs bash -c '
             for pair; do
                 name=${pair%%=*}
                 echo "$name"
