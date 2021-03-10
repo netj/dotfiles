@@ -305,6 +305,7 @@ ssh_Makefile_after() {
     for c in .dotfiles/.ssh/config.d/*; do
         install ${c#.dotfiles/}
     done
+    install .ssh/aws-ssm-ssh-proxy-magic.sh
     # backup original and enable everything if this is the first time
     if ! [ -d .ssh/config.enabled ]; then
         ! [ -e .ssh/config ] || mv -iv .ssh/config .ssh/config.orig
