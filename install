@@ -248,6 +248,8 @@ fi
 if has git; then
 git config --global color.ui auto
 
+git config --global pull.rebase false
+
 # do you even rerere? https://hackernoon.com/fix-conflicts-only-once-with-git-rerere-7d116b2cec67
 git config --global rerere.enabled true
 git config --global rerere.autoupdate true
