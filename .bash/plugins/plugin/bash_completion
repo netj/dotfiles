@@ -15,18 +15,15 @@ bash_plugin_interactive() {
     _bash_version_major_minor=${BASH_VERSION%.*}; _bash_version_major=${_bash_version_major_minor%.*} _bash_version_minor=${_bash_version_major_minor#*.}
     if [ $_bash_version_major -eq 2 -a $_bash_version_minor '>' 04 ] || [ $_bash_version_major -gt 2 ]; then
         bash_completions=()
-        bash_completions_more=()
         # load completion for Homebrew
         if type brew &>/dev/null; then
             brew_prefix=${brew_prefix:-$(brew --prefix)}
-            bash_completions+=("$brew_prefix"/etc/bash_completion)
             [ $_bash_version_major -lt 4 ] || {
                 BASH_COMPLETION_COMPAT_DIR="$brew_prefix"/etc/bash_completion.d  # XXX bash_completions@2.8 was broken, pointing to its own Cellar
+                bash_completions+=("$brew_prefix"/etc/profile.d/bash_completion.sh)
                 bash_completions+=("$brew_prefix"/share/bash-completion/bash_completion)
             }
-            bash_completions_more+=(
-                "$brew_prefix"/Library/Contributions/brew_bash_completion.sh
-            )
+            bash_completions+=("$brew_prefix"/etc/bash_completion)
         fi
         # look for other standard places
         bash_completions+=({/opt/local/etc,/usr/local/etc,/etc}/bash_completion)
@@ -38,13 +35,6 @@ bash_plugin_interactive() {
             fi
         done
         unset bash_completions
-        # once BASH_COMPLETION is available, source more
-        if [ -n "$BASH_COMPLETION" ]; then
-        for f in "${bash_completions_more[@]}"; do
-            [ ! -r "$f" ] || . "$f"
-        done
-        fi
-        unset bash_completions_more
     fi
     unset _bash_version_{major_minor,major,minor}
 
