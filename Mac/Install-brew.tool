@@ -16,15 +16,20 @@ brew_pkgs=(
     bash
     bash-completion2
     bats
+    black
+    pre-commit
     cabal-install
     clang-format
+    ctags
     coreutils
     debianutils
     diff-so-fancy
     docker-completion
+    docker-compose-completion
     ffmpeg
     ghc
     git
+    git-gui
     git-extras
     git-subrepo
     gnuplot
@@ -73,6 +78,7 @@ brew_pkgs=(
     socat
     ssh-copy-id
     sshfs
+    theseal/ssh-askpass/ssh-askpass
     tmux
     unzip
     vim
