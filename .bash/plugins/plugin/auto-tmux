@@ -22,10 +22,12 @@
 bash_plugin_login() {
     # we can't do much if tmux is not available
     if type tmux &>/dev/null; then
-    # use a dedicated $TMUX_TMPDIR for current $HOME for better isolation
-    export TMUX_TMPDIR="${TMPDIR:-/tmp}/tmux-$UID$HOME"
-    mkdir -p "$TMUX_TMPDIR"
-    chmod a=,u+rwX "${TMUX_TMPDIR%$HOME}"
+    # use a dedicated $TMUX_TMPDIR when current $HOME differs from default home dir for better isolation
+    if [[ "$HOME" != "$(eval "echo ~$(id -un)")" ]]; then
+        export TMUX_TMPDIR="${TMPDIR:-/tmp}/tmux-$UID$HOME"
+        mkdir -p "$TMUX_TMPDIR"
+        chmod a=,u+rwX "${TMUX_TMPDIR%$HOME}"
+    fi
     bash_default auto_tmux_env_root /tmp/auto-tmux.${SUDO_USER:-$LOGNAME}
     # a shorthand for enabling auto-tmux
     atmux() { auto_tmux_attach_at_login=true bash -l; }
