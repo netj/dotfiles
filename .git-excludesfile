@@ -1,4 +1,6 @@
 # This file should be configured with: git config --global core.excludesfile ~/.git-excludesfile
+*.orig
+*.rej
 
 *~
 .*.sw?
