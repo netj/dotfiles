@@ -88,8 +88,8 @@ Plugin 'https://gist.github.com/1432015.git'
   command! -nargs=+ -bar -bang AddColorSet  call s:addColorSet(<bang>0, <f-args>)
   if has("gui_running")
     AddColorSet  'darkLo'    hybrid_material desertEx    lucius       camo      dante      candy           " jellybeans brookstream
-    AddColorSet  'creativity' spring         clarity     navajo-night sea       oceandeep  breeze          " dusk       tabula      darkblue2
     AddColorSet  'darkHi'     fruity         oceanblack  jammy        northland lettuce    molokai         " neon       vibrantink  vividchalk colorer  torte
+    AddColorSet  'creativity' spring         clarity     navajo-night sea       oceandeep  breeze          " dusk       tabula      darkblue2
     AddColorSet  'bright'     summerfruit256 buttercream PapayaWhip   nuvola    habiLight  fruit           " eclipse    earendel
     AddColorSet! 'precision'  autumn         railscasts  Guardian     candycode inkpot     ChocolateLiquor
   else
