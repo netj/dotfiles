@@ -188,7 +188,6 @@ bash_plugin_interactive() {
     fi
     bash_default_alias ls "ls $ls_o"
     unset ls_o
-    unset uname
     # ls idioms
     bash_default_alias ll "ls -l"
     bash_default_alias la "ls -A"
@@ -206,13 +205,22 @@ bash_plugin_interactive() {
     # keep history clean and long enough
     # See: http://briancarper.net/blog/248/
     # See: https://sanctum.geek.nz/arabesque/better-bash-history/
-    [[ -n ${SHELL_SESSION_DID_INIT:-} ]] ||
-        # unless /etc/bashrc_Apple_Terminal on macOS is managing the history
-        bash_add_prompt "history -a" # immediately append history to file
+    case $uname in
+        Darwin)
+            [[ -n ${SHELL_SESSION_DID_INIT:-} ]] ||
+                # unless /etc/bashrc_Apple_Terminal on macOS is managing the history
+                bash_add_prompt "history -a" # immediately append history to file
+            # interferes with macOS /etc/bashrc_Apple_Terminal $SHELL_SESSION_HISTORY feature
+            SHELL_SESSION_HISTORY=1  # due to shopt -s histappend
+            ;;
+        *)
+        bash_default HISTTIMEFORMAT '%F %T  '
+    esac
+    unset uname
     #shopt -s cmdhist # keep multiline as a single history entry  # already done above
     bash_default HISTSIZE     1048576
     bash_default HISTFILESIZE 1048576
-    bash_default HISTTIMEFORMAT '%F %T  '
+
     bash_default HISTCONTROL erasedups
     bash_add_with_separator : HISTIGNORE \
         "&" "[bf]g" cd .. - \
