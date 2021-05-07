@@ -461,6 +461,7 @@ Plugin 'SQLUtilities'
 " Python
 Plugin 'nvie/vim-flake8'
 Plugin 'tell-k/vim-autopep8'
+Plugin 'cespare/vim-toml'
 
 " Vim-LaTeX is a comprehensive plugin for working with LaTeX
 " See: http://vim-latex.sourceforge.net/documentation/latex-suite/
