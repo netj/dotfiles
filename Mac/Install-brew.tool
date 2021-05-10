@@ -10,12 +10,13 @@ type brew || ! open https://brew.sh
 set -x
 
 ensure_brew_installs() {
-    brew upgrade -f "$@" ||
-    brew install "$@" ||
+    : ${brew_flags:=}
+    brew upgrade -f $brew_flags "$@" ||
+    brew install    $brew_flags "$@" ||
     # XXX brew install -f "$@"  literally reinstalls everything even though it's already installed, so falling back to a significantly slower loop that checks every package
     for pkg; do
-        brew install "$pkg" ||
-        brew install -f "$pkg"
+        brew install    $brew_flags "$pkg" ||
+        brew install -f $brew_flags "$pkg"
     done
 }
 
@@ -242,4 +243,5 @@ ensure_brew_installs "${brew_pkgs[@]}"
 brew_pkgs_HEAD=(
     universal-ctags/universal-ctags/universal-ctags 
 )
-ensure_brew_installs --HEAD "${brew_pkgs_HEAD[@]}"
+brew_flags='--fetch-HEAD' \
+ensure_brew_installs "${brew_pkgs_HEAD[@]}"
