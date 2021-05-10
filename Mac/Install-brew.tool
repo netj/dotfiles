@@ -7,6 +7,17 @@
 set -eu
 
 type brew || ! open https://brew.sh
+set -x
+
+ensure_brew_installs() {
+    brew upgrade -f "$@" ||
+    brew install "$@" ||
+    # XXX brew install -f "$@"  literally reinstalls everything even though it's already installed, so falling back to a significantly slower loop that checks every package
+    for pkg; do
+        brew install "$pkg" ||
+        brew install -f "$pkg"
+    done
+}
 
 brew_pkgs=(
     ant
@@ -18,7 +29,6 @@ brew_pkgs=(
     bats
     black
     pre-commit
-    cabal-install
     clang-format
     ctags
     coreutils
@@ -27,7 +37,9 @@ brew_pkgs=(
     docker-completion
     docker-compose-completion
     ffmpeg
-    ghc
+    # cabal-install
+    # ghc
+    # haskell-stack
     git
     git-gui
     git-extras
@@ -35,7 +47,6 @@ brew_pkgs=(
     gnuplot
     go
     graphviz
-    haskell-stack
     homebrew/cask/adoptopenjdk
     homebrew/cask/brightness
     homebrew/cask/cmake
@@ -66,7 +77,7 @@ brew_pkgs=(
     pdf2svg
     pstree
     pv
-    pypy
+    # pypy
     python3
     reattach-to-user-namespace
     rename
@@ -77,7 +88,7 @@ brew_pkgs=(
     sloccount
     socat
     ssh-copy-id
-    sshfs
+    # sshfs
     theseal/ssh-askpass/ssh-askpass
     tmux
     unzip
@@ -102,7 +113,7 @@ brew_pkgs=(
     # homebrew/cask/gfxcardstatus
     homebrew/cask/istat-menus
     homebrew/cask/bartender
-    homebrew/cask/bitbar
+    homebrew/cask/xbar
     # homebrew/cask/macid https://github.com/Homebrew/homebrew-cask/raw/b905b5fabf6218f8e740807ca8fd510519cd8b72/Casks/macid.rb
 
     # homebrew/cask/dropbox
@@ -179,7 +190,7 @@ brew_pkgs=(
     # homebrew/cask/shortcat
     # homebrew/cask/synergy
     homebrew/cask/omnidazzle
-    homebrew/cask/bonjour-browser
+    # homebrew/cask/bonjour-browser
     # homebrew/cask/key-codes
     homebrew/cask/keyboardcleantool
     homebrew/cask/pixel-check
@@ -226,11 +237,9 @@ brew_pkgs=(
     # homebrew/cask/delicious-library
 )
 # TODO skip.brew support
-brew install "${brew_pkgs[@]}" ||
-brew upgrade "${brew_pkgs[@]}"
+ensure_brew_installs "${brew_pkgs[@]}"
 
 brew_pkgs_HEAD=(
     universal-ctags/universal-ctags/universal-ctags 
 )
-brew install --HEAD "${brew_pkgs_HEAD[@]}" ||
-brew upgrade --HEAD "${brew_pkgs_HEAD[@]}"
+ensure_brew_installs --HEAD "${brew_pkgs_HEAD[@]}"
