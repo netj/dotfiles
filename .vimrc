@@ -181,11 +181,20 @@ if executable("remocon")
   nnoremap <Space>R  <C-\><C-N>:!remocon<CR>
 endif
 
-" Shorthand for running shell script in current buffer and capturing its output in a new buffer
-nnoremap <Space>!  <C-\><C-N>:%yank<CR><C-W>n:put<CR>i<C-G>u<C-\><C-N>:silent! %!bash -s 2>/dev/null<CR>:call <SID>setupShellOutputBuffer()<CR>
-nnoremap <Space>@  <C-\><C-N>:%yank<CR><C-W>n:put<CR>i<C-G>u<C-\><C-N>:silent! %!bash -s<CR>:call <SID>setupShellOutputBuffer()<CR>
-nnoremap <Space>#  <C-\><C-N>:%yank<CR><C-W>n:put<CR>i<C-G>u<C-\><C-N>:silent! %!(cat;echo 'exitStatus=$?')\|bash -sx<CR>:call <SID>setupShellOutputBuffer()<CR>
-fun! s:setupShellOutputBuffer()
+" Shorthand for duplicating current buffer contents in a new buffer
+nnoremap <Space>%  <C-\><C-N>:%yank<CR><C-W>n:put<CR>i<C-G>u<C-\><C-N>:call <SID>setupBufferAsDisposable()<CR>
+nnoremap <Space>#  <C-\><C-N><C-W>ni<C-R>=expand("#:p")<CR><C-G>u<C-\><C-N>:call <SID>setupBufferAsDisposable()<CR>
+" Shorthand for capturing the output in a new buffer of current (executable) file or buffer content
+" (when there's no filename, falls back to running current buffer content as shell script)
+" TODO use <count> and <bang> with a command or function
+nmap <Space>!   <C-\><C-N>:exec "norm 1".(empty(expand("%"))?"<Space>%":"<Space>#")."<Space>!%"<CR>
+nmap <Space>!!  <C-\><C-N>:exec "norm 1".(empty(expand("%"))?"<Space>%":"<Space>#")."<Space>!%!"<CR>
+nmap <Space>!!! <C-\><C-N>:exec "norm 1".(empty(expand("%"))?"<Space>%":"<Space>#")."<Space>!%!!"<CR>
+" Shorthand for running current buffer content as shell script and replacing with the output captured
+nnoremap <Space>!%   <C-\><C-N>:silent! %!bash -s 2>/dev/null<CR>:call <SID>setupBufferAsDisposable()<CR>
+nnoremap <Space>!%!  <C-\><C-N>:silent! %!bash -s<CR>:call <SID>setupBufferAsDisposable()<CR>
+nnoremap <Space>!%!! <C-\><C-N>:silent! %!(cat;echo 'exitStatus=$?')\|bash -sx<CR>:call <SID>setupBufferAsDisposable()<CR>
+fun! s:setupBufferAsDisposable()
   set nomodified
   nnoremap <buffer> q :unmap <buffer> q<CR>:close<CR>
 endfun
