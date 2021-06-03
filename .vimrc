@@ -334,9 +334,14 @@ if !exists("*s:gotoFileOrEditNew")
   nnoremap <silent> <C-W>gf :call <SID>gotoFileOrEditNew("<"."C-W>g", "tabedit")<CR>
 endif
 
-" Continue editing file:line in IntelliJ/JetBrains IDE
-if has("mac") && executable("idea")
-  map <C-D-E> :exec(":!idea ".expand("%").":".line("."))<CR>
+" Continue editing file:line in PyCharm/IntelliJ/JetBrains IDE
+if has("mac")
+  for cmd in ["charm", "idea"]
+    if executable(cmd)
+      map <C-D-E> :exec(":!".cmd." ".expand("%").":".line("."))<CR>
+      break
+    endif
+  endfor
 endif
 
 "------------------------------------------------------------------------------
