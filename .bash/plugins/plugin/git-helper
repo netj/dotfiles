@@ -26,7 +26,7 @@ bash_plugin_interactive() {
     bash_default_alias gp   "git pull"
     bash_default_alias gpom "git pull origin main"
     bash_default_alias gP   "git push"
-    bash_default_alias gPuH "git push -u origin HEAD"
+    bash_default_alias gPHu "git push origin HEAD -u"
     bash_default_alias gf   "git fetch"
     bash_default_alias gfp  "git fetch --prune"
     bash_default_alias gr   "git remote -v"
