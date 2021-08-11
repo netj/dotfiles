@@ -8,16 +8,15 @@ shopt -s extglob
 
 bash_plugin_interactive() {
 
-# bash_getkey will read a key among the ones specified in the prompt.  Each key
-# should be lower-cased and surrounded by square brackets.  If there's an
-# asterisk (*), it will accept any key.  Otherwise, it keeps showing prompt and
-# tries to read until a valid key is entered.  You can pass an optional timeout
-# and default key as argument.
-# 
-# For example, the following invokation will set VAR to the key user entered,
-# defaulting to "a" after 2 secs of timeout:
-#   bash_getkey VAR "[a] do one thing; [b] do another; or [q*]uit" 2 a
 bash_getkey() {
+    # bash_getkey will read a key among the ones specified in the prompt.  Each key # should be lower-cased and surrounded by square brackets.  If there's an
+    # asterisk (*), it will accept any key.  Otherwise, it keeps showing prompt and
+    # tries to read until a valid key is entered.  You can pass an optional timeout
+    # and default key as argument.
+    #
+    # For example, the following invokation will set VAR to the key user entered,
+    # defaulting to "a" after 2 secs of timeout:
+    #   bash_getkey VAR "[a] do one thing; [b] do another; or [q*]uit" 2 a
     local keyVarName=$1 prompt=$2 timeout=${3:-} defaultkey=${4:-}
     local keys=${prompt//\]*([^\[\]])\[/}; keys=${keys#*\[}; keys=${keys%\]*}
     case $keys in
@@ -37,11 +36,12 @@ bash_getkey() {
     trap "intr=true" INT
     while ! $intr; do
         REPLY=
-        read -p "$prompt" -n 1 ${timeout:+-t $timeout} -s
+        read -p "$prompt" -n 1 ${timeout:+-t $timeout} -s || :
         REPLY=${REPLY#[[:space:]]}
         [ -n "$REPLY" ] || REPLY=$defaultkey
         echo "$REPLY"
-        [[ $REPLY = ${REPLY/$keys} ]] || break
+        REPLY=$(tr A-Z a-z <<<"$REPLY")
+        [[ $REPLY = ${REPLY/$keys/} ]] || break
     done
     eval "$keyVarName=$REPLY"
     trap - INT
