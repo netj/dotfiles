@@ -23,30 +23,30 @@ bash_plugin_load() {
             eval "$(/usr/libexec/path_helper -s)"
             PATH=$PATH_orig
             # some stuffs get installed on /usr/local
-            bash_insert_path PATH /usr/local/sbin /usr/local/bin
-            bash_insert_path MANPATH /usr/local/man /usr/local/share/man
+            bash_insert_path_if_not PATH /usr/local/sbin /usr/local/bin
+            bash_insert_path_if_not MANPATH /usr/local/man /usr/local/share/man
             if type brew &>/dev/null; then
                 # Prefer Homebrew (http://mxcl.github.com/homebrew/)
                 brew_prefix=${brew_prefix:-$(brew --prefix)}
-                bash_insert_path PATH "$brew_prefix"/sbin "$brew_prefix"/bin
-                bash_insert_path MANPATH "$brew_prefix"/man "$brew_prefix"/share/man
+                bash_insert_path_if_not PATH "$brew_prefix"/sbin "$brew_prefix"/bin
+                bash_insert_path_if_not MANPATH "$brew_prefix"/man "$brew_prefix"/share/man
                 # prefer GNU coreutils to BSD ones
-                bash_insert_path PATH "$brew_prefix/opt/coreutils/libexec/gnubin"
-                bash_insert_path MANPATH "$brew_prefix/opt/coreutils/libexec/gnuman"
+                bash_insert_path_if_not PATH "$brew_prefix/opt/coreutils/libexec/gnubin"
+                bash_insert_path_if_not MANPATH "$brew_prefix/opt/coreutils/libexec/gnuman"
                 # unversioned python (See: https://docs.brew.sh/Homebrew-and-Python)
-                bash_insert_path PATH "$brew_prefix"/opt/python/libexec/bin
+                bash_insert_path_if_not PATH "$brew_prefix"/opt/python/libexec/bin
             elif [ -x /opt/local/bin/port ]; then
                 # Paths for MacPorts (http://www.macports.org/)
-                bash_insert_path PATH /opt/local/sbin /opt/local/libexec/gnubin /opt/local/bin
-                bash_insert_path MANPATH /opt/local/man /opt/local/share/man
+                bash_insert_path_if_not PATH /opt/local/sbin /opt/local/libexec/gnubin /opt/local/bin
+                bash_insert_path_if_not MANPATH /opt/local/man /opt/local/share/man
             fi
             # for scripts and console entrypoints of pip install --user or easy_install --user
-            bash_insert_path PATH ~/Library/Python/{2,3}.*/bin
+            bash_insert_path_if_not PATH ~/Library/Python/{2,3}.*/bin
         ;;
     esac
     # ensure ~/bin and ~/.local/bin are on PATH if exists
     # See also: https://unix.stackexchange.com/questions/316765/which-distributions-have-home-local-bin-in-path
-    bash_insert_path PATH ~/.local/bin ~/bin
+    bash_insert_path_if_not PATH ~/.local/bin ~/bin
 }
 
 bash_plugin_interactive() {
