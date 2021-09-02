@@ -53,7 +53,7 @@ bash_plugin_interactive() {
     # environment variables
     bash_default_env EDITOR vim
     bash_default_env PAGER less
-    bash_default_env LESS "-XFRiMW" # --no-init --quit-if-one-screen --RAW-CONTROL-CHARS --ignore-case --LONG-PROMPT --HILITE_UNREAD
+    bash_default_env LESS "-XFRiMWS" # --no-init --quit-if-one-screen --RAW-CONTROL-CHARS --ignore-case --LONG-PROMPT --HILITE_UNREAD --chop-long-lines
     env_names_ordered() {
         command printenv | xargs bash -c '
             for pair; do
