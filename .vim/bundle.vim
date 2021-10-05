@@ -347,10 +347,10 @@ Plugin 'tpope/vim-fugitive'
     set statusline=%<%f\ %h%m%r%{fugitive#statusline()}%=%-14.(%l,%c%V%)\ %P
   endif
   " some shorthands
-  nnoremap <Space>gg :Gstatus<CR>
+  nnoremap <Space>gg :Git<CR>
   nnoremap <Space>gd :Gdiff<CR>
   nnoremap <Space>gD :Gdiff HEAD<CR>
-  nnoremap <Space>gb :Gblame<CR>
+  nnoremap <Space>gb :Git blame<CR>
   nnoremap <Space>gl :Glog<CR>:copen<CR>
   nnoremap <Space>gL :Glog --<CR>
   nnoremap <Space>ge :Gedit<CR>
