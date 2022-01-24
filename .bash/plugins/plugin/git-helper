@@ -47,6 +47,9 @@ bash_plugin_interactive() {
     bash_default_alias gSP  "git stash pop"
     bash_default_alias gSA  "git stash apply"
 
+    bash_default_alias gCWIP "git commit --no-verify -m WIP -e"
+    bash_default_alias gRWIP "test \"\$(git log -1 --format='%s')\" != WIP || git reset --soft HEAD^"
+
     # github cli or hub.github.com
     bash_default_alias ghw  'gh pr view -w || gh repo view -w -b "$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)" || hub browse'
     bash_default_alias ghpC 'gh pr create -w'
