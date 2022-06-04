@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# MKV media goodies
+#
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2022-06-04
+# Requires: bash-idioms
+################################################################################
+
+bash_plugin_interactive() {
+    mkv-reorder-track() {
+        local f
+        for f in *.reorder.mkv *.ja.mkv; do
+            [[ -e "$f" ]] || continue
+            + mkvmerge --output "${f%.*.mkv}.mkv" \( "$f" \) --track-order 0:0,0:2,0:1
+        done
+    }
+}
