@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 # a bashrc for macOS
 
+# XXX nested login shells will use /usr/libexec/path_helper (by /etc/profile) multiple times and messes up the environment bpm augments, so restoring with path_helper output run from a clean slate when such condition is detected
+#[[ ${_BASHRCLVL:=0} -eq 0 ]] || ! shopt -qp login_shell || eval "$(env -i /usr/libexec/path_helper -s)"; let ++_BASHRCLVL; export _BASHRCLVL
+! shopt -qp login_shell || eval "$(env -i /usr/libexec/path_helper -s)"
+
 # load Apple's bashrc
 ! [ -r /etc/bashrc ] || . /etc/bashrc
 
