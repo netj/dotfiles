@@ -70,6 +70,7 @@ let g:enable_italic_font = 1
 let g:hybrid_transparent_background = 1
 let g:airline_theme = "hybrid"
 
+" Plugin 'junegunn/seoul256.vim'  " https://github.com/junegunn/seoul256.vim
 Plugin 'nanotech/jellybeans.vim'
 Plugin 'tomasr/molokai'
 Plugin 'Colour-Sampler-Pack'
