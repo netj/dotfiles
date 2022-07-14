@@ -55,18 +55,14 @@ bash_plugin_interactive() {
     bash_default_env PAGER less
     bash_default_env LESS "-XFRiMWS" # --no-init --quit-if-one-screen --RAW-CONTROL-CHARS --ignore-case --LONG-PROMPT --HILITE_UNREAD --chop-long-lines
     env_names_ordered() {
-        command printenv | xargs bash -c '
-            for pair; do
-                name=${pair%%=*}
-                echo "$name"
-            done' -- |
+        declare -p -x | sed 's/=.*//; s/^declare -x //' |
         LC_ALL=C sort --ignore-case
     }
     env() { # sorted env
         if [[ $# -gt 0 ]]; then
             command env "$@"
         else
-            # use printenv -0 to cope with multi-line values as well
+            # FIXME use printenv -0 to cope with multi-line values as well
             local name=
             for name in $(env_names_ordered); do echo "$name=$(printenv "$name")"; done
         fi
