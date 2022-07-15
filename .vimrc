@@ -335,14 +335,15 @@ if !exists("*s:gotoFileOrEditNew")
 endif
 
 " Continue editing file:line in PyCharm/IntelliJ/JetBrains IDE
-if has("mac")
-  for cmd in ["charm", "idea"]
-    if executable(cmd)
-      map <C-D-E> :exec(":!".cmd." ".expand("%").":".line("."))<CR>
-      break
+for cmd in ["charm", "idea"]
+  if executable(cmd)
+    map <Space>j  :silent exec(":!".cmd." ".expand("%").":".line("."))<CR>
+    if has("mac")
+      map <C-D-E> :silent exec(":!".cmd." ".expand("%").":".line("."))<CR>
     endif
-  endfor
-endif
+    break
+  endif
+endfor
 
 "------------------------------------------------------------------------------
 " Abbreviations                                                               -
