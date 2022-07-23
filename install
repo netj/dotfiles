@@ -111,7 +111,7 @@ install() {
                 [Yy]) # yes, install
                     run ${n}_before "$@"
                     # backup previous one
-                    ! [ -e ~/"$dst" ] || $nobackup || mv -Tiv ~/"$dst" ~/"$dst"~
+                    ! [ -e ~/"$dst" ] || $nobackup || mv -iv ~/"$dst" ~/"$dst"~
                     # create a symlink or a hardlink
                     if $nosymlink; then
                         ln -fv "$src" ~/"$dst"
@@ -153,7 +153,7 @@ safeln() {
     for tgt in "$@"; do
         if [ -e "$tgt" ]; then
             [ "`readlink "$tgt"`" != "$src" ] || continue
-            mv -Tiv "$tgt" "$tgt~"
+            mv -iv "$tgt" "$tgt~"
         fi
         [ -e "$tgt" ] || ln -sfnv "$src" "$tgt"
     done
