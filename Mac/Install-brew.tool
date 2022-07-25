@@ -52,7 +52,6 @@ brew_pkgs=(
     homebrew/cask/brightness
     homebrew/cask/cmake
     homebrew/cask/lynx
-    homebrew/cask/osxfuse
     htop-osx
     hub
     hunspell
@@ -89,7 +88,6 @@ brew_pkgs=(
     sloccount
     socat
     ssh-copy-id
-    # sshfs
     theseal/ssh-askpass/ssh-askpass
     tmux
     unzip
@@ -120,7 +118,8 @@ brew_pkgs=(
     # homebrew/cask/dropbox
 
     # homebrew/cask/github-desktop
-    homebrew/cask/osxfuse
+    homebrew/cask/macfuse
+    # homebrew/cask/osxfuse  # XXX no longer for M1 Macs
     # homebrew/cask/sshfs
     homebrew/cask/xquartz
 
@@ -155,13 +154,14 @@ brew_pkgs=(
     # homebrew/cask/virtualbox
     # homebrew/cask/vmware-fusion
 
-    homebrew/cask/emacs
-    homebrew/cask/intellij-idea
+    # homebrew/cask/emacs
+    homebrew/cask/pycharm
+    #homebrew/cask/intellij-idea
     # homebrew/cask/eclipse-java
     # homebrew/cask/java6
     # homebrew/cask/gephi
     # homebrew/cask/ghc
-    homebrew/cask/r
+    # homebrew/cask/r
     # homebrew/cask/processing
     # homebrew/cask/dbvisualizer
     # homebrew/cask/postico
@@ -169,7 +169,7 @@ brew_pkgs=(
     homebrew/cask/skim
     # homebrew/cask/mactex
     homebrew/cask/papers
-    homebrew/cask/djview
+    # homebrew/cask/djview
     # homebrew/cask/adobe-reader
 
     # homebrew/cask/airfoil
@@ -211,7 +211,7 @@ brew_pkgs=(
     # homebrew/cask/knock
     # homebrew/cask/language-switcher
 
-    homebrew/cask/transmission
+    # homebrew/cask/transmission
     # homebrew/cask/cyberduck
     # homebrew/cask/dictunifier
     # homebrew/cask/bitcoin-core
