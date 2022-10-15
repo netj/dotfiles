@@ -335,7 +335,7 @@ if !exists("*s:gotoFileOrEditNew")
 endif
 
 " Continue editing file:line in PyCharm/IntelliJ/JetBrains IDE
-for cmd in ["charm", "idea"]
+for cmd in ["pycharm", "charm", "idea"]
   if executable(cmd)
     map <Space>j  :silent exec(":!".cmd." ".expand("%").":".line("."))<CR>
     if has("mac")
