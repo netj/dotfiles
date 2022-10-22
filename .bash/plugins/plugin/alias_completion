@@ -81,7 +81,9 @@ bash_plugin_interactive() {
         alias -p | grep -v '[";|&]' |
         sed -e 's/alias -- /alias /; s/^alias \([^=][^=]*\)='\''\(.*\)'\''/\1 \2/' |
         while read shorthand definition; do
-            eval "set -- $definition"
+            # lightly parse the alias definition to pick out the command
+            read -a defn_words <<<"$definition"
+            set -- "${defn_words[@]}"
             while true; do
                 command=$1; shift
                 case $command in (*=*) ;; (*) break;; esac
