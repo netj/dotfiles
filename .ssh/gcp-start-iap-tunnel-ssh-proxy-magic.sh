@@ -43,9 +43,14 @@ type nc
 declare -- "$@"
 : ${gce_instance:?} ${sshuser:=} ${sshport:=22}
 
+# TODO support ssh key registration for $sshuser
+
 iap_port=$(printf 22%03d $(($RANDOM % 1000)))
 
 # parse the $instance.$zone.$project host alias format used by `gcloud compute config-ssh`
+# TODO support $instance w/o $zone or $project
+# TODO support $instance.$zone w/o $project
+# TODO support $instance.$zone.c.$project.internal format names
 instance_name=${gce_instance%%.*}
 project=${gce_instance##*.}
 zone=${gce_instance#*.}; zone=${zone%.*}
