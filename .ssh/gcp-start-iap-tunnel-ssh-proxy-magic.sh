@@ -55,6 +55,8 @@ instance_name=${gce_instance%%.*}
 project=${gce_instance##*.}
 zone=${gce_instance#*.}; zone=${zone%.*}
 
+export CLOUDSDK_PYTHON_SITEPACKAGES=1  # cf. https://cloud.google.com/iap/docs/using-tcp-forwarding#increasing_the_tcp_upload_bandwidth
+
 # start the IAP tunnel (ensuring it is stopped at the end)
 gcloud compute start-iap-tunnel --quiet >/dev/null --iap-tunnel-disable-connection-check \
   --project="$project" "$instance_name" --zone="$zone" $sshport --local-host-port=localhost:$iap_port &
