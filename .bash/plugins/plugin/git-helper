@@ -16,8 +16,9 @@ bash_plugin_interactive() {
     bash_default_alias gdom "git diff --find-copies-harder origin/main..."
     bash_default_alias ga   "git add"
     bash_default_alias gau  "git add -u"
-    bash_default_alias gl   'git log --decorate --graph HEAD $(git rev-parse HEAD@{u} 2>/dev/null)'
-    bash_default_alias gl1  'git log --decorate --graph --oneline HEAD origin/main $(git rev-parse HEAD@{u} 2>/dev/null)'
+    bash_default_alias _grv 'git rev-parse --revs-only 2>/dev/null'
+    bash_default_alias gl   'git log --decorate --graph HEAD $(_grv HEAD@{u})'
+    bash_default_alias gl1  'git log --decorate --graph --oneline HEAD $(_grv origin/main) $(_grv origin/master) $(_grv HEAD@{u})'
     bash_default_alias gb   "git branch --sort=-committerdate -v --format='%(HEAD) %(if)%(HEAD)%(then)%(color:green bold)%(end)%(align:40,left)%(refname:lstrip=2)%(end)%(color:reset) %(color:blue)%(align:14,right)%(committerdate:relative)%(end)%(color:reset)  %(color:brightblack)%(objectname:short)%(color:reset) %(if)%(upstream:track)%(then)%(color:yellow)%(upstream:track)%(color:reset) %(end)%(contents:subject)'"
     bash_default_alias gbg  "gb --color | grep -F '[gone]'"
     bash_default_alias gbgD "git for-each-ref --format $(printf %q '%(refname:short) %(upstream:track)') | sed $(printf %q '/ \[gone\]$/!d; s/ \[gone\]$//') | xargs -r git branch -D"
