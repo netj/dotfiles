@@ -50,6 +50,10 @@ bash_plugin_interactive() {
     bash_default_alias gSP  "git stash pop"
     bash_default_alias gSA  "git stash apply"
 
+    # grep all branches
+    _git_grep_all_branches() { git grep "$@" $(git branch --format='%(refname:lstrip=2)') --; }
+    bash_default_alias ggb  "_git_grep_all_branches"
+
     bash_default_alias gCWIP "git commit --no-verify -m WIP -e"
     bash_default_alias gRWIP "test \"\$(git log -1 --format='%s')\" != WIP || git reset --soft HEAD^"
 
