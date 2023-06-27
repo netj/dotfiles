@@ -19,9 +19,21 @@ bash_plugin_interactive() {
     bash_default_alias gau  "git add -u"
     bash_default_alias gl   'git log --decorate --graph HEAD $(_grv HEAD@{u})'
     bash_default_alias gl1  'git log --decorate --graph --oneline HEAD $(_grv origin/main) $(_grv origin/master) $(_grv HEAD@{u})'
-    bash_default_alias gb   "git branch --sort=-committerdate -v --format='%(HEAD) %(if)%(HEAD)%(then)%(color:green bold)%(end)%(align:40,left)%(refname:lstrip=2)%(end)%(color:reset) %(color:blue)%(align:14,right)%(committerdate:relative)%(end)%(color:reset)  %(color:brightblack)%(objectname:short)%(color:reset) %(if)%(upstream:track)%(then)%(color:yellow)%(upstream:track)%(color:reset) %(end)%(contents:subject)'"
-    bash_default_alias gbg  "gb --color | grep -F '[gone]'"
+    bash_default_alias Gb   "git branch --sort=-committerdate -v --format='%(HEAD) %(if)%(HEAD)%(then)%(color:green bold)%(end)%(align:40,left)%(refname:lstrip=2)%(end)%(color:reset) %(color:blue)%(align:14,right)%(committerdate:relative)%(end)%(color:reset)  %(color:brightblack)%(objectname:short)%(color:reset) %(if)%(upstream:track)%(then)%(color:yellow)%(upstream:track)%(color:reset) %(end)%(contents:subject)'"
+    __select_git_branch_to__() {  # interactively select a branch (using fuzzy finder)
+      : ${enumerate_branches_with:="git branch -a --color"}
+      local b; b=$(
+        set -o pipefail
+        export NO_COLOR= FORCE_COLOR=1  # trying to turn on color
+        eval "$enumerate_branches_with" |
+          fzf --ansi --color |
+          cut -b 3- | awk '{print $1}'
+      ) && "$@" "$b"
+    }
+    bash_default_alias gb   "enumerate_branches_with='Gb --color' __select_git_branch_to__ git checkout"
+    bash_default_alias Gbg  "Gb --color | grep -F '[gone]'"
     bash_default_alias gbgD "git for-each-ref --format $(printf %q '%(refname:short) %(upstream:track)') | sed $(printf %q '/ \[gone\]$/!d; s/ \[gone\]$//') | xargs -r git branch -D"
+    bash_default_alias gbg  "enumerate_branches_with='Gbg' __select_git_branch_to__ git branch -D"
     bash_default_alias gc   "git checkout"
     bash_default_alias gcb  "git checkout -b"
     bash_default_alias gfcb "git fetch origin HEAD; git checkout FETCH_HEAD -b"
