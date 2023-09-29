@@ -45,12 +45,12 @@ bash_plugin_interactive() {
                 # make sure the document URL (OSC sequence with Ps = 6) is cleared, or the
                 # iconstring set by a suspended VIM for example can interfere even after it exits
                 printf '\e]6;\a'
-            }
+            } >&2
             bash_add_prompt -xtermtitle_mac_terminal_clear_document_url
             -xtermtitle_mac_terminal_set_url() {
                 # OSC sequence for setting the working directory (Ps = 7)
                 printf '\e]7;%s\a' "$1"
-            }
+            } >&2
             -xtermtitle_mac_terminal_update() {
                 local pwd_url=
                 case $xtermtitle_label in
@@ -179,7 +179,7 @@ bash_plugin_interactive() {
                     ;;
             esac
             ! ${xtermtitle_mac_terminal:-true} || -xtermtitle_mac_terminal_update
-        }
+        } >&2
         # xterm title updater
         -xtermtitle_update() {
             local title= icon=
@@ -188,7 +188,7 @@ bash_plugin_interactive() {
             printf '\e]0;%s\a' "$title"
             # then override icon string if necessary
             [ -z "$icon" ] || printf '\e]1;%s\a' "$icon"
-        }
+        } >&2
         # use default if necessary
         title "$xtermtitle_label"
         # register it
