@@ -17,30 +17,31 @@ endif
 all: install
 
 # we'd like to generate a pattern of Makefile rules implicitly when including
-%Fonts.mk: genFontsFetchRules Makefile; @./$< $* >$@
+%Fonts.mk: genFontsFetchRules Makefile
+	@./$< $* >$@
 
 
 ## Noto Fonts by Google (Pan-CJK Sans-serif)
-# See: http://www.google.com/get/noto/
+# See: https://fonts.google.com/noto
 ifeq ($(uname),Darwin) # OS X (Mac)
-    NotoFontsArchive := Noto.zip
+    NotoFontsURL := https://www.google.com/get/noto/pkgs/Noto.zip
 else
 ifeq ($(patsubst CYGWIN_NT*,,$(uname)),) # Windows
-    NotoFontsArchive := Noto-windows.zip
+    NotoFontsURL := https://www.google.com/get/noto/pkgs/Noto-windows.zip
 else # Linux, etc.
-    NotoFontsArchive := Noto-hinted.zip
+    NotoFontsURL := https://www.google.com/get/noto/pkgs/Noto-hinted.zip
 endif
 endif
-NotoFontsURL := http://www.google.com/get/noto/pkgs/$(NotoFontsArchive)
+NotoFontsArchive := $(shell basename $(NotoFontsURL))
 NotoFonts := \
     Noto*.ttf \
     #
-include NotoFonts.mk
+#include NotoFonts.mk  # FIXME Noto-*.zip URLs stopped working
 
 
 ## Envy Code R, Damien Guard's coding font (monospace)
-# See: http://damieng.com/fonts/envy-code-r
-EnvyCodeRFontsURL := http://download.damieng.com/fonts/original/EnvyCodeR-PR7.zip
+# See: https://damieng.com/fonts/envy-code-r
+EnvyCodeRFontsURL := https://download.damieng.com/fonts/original/EnvyCodeR-PR7.zip
 EnvyCodeRFontsArchive := EnvyCodeR.zip
 EnvyCodeRFonts := \
     Envy?Code?R?Bold.ttf   \
@@ -50,78 +51,61 @@ EnvyCodeRFonts := \
 include EnvyCodeRFonts.mk
 
 ## Inconsolata (monospace)
-# See: http://www.levien.com/type/myfonts/inconsolata.html
-InconsolataFontsURL := http://www.levien.com/type/myfonts/Inconsolata.otf
+# See: https://levien.com/type/myfonts/inconsolata.html
+InconsolataFontsURL := https://github.com/googlefonts/Inconsolata/releases/download/v3.000/fonts_ttf.zip
+InconsolataFontsArchive := Inconsolata.zip
 InconsolataFonts := \
-    Inconsolata.otf \
+    Inconsolata-*.ttf \
     #
 include InconsolataFonts.mk
 
 ## Anonymous Pro
-# See: http://www.marksimonson.com/fonts/view/anonymous-pro
-AnonymousProFontsURL := http://www.marksimonson.com/assets/content/fonts/AnonymousPro-1.002.zip
+# See: https://www.marksimonson.com/fonts/view/anonymous-pro
+AnonymousProFontsURL := https://www.marksimonson.com/assets/content/fonts/AnonymousPro-1_002.zip
 AnonymousProFontsArchive := AnonymousPro.zip
 AnonymousProFonts := \
-    Anonymous?Pro.ttf    \
-    Anonymous?Pro?I.ttf  \
-    Anonymous?Pro?B.ttf  \
-    Anonymous?Pro?BI.ttf \
+    Anonymous?Pro*.ttf \
     #
 include AnonymousProFonts.mk
 
 ## Ubuntu Font Family (monospace, sans-serif)
-# See: http://font.ubuntu.com
-UbuntuFontsURL := http://font.ubuntu.com/download/ubuntu-font-family-0.80.zip
+# See: https://design.ubuntu.com/font
+UbuntuFontsURL := https://assets.ubuntu.com/v1/0cef8205-ubuntu-font-family-0.83.zip
 UbuntuFontsArchive := Ubuntu.zip
 UbuntuFonts := \
-    UbuntuMono-R.ttf  \
-    UbuntuMono-RI.ttf \
-    UbuntuMono-B.ttf  \
-    UbuntuMono-BI.ttf \
-    Ubuntu-R.ttf      \
-    Ubuntu-RI.ttf     \
-    Ubuntu-B.ttf      \
-    Ubuntu-BI.ttf     \
-    Ubuntu-M.ttf      \
-    Ubuntu-MI.ttf     \
-    Ubuntu-L.ttf      \
-    Ubuntu-LI.ttf     \
-    Ubuntu-C.ttf      \
+    UbuntuMono-*.ttf  \
+    Ubuntu-*.ttf      \
     #
 include UbuntuFonts.mk
 
 ## Consola Mono (monospace)
-# See: http://openfontlibrary.org/en/font/consolamono
-ConsolaMonoFontsURL := http://openfontlibrary.org/assets/downloads/consolamono/61cc2afcc4eca96efe7c6ebf178d39df/consolamono.zip
+# See: https://fontlibrary.org/en/font/consolamono
+ConsolaMonoFontsURL := https://fontlibrary.org/assets/downloads/consolamono/61cc2afcc4eca96efe7c6ebf178d39df/consolamono.zip
 ConsolaMonoFontsArchive := ConsolaMono.zip
 ConsolaMonoFonts := \
-    ConsolaMono.ttf      \
-    ConsolaMono-Bold.ttf \
+    ConsolaMono*.ttf \
     #
 include ConsolaMonoFonts.mk
 
 ## Fantasque Sans Mono (monospace)
-# See: http://openfontlibrary.org/en/font/fantasque-sans-mono
-FantasqueSansMonoFontsURL := http://openfontlibrary.org/assets/downloads/fantasque-sans-mono/d9468644396932f3eea03b16c132f620/fantasque-sans-mono.zip
+# See: https://fontlibrary.org/en/font/fantasque-sans-mono
+FantasqueSansMonoFontsURL := https://fontlibrary.org/assets/downloads/fantasque-sans-mono/d9468644396932f3eea03b16c132f620/fantasque-sans-mono.zip
 FantasqueSansMonoFontsArchive := FantasqueSansMono.zip
 FantasqueSansMonoFonts := \
-    FantasqueSansMono-Regular.ttf    \
-    FantasqueSansMono-RegItalic.ttf  \
-    FantasqueSansMono-Bold.ttf       \
-    FantasqueSansMono-BoldItalic.ttf \
+    FantasqueSansMono-*.ttf \
     #
 include FantasqueSansMonoFonts.mk
 
 ## ProFont (monospace)
-# See: http://tobiasjung.name/profont/
+# See: https://tobiasjung.name/profont/
 ifneq ($(uname),Darwin)
-    ProFontFontsURL := http://tobiasjung.name/downloadfile.php?file=ProFontWinTweaked.zip
+    ProFontFontsURL := https://tobiasjung.name/downloadfile.php?file=ProFontWinTweaked.zip
     ProFontFontsArchive := ProFont.zip
     ProFontFonts := \
         ProFontWindows.ttf
         #
     include ProFontFonts.mk
-    ProFontBoldFontsURL := http://tobiasjung.name/downloadfile.php?file=ProFont-Windows-Bold.zip
+    ProFontBoldFontsURL := https://tobiasjung.name/downloadfile.php?file=ProFont-Windows-Bold.zip
     ProFontBoldFontsArchive := ProFontBold.zip
     ProFontBoldFonts := \
         ProFontWindows-Bold.ttf \
@@ -129,8 +113,8 @@ ifneq ($(uname),Darwin)
     include ProFontBoldFonts.mk
 else
     ## ProFontX for Mac OS X
-    # See: http://faisal.com/software/profontx/
-    ProFontXFontsURL := http://faisal.com/software/profontx/ProFontX.zip
+    # See: https://www.faisal.com/software/profontx/
+    ProFontXFontsURL := https://www.faisal.com/software/profontx/ProFontX.zip
     ProFontXFontsArchive := ProFontX.zip
     ProFontXFonts := \
         ProFontX \
@@ -139,14 +123,11 @@ else
 endif
 
 ## Courier Code (monospace)
-# See: http://openfontlibrary.org/en/font/courier-code
-CourierCodeFontsURL := http://openfontlibrary.org/assets/downloads/courier-code/d0b044fc63eb2e97d49d433acac9053d/courier-code.zip
+# See: https://fontlibrary.org/en/font/courier-code
+CourierCodeFontsURL := https://fontlibrary.org/assets/downloads/courier-code/d0b044fc63eb2e97d49d433acac9053d/courier-code.zip
 CourierCodeFontsArchive := CourierCode.zip
 CourierCodeFonts := \
-    CourierCode-Roman.ttf      \
-    CourierCode-Italic.ttf     \
-    CourierCode-Bold.ttf       \
-    CourierCode-BoldItalic.ttf \
+    CourierCode-*.ttf \
     #
 include CourierCodeFonts.mk
 
@@ -168,10 +149,10 @@ $(PowerlineFonts):
 
 
 ## Nanum Fonts
-# See: http://hangeul.naver.com
+# See: https://hangeul.naver.com/fonts/search?f=nanum
 ifneq (,$(filter Darwin-10.6 Darwin-10.6.%,$(uname_version)))
 # Mac OS X Lion and later (Darwin-10.7+) includes Nanum Fonts
-NanumFontsURL := http://cdn.naver.com/naver/NanumFont/fontfiles/NanumFont_TTF_ALL.zip
+NanumFontsURL := https://hangeul.naver.com/hangeul_static/webfont/zips/nanum-gothic.zip
 NanumFonts := \
     NanumGothic.ttf             \
     NanumGothicBold.ttf         \
@@ -186,31 +167,26 @@ include NanumFonts.mk
 endif
 
 ## Nanum Eco Fonts
-NanumGothicEcoFontsURL := http://cdn.naver.com/naver/NanumFont/fontfiles/NanumFontSetup_TTF_GOTHICECO.zip
+NanumGothicEcoFontsURL := https://hangeul.naver.com/hangeul_static/webfont/zips/nanum-gothic-eco.zip
 NanumGothicEcoFonts := \
-    NanumGothicEco.ttf \
-    NanumGothicEcoBold.ttf \
-    NanumGothicEcoExtraBold.ttf \
+    NanumGothicEco*.ttf \
     #
 include NanumGothicEcoFonts.mk
-NanumMyeongjoEcoFontsURL := http://cdn.naver.com/naver/NanumFont/fontfiles/NanumFontSetup_TTF_MYUNGJOECO.zip
+NanumMyeongjoEcoFontsURL := https://hangeul.naver.com/hangeul_static/webfont/zips/nanum-myeongjo-eco.zip
 NanumMyeongjoEcoFonts := \
-    NanumMyeongjoEco.ttf \
-    NanumMyeongjoEcoBold.ttf \
-    NanumMyeongjoEcoExtraBold.ttf \
+    NanumMyeongjoEco*.ttf \
     #
 include NanumMyeongjoEcoFonts.mk
 
 ## Nanum Gothic Coding Font
-NanumGothicCodingFontsURL := http://dev.naver.com/frs/download.php/441/NanumGothicCoding-2.0.zip
+NanumGothicCodingFontsURL := https://hangeul.naver.com/hangeul_static/webfont/zips/nanum-gothic-coding.zip
 NanumGothicCodingFonts := \
-    나눔고딕코딩-Bold.ttf 나눔고딕코딩-Bold.ttf \
-    나눔고딕코딩.ttf 나눔고딕코딩.ttf \
+    D2CodingAll/D2Coding-*-all.ttc \
     #
 include NanumGothicCodingFonts.mk
 
 ## Nanum Gothic Light Font
-NanumGothicLightFontsURL := http://cdn.naver.com/naver/NanumFont/fontfiles/NanumFontSetup_TTF_GOTHICLIGHT.zip
+NanumGothicLightFontsURL := http://cdn.naver.com/naver/NanumFont/fontfiles/NanumFontSetup_TTF_GOTHICLIGHT.zip  # FIXME to https://hangeul.naver.com/fonts/search?f=nanum
 NanumGothicLightFonts := \
     NanumGothicLight.ttf \
     #
@@ -218,8 +194,8 @@ include NanumGothicLightFonts.mk
 
 
 ## Seoul Fonts
-# See: http://www.seoul.go.kr/v2012/seoul/symbol/font.html
-SeoulFontsURL := http://www.seoul.go.kr/v2012/seoul/symbol/download.php?div=Zm9udDAy
+# See: https://english.seoul.go.kr/seoul-views/seoul-symbols/5-fonts/
+SeoulFontsURL := https://english.seoul.go.kr/wp-content/uploads/2013/12/TTF_Manual%20installment_5.zip
 SeoulFontsArchive := SeoulFonts_TTF.zip
 SeoulFonts := \
     SeoulHangangB.ttf   \
@@ -235,31 +211,24 @@ SeoulFonts := \
 include SeoulFonts.mk
 
 ## Crimson (serif)
-# See: http://openfontlibrary.org/en/font/crimson
-CrimsonFontsURL := http://openfontlibrary.org/assets/downloads/crimson/6feb6f6187adb04e0ea4a40f69101d98/crimson.zip
+# See: https://fontlibrary.org/en/font/crimson
+CrimsonFontsURL := https://fontlibrary.org/assets/downloads/crimson/6feb6f6187adb04e0ea4a40f69101d98/crimson.zip
 CrimsonFontsArchive := Crimson.zip
 CrimsonFonts := \
-    Crimson-Roman.otf      \
-    Crimson-Italic.otf     \
-    Crimson-Bold.otf       \
+    Crimson-*.otf 
     #
 include CrimsonFonts.mk
-# See: http://sourceforge.net/projects/crimsontext/
-CrimsonTextFontsURL := http://www.fontsquirrel.com/fonts/download/crimson
+# See: https://fonts.google.com/specimen/Crimson+Text
+CrimsonTextFontsURL := https://www.fontsquirrel.com/fonts/download/crimson
 CrimsonTextFontsArchive := CrimsonText.zip
 CrimsonTextFonts := \
-    CrimsonText-Roman.ttf          \
-    CrimsonText-Italic.ttf         \
-    CrimsonText-SemiBold.ttf       \
-    CrimsonText-SemiBoldItalic.ttf \
-    CrimsonText-Bold.ttf           \
-    CrimsonText-BoldItalic.ttf     \
+    CrimsonText-*.ttf \
     #
 include CrimsonTextFonts.mk
 
 ## Vollkorn (serif)
 # See: http://vollkorn-typeface.com
-VollkornFontsURL := http://vollkorn-typeface.com/download/vollkorn-3-005.zip
+VollkornFontsURL := https://www.fontsquirrel.com/fonts/download/vollkorn
 VollkornFontsArchive := Vollkorn.zip
 VollkornFonts := \
     Vollkorn-Regular.ttf        \
@@ -274,62 +243,35 @@ VollkornFonts := \
 include VollkornFonts.mk
 
 ## Adobe's Source Code Pro (monospace)
-# See: http://sourceforge.net/projects/sourcecodepro.adobe/
-SourceCodeProFontsURL := http://downloads.sourceforge.net/project/sourcecodepro.adobe/SourceCodePro_FontsOnly-1.017.zip
+# See: https://adobe-fonts.github.io/source-code-pro/
+SourceCodeProFontsURL := https://github.com/adobe-fonts/source-code-pro/releases/download/2.042R-u%2F1.062R-i%2F1.026R-vf/TTF-source-code-pro-2.042R-u_1.062R-i.zip
 SourceCodeProFontsArchive := SourceCodePro.zip
 SourceCodeProFonts := \
-    SourceCodePro-Regular.ttf    \
-    SourceCodePro-ExtraLight.ttf \
-    SourceCodePro-Light.ttf      \
-    SourceCodePro-Semibold.ttf   \
-    SourceCodePro-Bold.ttf       \
-    SourceCodePro-Black.ttf      \
+    TTF/SourceCodePro-*.ttf \
     #
 include SourceCodeProFonts.mk
 
-## Adobe's Source Serif Pro (serif)
-# See: http://sourceforge.net/projects/sourceserifpro.adobe/
-SourceSerifProFontsURL := http://downloads.sourceforge.net/project/sourceserifpro.adobe/SourceSerifPro_FontsOnly-1.014.zip
-SourceSerifProFontsArchive := SourceSerifPro.zip
-SourceSerifProFonts := \
-    SourceSerifPro-Regular.ttf      \
-    SourceSerifPro-It.ttf           \
-    SourceSerifPro-ExtraLight.ttf   \
-    SourceSerifPro-ExtraLightIt.ttf \
-    SourceSerifPro-Light.ttf        \
-    SourceSerifPro-LightIt.ttf      \
-    SourceSerifPro-Semibold.ttf     \
-    SourceSerifPro-SemiboldIt.ttf   \
-    SourceSerifPro-Bold.ttf         \
-    SourceSerifPro-BoldIt.ttf       \
-    SourceSerifPro-Black.ttf        \
-    SourceSerifPro-BlackIt.ttf      \
+## Adobe's Source Serif 4 (serif)
+# See: https://adobe-fonts.github.io/source-serif/
+SourceSerif4FontsURL := https://github.com/adobe-fonts/source-serif/releases/download/4.004R/source-serif-4.004.zip
+SourceSerif4FontsArchive := SourceSerif4.zip
+SourceSerif4Fonts := \
+    SourceSerif4-*.ttf \
     #
-include SourceSerifProFonts.mk
+include SourceSerif4Fonts.mk
 
-## Adobe's Source Sans Pro (sans-serif)
-# See: http://sourceforge.net/projects/sourcesans.adobe/
-SourceSansProFontsURL := http://downloads.sourceforge.net/project/sourcesans.adobe/SourceSansPro_FontsOnly-1.050.zip
-SourceSansProFontsArchive := SourceSansPro.zip
-SourceSansProFonts := \
-    SourceSansPro-Regular.ttf      \
-    SourceSansPro-It.ttf           \
-    SourceSansPro-ExtraLight.ttf   \
-    SourceSansPro-ExtraLightIt.ttf \
-    SourceSansPro-Light.ttf        \
-    SourceSansPro-LightIt.ttf      \
-    SourceSansPro-Semibold.ttf     \
-    SourceSansPro-SemiboldIt.ttf   \
-    SourceSansPro-Bold.ttf         \
-    SourceSansPro-BoldIt.ttf       \
-    SourceSansPro-Black.ttf        \
-    SourceSansPro-BlackIt.ttf      \
+## Adobe's Source Sans 3 (sans-serif)
+# See: https://adobe-fonts.github.io/source-sans/
+SourceSans3FontsURL := https://github.com/adobe-fonts/source-sans/releases/download/3.052R/TTF-source-sans-3.052R.zip
+SourceSans3FontsArchive := SourceSans3.zip
+SourceSans3Fonts := \
+    TTF/SourceSans3-*.ttf \
     #
-include SourceSansProFonts.mk
+include SourceSans3Fonts.mk
 
 ## Crusoe Text (sans-serif)
-# See: http://openfontlibrary.org/en/font/crusoe-text
-CrusoeTextFontsURL := http://openfontlibrary.org/assets/downloads/crusoe-text/e045c0cbb955e2c4cc1dfbbf844b240c/crusoe-text.zip
+# See: https://fontlibrary.org/en/font/crusoe-text
+CrusoeTextFontsURL := https://fontlibrary.org/assets/downloads/crusoe-text/e045c0cbb955e2c4cc1dfbbf844b240c/crusoe-text.zip
 CrusoeTextFontsArchive := CrusoeText.zip
 CrusoeTextFonts := \
     CrusoeText-Regular.ttf \
@@ -339,8 +281,8 @@ CrusoeTextFonts := \
 include CrusoeTextFonts.mk
 
 ## Avería Serif (serif)
-# See: http://openfontlibrary.org/en/font/averia-serif
-AveriaSerifFontsURL := http://openfontlibrary.org/assets/downloads/averia-serif/51e3ae7cf61b932c613416e6e0a05e40/averia-serif.zip
+# See: https://fontlibrary.org/en/font/averia-serif
+AveriaSerifFontsURL := https://fontlibrary.org/assets/downloads/averia-serif/51e3ae7cf61b932c613416e6e0a05e40/averia-serif.zip
 AveriaSerifFontsArchive := AveriaSerif.zip
 AveriaSerifFonts := \
     AveriaSerif-Regular.ttf     \
@@ -353,15 +295,16 @@ AveriaSerifFonts := \
 include AveriaSerifFonts.mk
 
 ## Dijkstra
-DijkstraFontsURL := http://www.fonts101.com/download/34398/Dijkstra/A5922C74E09F7630B830C8BDB36343B0.aspx
+# See: https://fontsgeek.com/fonts/Dijkstra-Regular
+DijkstraFontsURL := https://media.fontsgeek.com/download/zip/d/i/dijkstra-regular_iBTmg.zip
 DijkstraFontsArchive := Dijkstra.zip
 DijkstraFonts := \
-    dijkstra.ttf \
+    Dijkstra?Regular.ttf \
     #
 include DijkstraFonts.mk
 
 ## Bubblegum
-BubblegumSansFontsURL := http://www.fontsquirrel.com/fonts/download/bubblegum-sans
+BubblegumSansFontsURL := https://www.fontsquirrel.com/fonts/download/bubblegum-sans
 BubblegumSansFontsArchive := BubblegumSans.zip
 BubblegumSansFonts := \
     BubblegumSans-Regular.otf \

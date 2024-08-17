@@ -331,14 +331,6 @@ install .emacs.d/elisp/Makefile
 fi
 
 
-# GUI
-if has make && { [ -n "${DISPLAY:-}" ] || running WindowServer; }; then
-fonts_d_after() { make -C .fonts.d; }
-install .fonts.conf
-install .fonts.d Fonts
-fi
-
-
 # Mac OS X
 case $(uname) in Darwin)
     install .zprofile
@@ -464,3 +456,11 @@ case $(uname) in Darwin)
     fi
     fi
 ;; esac
+
+
+# GUI
+if has make && { [ -n "${DISPLAY:-}" ] || running WindowServer; }; then
+fonts_d_after() { make -C .fonts.d; }
+install .fonts.conf
+install .fonts.d Fonts
+fi

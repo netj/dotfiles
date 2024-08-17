@@ -11,7 +11,7 @@ ${Prefix}FontsArchive ?= \$(shell basename \$(${Prefix}FontsURL))
 	@-./extract "$<" \$(FONTSDIR) "\$(@F)"
 
 \$(${Prefix}FontsArchive):
-	curl -# -C- -LRo \$@ \$(${Prefix}FontsURL)
+	curl -C- -# -Lo \$@ -g \$(${Prefix}FontsURL)
 
 InstalledFiles    += \$(${Prefix}FontsFiles)
 IntermediateFiles += \$(${Prefix}FontsArchive)
