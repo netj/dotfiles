@@ -41,7 +41,7 @@ brew_pkgs=(
     # cabal-install
     # ghc
     # haskell-stack
-    git
+    git  # NOTE as of macOS 15 git-completion can be installed via: ln -sfnv /Library/Developer/CommandLineTools/usr/share/git-core/git-completion.bash /opt/homebrew/etc/bash_completion.d/
     git-gui
     git-extras
     git-subrepo
