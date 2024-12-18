@@ -18,13 +18,21 @@ bash_plugin_load() {
             # XXX you need it anyway to search for non-standrad places.
             : ${MANPATH:=}
             export MANPATH
-            # XXX and since path_helper messes up with your PATH, let's preserve it
-            PATH_orig=$PATH
-            eval "$(/usr/libexec/path_helper -s)"
-            PATH=$PATH_orig
+            eval "$(env -i /usr/libexec/path_helper -s)"
             # some stuffs get installed on /usr/local
             bash_insert_path_if_not PATH /usr/local/sbin /usr/local/bin
             bash_insert_path_if_not MANPATH /usr/local/man /usr/local/share/man
+            # recognize typical Homebrew installations
+            type brew &>/dev/null || {
+                for brew_prefix in /opt/homebrew /usr/local
+                do  if [[ -x "$brew_prefix"/bin/brew ]]; then
+                        bash_insert_path_if_not PATH "$brew_prefix"/bin
+                        break
+                    else
+                        brew_prefix=
+                    fi
+                done
+            }
             if type brew &>/dev/null; then
                 # Prefer Homebrew (http://mxcl.github.com/homebrew/)
                 brew_prefix=${brew_prefix:-$(brew --prefix)}
