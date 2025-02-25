@@ -36,7 +36,7 @@ brew_pkgs=(
     debianutils
     diff-so-fancy
     docker-completion
-    docker-compose-completion
+    #docker-compose-completion
     ffmpeg
     # cabal-install
     # ghc
@@ -48,9 +48,9 @@ brew_pkgs=(
     gnuplot
     go
     graphviz
-    homebrew/cask/adoptopenjdk
-    homebrew/cask/brightness
-    homebrew/cask/cmake
+    #homebrew/cask/adoptopenjdk
+    #homebrew/cask/brightness
+    #homebrew/cask/cmake
     homebrew/cask/lynx
     htop-osx
     gh
