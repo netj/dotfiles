@@ -53,6 +53,7 @@ brew_pkgs=(
     #homebrew/cask/cmake
     homebrew/cask/lynx
     htop-osx
+    fzf
     gh
     hunspell
     jq
