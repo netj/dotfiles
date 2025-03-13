@@ -80,7 +80,7 @@ bash_plugin_interactive() {
     }
 
     # launch Vim with fugitive :Gstatus
-    bash_default_alias gg   '_git_dir=$(git rev-parse --git-dir) && vim "$_git_dir"/index'
+    bash_default_alias gg   '( _git_dir=$(git rev-parse --git-dir) && cd "$_git_dir" && vim +Git )'
 
     #bash_default_alias gt git-tether-remote  # XXX use: github.com/netj/remocon
 
