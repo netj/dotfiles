@@ -79,8 +79,34 @@ bash_plugin_interactive() {
         source <(gh completion -s bash)
     }
 
-    # launch Vim with fugitive :Gstatus
-    bash_default_alias gg   '( _git_dir=$(git rev-parse --git-dir) && cd "$_git_dir" && vim +Git )'
+    # launch Vim with fugitive :Gstatus and also some useful lists of files based on git diff
+    gg() {
+      local _git_dir
+      if _git_dir=$(git rev-parse --git-dir); then
+        _quoted_for_vim_ex() {
+          sed 's/[#%]/\\&/g'
+        }
+        _gg() {
+          BLK() {
+            local title=$1; shift
+            local count=$("$@" | wc -l)
+            [[ $count -eq 0 ]] || {
+              echo "$title ($count)"
+              "$@" | sed 's/^$/ /'
+              echo
+            }
+          }
+          BLK "Branch $(git symbolic-ref --short HEAD) since origin/HEAD"  git diff origin/HEAD... --stat=65536
+          BLK "Last commit"                                                git show                --stat=65536
+          BLK "Staged"                                                     git diff --staged       --stat=65536
+          BLK "Unstaged"                                                   git diff                --stat=65536
+        }
+        vim "$_git_dir"/index \
+          +'new' \
+          +"r !$(declare -p -f _gg | _quoted_for_vim_ex);_gg" \
+          +'setl readonly nomodified syntax=fugitive'
+      fi
+    }
 
     #bash_default_alias gt git-tether-remote  # XXX use: github.com/netj/remocon
 
