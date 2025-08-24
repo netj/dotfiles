@@ -39,7 +39,11 @@ set title		" set xterm title
 if has("mouse")
   set mouse=a		" use mouse
 endif
+if has ("nvim")
+set clipboard=
+else
 set clipboard=exclude:.*
+endif
 set nowrap              " no line wrapping
 set scrolloff=2
 set modeline modelines=5

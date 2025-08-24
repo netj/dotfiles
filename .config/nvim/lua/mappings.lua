@@ -85,4 +85,7 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
   end,
 })
 
+-- Theme switching
+map("n", "<Space>t", "<cmd>Telescope themes<CR>", { desc = "Browse and switch themes" })
+
 -- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")

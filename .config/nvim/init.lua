@@ -26,7 +26,12 @@ require("lazy").setup({
 }, lazy_config)
 
 -- load theme
-dofile(vim.g.base46_cache .. "defaults")
+if vim.fn.has("gui_running") == 1 or vim.g.neovide then
+    dofile(vim.g.base46_cache .. "defaults")
+else
+    -- TODO pick a theme for terminal?
+    vim.cmd("source ~/.vimrc")
+end
 dofile(vim.g.base46_cache .. "statusline")
 
 require "options"
@@ -35,3 +40,4 @@ require "autocmds"
 vim.schedule(function()
   require "mappings"
 end)
+
