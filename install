@@ -245,15 +245,6 @@ install .vim
 fi
 fi
 
-if has nvim; then
-config_nvim_after() {
-    # Create symlink for nvim config if it doesn't exist
-    [ -d ~/.config ] || mkdir -p ~/.config
-    [ -L ~/.config/nvim ] || [ -d ~/.config/nvim ] || ln -snfv ../.dotfiles/.config/nvim ~/.config/nvim
-}
-install .config/nvim
-fi
-
 if has git; then
 git config --global color.ui auto
 
