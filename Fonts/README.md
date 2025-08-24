@@ -7,7 +7,11 @@ commercially or redistribution.
 
 - [Envy Code R](http://damieng.com/blog/2008/05/26/envy-code-r-preview-7-coding-font-released)
     
-    ![](EnvyCodeR-2048x2048.jpeg)
+    [![](EnvyCodeR-2048x2048.jpeg)](https://www.programmingfonts.org/#envy-code-r)
+
+- [Agave](https://github.com/blobject/agave)
+
+    [![](https://github.com/blobject/agave/raw/master/pub/ascii.png)](https://www.programmingfonts.org/#agave)
 
 - [Dijkstra](http://www.fonts101.com/fonts/view/Uncategorized/34398/Dijkstra.aspx)
 
@@ -42,3 +46,6 @@ Or some characters to look at side-by-side:
 
 Here are some good readings regarding typefaces for programming:
 * [Dan Benjamin's Top 10 Programming Fonts](http://hivelogic.com/articles/top-10-programming-fonts)
+
+ICYMI the nerdy world has converged towards [Nerd Fonts](https://www.nerdfonts.com/font-downloads), which collects a lot of great programming fonts with essential icons.
+You can preview a ton of choices live from [Programming Fonts](https://www.programmingfonts.org/#envy-code-r)
