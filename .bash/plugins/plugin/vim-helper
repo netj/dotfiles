@@ -7,6 +7,9 @@
 ################################################################################
 
 bash_plugin_interactive() {
+    v() { nvim "$@"; }
+    V() { neovide "$@"; }
+
     # we can use one of Vim's ftplugin to see man pages in a nice way
     man() {
         if [[ -t 1 && -t 0 ]] && PAGER=false man "$@" &>/dev/null; then
@@ -17,6 +20,4 @@ bash_plugin_interactive() {
             command man "$@"
         fi
     }
-
-    v() { nvim "$@"; }
 }

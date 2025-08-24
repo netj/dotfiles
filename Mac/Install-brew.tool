@@ -93,6 +93,8 @@ brew_pkgs=(
     tmux
     unzip
     vim
+    neovim
+    neovide
     wget
     xml-coreutils
     xmlstarlet
