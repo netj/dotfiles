@@ -17,4 +17,6 @@ bash_plugin_interactive() {
             command man "$@"
         fi
     }
+
+    v() { nvim "$@"; }
 }
