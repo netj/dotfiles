@@ -21,6 +21,28 @@ all: install
 	@./$< $* >$@
 
 
+## Envy Code R Nerd Font, Damien Guard's coding font (monospace)
+# See: https://damieng.com/fonts/envy-code-r
+# See: https://www.programmingfonts.org/#envy-code-r
+EnvyCodeRNerdFontsURL := https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/EnvyCodeR.zip
+EnvyCodeRNerdFontsArchive := EnvyCodeRNerdFonts.zip
+EnvyCodeRNerdFonts := \
+    EnvyCodeRNerdFont*.ttf \
+    #
+include EnvyCodeRNerdFonts.mk
+
+
+## Agave Nerd Font (monospace)
+# See: https://github.com/blobject/agave
+# See: https://www.programmingfonts.org/#agave
+AgaveFontsURL := https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Agave.zip
+AgaveFontsArchive := Agave.zip
+AgaveFonts := \
+    Agave*.ttf \
+    #
+include AgaveFonts.mk
+
+
 ## Noto Fonts by Google (Pan-CJK Sans-serif)
 # See: https://fonts.google.com/noto
 ifeq ($(uname),Darwin) # OS X (Mac)
@@ -38,17 +60,6 @@ NotoFonts := \
     #
 #include NotoFonts.mk  # FIXME Noto-*.zip URLs stopped working
 
-
-## Envy Code R, Damien Guard's coding font (monospace)
-# See: https://damieng.com/fonts/envy-code-r
-EnvyCodeRFontsURL := https://download.damieng.com/fonts/original/EnvyCodeR-PR7.zip
-EnvyCodeRFontsArchive := EnvyCodeR.zip
-EnvyCodeRFonts := \
-    Envy?Code?R?Bold.ttf   \
-    Envy?Code?R?Italic.ttf \
-    Envy?Code?R.ttf        \
-    #
-include EnvyCodeRFonts.mk
 
 ## Inconsolata (monospace)
 # See: https://levien.com/type/myfonts/inconsolata.html
