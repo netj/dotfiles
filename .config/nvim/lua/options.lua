@@ -1,3 +1,7 @@
+-- Set leader key to Space. MUST be done before any <leader> mappings are used.
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+
 require "nvchad.options"
 
 local opt = vim.opt
@@ -34,18 +38,35 @@ opt.listchars = { tab = ">.", eol = "$" }
 
 opt.wildmode = "list:full"
 opt.wildchar = 9
-if vim.fn.has("wildignorecase") == 1 then
+if vim.fn.has "wildignorecase" == 1 then
   opt.wildignorecase = true
 end
 
-opt.suffixes:remove(".h")
-opt.suffixes:append({ ".o", ".d", ".a", ".class", "#", ".hi", ".cmi", ".cmo", ".cmx", ".cma", ".cmxa", ".blg", ".annot", "DS_Store" })
+opt.suffixes:remove ".h"
+opt.suffixes:append {
+  ".o",
+  ".d",
+  ".a",
+  ".class",
+  "#",
+  ".hi",
+  ".cmi",
+  ".cmo",
+  ".cmx",
+  ".cma",
+  ".cmxa",
+  ".blg",
+  ".annot",
+  "DS_Store",
+}
 
-local data_dir = vim.fn.stdpath("data")
+local data_dir = vim.fn.stdpath "data"
 opt.directory = { data_dir .. "/swap//", "." }
 opt.undodir = { data_dir .. "/undo//", "." }
 
-if vim.fn.has("syntax") == 1 then
-  vim.cmd("syntax on")
+if vim.fn.has "syntax" == 1 then
+  vim.cmd "syntax on"
   opt.hlsearch = true
 end
+
+opt.guifont = "EnvyCodeR Nerd Font:h13"

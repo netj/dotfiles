@@ -95,6 +95,8 @@ brew_pkgs=(
     vim
     neovim
     neovide
+    ripgrep
+    fd
     wget
     xml-coreutils
     xmlstarlet

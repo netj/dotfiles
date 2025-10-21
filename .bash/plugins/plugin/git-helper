@@ -107,6 +107,9 @@ bash_plugin_interactive() {
           +'setl readonly nomodified syntax=fugitive'
       fi
     }
+    # use lazygit when available
+    ! type lazygit &>/dev/null ||
+    gg() { lazygit "$@"; }
 
     #bash_default_alias gt git-tether-remote  # XXX use: github.com/netj/remocon
 
