@@ -114,6 +114,7 @@ brew_pkgs=(
     homebrew/cask/istat-menus
     homebrew/cask/ice
     homebrew/cask/xbar
+    homebrew/cask/soundsource
     # homebrew/cask/macid https://github.com/Homebrew/homebrew-cask/raw/b905b5fabf6218f8e740807ca8fd510519cd8b72/Casks/macid.rb
 
     # homebrew/cask/dropbox
