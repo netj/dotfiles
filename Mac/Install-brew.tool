@@ -80,6 +80,8 @@ brew_pkgs=(
     pv
     # pypy
     python3
+    uv
+    ruff
     reattach-to-user-namespace
     rename
     rlwrap
