@@ -279,8 +279,10 @@ nnoremap <Space>s      :syntax sync fromstart<CR>
 nnoremap <Space>/      :nohlsearch<CR>
 
 " Easy (git) grep word under cursor or visual/select
-nnoremap <Space>*      :Ggrep -q <cword><CR>
-vmap     <Space>*     *:Ggrep -q <C-R>=shellescape(@/)<CR><CR>
+nmap     <Space>*      *:Ggrep -q <C-R>=shellescape(@/)<CR><CR>
+nmap     <Space>#      #:Ggrep -q <C-R>=shellescape(@/)<CR><CR>
+vmap     <Space>*      *:Ggrep -q <C-R>=shellescape(@/)<CR><CR>
+vmap     <Space>#      #:Ggrep -q <C-R>=shellescape(@/)<CR><CR>
 
 " Easy open and close of the QuickFix window
 nnoremap <Space>q      :copen<CR>
