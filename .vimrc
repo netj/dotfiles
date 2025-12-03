@@ -278,11 +278,11 @@ nnoremap <Space>s      :syntax sync fromstart<CR>
 " Toggle hlsearch (highlight search matches).
 nnoremap <Space>/      :nohlsearch<CR>
 
-" Easy (git) grep word under cursor or visual/select
-nmap     <Space>*      *:Ggrep -q <C-R>=shellescape(@/)<CR><CR>
-nmap     <Space>#      #:Ggrep -q <C-R>=shellescape(@/)<CR><CR>
-vmap     <Space>*      *:Ggrep -q <C-R>=shellescape(@/)<CR><CR>
-vmap     <Space>#      #:Ggrep -q <C-R>=shellescape(@/)<CR><CR>
+" Easy git grep'ing the word under cursor or visual/select in :lwindow via * or :cwindow via #
+nmap     <Space>*      *:Glgrep -q <C-R>=shellescape(@/)<CR><CR>
+vmap     <Space>*      *:Glgrep -q <C-R>=shellescape(@/)<CR><CR>
+nmap     <Space>#      #:Ggrep  -q <C-R>=shellescape(@/)<CR><CR>
+vmap     <Space>#      #:Ggrep  -q <C-R>=shellescape(@/)<CR><CR>
 
 " Easy open and close of the QuickFix window
 nnoremap <Space>q      :copen<CR>
