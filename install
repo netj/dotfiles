@@ -464,3 +464,16 @@ fonts_d_after() { make -C .fonts.d; }
 install .fonts.conf
 install .fonts.d Fonts
 fi
+
+
+# uv
+if has uv; then
+# some essentials in python via uv, installed on ~/.local/bin/
+uv_tools=(
+    csvkit
+    json2yaml
+)
+for pkg in "${uv_tools[@]}"
+do uv tool install "$pkg"
+done
+fi

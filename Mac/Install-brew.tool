@@ -249,11 +249,3 @@ brew_pkgs_HEAD=(
 )
 brew_flags='--fetch-HEAD' \
 ensure_brew_installs "${brew_pkgs_HEAD[@]}"
-
-
-# some essentials in python via uv, installed on ~/.local/bin/
-uv_tools=(
-    csvkit
-    json2yaml
-)
-uv tool install "${uv_tools[@]}"
