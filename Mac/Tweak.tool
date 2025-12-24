@@ -16,6 +16,9 @@ defaults write com.apple.dock showhidden -boolean true
 defaults write com.apple.dock mouse-over-hilite-stack -boolean false
 defaults write com.apple.dock mineffect -string suck
 #defaults write com.apple.dock expose-animation-duration -float 0.17
+defaults write com.apple.dock persistent-apps   -array-add '{tile-type="small-spacer-tile";}'
+defaults write com.apple.dock persistent-apps   -array-add '{tile-type="small-spacer-tile";}'
+defaults write com.apple.dock persistent-others -array-add '{tile-data={}; tile-type="small-spacer-tile";}'
 killall Dock
 
 defaults write com.apple.finder ShowPathBar -boolean true
