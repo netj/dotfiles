@@ -108,6 +108,27 @@ bash_plugin_interactive() {
       fi
     }
 
+    gt() {
+      local _git_worktree
+      if _git_worktree=$(git rev-parse --show-toplevel); then
+        (
+        cd "$_git_worktree"
+        [[ -x .git/hooks/ctags ]] ||
+          ln -sfn ~/.dotfiles/.git-template/hooks/ctags .git/hooks/
+        for hook in ~/.dotfiles/.git-template/hooks/post-*; do
+          hook_name=$(basename "$hook")
+          if [[ -e .git/hooks/"$hook_name" ]]; then
+            grep -q .git/hooks/ctags .git/hooks/"$hook_name" ||
+            cat <"$hook" >.git/hooks/"$hook_name"
+          else
+            cp -a "$hook" .git/hooks/"$hook_name"
+          fi
+        done
+        .git/hooks/ctags
+        )
+      fi
+    }
+
     #bash_default_alias gt git-tether-remote  # XXX use: github.com/netj/remocon
 
     bash_default_alias gss "git submodule summary"

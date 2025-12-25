@@ -1,7 +1,19 @@
 #!/bin/sh
 set -e
-exit # XXX comment this line if you want to keep .git/tags up to date
 
 trap "rm -f .git/tags.$$" EXIT
-ctags --tag-relative -R -f.git/tags.$$ --links=no --exclude=.git
-mv .git/tags.$$ .git/tags
+
+# trying to find universal ctags
+case $(uname) in
+  Darwin)
+    eval "$(/usr/libexec/path_helper)"
+    PATH=/opt/homebrew/bin:"$PATH"
+    ;;
+esac
+
+# universal ctags
+git ls-files | ctags --tag-relative -L - -f".git/tags.$$" #--languages=-json
+
+# TODO fallback to macOS ctags when unavailable
+
+mv -f .git/tags.$$ .git/tags

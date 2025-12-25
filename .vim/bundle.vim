@@ -292,6 +292,27 @@ Plugin 'netj/vim-vinegar'  " XXX using personal fork of 'tpope/vim-vinegar'
 "  nnoremap <Space>f :FufFileWithCurrentBufferDir<CR>
 "Plugin 'Command-T'
 "  nnoremap <Space>f :CommandT<CR>
+
+Plugin 'junegunn/fzf'
+Plugin 'junegunn/fzf.vim'
+nnoremap <Space>ff :GFiles<CR>
+nnoremap <Space>fF :Files<CR>
+nnoremap <Space>ft :Tags<CR>
+set tags+=.git/tags
+nnoremap <Space>fo :History<CR>
+" TODO fzf history if possible?
+" An action can be a reference to a function that processes selected lines
+function! s:build_quickfix_list(lines)
+  call setqflist(map(copy(a:lines), '{ "filename": v:val, "lnum": 1 }'))
+  copen
+  cc
+endfunction
+let g:fzf_action = {
+  \ 'ctrl-q': function('s:build_quickfix_list'),
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-x': 'split',
+  \ 'ctrl-v': 'vsplit' }
+
 Plugin 'kien/ctrlp.vim'
   let g:ctrlp_map = '<c-p>'
   let g:ctrlp_cmd = 'CtrlPMixed'
