@@ -7,8 +7,8 @@
 ################################################################################
 
 bash_plugin_interactive() {
-    bash_default_alias g    "git status --untracked=no"
-    bash_default_alias G    "git status"
+    bash_default_alias g    "git status"
+    bash_default_alias G    "git status --untracked=no"
     bash_default_alias _grv 'git rev-parse --revs-only 2>/dev/null'
     bash_default_alias gd   "git diff --find-copies-harder"
     bash_default_alias gds  "git diff --find-copies-harder --staged"
