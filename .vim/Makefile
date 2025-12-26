@@ -7,11 +7,11 @@ export SHELL := $(shell which bash)
 .PHONY: all
 all: $(shell sed <Makefile -n '/:.*\#\#$$/ s/:.*$$//p')
 
-# vundle installation
-vundle-update: ##
-	read -p "update .vim/bundle/? [yN] " -n1 -t2 || echo n; \
-	case $$REPLY in [yY]) echo "updating .vim/bundle/..." ;; *) exit 0 ;; esac; \
-	vim +PluginInstall +qa
+# vim-plug installation
+vim-plug-update: ##
+	read -p "update .vim/plugged/? [yN] " -n1 -t2 || echo n; \
+	case $$REPLY in [yY]) echo "updating .vim/plugged/..." ;; *) exit 0 ;; esac; \
+	vim +PlugUpdate +qa
 
 spell: ##
 	git clone https://github.com/netj/spell.git

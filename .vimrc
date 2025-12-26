@@ -365,9 +365,9 @@ iab Created:    Created: <C-R>=system("date +%Y-%m-%d")
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Vim Scripts/Plugins managed by Vundle                                       "
+" Vim Scripts/Plugins managed by vim-plug                                     "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-SourceOptional ~/.vim/bundle.vim
+SourceOptional ~/.vim/plugged.vim
 
 
 "------------------------------------------------------------------------------

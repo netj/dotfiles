@@ -4,18 +4,13 @@ if exists("s:LoadedBundles") | finish | endif
 try
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-if !isdirectory($HOME.'/.vim/bundle/Vundle.vim/autoload')
+" Auto-install vim-plug if not present
+if empty(glob('~/.vim/autoload/plug.vim'))
   if executable("git")
-    let s:self = expand("<sfile>")
-    fun! s:BootstrapVundle()
-      exec 'silent !git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim'
-      delcommand PluginInstall
-      exec 'source '.s:self
-      PluginInstall
-    endfun
-    command! -nargs=* -bang PluginInstall call s:BootstrapVundle()
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+      \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
   endif
-  finish
 endif
 
 fun! s:setLocalOptionsForWriting()
@@ -36,14 +31,8 @@ endfun
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
-
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
+" Initialize vim-plug
+call plug#begin()
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 """ More info about Vim plugins
@@ -61,26 +50,26 @@ Plugin 'VundleVim/Vundle.vim'
 " light-lo: spring autumn sienna
 " fun: matrix borland golden camo
 " bright: summerfruit256 buttercream PapayaWhip nuvola habiLight fruit eclipse earendel
-Plugin 'w0ng/vim-hybrid'
+Plug 'w0ng/vim-hybrid'
 "let g:hybrid_custom_term_colors = 1
 "let g:hybrid_reduced_contrast = 1 " Remove this line if using the default palette.
-"Plugin 'kristijanhusak/vim-hybrid-material'
+"Plug 'kristijanhusak/vim-hybrid-material'
 let g:enable_bold_font = 1
 let g:enable_italic_font = 1
 let g:hybrid_transparent_background = 1
 let g:airline_theme = "hybrid"
 
-" Plugin 'junegunn/seoul256.vim'  " https://github.com/junegunn/seoul256.vim
-Plugin 'nanotech/jellybeans.vim'
-Plugin 'tomasr/molokai'
-Plugin 'Colour-Sampler-Pack'
+" Plug 'junegunn/seoul256.vim'  " https://github.com/junegunn/seoul256.vim
+Plug 'nanotech/jellybeans.vim'
+Plug 'tomasr/molokai'
+Plug 'Colour-Sampler-Pack'
   let g:jellybeans_overrides = {
         \    'Todo': { 'guifg': '101010', 'guibg': 'fad07a',
         \              'ctermfg': 'Black', 'ctermbg': 'Yellow',
         \              'attr': 'bold' },
         \}
 " scroll among my favorites with VimTip341
-Plugin 'https://gist.github.com/1432015.git'
+Plug 'https://gist.github.com/1432015.git'
   let s:mySetColorsSet = []
   fun! s:addColorSet(reversed, name, ...)
     let colors = a:000 | if a:reversed | let colors = reverse(copy(colors)) | endif
@@ -105,8 +94,8 @@ Plugin 'https://gist.github.com/1432015.git'
     endif
   endif
 
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
   let g:airline#extensions#whitespace#enabled = 0
   set laststatus=2 noshowmode showcmd
 if has("gui_running")
@@ -130,7 +119,7 @@ if has("gui_running")
 
   if has("gui_gtk2")
     " quick font resize for GVim
-    Plugin 'fontsize'
+    Plug 'fontsize'
       nmap <silent> <M-=> <Leader><Leader>+
       nmap <silent> <M--> <Leader><Leader>-
   endif
@@ -139,24 +128,24 @@ endif
 
 """ Productivity boosters
 " open-browser for broken netrw gx (cf. https://github.com/vim/vim/issues/4738)
-Plugin 'tyru/open-browser.vim'
+Plug 'tyru/open-browser.vim'
 let g:netrw_nogx = 1 " disable netrw's gx mapping.
 nmap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
 if has("python")
-Plugin 'Gundo'
+Plug 'Gundo'
   let g:gundo_close_on_revert = 1
   nnoremap <Space>u :GundoToggle<CR>
 endif
-Plugin 'bufexplorer.zip'
+Plug 'bufexplorer.zip'
   nnoremap <Space>b :BufExplorerHorizontalSplit<CR>
-"Plugin 'tselectbuffer'
+"Plug 'tselectbuffer'
 "  nnoremap <Space>b :TSelectBuffer<CR>
-Plugin 'majutsushi/tagbar'
+Plug 'majutsushi/tagbar'
   nnoremap <Space>t :TagbarOpenAutoClose<CR>
   nnoremap <Space>T :TagbarToggle<CR>
   " See also: https://ctags.io or brew install --HEAD universal-ctags/universal-ctags/universal-ctags
-Plugin 'ack.vim'
+Plug 'ack.vim'
 fun! s:jumpToTagWithQuickFix(w)
   exec "ltag" a:w
   keepjumps call setqflist(getloclist(0))
@@ -177,7 +166,7 @@ if has("gui") || has("mouse")
   noremap <C-RightMouse> <C-\><C-N><LeftMouse>:call <SID>ackWord(expand("<cword>"))<CR>
 endif
 " unimpaired quickfix access with [q, ]q, [Q, ]Q
-Plugin 'tpope/vim-unimpaired'
+Plug 'tpope/vim-unimpaired'
   " Eclipse-style movement
   nmap <M-Up>   V<M-Up>
   nmap <M-Down> V<M-Down>
@@ -190,21 +179,21 @@ Plugin 'tpope/vim-unimpaired'
   endif
 
 " exchange.vim for cx, cxx, cxc, v_X. See: http://vimcasts.org/episodes/swapping-two-regions-of-text-with-exchange-vim/
-Plugin 'tommcdo/vim-exchange'
+Plug 'tommcdo/vim-exchange'
 
   " Align%294's \m= collides with Mark%2666 unless already mapped
   map <Leader>tm= <Plug>AM_m=
-Plugin 'Align'
-Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-repeat'
-"Plugin 'tpope/vim-speeddating' " FIXME doesn't work with 7.4-1589
-Plugin 'tpope/vim-commentary'
-Plugin 'bronson/vim-visual-star-search'
-Plugin 'Lokaltog/vim-easymotion'
+Plug 'Align'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
+"Plug 'tpope/vim-speeddating' " FIXME doesn't work with 7.4-1589
+Plug 'tpope/vim-commentary'
+Plug 'bronson/vim-visual-star-search'
+Plug 'Lokaltog/vim-easymotion'
   let g:EasyMotion_leader_key = '<Space>w'
-Plugin 'matchit.zip'
-Plugin 'closeb'  " CTRL-_ to close complex brackets/tags
-Plugin 'kien/rainbow_parentheses.vim'
+Plug 'matchit.zip'
+Plug 'closeb'  " CTRL-_ to close complex brackets/tags
+Plug 'kien/rainbow_parentheses.vim'
   fun! RainbowParenthesesLoadAndToggleAll()
     exec 'RainbowParenthesesLoadRound'
     exec 'RainbowParenthesesLoadSquare'
@@ -215,12 +204,12 @@ Plugin 'kien/rainbow_parentheses.vim'
   nnoremap <C-\>0      :call RainbowParenthesesLoadAndToggleAll()<CR>
   inoremap <C-\>0 <C-o>:call RainbowParenthesesLoadAndToggleAll()<CR>
 
-" Plugin 'RltvNmbr'
-Plugin 'DrawIt'
-" Plugin 'MixCase'
-Plugin 'junegunn/vim-emoji'
+" Plug 'RltvNmbr'
+Plug 'DrawIt'
+" Plug 'MixCase'
+Plug 'junegunn/vim-emoji'
 
-Plugin 'Mark'
+Plug 'Mark'
   let g:mwHistAdd       = '' " '/@'
   let g:mwAutoLoadMarks = 1
   let g:mwAutoSaveMarks = 1
@@ -235,8 +224,8 @@ Plugin 'Mark'
 """ CamelCase stuff
 " Shougo's NeoComplCache is really nice!
 if $USER != "root"
-Plugin 'Shougo/neocomplcache'
-Plugin 'Shougo/vimproc'
+Plug 'Shougo/neocomplcache'
+Plug 'Shougo/vimproc'
   let g:acp_enableAtStartup = 0
   " XXX Rather than enabling at startup, I use special key combo Cmd-Shift-D to turn it on
   "let g:neocomplcache_enable_at_startup = 1
@@ -252,17 +241,17 @@ Plugin 'Shougo/vimproc'
   autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 endif
 " CamelCaseComplete is less convenient (CTRL-X CTRL-C), yet lightweight
-Plugin 'CamelCaseComplete' 
-Plugin 'CompleteHelper'
-Plugin 'camelcasemotion'
+Plug 'CamelCaseComplete' 
+Plug 'CompleteHelper'
+Plug 'camelcasemotion'
   " recover default ,
   nnoremap ,, ,
   xnoremap ,, ,
   onoremap ,, ,
-Plugin 'tpope/vim-abolish'
+Plug 'tpope/vim-abolish'
 
-"Plugin 'slime'
-Plugin 'scrooloose/nerdtree'
+"Plug 'slime'
+Plug 'scrooloose/nerdtree'
   nnoremap <Space>e :NERDTreeFind<CR>
   nnoremap <Space>E :let g:NERDTreeQuitOnOpen=!g:NERDTreeQuitOnOpen<CR>:NERDTreeFind<CR>
   let g:NERDTreeQuitOnOpen = 1
@@ -286,15 +275,15 @@ Plugin 'scrooloose/nerdtree'
   let g:netrw_sort_case_sensitive = 0
   let g:netrw_list_hide = '\(^\|\s\s\)\zs\.\S\+' " all dotfiles
   let g:netrw_hide = 0
-Plugin 'netj/vim-vinegar'  " XXX using personal fork of 'tpope/vim-vinegar'
+Plug 'netj/vim-vinegar'  " XXX using personal fork of 'tpope/vim-vinegar'
   let g:NERDTreeHijackNetrw = 0
-"Plugin 'FuzzyFinder'
+"Plug 'FuzzyFinder'
 "  nnoremap <Space>f :FufFileWithCurrentBufferDir<CR>
-"Plugin 'Command-T'
+"Plug 'Command-T'
 "  nnoremap <Space>f :CommandT<CR>
 
-Plugin 'junegunn/fzf'
-Plugin 'junegunn/fzf.vim'
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
 nnoremap <Space>ff :GFiles<CR>
 nnoremap <Space>fF :Files<CR>
 nnoremap <Space>ft :Tags<CR>
@@ -313,26 +302,26 @@ let g:fzf_action = {
   \ 'ctrl-x': 'split',
   \ 'ctrl-v': 'vsplit' }
 
-Plugin 'kien/ctrlp.vim'
+Plug 'kien/ctrlp.vim'
   let g:ctrlp_map = '<c-p>'
   let g:ctrlp_cmd = 'CtrlPMixed'
   let g:ctrlp_mruf_relative = 1
   let g:ctrlp_custom_ignore = {
         \ "dir": '\v[\/]\@prefix\@$'
         \ }
-Plugin 'qpkorr/vim-renamer'
-Plugin 'chrisbra/Recover.vim'
-"Plugin 'snipmate'
-"Plugin 'vmark.vim_Visual_Bookmarking' " XXX beware: <F2>/<F3> is overrided
+Plug 'qpkorr/vim-renamer'
+Plug 'chrisbra/Recover.vim'
+"Plug 'snipmate'
+"Plug 'vmark.vim_Visual_Bookmarking' " XXX beware: <F2>/<F3> is overrided
 " TODO let b:vm_guibg = yellow
 "if has("ruby")
-"  Plugin 'tips'
+"  Plug 'tips'
 "end
-Plugin 'tpope/vim-eunuch' " for :Move, :SudoWrite, etc.
+Plug 'tpope/vim-eunuch' " for :Move, :SudoWrite, etc.
 
 " Vim and Tmux even better together: https://blog.bugsnag.com/tmux-and-vim/
 if exists("$TMUX")  " activate only in a tmux session
-  Plugin 'christoomey/vim-tmux-navigator'
+  Plug 'christoomey/vim-tmux-navigator'
   let g:tmux_navigator_no_mappings = 1
   " quicker move between windows with Ctrl+Alt+h/j/k/l and backslash
   nnoremap <silent> <Esc><C-h> :TmuxNavigateLeft<CR>
@@ -346,7 +335,7 @@ if exists("$TMUX")  " activate only in a tmux session
   " NOTE MacVim settings are not easy with Ctrl+Alt+keys, so relying on BetterTouchTool
   " (neither do <C-M-*> nor <C-D-*> works)
 
-  Plugin 'benmills/vimux'
+  Plug 'benmills/vimux'
   noremap <silent> <Esc><C-]>    :wall\|VimuxPromptCommand<CR>
   noremap <silent> <Esc><Return> :wall\|VimuxRunLastCommand<CR>
   noremap <silent> <Esc><C-x>    :VimuxInspectRunner<CR>
@@ -358,7 +347,7 @@ if exists("$TMUX")  " activate only in a tmux session
 endif
 
 """ Git, Github
-Plugin 'tpope/vim-fugitive'
+Plug 'tpope/vim-fugitive'
   if exists("*fugitive#buffer")
     " tips from vimcasts.org
     autocmd User fugitive
@@ -377,13 +366,13 @@ Plugin 'tpope/vim-fugitive'
   nnoremap <Space>gL :Glog --<CR>
   nnoremap <Space>ge :Gedit<CR>
   nnoremap <Space>gE :Gedit 
-Plugin 'tpope/vim-rhubarb'
-Plugin 'gregsexton/gitv'
+Plug 'tpope/vim-rhubarb'
+Plug 'gregsexton/gitv'
   nnoremap <Space>gv :Gitv --all<CR>
   nnoremap <Space>gV :Gitv! --all<CR>
   vnoremap <Space>gV :Gitv! --all<CR>
   set lazyredraw
-Plugin 'airblade/vim-gitgutter.git'
+Plug 'airblade/vim-gitgutter.git'
   let g:gitgutter_enabled = 1
   nnoremap <Space><C-g><C-g> :GitGutterToggle<CR>
   nnoremap <Space><C-g>g     :GitGutterLineHighlightsToggle<CR>
@@ -392,8 +381,8 @@ Plugin 'airblade/vim-gitgutter.git'
   nnoremap <Space>gh :GitGutterPreviewHunk<CR>
   nnoremap [G :GitGutterStageHunk<CR>
   nnoremap ]G :GitGutterUndoHunk<CR>
-Plugin 'mattn/gist-vim'
-Plugin 'mattn/webapi-vim'
+Plug 'mattn/gist-vim'
+Plug 'mattn/webapi-vim'
   let g:gist_clip_command = 'pbcopy'
   let g:gist_open_browser_after_post = 1
   let g:gist_get_multiplefile = 1
@@ -403,16 +392,16 @@ Plugin 'mattn/webapi-vim'
 
 
 """ Some file types
-Plugin 'tpope/vim-endwise'
+Plug 'tpope/vim-endwise'
 let g:sparkup = {}
   let g:sparkup.lhs_expand = '<C-\><C-e>'
   let g:sparkup.lhs_jump_next_empty_tag = '<C-\><C-f>'
-Plugin 'chrisgeo/sparkup', {'rtp': 'vim/'}
-Plugin 'xmledit'
+Plug 'chrisgeo/sparkup', {'rtp': 'vim/'}
+Plug 'xmledit'
   let g:xml_jump_string = "`"
-Plugin 'tpope/vim-ragtag'
+Plug 'tpope/vim-ragtag'
 
-Plugin 'tpope/vim-markdown' " Markdown vim-ft-markdown_fold
+Plug 'tpope/vim-markdown' " Markdown vim-ft-markdown_fold
   " Marked
   au FileType markdown
     \ call s:setLocalOptionsForWriting() |
@@ -424,71 +413,71 @@ Plugin 'tpope/vim-markdown' " Markdown vim-ft-markdown_fold
       \ noremap! <D-e> <C-\><C-N><D-e>gi|
       \ call sparkup#Setup()|
   endif
-Plugin 'elzr/vim-json'
+Plug 'elzr/vim-json'
   au BufEnter *.json setfiletype json
-Plugin 'vito-c/jq.vim'  " jq query language for JSON
-Plugin 'tpope/vim-jdaddy' " for aj and ij text objects
-Plugin 'GEverding/vim-hocon'  " for HOCON (Human Optimized Configuration Object Notation)
+Plug 'vito-c/jq.vim'  " jq query language for JSON
+Plug 'tpope/vim-jdaddy' " for aj and ij text objects
+Plug 'GEverding/vim-hocon'  " for HOCON (Human Optimized Configuration Object Notation)
 
 " C/C++ development essentials
 if has("python") && exists("$VIM_YCM")
-Plugin 'Valloric/YouCompleteMe'
+Plug 'Valloric/YouCompleteMe'
 " See: https://github.com/Valloric/YouCompleteMe#options
 " only activate YCM on a select filetypes (defaults to '*')
 let g:ycm_filetype_whitelist = {
       \ 'cpp': 1,
       \}
-Plugin 'rdnetto/YCM-Generator'
+Plug 'rdnetto/YCM-Generator'
 endif
 if executable("clang-format")
-  Plugin 'kana/vim-operator-user' " vim-operator-user
-  Plugin 'rhysd/vim-clang-format' " vim-clang-format
+  Plug 'kana/vim-operator-user' " vim-operator-user
+  Plug 'rhysd/vim-clang-format' " vim-clang-format
   let g:clang_format#code_style = "google"
   au FileType c,cpp,objc,objcpp
         \| nmap <Space><C-K> :ClangFormatAutoToggle<CR>
         \| map <C-K> <Plug>(operator-clang-format)
 endif
-Plugin 'msanders/cocoa.vim' 
-Plugin 'b4winckler/vim-objc'
-Plugin 'leafgarland/typescript-vim'
-Plugin 'ianks/vim-tsx'
-Plugin 'hashivim/vim-terraform'
-Plugin 'Shougo/vimproc.vim'
-Plugin 'Quramy/tsuquyomi'
-Plugin 'kchmck/vim-coffee-script'
+Plug 'msanders/cocoa.vim' 
+Plug 'b4winckler/vim-objc'
+Plug 'leafgarland/typescript-vim'
+Plug 'ianks/vim-tsx'
+Plug 'hashivim/vim-terraform'
+Plug 'Shougo/vimproc.vim'
+Plug 'Quramy/tsuquyomi'
+Plug 'kchmck/vim-coffee-script'
   au BufEnter *.coffee syntax sync fromstart
   " Search for CoffeeScript/JavaScript files, e.g., require "foo"
   au BufRead,BufNewFile *.coffee setl suffixesadd+=.coffee,.js
   " CoffeeScript autocompilation
   "autocmd BufWritePost *.coffee silent CoffeeMake! | cwindow
 if has("ruby")
-  Plugin 'lukaszkorecki/CoffeeTags'
+  Plug 'lukaszkorecki/CoffeeTags'
 endif
-Plugin 'jade.vim'
-Plugin 'kana/vim-altr'
+Plug 'jade.vim'
+Plug 'kana/vim-altr'
   nmap <Space><Tab>    <Plug>(altr-forward)
   nmap <Space><S-Tab>  <Plug>(altr-backward)
-Plugin 'tpope/vim-classpath'
-Plugin 'applescript.vim'
+Plug 'tpope/vim-classpath'
+Plug 'applescript.vim'
   au BufEnter *.applescript setfiletype applescript
-Plugin 'vim-scala'
-"Plugin 'MarcWeber/vim-addon-scala'
+Plug 'vim-scala'
+"Plug 'MarcWeber/vim-addon-scala'
   " Scala (See: http://mdr.github.com/scalariform/)
   "au BufEnter *.scala setl formatprg=scalariform\ --forceOutput
-Plugin 'octave.vim--'
+Plug 'octave.vim--'
   au BufEnter *.oct setlocal filetype=octave  " XXX *.m could be an Objective-C file
-Plugin 'SQLUtilities'
+Plug 'SQLUtilities'
   let g:sqlutil_keyword_case='\U'
   let g:sqlutil_align_where=1
   let g:sqlutil_align_comma=0
 " Python
-Plugin 'nvie/vim-flake8'
-Plugin 'tell-k/vim-autopep8'
-Plugin 'cespare/vim-toml'
+Plug 'nvie/vim-flake8'
+Plug 'tell-k/vim-autopep8'
+Plug 'cespare/vim-toml'
 
 " Vim-LaTeX is a comprehensive plugin for working with LaTeX
 " See: http://vim-latex.sourceforge.net/documentation/latex-suite/
-Plugin 'vim-latex/vim-latex'
+Plug 'vim-latex/vim-latex'
   let g:Tex_IgnoreLevel = 0
   let g:Tex_IgnoreUnmatched = 0
   let g:Tex_Folding = 1
@@ -577,35 +566,34 @@ Plugin 'vim-latex/vim-latex'
     endif
   endfun
   au FileType tex call s:LaTeX_Setup()
-" Automatic LaTeX Plugin for Vim and LaTeX_Box is also nice supporting
+" Automatic LaTeX Plug for Vim and LaTeX_Box is also nice supporting
 " latexmk directly, vim-like motions, mappings, etc.  but I find it a little
 " premature yet (e.g., ShowErrors didn't work for me)
 " See: http://atp-vim.sourceforge.net
-"Plugin 'AutomaticLaTeXPlugin'
-"Plugin 'LaTeX_Box'
+"Plug 'AutomaticLaTeXPlug'
+"Plug 'LaTeX_Box'
 
-"Plugin 'embear/vim-localvimrc'
+"Plug 'embear/vim-localvimrc'
 "  let g:localvimrc_name = [ ".lvimrc", ".vimrc" ]
 "  let g:localvimrc_persistent = 1
 "  let g:localvimrc_sandbox = 0
-Plugin 'MarcWeber/vim-addon-local-vimrc'
+Plug 'MarcWeber/vim-addon-local-vimrc'
   let g:local_vimrc = {'names':['.lvimrc', '.vimrc'],'hash_fun':'LVRHashOfFile'}
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
+" All of your Plugs must be added before the following line
+call plug#end()              " required
 filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
 "
 " Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+" :PlugInstall      - installs plugins
+" :PlugUpdate       - update plugins
+" :PlugClean        - removes unlisted plugins (confirm removal)
+" :PlugUpgrade      - upgrade vim-plug itself
+" :PlugStatus       - check the status of plugins
 "
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
+" see :h vim-plug for more details
+" Put your non-Plug stuff after this line
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " XXX probably not a good idea as it sometimes crashes tmux and macOS Terminal.app
@@ -641,7 +629,7 @@ endfun
 " TODO key for switching background between dark and bright
 set background=dark
 " XXX tlib seems not working, so workaround
-"Plugin 'tlib'
+"Plug 'tlib'
 "let g:mySetColors = tlib#list#RemoveAll(tlib#list#Flatten(tlib#list#Zip(g:mySetColorsSet)),'')
 let g:mySetColors       = s:stripeLists(s:mySetColorsSet)
 try

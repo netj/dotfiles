@@ -1,3 +1,5 @@
+/autoload/plug.vim
+/plugged
 /.netrwhist
 /spell
 /bundle
