@@ -62,7 +62,7 @@ let g:airline_theme = "hybrid"
 " Plug 'junegunn/seoul256.vim'  " https://github.com/junegunn/seoul256.vim
 Plug 'nanotech/jellybeans.vim'
 Plug 'tomasr/molokai'
-Plug 'Colour-Sampler-Pack'
+Plug 'vim-scripts/Colour-Sampler-Pack'
   let g:jellybeans_overrides = {
         \    'Todo': { 'guifg': '101010', 'guibg': 'fad07a',
         \              'ctermfg': 'Black', 'ctermbg': 'Yellow',
@@ -119,7 +119,7 @@ if has("gui_running")
 
   if has("gui_gtk2")
     " quick font resize for GVim
-    Plug 'fontsize'
+    Plug 'vim-scripts/fontsize'
       nmap <silent> <M-=> <Leader><Leader>+
       nmap <silent> <M--> <Leader><Leader>-
   endif
@@ -133,11 +133,11 @@ let g:netrw_nogx = 1 " disable netrw's gx mapping.
 nmap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
 if has("python")
-Plug 'Gundo'
+Plug 'sjl/gundo.vim'
   let g:gundo_close_on_revert = 1
   nnoremap <Space>u :GundoToggle<CR>
 endif
-Plug 'bufexplorer.zip'
+Plug 'jlanzarotta/bufexplorer'
   nnoremap <Space>b :BufExplorerHorizontalSplit<CR>
 "Plug 'tselectbuffer'
 "  nnoremap <Space>b :TSelectBuffer<CR>
@@ -145,7 +145,7 @@ Plug 'majutsushi/tagbar'
   nnoremap <Space>t :TagbarOpenAutoClose<CR>
   nnoremap <Space>T :TagbarToggle<CR>
   " See also: https://ctags.io or brew install --HEAD universal-ctags/universal-ctags/universal-ctags
-Plug 'ack.vim'
+Plug 'mileszs/ack.vim'
 fun! s:jumpToTagWithQuickFix(w)
   exec "ltag" a:w
   keepjumps call setqflist(getloclist(0))
@@ -183,16 +183,16 @@ Plug 'tommcdo/vim-exchange'
 
   " Align%294's \m= collides with Mark%2666 unless already mapped
   map <Leader>tm= <Plug>AM_m=
-Plug 'Align'
+Plug 'vim-scripts/Align'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 "Plug 'tpope/vim-speeddating' " FIXME doesn't work with 7.4-1589
 Plug 'tpope/vim-commentary'
 Plug 'bronson/vim-visual-star-search'
-Plug 'Lokaltog/vim-easymotion'
+Plug 'easymotion/vim-easymotion'
   let g:EasyMotion_leader_key = '<Space>w'
-Plug 'matchit.zip'
-Plug 'closeb'  " CTRL-_ to close complex brackets/tags
+Plug 'vim-scripts/matchit.zip'
+Plug 'vim-scripts/closeb'  " CTRL-_ to close complex brackets/tags
 Plug 'kien/rainbow_parentheses.vim'
   fun! RainbowParenthesesLoadAndToggleAll()
     exec 'RainbowParenthesesLoadRound'
@@ -205,11 +205,12 @@ Plug 'kien/rainbow_parentheses.vim'
   inoremap <C-\>0 <C-o>:call RainbowParenthesesLoadAndToggleAll()<CR>
 
 " Plug 'RltvNmbr'
-Plug 'DrawIt'
+Plug 'vim-scripts/DrawIt'
 " Plug 'MixCase'
 Plug 'junegunn/vim-emoji'
 
-Plug 'Mark'
+Plug 'inkarkat/vim-ingo-library'  " required by vim-mark
+Plug 'inkarkat/vim-mark'
   let g:mwHistAdd       = '' " '/@'
   let g:mwAutoLoadMarks = 1
   let g:mwAutoSaveMarks = 1
@@ -225,7 +226,6 @@ Plug 'Mark'
 " Shougo's NeoComplCache is really nice!
 if $USER != "root"
 Plug 'Shougo/neocomplcache'
-Plug 'Shougo/vimproc'
   let g:acp_enableAtStartup = 0
   " XXX Rather than enabling at startup, I use special key combo Cmd-Shift-D to turn it on
   "let g:neocomplcache_enable_at_startup = 1
@@ -241,9 +241,9 @@ Plug 'Shougo/vimproc'
   autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 endif
 " CamelCaseComplete is less convenient (CTRL-X CTRL-C), yet lightweight
-Plug 'CamelCaseComplete' 
-Plug 'CompleteHelper'
-Plug 'camelcasemotion'
+Plug 'vim-scripts/CamelCaseComplete' 
+Plug 'vim-scripts/CompleteHelper'
+Plug 'bkad/CamelCaseMotion'
   " recover default ,
   nnoremap ,, ,
   xnoremap ,, ,
@@ -282,7 +282,7 @@ Plug 'netj/vim-vinegar'  " XXX using personal fork of 'tpope/vim-vinegar'
 "Plug 'Command-T'
 "  nnoremap <Space>f :CommandT<CR>
 
-Plug 'junegunn/fzf'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 nnoremap <Space>ff :GFiles<CR>
 nnoremap <Space>fF :Files<CR>
@@ -372,7 +372,7 @@ Plug 'gregsexton/gitv'
   nnoremap <Space>gV :Gitv! --all<CR>
   vnoremap <Space>gV :Gitv! --all<CR>
   set lazyredraw
-Plug 'airblade/vim-gitgutter.git'
+Plug 'airblade/vim-gitgutter'
   let g:gitgutter_enabled = 1
   nnoremap <Space><C-g><C-g> :GitGutterToggle<CR>
   nnoremap <Space><C-g>g     :GitGutterLineHighlightsToggle<CR>
@@ -396,8 +396,8 @@ Plug 'tpope/vim-endwise'
 let g:sparkup = {}
   let g:sparkup.lhs_expand = '<C-\><C-e>'
   let g:sparkup.lhs_jump_next_empty_tag = '<C-\><C-f>'
-Plug 'chrisgeo/sparkup', {'rtp': 'vim/'}
-Plug 'xmledit'
+Plug 'rstacruz/sparkup', {'rtp': 'vim/'}
+Plug 'vim-scripts/xmledit'
   let g:xml_jump_string = "`"
 Plug 'tpope/vim-ragtag'
 
@@ -421,7 +421,7 @@ Plug 'GEverding/vim-hocon'  " for HOCON (Human Optimized Configuration Object No
 
 " C/C++ development essentials
 if has("python") && exists("$VIM_YCM")
-Plug 'Valloric/YouCompleteMe'
+Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer' }
 " See: https://github.com/Valloric/YouCompleteMe#options
 " only activate YCM on a select filetypes (defaults to '*')
 let g:ycm_filetype_whitelist = {
@@ -442,7 +442,7 @@ Plug 'b4winckler/vim-objc'
 Plug 'leafgarland/typescript-vim'
 Plug 'ianks/vim-tsx'
 Plug 'hashivim/vim-terraform'
-Plug 'Shougo/vimproc.vim'
+Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 Plug 'Quramy/tsuquyomi'
 Plug 'kchmck/vim-coffee-script'
   au BufEnter *.coffee syntax sync fromstart
@@ -453,20 +453,20 @@ Plug 'kchmck/vim-coffee-script'
 if has("ruby")
   Plug 'lukaszkorecki/CoffeeTags'
 endif
-Plug 'jade.vim'
+Plug 'digitaltoad/vim-pug'  " formerly jade.vim
 Plug 'kana/vim-altr'
   nmap <Space><Tab>    <Plug>(altr-forward)
   nmap <Space><S-Tab>  <Plug>(altr-backward)
 Plug 'tpope/vim-classpath'
-Plug 'applescript.vim'
+Plug 'vim-scripts/applescript.vim'
   au BufEnter *.applescript setfiletype applescript
-Plug 'vim-scala'
+Plug 'derekwyatt/vim-scala'
 "Plug 'MarcWeber/vim-addon-scala'
   " Scala (See: http://mdr.github.com/scalariform/)
   "au BufEnter *.scala setl formatprg=scalariform\ --forceOutput
-Plug 'octave.vim--'
+Plug 'vim-scripts/octave.vim--'
   au BufEnter *.oct setlocal filetype=octave  " XXX *.m could be an Objective-C file
-Plug 'SQLUtilities'
+Plug 'vim-scripts/SQLUtilities'
   let g:sqlutil_keyword_case='\U'
   let g:sqlutil_align_where=1
   let g:sqlutil_align_comma=0
