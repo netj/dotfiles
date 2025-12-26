@@ -100,20 +100,20 @@ Plug 'vim-airline/vim-airline-themes'
   set laststatus=2 noshowmode showcmd
 if has("gui_running")
   let g:airline_powerline_fonts = 1
-  fun! s:fontname(nameSize)
-    return substitute(a:nameSize, "\\(:h\\|  *\\)[0-9]\\+$", "", "i")
-  endfun
-  let guifonts = reverse(map(split(&guifont,","), '[s:fontname(v:val), v:val[len(s:fontname(v:val)):]]'))
-  let suffixes = reverse([
-        \  " for Powerline",
-        \  " Powerline",
-        \  " derivative Powerline",
-        \])
-  for [name,size] in guifonts
-    for suffix in suffixes
-      let &guifont = name.suffix.size .",". &guifont
-    endfor
-  endfor
+  " fun! s:fontname(nameSize)
+  "   return substitute(a:nameSize, "\\(:h\\|  *\\)[0-9]\\+$", "", "i")
+  " endfun
+  " let guifonts = reverse(map(split(&guifont,","), '[s:fontname(v:val), v:val[len(s:fontname(v:val)):]]'))
+  " let suffixes = reverse([
+  "       \  " for Powerline",
+  "       \  " Powerline",
+  "       \  " derivative Powerline",
+  "       \])
+  " for [name,size] in guifonts
+  "   for suffix in suffixes
+  "     let &guifont = name.suffix.size .",". &guifont
+  "   endfor
+  " endfor
   " using colorscheme from localvimrc can screw up powerline, hence below:
   autocmd VimEnter * doautoall airline BufEnter,ColorScheme
 
