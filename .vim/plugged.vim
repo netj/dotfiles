@@ -211,16 +211,17 @@ Plug 'junegunn/vim-emoji'
 
 Plug 'inkarkat/vim-ingo-library'  " required by vim-mark
 Plug 'inkarkat/vim-mark'
+  let g:mw_no_mappings = 1  " disable default mappings to use custom ones below
   let g:mwHistAdd       = '' " '/@'
   let g:mwAutoLoadMarks = 1
   let g:mwAutoSaveMarks = 1
-  set viminfo+=!  " Save and restore global variables. 
-  nmap <Space>m <Leader>m
-  xmap <Space>m <Leader>m
-  nmap <Space>M <Leader>n
-  xmap <Space>M <Leader>n
-  nmap <Space>n <Leader>*
-  nmap <Space>N <Leader>/
+  set viminfo+=!  " Save and restore global variables.
+  nmap <Space>m <Plug>MarkSet
+  xmap <Space>m <Plug>MarkSet
+  nmap <Space>M <Plug>MarkClear
+  xmap <Space>M <Plug>MarkClear
+  nmap <Space>n <Plug>MarkSearchNext
+  nmap <Space>N <Plug>MarkSearchPrev
 
 """ CamelCase stuff
 " Shougo's NeoComplCache is really nice!
