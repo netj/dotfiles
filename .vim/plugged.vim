@@ -412,7 +412,6 @@ Plug 'tpope/vim-markdown' " Markdown vim-ft-markdown_fold
     au FileType markdown
       \ nnoremap <D-e> :exec "!open -a \"Marked 2\" ".shellescape(expand("%"))<CR><CR>|
       \ noremap! <D-e> <C-\><C-N><D-e>gi|
-      \ call sparkup#Setup()|
   endif
 Plug 'elzr/vim-json'
   au BufEnter *.json setfiletype json
