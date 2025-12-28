@@ -240,6 +240,11 @@ brew_pkgs=(
     # homebrew/cask/iphone-backup-extractor
     # homebrew/cask/phoneclean
     # homebrew/cask/delicious-library
+
+    # vim Edit Popup https://github.com/tonisives/ovim
+    neovim
+    Alacritty
+    tonisives/tap/ovim
 )
 # TODO skip.brew support
 ensure_brew_installs "${brew_pkgs[@]}"
@@ -249,3 +254,5 @@ brew_pkgs_HEAD=(
 )
 brew_flags='--fetch-HEAD' \
 ensure_brew_installs "${brew_pkgs_HEAD[@]}"
+
+xattr -dr com.apple.quarantine "/Applications/Alacritty.app"
