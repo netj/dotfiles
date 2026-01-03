@@ -30,7 +30,7 @@ bash_plugin_interactive() {
           cut -b 3- | awk '{print $1}'
       ) && "$@" "$b"
     }
-    bash_default_alias gb.  "enumerate_branches_with='gb --color' __select_git_branch_to__ git checkout"
+    bash_default_alias gb.  "__() { enumerate_branches_with=\"gb --color \$*\" __select_git_branch_to__ git checkout; }; __"
     bash_default_alias gbg  "gb --color | grep -F '[gone]'"
     bash_default_alias gbgD "git for-each-ref --format $(printf %q '%(refname:short) %(upstream:track)') | sed $(printf %q '/ \[gone\]$/!d; s/ \[gone\]$//') | xargs -r git branch -D"
     bash_default_alias gbg. "enumerate_branches_with='gbg' __select_git_branch_to__ git branch -D"
