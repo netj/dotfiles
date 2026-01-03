@@ -73,6 +73,7 @@ bash_plugin_interactive() {
     bash_default_alias ghw  'gh pr view -w || gh repo view -w -b "$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)" || hub browse'
     bash_default_alias ghpC 'gh pr create -w'
     bash_default_alias ghpc 'gh pr checkout'
+    bash_default_alias ghpcw 'gh pr checks --watch'
 
     # GitHub CLI!
     ! type -p gh &>/dev/null || {
