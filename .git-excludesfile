@@ -10,3 +10,5 @@
 
 .lvimrc
 .ycm_extra_conf.py
+
+.claude/settings.local.json
