@@ -86,9 +86,6 @@ bash_plugin_interactive() {
     gg() {
       local _git_dir
       if _git_dir=$(git rev-parse --git-dir); then
-        _quoted_for_vim_ex() {
-          sed 's/[#%]/\\&/g'
-        }
         _gg() {
           BLK() {
             local title=$1; shift
@@ -100,14 +97,13 @@ bash_plugin_interactive() {
             }
           }
           BLK "Branch $(git symbolic-ref --short HEAD) since origin/HEAD"  git diff origin/HEAD... --stat=65536
-          BLK "Last commit"                                                git show                --stat=65536
-          BLK "Staged"                                                     git diff --staged       --stat=65536
           BLK "Unstaged"                                                   git diff                --stat=65536
+          BLK "Staged"                                                     git diff --staged       --stat=65536
+          BLK "Last commit"                                                git show                --stat=65536
         }
-        vim "$_git_dir"/index \
-          +'new' \
-          +"r !$(declare -p -f _gg | _quoted_for_vim_ex);_gg" \
-          +'setl readonly nomodified syntax=fugitive'
+        vim <(_gg) +'silent! file gg' \
+          +'setlocal buftype=nofile bufhidden=hide noswapfile readonly syntax=fugitive' \
+          #
       fi
     }
 
