@@ -202,10 +202,13 @@ fun! s:setupBufferAsDisposable()
   nnoremap <buffer> q :unmap <buffer> q<CR>:close<CR>
 endfun
 
+" quick Claude Code
+nmap <Space>cc  <C-\><C-N>:%!claude --print --no-session-persistence --output-format text --max-turns 1 --disable-slash-commands --permission-mode dontAsk --disallowed-tools "Bash(rm:*)" "Bash(sudo:*)" "Read" "Write" -- "$(cat)"<CR>
+
+
 " quickly display mappings of <C-\>, <Space>, <Leader>
 nnoremap <Space><C-l>   :map <S<BS>Space><CR>
 nnoremap <Leader><C-l>  :map <L<BS>Leader><CR>
-
 
 " Mode Toggler Keys
 let s:modeToggleKeys = {}
