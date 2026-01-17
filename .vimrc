@@ -213,6 +213,12 @@ onoremap <silent> ic :normal vic<CR>
 xnoremap <silent> ac <Esc>:<C-u>keeppatterns ?^```<CR>m<:<C-u>keeppatterns /^```<CR>m>:nohlsearch<CR>gvV
 onoremap <silent> ac :normal vac<CR>
 
+" quick new buffer with visual selection
+vnoremap <C-w>b  y:new<CR>:setlocal buftype=nofile bufhidden=hide noswapfile<CR>P:call <SID>setupBufferAsDisposable()<CR>
+
+" quick new buffer for the Markdown code fence
+nmap     <Space>`  vicok<C-w>bgg3xD:set ft=<C-r>"<CR>dd
+
 
 " quickly display mappings of <C-\>, <Space>, <Leader>
 nnoremap <Space><C-l>   :map <S<BS>Space><CR>
