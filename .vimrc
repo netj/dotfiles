@@ -203,7 +203,7 @@ fun! s:setupBufferAsDisposable()
 endfun
 
 " quick Claude Code
-nmap <Space>cc  <C-\><C-N>:%!claude --print --no-session-persistence --output-format text --max-turns 1 --disable-slash-commands --permission-mode dontAsk --disallowed-tools "Bash(rm:*)" "Bash(sudo:*)" "Read" "Write" -- "$(cat)"<CR>
+nmap <Space>cc  <C-\><C-N>:%!claude --print --no-session-persistence --output-format text --max-turns 5 --disable-slash-commands --permission-mode dontAsk --disallowed-tools "Bash(rm:*)" "Bash(sudo:*)" "Read" "Write" -- "$(cat)"<CR>
 
 " Markdown text objects
 " Inner Code Block (content between fences)
