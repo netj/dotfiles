@@ -255,6 +255,9 @@ git config --global init.defaultBranch main
 git config --global rerere.enabled true
 git config --global rerere.autoupdate true
 
+# some aliases
+git alias --global ezlog "log --pretty=format:'%C(yellow)%h %Cgreen(%cr) %C(bold blue)%<(15,trunc)%an%Creset%C(auto)%d%Creset %s'"
+
 git_excludesfile_after() {
     git config --global core.excludesfile ~/.git-excludesfile
 }

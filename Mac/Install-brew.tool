@@ -42,7 +42,7 @@ brew_pkgs=(
     # ghc
     # haskell-stack
     git  # NOTE as of macOS 15 git-completion can be installed via: ln -sfnv /Library/Developer/CommandLineTools/usr/share/git-core/git-completion.bash /opt/homebrew/etc/bash_completion.d/
-    git-gui
+    lazygit
     git-extras
     git-subrepo
     gnuplot
