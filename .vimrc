@@ -341,13 +341,15 @@ if has("mac")
 endif
 
 " Enhance "goto file" (gf, <C-W>f, <C-W>gf) for nonexistent files
+" and paths after = (e.g., --flag=/some/path or root=/some/path)
+set includeexpr=substitute(v:fname,'^.*=','','')
 if !exists("*s:gotoFileOrEditNew")
   fun! s:gotoFileOrEditNew(keysGoto, cmdEditNew)
     try
       " XXX need double exec to support special key syntax, e.g., <C-W>
       exec 'exec "normal! '.escape(a:keysGoto,"<").'f"'
     catch /^Vim\%((\a\+)\)\=:E447/
-      let fname = expand("<cfile>")
+      let fname = substitute(expand("<cfile>"), '^.*=', '', '')
       if index(["/", "~"], fname[0]) == -1
         " resolve relative paths with current file's directory
         let fname = expand("%:h")."/".fname
