@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Git aliases and etc.
+#
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2026-01-25
+# Requires: bpm.utils
+################################################################################
+
+bash_plugin_interactive() {
+    bash_default_alias C    "claude"
+}

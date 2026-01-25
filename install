@@ -220,6 +220,7 @@ bash_after() {
         tmux-cwd-sync
         git-helper
         logout-clear
+        coding-aliases
     )
     [ -d .bash/plugins/enabled ] ||
     . .bash/plugins/bpm.sh enable "${plugins[@]}"
