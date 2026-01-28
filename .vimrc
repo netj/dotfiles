@@ -203,7 +203,9 @@ fun! s:setupBufferAsDisposable()
 endfun
 
 " quick Claude Code
-nmap <Space>cc  <C-\><C-N>:%!claude --print --no-session-persistence --output-format text --max-turns 5 --disable-slash-commands --permission-mode dontAsk --disallowed-tools "Bash(rm:*)" "Bash(sudo:*)" "Read" "Write" -- "$(cat)"<CR>
+nmap <Space>C  <C-\><C-N>:%!claude --print --no-session-persistence --output-format text --max-turns 5 --disable-slash-commands --permission-mode dontAsk --disallowed-tools "Bash(rm:*)" "Bash(sudo:*)" "Read" "Write" -- "$(cat)"<CR>
+" quick GEMINI
+nmap <Space>G  <C-\><C-N>:%!gemini --sandbox --yolo --output-format=text "NEVER CREATE FILES; JUST OUTPUT." "$(cat)"<CR>
 
 " Markdown text objects
 " Inner Code Block (content between fences)
