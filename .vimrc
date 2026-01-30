@@ -61,7 +61,7 @@ set expandtab
 set listchars=tab:>.,eol:$
 
 " expansions
-set wildmode=list:full
+set wildmode=full  " XXX list:full no longer works like before
 set wildchar=<Tab>
 if has("&wildignorecase")
   set wildignorecase
@@ -203,7 +203,7 @@ fun! s:setupBufferAsDisposable()
 endfun
 
 " quick Claude Code
-nmap <Space>C  <C-\><C-N>:%!claude --print --no-session-persistence --output-format text --max-turns 5 --disable-slash-commands --permission-mode dontAsk --disallowed-tools "Bash(rm:*)" "Bash(sudo:*)" "Read" "Write" -- "$(cat)"<CR>
+nmap <Space>C  <C-\><C-N>:%!claude --print --no-session-persistence --output-format text --model claude-haiku-4-5 --max-turns 10 --disable-slash-commands --permission-mode dontAsk --disallowed-tools "Bash(rm:*)" "Bash(sudo:*)" "Read" "Write" -- "$(cat)"<CR>
 " quick GEMINI
 nmap <Space>G  <C-\><C-N>:%!gemini --sandbox --yolo --output-format=text "NEVER CREATE FILES; JUST OUTPUT." "$(cat)"<CR>
 
