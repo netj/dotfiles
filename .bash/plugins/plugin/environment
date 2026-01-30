@@ -36,17 +36,15 @@ bash_plugin_load() {
             if type brew &>/dev/null; then
                 # Prefer Homebrew (http://mxcl.github.com/homebrew/)
                 brew_prefix=${brew_prefix:-$(brew --prefix)}
-                bash_insert_path_if_not PATH "$brew_prefix"/sbin "$brew_prefix"/bin
-                bash_insert_path_if_not MANPATH "$brew_prefix"/man "$brew_prefix"/share/man
+                bash_insert_path PATH "$brew_prefix"/sbin "$brew_prefix"/bin
+                bash_insert_path MANPATH "$brew_prefix"/man "$brew_prefix"/share/man
                 # prefer GNU coreutils to BSD ones
-                bash_insert_path_if_not PATH "$brew_prefix/opt/coreutils/libexec/gnubin"
-                bash_insert_path_if_not MANPATH "$brew_prefix/opt/coreutils/libexec/gnuman"
-                # unversioned python (See: https://docs.brew.sh/Homebrew-and-Python)
-                bash_insert_path_if_not PATH "$brew_prefix"/opt/python/libexec/bin
+                bash_insert_path PATH "$brew_prefix/opt/coreutils/libexec/gnubin"
+                bash_insert_path MANPATH "$brew_prefix/opt/coreutils/libexec/gnuman"
             elif [ -x /opt/local/bin/port ]; then
                 # Paths for MacPorts (http://www.macports.org/)
-                bash_insert_path_if_not PATH /opt/local/sbin /opt/local/libexec/gnubin /opt/local/bin
-                bash_insert_path_if_not MANPATH /opt/local/man /opt/local/share/man
+                bash_insert_path PATH /opt/local/sbin /opt/local/libexec/gnubin /opt/local/bin
+                bash_insert_path MANPATH /opt/local/man /opt/local/share/man
             fi
             # for scripts and console entrypoints of pip install --user or easy_install --user
             bash_insert_path_if_not PATH ~/Library/Python/{2,3}.*/bin
