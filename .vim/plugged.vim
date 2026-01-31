@@ -285,8 +285,8 @@ Plug 'netj/vim-vinegar'  " XXX using personal fork of 'tpope/vim-vinegar'
 
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-nnoremap <Space>ff :GFiles<CR>
-nnoremap <Space>fF :Files<CR>
+nnoremap <Space>fg :GFiles<CR>
+nnoremap <Space>ff :Files<CR>
 nnoremap <Space>ft :Tags<CR>
 set tags+=.git/tags
 nnoremap <Space>fo :History<CR>
