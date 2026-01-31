@@ -61,7 +61,8 @@ set expandtab
 set listchars=tab:>.,eol:$
 
 " expansions
-set wildmode=full  " XXX list:full no longer works like before
+set wildmode=list:full
+set wildmenu!  " NOTE list:full no longer works nicely if wildmenu is on
 set wildchar=<Tab>
 if has("&wildignorecase")
   set wildignorecase
