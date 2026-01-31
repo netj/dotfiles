@@ -59,7 +59,7 @@ bash_plugin_interactive() {
     # environment variables
     bash_default_env EDITOR vim
     bash_default_env PAGER less
-    bash_default_env LESS "-XFRiMWS" # --no-init --quit-if-one-screen --RAW-CONTROL-CHARS --ignore-case --LONG-PROMPT --HILITE_UNREAD --chop-long-lines
+    bash_default_env LESS "-XFRiMWS --mouse" # --no-init --quit-if-one-screen --RAW-CONTROL-CHARS --ignore-case --LONG-PROMPT --HILITE_UNREAD --chop-long-lines
     env_names_ordered() {
         declare -p -x | sed 's/=.*//; s/^declare -x //' |
         LC_ALL=C sort --ignore-case
