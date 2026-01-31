@@ -288,7 +288,7 @@ Plug 'junegunn/fzf.vim'
 nnoremap <Space>fg :GFiles<CR>
 nnoremap <Space>ff :Files<CR>
 nnoremap <Space>ft :Tags<CR>
-set tags+=.git/tags
+set tags+=.git/tags  " maintained by ../.git-template/hooks/ctags
 nnoremap <Space>fo :History<CR>
 " TODO fzf history if possible?
 " An action can be a reference to a function that processes selected lines
