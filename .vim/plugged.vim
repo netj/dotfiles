@@ -321,30 +321,35 @@ Plug 'chrisbra/Recover.vim'
 Plug 'tpope/vim-eunuch' " for :Move, :SudoWrite, etc.
 
 " Vim and Tmux even better together: https://blog.bugsnag.com/tmux-and-vim/
+Plug 'christoomey/vim-tmux-navigator'
+let g:tmux_navigator_disable_when_zoomed = 1  " this makes more sense IMO
+let g:tmux_navigator_preserve_zoom = 1
+let g:tmux_navigator_no_mappings = 1
+" quicker move between windows with Ctrl+Alt+h/j/k/l and backslash
+nnoremap <silent> <Esc><C-h> :TmuxNavigateLeft<CR>
+nnoremap <silent> <Esc><C-j> :TmuxNavigateDown<CR>
+nnoremap <silent> <Esc><C-k> :TmuxNavigateUp<CR>
+nnoremap <silent> <Esc><C-l> :TmuxNavigateRight<CR>
+nnoremap <silent> <Esc><C-\> :TmuxNavigatePrevious<CR>
+" quicker splits/close
+nnoremap <silent> <Esc><C-v> <C-w>v
+nnoremap <silent> <Esc><C-n> <C-w>s
+nnoremap <silent> <Esc><C-s> <C-w>s
+nnoremap <silent> <Esc><C-w> <C-w>c
+" NOTE MacVim settings are not easy with Ctrl+Alt+keys, so relying on BetterTouchTool
+" (neither do <C-M-*> nor <C-D-*> works)
+
 if exists("$TMUX")  " activate only in a tmux session
-  Plug 'christoomey/vim-tmux-navigator'
-  let g:tmux_navigator_no_mappings = 1
-  " quicker move between windows with Ctrl+Alt+h/j/k/l and backslash
-  nnoremap <silent> <Esc><C-h> :TmuxNavigateLeft<CR>
-  nnoremap <silent> <Esc><C-j> :TmuxNavigateDown<CR>
-  nnoremap <silent> <Esc><C-k> :TmuxNavigateUp<CR>
-  nnoremap <silent> <Esc><C-l> :TmuxNavigateRight<CR>
-  nnoremap <silent> <Esc><C-\> :TmuxNavigatePrevious<CR>
-  " quicker splits
-  nnoremap <silent> <Esc><C-v> <C-w>v
-  nnoremap <silent> <Esc><C-s> <C-w>s
-  " NOTE MacVim settings are not easy with Ctrl+Alt+keys, so relying on BetterTouchTool
-  " (neither do <C-M-*> nor <C-D-*> works)
-
-  Plug 'benmills/vimux'
-  noremap <silent> <Esc><C-]>    :wall\|VimuxPromptCommand<CR>
-  noremap <silent> <Esc><Return> :wall\|VimuxRunLastCommand<CR>
-  noremap <silent> <Esc><C-x>    :VimuxInspectRunner<CR>
-  " vimux zooming tmux pane and returning, a la suspending Vim w/ Ctrl-Z
-  noremap <silent> <Esc><C-z>    :VimuxZoomRunner<CR>
-
   " ignore the prefix sent by Tmux for uniform behavior across INSERT-NORMAL modes
   nnoremap <silent> <C-\><C-o>   <C-g>
+
+  Plug 'benmills/vimux'
+  nnoremap <silent> <Esc><C-]>    :wall\|VimuxPromptCommand<CR>
+  nnoremap <silent> <Esc><Return> :wall\|VimuxRunLastCommand<CR>
+  inoremap <silent> <Esc><Return> <C-o>:wall\|VimuxRunLastCommand<CR>
+  "noremap <silent> <Esc><C-x>    :VimuxInspectRunner<CR>
+  " vimux zooming tmux pane and returning, a la suspending Vim w/ Ctrl-Z
+  "noremap <silent> <Esc><C-z>    :VimuxZoomRunner<CR>
 endif
 
 """ Git, Github
