@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+# tmux utilities
+#
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2026-01-31
+################################################################################
+
+bash_plugin_login() {
+    256colors () {
+        # cf. https://askubuntu.com/a/1260375/296825
+        _color_row() {
+            local label=$1; shift
+            local i
+            # Black FG on color BG
+            for i; do printf "\e[30;48;5;%sm%4d " "$i" "$i"; done
+            printf "\e[0m"
+            printf "%4s" ""
+            # White FG on color BG
+            for i; do printf "\e[97;48;5;%sm%4d " "$i" "$i"; done
+            printf "\e[0m"
+            printf "%4s" ""
+            # Color FG on black BG
+            for i; do printf "\e[40;38;5;%sm%4d " "$i" "$i"; done
+            printf "\e[0m"
+            printf "%4s" ""
+            # Color FG on white BG
+            for i; do printf "\e[107;38;5;%sm%4d " "$i" "$i"; done
+            printf "\e[0m"
+            printf " $label\n"
+        }
+        for j in {0..15..8}; do
+            eval "_color_row '' {$j..$(($j + 7))}"
+        done
+        echo
+        for j in {16..231..6}; do
+            eval "_color_row '' {$j..$(($j + 5))}"
+        done
+        echo
+        for j in {233..255..6}; do
+            eval "_color_row '' {$j..$(($j + 5))}"
+        done
+        echo
+
+        # cf. https://superuser.com/questions/1570764/how-do-you-arrange-terminal-color-sequences-into-human-friendly-color-grades#:~:text=%23!/bin/env%20python3%20def,%2C%20end%20=%20RESET)%20print()
+        _color_row  reds            231 224 217 210 203 196 160 124 88  52  16
+        _color_row  yellows         231 230 229 228 227 226 184 142 100 58  16
+        _color_row  greens          231 194 157 120 83  46  40  34  28  22  16
+        _color_row  cyans           231 195 159 123 87  51  44  37  30  23  16
+        _color_row  blues           231 189 147 105 63  21  20  19  18  17  16
+        _color_row  magentas        231 225 219 213 207 201 164 127 90  53  16
+        echo
+        _color_row "white to black" 231 188 145 102 59  16
+        _color_row  grays           231 255 254 253 252 251 250 249 248 247 246 245 244 243 242 241 240 239 238 237 236 235 234 233 232 16
+    }
+}
