@@ -322,7 +322,7 @@ Plug 'tpope/vim-eunuch' " for :Move, :SudoWrite, etc.
 
 " Vim and Tmux even better together: https://blog.bugsnag.com/tmux-and-vim/
 Plug 'christoomey/vim-tmux-navigator'
-let g:tmux_navigator_disable_when_zoomed = 1  " this makes more sense IMO
+"let g:tmux_navigator_disable_when_zoomed = 1  " this makes more sense IMO
 let g:tmux_navigator_preserve_zoom = 1
 let g:tmux_navigator_no_mappings = 1
 " quicker move between windows with Ctrl+Alt+h/j/k/l and backslash
