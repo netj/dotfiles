@@ -185,6 +185,13 @@ if executable("remocon")
   nnoremap <Space>R  <C-\><C-N>:!remocon<CR>
 endif
 
+" macOS clipboard (symmetric: <Space>y to yank, <Space>p to put)
+if has("mac")
+  vnoremap <Space>y :w !pbcopy<CR><CR>
+  nnoremap <Space>p :r !pbpaste<CR>
+  nnoremap <Space>P :-1r !pbpaste<CR>
+endif
+
 " Shorthand for duplicating current buffer contents in a new buffer
 nnoremap <Space>%  <C-\><C-N>:%yank<CR><C-W>n:put<CR>i<C-G>u<C-\><C-N>:call <SID>setupBufferAsDisposable()<CR>
 nnoremap <Space>#  <C-\><C-N><C-W>ni<C-R>=expand("#:p")<CR><C-G>u<C-\><C-N>:call <SID>setupBufferAsDisposable()<CR>
