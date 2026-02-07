@@ -39,7 +39,6 @@ set title		" set xterm title
 if has("mouse")
   set mouse=a		" use mouse
 endif
-set clipboard=exclude:.*
 set nowrap              " no line wrapping
 set scrolloff=2
 set modeline modelines=5
@@ -185,12 +184,10 @@ if executable("remocon")
   nnoremap <Space>R  <C-\><C-N>:!remocon<CR>
 endif
 
-" macOS clipboard (symmetric: <Space>y to yank, <Space>p to put)
-if has("mac")
-  vnoremap <Space>y :w !pbcopy<CR><CR>
-  nnoremap <Space>p :r !pbpaste<CR>
-  nnoremap <Space>P :-1r !pbpaste<CR>
-endif
+" System clipboard (symmetric: <Space>y to yank, <Space>p to put)
+vnoremap <Space>y "+y
+nnoremap <Space>p "+p
+nnoremap <Space>P "+P
 
 " Shorthand for duplicating current buffer contents in a new buffer
 nnoremap <Space>%  <C-\><C-N>:%yank<CR><C-W>n:put<CR>i<C-G>u<C-\><C-N>:call <SID>setupBufferAsDisposable()<CR>
