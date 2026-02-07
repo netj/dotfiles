@@ -225,22 +225,22 @@ Plug 'inkarkat/vim-mark'
 
 """ CamelCase stuff
 " Shougo's NeoComplCache is really nice!
-if $USER != "root"
-Plug 'Shougo/neocomplcache'
-  let g:acp_enableAtStartup = 0
-  " XXX Rather than enabling at startup, I use special key combo Cmd-Shift-D to turn it on
-  "let g:neocomplcache_enable_at_startup = 1
-  noremap <Space><C-n> :NeoComplCacheEnable<CR>
-  "let g:neocomplcache_enable_smart_case = 1
-  let g:neocomplcache_enable_camel_case_completion = 1
-  let g:neocomplcache_enable_underbar_completion = 1
-  " Enable omni completion.
-  autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-  autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-  autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-  autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-  autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-endif
+"if $USER != "root"
+"Plug 'Shougo/neocomplcache'
+"  let g:acp_enableAtStartup = 0
+"  " XXX Rather than enabling at startup, I use special key combo Cmd-Shift-D to turn it on
+"  "let g:neocomplcache_enable_at_startup = 1
+"  noremap <Space><C-n> :NeoComplCacheEnable<CR>
+"  "let g:neocomplcache_enable_smart_case = 1
+"  let g:neocomplcache_enable_camel_case_completion = 1
+"  let g:neocomplcache_enable_underbar_completion = 1
+"  " Enable omni completion.
+"  autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+"  autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+"  autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+"  autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+"  autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+"endif
 " CamelCaseComplete is less convenient (CTRL-X CTRL-C), yet lightweight
 Plug 'vim-scripts/CamelCaseComplete' 
 Plug 'vim-scripts/CompleteHelper'
@@ -399,25 +399,25 @@ Plug 'mattn/webapi-vim'
 
 """ Some file types
 Plug 'tpope/vim-endwise'
-let g:sparkup = {}
-  let g:sparkup.lhs_expand = '<C-\><C-e>'
-  let g:sparkup.lhs_jump_next_empty_tag = '<C-\><C-f>'
-Plug 'rstacruz/sparkup', {'rtp': 'vim/'}
+" let g:sparkup = {}
+"   let g:sparkup.lhs_expand = '<C-\><C-e>'
+"   let g:sparkup.lhs_jump_next_empty_tag = '<C-\><C-f>'
+" Plug 'rstacruz/sparkup', {'rtp': 'vim/'}
 Plug 'vim-scripts/xmledit'
   let g:xml_jump_string = "`"
 Plug 'tpope/vim-ragtag'
 
 Plug 'tpope/vim-markdown' " Markdown vim-ft-markdown_fold
-  " Marked
-  au FileType markdown
-    \ call s:setLocalOptionsForWriting() |
-    \ let &l:formatprg = '~/.vim/format-latex.pl' | " abuse LaTeX formatter on Markdown
-    \ setlocal formatoptions+=n |
-  if has("mac")
-    au FileType markdown
-      \ nnoremap <D-e> :exec "!open -a \"Marked 2\" ".shellescape(expand("%"))<CR><CR>|
-      \ noremap! <D-e> <C-\><C-N><D-e>gi|
-  endif
+  " " Marked
+  " au FileType markdown
+  "   \ call s:setLocalOptionsForWriting() |
+  "   \ let &l:formatprg = '~/.vim/format-latex.pl' | " abuse LaTeX formatter on Markdown
+  "   \ setlocal formatoptions+=n |
+  " if has("mac")
+  "   au FileType markdown
+  "     \ nnoremap <D-e> :exec "!open -a \"Marked 2\" ".shellescape(expand("%"))<CR><CR>|
+  "     \ noremap! <D-e> <C-\><C-N><D-e>gi|
+  " endif
 Plug 'elzr/vim-json'
   au BufEnter *.json setfiletype json
 Plug 'vito-c/jq.vim'  " jq query language for JSON
