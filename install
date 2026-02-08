@@ -236,10 +236,12 @@ install .inputrc
 
 tmux_conf_after() {
     # install tpm (tmux plugin manager)
-    [[ -e ~/.tmux/plugins/tpm ]] ||
-        git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+    tpm=tmux-plugins/tpm
+    tpm=netj/tpm  # XXX using my fork for now until merging the user/repo fix
+    [[ -e ~/.tmux/plugins/$tpm ]] ||
+        git clone https://github.com/$tpm ~/.tmux/plugins/$tpm
     # install plugins
-    ~/.tmux/plugins/tpm/bin/install_plugins
+    ~/.tmux/plugins/$tpm/bin/install_plugins
 }
 ! has tmux ||
 install .tmux.conf
