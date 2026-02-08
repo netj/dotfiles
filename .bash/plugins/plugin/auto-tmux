@@ -230,7 +230,7 @@ bash_plugin_login() {
             case $key in
                 [nN]) # start a new one per request
                     echo "auto-tmux: starting new session"
-                    tmux_ new-session
+                    SHLVL=$((SHLVL - 1)) tmux_ new-session
                     ;;
                 [rR]) # otherwise, default is to resume
                     echo "auto-tmux: resuming previous session"
