@@ -236,7 +236,7 @@ install .inputrc
 
 tmux_conf_after() {
     # install tpm (tmux plugin manager)
-    tmux new-session ~/.tmux/plugins/netj/tpm/bin/install_plugins
+    tmux -S ${TMPDIR:-/tmp}/tmux-%u-dotfiles new-session ~/.tmux/plugins/netj/tpm/bin/install_plugins
 }
 ! has tmux ||
 install .tmux.conf
