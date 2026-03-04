@@ -57,6 +57,7 @@ bash_plugin_interactive() {
     bash_default_alias gRC  "git rebase --continue"
     bash_default_alias gRA  "git rebase --abort"
     bash_default_alias gcp  "git cherry-pick"
+    bash_default_alias gm   "git merge"
     bash_default_alias gmt  "git mergetool"
     bash_default_alias gRH  "git reset --hard HEAD"
     bash_default_alias gRHu "git reset --hard HEAD@{u}"  # reset to upstream branch
