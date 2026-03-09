@@ -1,7 +1,9 @@
 #!/bin/sh
 set -e
 
-trap "rm -f .git/tags.$$" EXIT
+TOPLEVEL=$(git rev-parse --show-toplevel)
+
+trap "rm -f \"$TOPLEVEL/tags.$$\"" EXIT
 
 # trying to find universal ctags
 case $(uname) in
@@ -12,8 +14,8 @@ case $(uname) in
 esac
 
 # universal ctags
-git ls-files | ctags --tag-relative -L - -f".git/tags.$$" #--languages=-json
+git ls-files | ctags --tag-relative -L - -f"$TOPLEVEL/tags.$$" #--languages=-json
 
 # TODO fallback to macOS ctags when unavailable
 
-mv -f .git/tags.$$ .git/tags
+mv -f "$TOPLEVEL/tags.$$" "$TOPLEVEL/tags"
