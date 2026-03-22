@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# OSC 8 hyperlink handler for less
+# Receives a URI, outputs the command for less to execute
+# See: less(1) section on OSC 8 hyperlinks
+uri=$1
+case $uri in
+    file://*)
+        path=${uri#file://}
+        # strip hostname from file://host/path (empty host in file:///path)
+        case $path in
+            /*) ;; # no hostname (file:///path), path is already correct
+            *)  path=/${path#*/} ;; # strip hostname
+        esac
+        # extract #fragment (line number)
+        frag=
+        case $path in *"#"*) frag=${path##*#}; path=${path%%#*} ;; esac
+        frag=${frag#L}  # strip L prefix from GitHub-style #L123 fragments
+        if [[ -n "$frag" ]]; then
+            printf "vim '+%s' %q\\n" "$frag" "$path"
+        else
+            printf "vim %q\\n" "$path"
+        fi
+        ;;
+    http://*|https://*)
+        case $(uname) in
+            Darwin) printf "open %q\\n" "$uri" ;;
+            *)      printf "xdg-open %q\\n" "$uri" ;;
+        esac
+        ;;
+esac

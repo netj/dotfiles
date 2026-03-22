@@ -273,7 +273,10 @@ if has delta; then
     git config --global interactive.diffFilter "delta --color-only"
     git config --global delta.dark true
     git config --global delta.navigate true
+    git config --global delta.pager 'less -+F'  # override git's default LESS=FRX to not quit-if-one-screen (conflicts with --mouse and OSC 8 hyperlinks)
     git config --global delta.hyperlinks true
+    git config --global delta.hyperlinks-file-link-format 'file://{path}#L{line}'
+    install bin/ezurlopen
     git config --global delta.line-numbers true
     git config --global merge.conflictstyle diff3
     git config --global diff.colorMoved default

@@ -59,7 +59,9 @@ bash_plugin_interactive() {
     # environment variables
     bash_default_env EDITOR vim
     bash_default_env PAGER less
-    bash_default_env LESS "-XFRiMWS --mouse" # --no-init --quit-if-one-screen --RAW-CONTROL-CHARS --ignore-case --LONG-PROMPT --HILITE_UNREAD --chop-long-lines
+    bash_default_env LESS "-XRiMWS --mouse" # --no-init --RAW-CONTROL-CHARS --ignore-case --LONG-PROMPT --HILITE_UNREAD --chop-long-lines --mouse
+    bash_default_env LESS_OSC8_file -  # disable default file:// handler to let _ANY handle it
+    bash_default_env LESS_OSC8_ANY "ezurlopen '%o'"
     env_names_ordered() {
         declare -p -x | sed 's/=.*//; s/^declare -x //' |
         LC_ALL=C sort --ignore-case

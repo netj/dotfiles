@@ -1,7 +1,9 @@
+# os:
+#   openLink: 'eval "$(ezurlopen {{link}})"'  # XXX ezurlopen prints the command, doesn't run it (designed for less); vim freezes w/o TTY
 git:
-  paging:
-    colorArg: always
-    pager: delta --dark --paging=never
+  pagers:
+    - colorArg: always
+      pager: delta --dark --paging=never --hyperlinks --hyperlinks-file-link-format='lazygit-edit://{path}:{line}'
 customCommands:
   - key: 'B'
     context: 'global'
