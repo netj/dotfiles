@@ -36,17 +36,26 @@ bash_plugin_interactive() {
     bash_default_alias gbg  "gb --color | grep -F '[gone]'"
     bash_default_alias gbgd "git for-each-ref --format $(printf %q '%(refname:short) %(upstream:track)') | sed $(printf %q '/ \[gone\]$/!d; s/ \[gone\]$//') | xargs -r git branch -D"
     gbgD() {
-      git for-each-ref --format='%(refname:short) %(upstream:track)' |
-      sed -n 's/ \[gone\]$//p' |
-      xargs -r -L1 bash -xeuc '
-        branch=$1
-        # find the worktree that has this branch checked out (if any)
-        wt=$(git worktree list --porcelain | awk -v b="refs/heads/$branch" "/^worktree /{p=\$2} /^branch / && \$2==b {print p}")
-        if [[ -n "$wt" ]]; then
-          git worktree remove --force "$wt"
-        fi
-        git branch -D "$branch"
-      ' --
+      local gone sel branch wt
+      gone=$(git for-each-ref --format='%(refname:short) %(upstream:track)' | sed -n 's/ \[gone\]$//p')
+      if [[ -z "$gone" ]]
+      then echo "No gone branches"
+      else
+        sel=$(printf '* ALL\n%s' "$gone" | fzf -m --header='Select gone branches to delete')
+        ! grep -qF '* ALL' <<<"$sel" || sel=$gone
+        while read -r branch; do
+          # find the worktree that has this branch checked out (if any)
+          wt=$(git worktree list --porcelain | awk -v b="refs/heads/$branch" '/^worktree /{p=$2} /^branch / && $2==b {print p}')
+          if [[ -n "$wt" ]]; then
+            echo "Removing worktree $wt (branch $branch)"
+            if ! git worktree remove "$wt"; then
+              read -p "Force remove worktree $wt? [y/N] " ans </dev/tty
+              [[ "$ans" == [yY]* ]] && git worktree remove --force "$wt" || { echo "Skipping $branch"; continue; }
+            fi
+          fi
+          git branch -D "$branch"
+        done <<<"$sel"
+      fi
     }
     bash_default_alias gbg. "enumerate_branches_with='gbg' __select_git_branch_to__ git branch -D"
     bash_default_alias gc   "git checkout"

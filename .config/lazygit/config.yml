@@ -19,14 +19,17 @@ customCommands:
       else
         sel=$(printf '* ALL\n%s' "$gone" | fzf -m --header='Select gone branches to delete')
         ! grep -qF '* ALL' <<<"$sel" || sel=$gone
-        echo "$sel" | xargs -L1 bash -xeuc '
-          branch=$1
+        while read -r branch; do
           # find the worktree that has this branch checked out (if any)
-          wt=$(git worktree list --porcelain | awk -v b="refs/heads/$branch" "/^worktree /{p=\$2} /^branch / && \$2==b {print p}")
+          wt=$(git worktree list --porcelain | awk -v b="refs/heads/$branch" '/^worktree /{p=$2} /^branch / && $2==b {print p}')
           if [[ -n "$wt" ]]; then
-            git worktree remove --force "$wt"
+            echo "Removing worktree $wt (branch $branch)"
+            if ! git worktree remove "$wt"; then
+              read -p "Force remove worktree $wt? [y/N] " ans </dev/tty
+              [[ "$ans" == [yY]* ]] && git worktree remove --force "$wt" || { echo "Skipping $branch"; continue; }
+            fi
           fi
           git branch -D "$branch"
-        ' --
+        done <<<"$sel"
       fi
     output: terminal
