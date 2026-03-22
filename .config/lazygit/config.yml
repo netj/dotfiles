@@ -1,5 +1,6 @@
 # os:
 #   openLink: 'eval "$(ezurlopen {{link}})"'  # XXX ezurlopen prints the command, doesn't run it (designed for less); vim freezes w/o TTY
+promptToReturnFromSubprocess: false
 git:
   pagers:
     - colorArg: always
