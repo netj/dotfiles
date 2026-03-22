@@ -38,7 +38,15 @@ bash_plugin_interactive() {
     gbgD() {
       git for-each-ref --format='%(refname:short) %(upstream:track)' |
       sed -n 's/ \[gone\]$//p' |
-      xargs -r -I {} sh -c 'git worktree remove --force {} 2>/dev/null || git branch -D {}'
+      xargs -r -L1 bash -xeuc '
+        branch=$1
+        # find the worktree that has this branch checked out (if any)
+        wt=$(git worktree list --porcelain | awk -v b="refs/heads/$branch" "/^worktree /{p=\$2} /^branch / && \$2==b {print p}")
+        if [[ -n "$wt" ]]; then
+          git worktree remove --force "$wt"
+        fi
+        git branch -D "$branch"
+      ' --
     }
     bash_default_alias gbg. "enumerate_branches_with='gbg' __select_git_branch_to__ git branch -D"
     bash_default_alias gc   "git checkout"
