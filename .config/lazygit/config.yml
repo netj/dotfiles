@@ -1,0 +1,15 @@
+git:
+  paging:
+    colorArg: always
+    pager: delta --dark --paging=never
+customCommands:
+  - key: '<c-d>'
+    context: 'global'
+    description: 'Diff HEAD against origin/main'
+    command: 'git diff origin/main...HEAD'
+    output: 'popup'
+  - key: 'D'
+    context: 'localBranches'
+    description: 'Delete all gone branches (and worktrees)'
+    command: "git for-each-ref --format='%(refname:short) %(upstream:track)' | sed -n 's/ \\[gone\\]$//p' | xargs -I {} sh -c 'git worktree remove --force {} 2>/dev/null || git branch -D {}'"
+    output: terminal

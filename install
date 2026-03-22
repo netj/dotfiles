@@ -306,6 +306,13 @@ fi
 
 fi
 
+if has lazygit; then
+case $(uname) in
+    Darwin) install Library/"Application Support"/lazygit/config.yml .config/lazygit/config.yml ;;
+    *)      install .config/lazygit/config.yml ;;
+esac
+fi
+
 ! top -v 2>&1 | grep -q 'procps version' ||
 install .toprc
 
