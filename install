@@ -267,10 +267,20 @@ git_excludesfile_after() {
 }
 install .git-excludesfile
 
-# no work possible w/o git + diff-so-fancy
+# See: https://dandavison.github.io/delta/configuration.html
+if has delta; then
+    git config --global --replace-all core.pager delta
+    git config --global interactive.diffFilter "delta --color-only"
+    git config --global delta.dark true
+    git config --global delta.navigate true
+    git config --global delta.hyperlinks true
+    git config --global delta.line-numbers true
+    git config --global merge.conflictstyle diff3
+    git config --global diff.colorMoved default
+
 # See: https://github.com/so-fancy/diff-so-fancy#readme
-if has diff-so-fancy; then
-    git config --global core.pager "diff-so-fancy | less --tabs=4 -RFX"
+elif has diff-so-fancy; then
+    git config --global --replace-all core.pager "diff-so-fancy | less --tabs=4 -RFX"
 
     git config --global color.diff-highlight.oldNormal    "red bold"
     git config --global color.diff-highlight.oldHighlight "red bold 52"

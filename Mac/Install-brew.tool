@@ -34,7 +34,7 @@ brew_pkgs=(
     ctags
     coreutils
     debianutils
-    diff-so-fancy
+    delta
     docker-completion
     #docker-compose-completion
     ffmpeg
