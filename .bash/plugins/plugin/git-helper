@@ -37,6 +37,8 @@ bash_plugin_interactive() {
     bash_default_alias gbgd "git for-each-ref --format $(printf %q '%(refname:short) %(upstream:track)') | sed $(printf %q '/ \[gone\]$/!d; s/ \[gone\]$//') | xargs -r git branch -D"
     gbgD() {
       local gone sel branch wt
+      local remote; remote=$(git rev-parse --abbrev-ref '@{upstream}' 2>/dev/null | cut -d/ -f1) || remote=origin
+      git remote update --prune "$remote"
       gone=$(git for-each-ref --format='%(refname:short) %(upstream:track)' | sed -n 's/ \[gone\]$//p')
       if [[ -z "$gone" ]]
       then echo "No gone branches"
