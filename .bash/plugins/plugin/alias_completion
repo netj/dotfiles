@@ -84,11 +84,8 @@ bash_plugin_interactive() {
             # lightly parse the alias definition to pick out the command
             read -a defn_words <<<"$definition"
             set -- "${defn_words[@]}"
-            while true; do
-                command=$1; shift
-                case $command in (*=*) ;; (*) break;; esac
-            done
-            printf '%q ' ${alias_completion_namespace}wrap_alias "$shorthand" "$command" "$definition"; echo
+            for _command; do [[ $_command = *=* ]] || break; done
+            printf '%q ' ${alias_completion_namespace}wrap_alias "$shorthand" "$_command" "$definition"; echo
         done
     )"
 }
