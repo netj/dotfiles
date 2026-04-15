@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
-# run given command in the same environment setup as interactive/login shell (BASH)
+# run given command in the same environment setup as an interactive/login shell (BASH)
 # Author: Jaeho Shin <netj@sparcs.org>
 # Created: 2026-04-14
 #
 # Usage:
 #   ssh host -t -- .dotfiles/env some-command arg args
+#   ssh host -t -- .dotfiles/env optmux some/project/dir/
 ##
 source /etc/profile
 exec bash -ic '"$@"' -- "$@"
