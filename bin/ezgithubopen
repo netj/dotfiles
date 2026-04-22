@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# ezgithubopen — open GitHub PR or repo page for the current branch in browser
+gh pr view -w 2>/dev/null ||
+gh repo view -w -b "$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)" 2>/dev/null ||
+gh browse .

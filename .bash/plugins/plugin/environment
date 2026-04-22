@@ -50,9 +50,9 @@ bash_plugin_load() {
             bash_insert_path_if_not PATH ~/Library/Python/{2,3}.*/bin
         ;;
     esac
-    # ensure ~/bin and ~/.local/bin are on PATH if exists
+    # ensure ~/bin, ~/.local/bin, ~/.dotfiles/bin are on PATH if exists
     # See also: https://unix.stackexchange.com/questions/316765/which-distributions-have-home-local-bin-in-path
-    bash_insert_path_if_not PATH ~/.local/bin ~/bin
+    bash_insert_path_if_not PATH ~/.local/bin ~/bin ~/.dotfiles/bin
 }
 
 bash_plugin_interactive() {

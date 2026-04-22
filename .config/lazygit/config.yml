@@ -15,37 +15,5 @@ customCommands:
   - key: '<c-k>'
     context: 'global'
     description: 'Delete gone branches (and worktrees)'
-    command: |
-      remote=$(git rev-parse --abbrev-ref '@{upstream}' 2>/dev/null | cut -d/ -f1) || remote=origin
-      git remote update --prune "$remote"
-      gone=$(git for-each-ref --format='%(refname:short) %(upstream:track)' | sed -n 's/ \[gone\]$//p')
-      if [[ -z "$gone" ]]
-      then echo "No gone branches"
-      else
-        sel=$(printf '* ALL\n%s' "$gone" | fzf -m --header='Select gone branches to delete')
-        ! grep -qF '* ALL' <<<"$sel" || sel=$gone
-        force_needed=()
-        while read -r branch; do
-          wt=$(git worktree list --porcelain | awk -v b="refs/heads/$branch" '/^worktree /{p=$2} /^branch / && $2==b {print p}')
-          if [[ -n "$wt" ]]; then
-            if git worktree remove "$wt" 2>/dev/null; then
-              echo "Removed worktree $wt"
-            else
-              force_needed+=("$branch	$wt")
-              continue
-            fi
-          fi
-          git branch -D "$branch"
-        done <<<"$sel"
-        if [[ ${#force_needed[@]} -gt 0 ]]; then
-          force_sel=$(printf '%s\n' "${force_needed[@]}" |
-            fzf -m --header='These worktrees have changes — select to FORCE remove' \
-                --delimiter=$'\t' --with-nth=1 --preview='echo {} | cut -f2 | xargs git -C {} status --short')
-          while IFS=$'\t' read -r branch wt; do
-            echo "Force removing worktree $wt (branch $branch)"
-            git worktree remove --force "$wt" || { echo "Skipping $branch"; continue; }
-            git branch -D "$branch"
-          done <<<"$force_sel"
-        fi
-      fi
+    command: ezgitprunegone
     output: terminal

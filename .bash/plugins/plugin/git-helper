@@ -35,44 +35,7 @@ bash_plugin_interactive() {
     bash_default_alias gb.  "__() { enumerate_branches_with=\"gb --color \$*\" __select_git_branch_to__ git checkout; }; __"
     bash_default_alias gbg  "gb --color | grep -F '[gone]'"
     bash_default_alias gbgd "git for-each-ref --format $(printf %q '%(refname:short) %(upstream:track)') | sed $(printf %q '/ \[gone\]$/!d; s/ \[gone\]$//') | xargs -r git branch -D"
-    gbgD() {
-      local gone sel branch wt
-      local remote; remote=$(git rev-parse --abbrev-ref '@{upstream}' 2>/dev/null | cut -d/ -f1) || remote=origin
-      git remote update --prune "$remote"
-      gone=$(git for-each-ref --format='%(refname:short) %(upstream:track)' | sed -n 's/ \[gone\]$//p')
-      if [[ -z "$gone" ]]
-      then echo "No gone branches"
-      else
-        sel=$(printf '* ALL\n%s' "$gone" | fzf -m --header='Select gone branches to delete')
-        ! grep -qF '* ALL' <<<"$sel" || sel=$gone
-        # first pass: remove cleanly, collect ones needing force
-        local force_needed=()
-        while read -r branch; do
-          wt=$(git worktree list --porcelain | awk -v b="refs/heads/$branch" '/^worktree /{p=$2} /^branch / && $2==b {print p}')
-          if [[ -n "$wt" ]]; then
-            if git worktree remove "$wt" 2>/dev/null; then
-              echo "Removed worktree $wt"
-            else
-              force_needed+=("$branch	$wt")
-              continue
-            fi
-          fi
-          git branch -D "$branch"
-        done <<<"$sel"
-        # second pass: let user pick which dirty worktrees to force-remove
-        if [[ ${#force_needed[@]} -gt 0 ]]; then
-          local force_sel
-          force_sel=$(printf '%s\n' "${force_needed[@]}" |
-            fzf -m --header='These worktrees have changes — select to FORCE remove' \
-                --delimiter=$'\t' --with-nth=1 --preview='echo {}  | cut -f2 | xargs git -C {} status --short')
-          while IFS=$'\t' read -r branch wt; do
-            echo "Force removing worktree $wt (branch $branch)"
-            git worktree remove --force "$wt" || { echo "Skipping $branch"; continue; }
-            git branch -D "$branch"
-          done <<<"$force_sel"
-        fi
-      fi
-    }
+    bash_default_alias gbgD "ezgitprunegone"
     bash_default_alias gbg. "enumerate_branches_with='gbg' __select_git_branch_to__ git branch -D"
     bash_default_alias gc   "git checkout"
     bash_default_alias gcb  "git checkout -b"
@@ -111,7 +74,7 @@ bash_plugin_interactive() {
     bash_default_alias gRWIP "test \"\$(git log -1 --format='%s')\" != WIP || git reset --soft HEAD^"
 
     # github cli or hub.github.com
-    bash_default_alias ghw  'gh pr view -w || gh repo view -w -b "$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)" || hub browse'
+    bash_default_alias ghw  'ezgithubopen'
     bash_default_alias ghpC 'gh pr create -w'
     bash_default_alias ghpc 'gh pr checkout'
     bash_default_alias ghpcw 'gh pr checks --watch'
