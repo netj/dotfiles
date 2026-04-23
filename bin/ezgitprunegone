@@ -8,9 +8,24 @@ if [[ -z "$remote" ]]; then
 fi
 git remote update --prune "$remote"
 
-gone=$(git for-each-ref --format='%(refname:short) %(upstream:track)' | sed -n 's/ \[gone\]$//p')
+git_gone=$(git for-each-ref --format='%(refname:short) %(upstream:track)' | sed -n 's/ \[gone\]$//p')
+gone=$git_gone
+
+# Also detect local branches whose PRs were merged on GitHub
+if command -v gh &>/dev/null; then
+  default_branch=$(gh repo view --json defaultBranchRef --jq '.defaultBranchRef.name' 2>/dev/null) || default_branch=main
+  pr_branches=$(gh pr list --state merged --limit 200 --json headRefName --jq '.[].headRefName' 2>/dev/null | sort -u) || pr_branches=
+  if [[ -n "$pr_branches" ]]; then
+    local_branches=$(git for-each-ref --format='%(refname:short)' refs/heads/ | sort)
+    gh_gone=$(comm -12 <(echo "$local_branches") <(echo "$pr_branches") | grep -vxF "$default_branch" || true)
+    if [[ -n "$gh_gone" ]]; then
+      gone=$( { [[ -n "$gone" ]] && echo "$gone"; echo "$gh_gone"; } | sort -u)
+    fi
+  fi
+fi
+
 if [[ -z "$gone" ]]; then
-  echo "No gone branches"
+  echo "NONE" | fzf --tmux --header='No gone branches to delete'
   exit
 fi
 
