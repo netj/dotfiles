@@ -1,0 +1,62 @@
+# Ghostty config — Dosa theme
+# Ported from Mac/Dosa.terminal and Mac/Dosa.itermcolors
+
+# Font
+font-family = EnvyCodeR Nerd Font
+font-size = 16
+
+# Colors (sRGB values from Dosa.itermcolors)
+background = #0e1400
+foreground = #bbc4a1
+cursor-color = #00f900
+selection-background = #005493
+
+palette = 0=#383f1c
+palette = 1=#cc3300
+palette = 2=#33cc33
+palette = 3=#ffcc00
+palette = 4=#417dd6
+palette = 5=#cc3299
+palette = 6=#36d9d9
+palette = 7=#ebebeb
+palette = 8=#718033
+palette = 9=#ff4d41
+palette = 10=#30f942
+palette = 11=#fffc41
+palette = 12=#3dacff
+palette = 13=#ff5bff
+palette = 14=#32fdff
+palette = 15=#ffffff
+
+# Cursor
+cursor-style = block
+cursor-style-blink = true
+
+# Window
+window-columns = 132
+window-rows = 40
+background-opacity = 0.95
+background-blur-radius = 20
+
+# Input
+macos-option-as-alt = true
+
+# Scrollback
+scrollback-limit = 100000
+
+# Shell integration (enables prompt tracking, title, sudo)
+shell-integration = detect
+shell-integration-features = cursor,sudo,title
+
+# URL and file clicking — cmd+click opens URLs and file paths
+mouse-hide-while-typing = true
+link-url = true
+
+# Copy selected text to clipboard automatically
+copy-on-select = false
+
+# Close window when shell exits without prompting
+confirm-close-surface = false
+
+# Keep window open on shell exit (set to false to auto-close)
+window-close-on-last-tab = true
