@@ -33,8 +33,6 @@ cursor-style = block
 cursor-style-blink = true
 
 # Window
-window-columns = 132
-window-rows = 40
 background-opacity = 0.95
 background-blur-radius = 20
 
@@ -59,4 +57,4 @@ copy-on-select = false
 confirm-close-surface = false
 
 # Keep window open on shell exit (set to false to auto-close)
-window-close-on-last-tab = true
+quit-after-last-window-closed = false

@@ -325,6 +325,12 @@ case $(uname) in
 esac
 fi
 
+if has ghostty || mdfind-has 'kMDItemCFBundleIdentifier == "com.mitchellh.ghostty"' 2>/dev/null; then
+case $(uname) in
+    Darwin) install Library/"Application Support"/com.mitchellh.ghostty/config.ghostty ghostty/config ;;
+esac
+fi
+
 ! top -v 2>&1 | grep -q 'procps version' ||
 install .toprc
 
