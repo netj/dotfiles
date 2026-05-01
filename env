@@ -5,7 +5,13 @@
 #
 # Usage:
 #   ssh host -t -- .dotfiles/env some-command arg args
-#   ssh host -t -- .dotfiles/env optmux some/project/dir/
+#   ssh host -t -- .dotfiles/env NAME=VALUE ... some-command arg args
+#   ssh host -t -- .dotfiles/env TERM=xterm-256color optmux some/project/dir/
 ##
+envs=""
+while [[ "${1:-}" == *=* ]]; do
+    envs+="export $(printf %q "$1"); "
+    shift
+done
 source /etc/profile
-exec bash -ic '"$@"' -- "$@"
+exec bash -ic "${envs}"'"$@"' -- "$@"
