@@ -28,6 +28,9 @@ palette = 13=#ff5bff
 palette = 14=#32fdff
 palette = 15=#ffffff
 
+# Bold renders as bright color (matches traditional terminal behavior for ls colors, etc.)
+bold-is-bright = true
+
 # Cursor
 cursor-style = block
 cursor-style-blink = true

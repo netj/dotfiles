@@ -137,6 +137,9 @@ bash_plugin_interactive() {
             ##trap -xtermtitle_mac_terminal_update_hook DEBUG
         else
             xtermtitle_mac_terminal=false
+            if [[ "${TERM_PROGRAM:-}" == "ghostty" ]]; then
+                ssh() { TERM=xterm-256color command ssh "$@"; }
+            fi
         fi
         # xterm title controller
         title() {
