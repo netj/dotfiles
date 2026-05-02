@@ -40,6 +40,8 @@ if has("mouse")
   set mouse=a		" use mouse
 endif
 set nowrap              " no line wrapping
+set number relativenumber
+set cursorline cursorcolumn
 set scrolloff=2
 set modeline modelines=5
 
@@ -272,6 +274,7 @@ ModeToggleKey list            <C-Space>
 ModeToggleKey list            <C-@>
 ModeToggleKey modifiable      <C-m>
 ModeToggleKey number          1
+ModeToggleKey relativenumber  0
 ModeToggleKey paste           <C-]>
 ModeToggleKey readonly        <C-r>
 ModeToggleKey ruler           %
