@@ -5,6 +5,8 @@
 #   launchd-managed agent, or a forwarded one from `ssh -A`), leave it alone.
 # - Otherwise, start (or reuse) a per-host agent on a stable socket path
 #   ~/.ssh/auth.sock so every shell and tmux pane on the host can share it.
+#   Also makes sure tmux picks up the shared SSH_AUTH_SOCK, since
+#   tmux-env-sync plugin can interfere and wipe out the env var set here.
 #
 # Author: Jaeho Shin <netj@sparcs.org>
 # Created: 2026-05-03
@@ -18,12 +20,10 @@ bash_plugin_login() {
         local rc=$?
         [ $rc -eq 0 ] || [ $rc -eq 1 ]
     }
-    -shared-ssh-agent-init() {
-        # if the inherited SSH_AUTH_SOCK already works, don't override it
-        ! [ -n "${SSH_AUTH_SOCK:-}" ] || ! -shared-ssh-agent-alive "$SSH_AUTH_SOCK" || return 0
+    -shared-ssh-agent-launch() {
         type ssh-agent &>/dev/null || return 0
-        local sock=$HOME/.ssh/auth.sock
-        local lockdir=$sock.lock
+        local sock="$1"
+        local lockdir="$sock".lock
         local i
         # serialize concurrent logins so two shells don't race to start two agents
         for i in 1 2 3 4 5; do
@@ -37,13 +37,21 @@ bash_plugin_login() {
             fi
             sleep 0.2
         done
-        if -shared-ssh-agent-alive "$sock"; then
-            export SSH_AUTH_SOCK=$sock
-            unset SSH_AGENT_PID
-        fi
     }
-    -shared-ssh-agent-init
-    unset -f -- -shared-ssh-agent-init -shared-ssh-agent-alive
+    # if the inherited SSH_AUTH_SOCK already works, don't override it
+    if [[ -z "${SSH_AUTH_SOCK:-}" ]] || ! -shared-ssh-agent-alive "$SSH_AUTH_SOCK"; then
+        SSH_AUTH_SOCK=~/.ssh/auth.sock
+        -shared-ssh-agent-launch "$SSH_AUTH_SOCK"
+        if -shared-ssh-agent-alive "$SSH_AUTH_SOCK"; then
+            echo >&2 "shared-ssh-agent: $SSH_AUTH_SOCK"
+            export SSH_AUTH_SOCK
+            [[ -z "${TMUX:-}" ]] || tmux set-environment SSH_AUTH_SOCK "$SSH_AUTH_SOCK"
+            unset SSH_AGENT_PID
+        else
+            unset SSH_AUTH_SOCK
+        fi
+    fi
+    unset -f -- -shared-ssh-agent-launch -shared-ssh-agent-alive
 }
 
 # vim:et:ts=8:sw=4:sts=4
