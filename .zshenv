@@ -1,2 +1,2 @@
-export PATH=/opt/homebrew/bin:"$PATH"
+eval "$(/usr/libexec/path_helper -s)"
 export PATH=~/bin:~/.local/bin:"$PATH"
