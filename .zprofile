@@ -4,6 +4,8 @@
 # If you still have old bash (3.x) as your shell, please change it to zsh before using this with:
 #  chsh -s /bin/zsh
 
+source ~/.zshenv
+
 [ "$-" = "${-//[il]/}" ] || # don't interfere when not a login or interactive shell
 [ -n "${CLAUDECODE-}" ] ||  # don't interfere with Claude Code
 [ -n "${INTELLIJ_ENVIRONMENT_READER-}" ] ||  # don't interfere with PyCharm or IntelliJ IDEs
