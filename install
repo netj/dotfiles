@@ -329,7 +329,7 @@ fi
 
 if has ghostty || test -x /Applications/Ghostty.app/Contents/MacOS/ghostty &>/dev/null; then
 case $(uname) in
-    Darwin) install Library/"Application Support"/com.mitchellh.ghostty/config.ghostty ghostty/config ;;
+    Darwin) install Library/"Application Support"/com.mitchellh.ghostty/config ghostty/config ;;
 esac
 fi
 

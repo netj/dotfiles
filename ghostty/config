@@ -43,7 +43,12 @@ background-blur-radius = 20
 macos-option-as-alt = true
 
 # Scrollback
-scrollback-limit = 100000
+scrollback-limit = 1000000000
+
+# Inherit working directory for new tabs/windows/splits
+window-inherit-working-directory = true
+tab-inherit-working-directory = true
+split-inherit-working-directory = true
 
 # Shell integration (enables prompt tracking, title, sudo)
 shell-integration = detect

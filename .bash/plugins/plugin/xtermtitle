@@ -39,7 +39,7 @@ bash_plugin_interactive() {
         # See: http://www.macosxautomation.com/lion/terminal.html
         # See also: /private/etc/bashrc's update_terminal_cwd
         if ${xtermtitle_mac_terminal:-false} ||
-            [[ -z $TMUX && $TERM_PROGRAM = "Apple_Terminal" && ! ${TERM_PROGRAM_VERSION:-0} < 297 ]]; then
+            [[ -z $TMUX && ( $TERM_PROGRAM = "ghostty" || ( $TERM_PROGRAM = "Apple_Terminal" && ! ${TERM_PROGRAM_VERSION:-0} < 297 ) ) ]]; then
             xtermtitle_mac_terminal=true
             -xtermtitle_mac_terminal_clear_document_url() {
                 # make sure the document URL (OSC sequence with Ps = 6) is cleared, or the
@@ -91,8 +91,12 @@ bash_plugin_interactive() {
                 title "$oldlabel"
             }
             -xtermtitle_mac_terminal_disable_for_sshish() {
-            local remotehost="$(shift; -xtermtitle_mac_terminal_find_hostname "$@")"
+                local remotehost="$(shift; -xtermtitle_mac_terminal_find_hostname "$@")"
                 if [[ -n "$remotehost" ]]; then
+                    if [[ "$TERM" == "xterm-ghostty" ]]; then
+                        # many ssh hosts do not support ghostty missing the terminfo, so fallback to xterm-256color
+                        set -- env TERM=xterm-256color "$@"
+                    fi
                     -xtermtitle_mac_terminal_disable_for "file://$remotehost/${remotehost%%.*}" "$@"
                 else
                     command "$@"
@@ -105,13 +109,16 @@ bash_plugin_interactive() {
                     case $arg in
                         # skip ssh options with args
                         -[bcDeFIilmOopRSWw]) skip=true ;;
+                        --) break ;;
                         -*) continue ;;
                         *)
                             if [[ -z "$hostname" ]]; then
                                 hostname=$arg
                             else # supposedly a command is following
-                                hostname= # do not report hostname
-                                break
+                                if ${xtermtitle_mac_terminal_hostname_disabled_for_ssh_commands:-false}; then
+                                    hostname= # do not report hostname
+                                    break
+                                fi
                             fi
                             ;;
                     esac
@@ -137,7 +144,7 @@ bash_plugin_interactive() {
             ##trap -xtermtitle_mac_terminal_update_hook DEBUG
         else
             xtermtitle_mac_terminal=false
-            if [[ "${TERM_PROGRAM:-}" == "ghostty" ]]; then
+            if [[ "$TERM" == "xterm-ghostty" ]]; then
                 ssh() { TERM=xterm-256color command ssh "$@"; }
             fi
         fi
