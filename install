@@ -217,6 +217,8 @@ bash_after() {
         try+repeat
         auto-tmux
         tmux-cwd-title
+        tmux-env-sync
+        shared-ssh-agent
         git-helper
         logout-clear
         coding-aliases

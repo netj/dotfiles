@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Refresh tmux-tracked env vars (SSH_AUTH_SOCK, DISPLAY, ...) at every prompt
+# while inside tmux, so existing panes pick up updates after a re-attach from
+# a fresh client/SSH connection without needing `eval $(tmux show-env -s)` by
+# hand. Tmux's `update-environment` controls which vars are tracked.
+#
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2026-05-03
+# Requires: bpm.utils bpm.events
+################################################################################
+
+bash_plugin_interactive() {
+    -tmux-env-sync() {
+        [ -n "${TMUX:-}" ] || return 0
+        eval "$(tmux show-environment -s 2>/dev/null)"
+    }
+    bash_insert_prompt -tmux-env-sync
+}
+
+# vim:et:ts=8:sw=4:sts=4
