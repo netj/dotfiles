@@ -2,7 +2,10 @@
 # ezgitprunegone — prune gone branches and their worktrees
 set -euo pipefail
 
-remote=${1:-}
+days=3
+remote=
+declare -- "$@" &>/dev/null || true
+
 if [[ -z "$remote" ]]; then
   remote=$(git rev-parse --abbrev-ref '@{upstream}' 2>/dev/null | cut -d/ -f1) || remote=origin
 fi
@@ -29,12 +32,70 @@ if [[ -z "$gone" ]]; then
   exit
 fi
 
-sel=$(printf '* ALL\n%s' "$gone" | fzf --tmux -m --header='Select gone branches to delete')
-! grep -qF '* ALL' <<<"$sel" || sel=$gone
+# classify branches by age and sort by timestamp
+now=$(date +%s)
+threshold=$((now - days * 86400))
+
+# get timestamps for all branches, sort oldest first
+sorted_branches=$(
+  while read -r branch; do
+    ts=$(git for-each-ref --format='%(committerdate:unix)' "refs/heads/$branch" 2>/dev/null)
+    age=$(git for-each-ref --format='%(committerdate:relative)' "refs/heads/$branch" 2>/dev/null)
+    echo "${ts:--1}"$'\t'"$branch"$'\t'"${age:-(unknown)}"
+  done <<<"$gone" | sort -n
+)
+
+# old branches carry a trailing "stale" tag so fzf can pre-select them by query
+old_branches=()
+recent_branches=()
+while IFS=$'\t' read -r ts branch age; do
+  if [[ "$ts" == "-1" ]] || [[ "$ts" -le "$threshold" ]]; then
+    old_branches+=("$branch"$'\t'"$age"$'\t'"stale")
+  else
+    recent_branches+=("$branch"$'\t'"$age")
+  fi
+done <<<"$sorted_branches"
+
+# build fzf input: old branches first, then separator, then recent
+fzf_input=("${old_branches[@]}")
+if [[ ${#recent_branches[@]} -gt 0 ]]; then
+  fzf_input+=("---"$'\t'"(recent, select manually)")
+  fzf_input+=("${recent_branches[@]}")
+fi
+
+# pre-select the stale ones: start with a query matching only them, select, then clear
+# (--sync is required for start: bindings to see the loaded list)
+preselect=()
+if [[ ${#old_branches[@]} -gt 0 ]]; then
+  preselect=(--query='stale$' --bind='start:select-all+clear-query')
+fi
+
+sel=$(printf '%s\n' "${fzf_input[@]}" |
+  fzf --tmux=90%,90% -m --sync --header="Select gone branches to delete (old = ${days}+ days)" \
+      --delimiter=$'\t' --with-nth=1.. \
+      --preview-window=down,5,border-top \
+      "${preselect[@]}" \
+      --preview='b={1}; [[ "$b" != "---" ]] && git log --oneline -5 "$b" 2>/dev/null || echo {2}')
+
+# extract branch names from selection, skipping the separator and blanks
+branches=()
+while IFS=$'\t' read -r branch _rest; do
+  case $branch in
+    ''|'---') continue;;
+    *) branches+=("$branch");;
+  esac
+done <<<"$sel"
+
+if [[ ${#branches[@]} -eq 0 ]]; then
+  exit
+fi
+
+# deduplicate
+branches=($(printf '%s\n' "${branches[@]}" | sort -u))
 
 # first pass: remove cleanly, collect ones needing force
 force_needed=()
-while read -r branch; do
+for branch in "${branches[@]}"; do
   wt=$(git worktree list --porcelain | awk -v b="refs/heads/$branch" '/^worktree /{p=$2} /^branch / && $2==b {print p}')
   if [[ -n "$wt" ]]; then
     if git worktree remove "$wt" 2>/dev/null; then
@@ -45,7 +106,7 @@ while read -r branch; do
     fi
   fi
   git branch -D "$branch"
-done <<<"$sel"
+done
 
 # second pass: let user pick which dirty worktrees to force-remove
 if [[ ${#force_needed[@]} -gt 0 ]]; then
