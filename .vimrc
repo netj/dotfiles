@@ -62,8 +62,9 @@ set expandtab
 set listchars=tab:>.,eol:$
 
 " expansions
-set wildmode=list:full
-set wildmenu!  " NOTE list:full no longer works nicely if wildmenu is on
+set wildmenu   " NOTE on by default since Vim 9.1.0862, so no longer toggling it
+set wildmode=full  " a la .inputrc's menu-complete: <Tab> takes the first match right away and cycles, <S-Tab> goes back (as do <C-N>/<C-P>) and <C-L> gives the longest prefix
+set wildoptions=pum  " use a vertical popup menu instead of the inline one
 set wildchar=<Tab>
 if has("&wildignorecase")
   set wildignorecase
