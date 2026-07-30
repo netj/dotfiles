@@ -38,6 +38,7 @@ bash_plugin_interactive() {
     bash_default_alias gbgD "ezgitprunegone"
     bash_default_alias gbg. "enumerate_branches_with='gbg' __select_git_branch_to__ git branch -D"
     bash_default_alias gc   "git checkout"
+    bash_default_alias gcd  "git checkout --detached"
     bash_default_alias gcb  "git checkout -b"
     bash_default_alias gfcb "git fetch origin HEAD; git checkout FETCH_HEAD -b"
     bash_default_alias gC   "git commit"
@@ -59,6 +60,7 @@ bash_plugin_interactive() {
     bash_default_alias gRA  "git rebase --abort"
     bash_default_alias gcp  "git cherry-pick"
     bash_default_alias gm   "git merge"
+    bash_default_alias gma  "git merge --abort"
     bash_default_alias gmt  "git mergetool"
     bash_default_alias gRH  "git reset --hard HEAD"
     bash_default_alias gRHu "git reset --hard HEAD@{u}"  # reset to upstream branch
