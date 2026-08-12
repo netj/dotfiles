@@ -68,6 +68,8 @@ brew_pkgs=(
     mutt
     netcat
     netj/tap/remocon
+    netj/tap/optmux
+    netj/tap/wtcode
     netpbm
     nmap
     node
