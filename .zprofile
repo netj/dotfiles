@@ -9,7 +9,7 @@ source ~/.zshenv
 _switch_to_bash() { exec env SHELL=$(which bash) bash -il; }
 [ "$-" = "${-//[il]/}" ] || # don't interfere when not a login or interactive shell
 case "${TERM_PROGRAM-${TERMINAL_EMULATOR-}}---${__CFBundleIdentifier-}" in
-    # to switch to bash only for known terminals, uncomment below
+    # to switch to bash only for known terminals, uncomment below:
     # # truly end-user interactive terminals
     # tmux---*) _switch_to_bash ;;
     # Apple_Terminal---com.apple.Terminal) _switch_to_bash ;;
@@ -17,6 +17,7 @@ case "${TERM_PROGRAM-${TERMINAL_EMULATOR-}}---${__CFBundleIdentifier-}" in
     # ghostty---*) ;;
     # # not ones running inside AI agents or IDEs
     # *---com.jetbrains.pycharm) ;;
+    # JetBrains-JediTerm---*) ;;
     # zed---*) ;;
     # ---dev.zed.Zed) ;;
     # *) ;;
