@@ -5,7 +5,7 @@ This directory and the Makefile lets you download some of netj's favorite
 fonts for personal use.  Beware: some may have restrictions on using them
 commercially or redistribution.
 
-- [Envy Code R](http://damieng.com/blog/2008/05/26/envy-code-r-preview-7-coding-font-released)
+- [Envy Code R](https://damieng.com/blog/2008/envy-code-r-preview-7-coding-font-released/)
     
     [![](EnvyCodeR-2048x2048.jpeg)](https://www.programmingfonts.org/#envy-code-r)
 
