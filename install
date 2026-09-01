@@ -242,6 +242,8 @@ tmux_conf_after() {
 }
 ! has tmux ||
 install .tmux.conf
+! has optmux ||
+install .optmux.yaml
 
 if has vim; then
 install .vimrc

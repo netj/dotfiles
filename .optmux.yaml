@@ -1,0 +1,27 @@
+# for https://github.com/netj/optmux
+optmux:
+  tmux_config:
+    # my TMUX config deviating from default
+    massive-multi-tasking-pain-killers: |
+      set -g renumber-windows on
+  shortcuts:
+    C-M-w:
+      command: ezgithubopen
+      detached: true
+      float_window: true
+    C-M-k: ezgitprunegone
+
+    C-M-n: open -a Ghostty .
+
+    # C-M-e:
+    #   command: |
+    #     test -e NOTES.md || touch NOTES.md; open -a MacVim "$PWD"/NOTES.md
+    #   detached: true
+
+    C-M-a:
+      tip: |
+        reveal the macOS Finder for the working directory so the Stage Manager group holding it can appear
+      command: |
+        open -R .git; /Applications/BetterTouchTool.app/Contents/SharedSupport/bin/bttcli trigger_named ActivateStageByFinderWindow
+      detached: true
+      float_window: true
