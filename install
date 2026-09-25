@@ -222,6 +222,7 @@ bash_after() {
         git-helper
         logout-clear
         coding-aliases
+        tty-utils
     )
     [ -d .bash/plugins/enabled ] ||
     . .bash/plugins/bpm.sh enable "${plugins[@]}"

@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# modern tty utils
+# 
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2026-09-24
+################################################################################
+
+bash_plugin_load() {
+
+    # a way to copy all stdin over tty via OSC 52
+    # cf. https://github.com/theimpostor/osc
+    osc52copy() { printf '\033]52;c;'; base64 -w0; printf '\a'; }
+
+}
