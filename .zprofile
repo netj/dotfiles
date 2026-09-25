@@ -22,6 +22,9 @@ case "${TERM_PROGRAM-${TERMINAL_EMULATOR-}}---${__CFBundleIdentifier-}" in
     # ---dev.zed.Zed) ;;
     # *) ;;
 
-    ---*) ;;               # unspecified terminal program, likely non-interactive probes (e.g., Zed)
+    ---*)
+        # unspecified terminal program, likely non-interactive probes (e.g., Zed)
+        [ -z ${SSH_TTY-} ] || _switch_to_bash  # switch to bash when starting inside ssh
+        ;;
     *) _switch_to_bash ;;  # defaults to switching any interactive login shell to bash
 esac
