@@ -1,0 +1,267 @@
+tap "homebrew/cask"
+tap "homebrew/core"
+tap "homebrew/services"
+tap "morantron/tmux-fingers"
+tap "netj/tap", trusted: true
+tap "theseal/ssh-askpass"
+tap "universal-ctags/universal-ctags"
+# Extremely Fast Compression algorithm
+brew "lz4"
+# General-purpose data compression with high compression ratio
+brew "xz"
+# TIFF library and utilities
+brew "libtiff"
+# Image format providing lossless and lossy compression for web images
+brew "webp"
+# Utility to check whether MAC addresses are already taken on a LAN
+brew "arping"
+# Automatically restart SSH sessions and tunnels
+brew "autossh"
+# Bourne-Again SHell, a UNIX command interpreter
+brew "bash"
+# Programmable completion for Bash 4.2+
+brew "bash-completion@2"
+# GNU File, Shell, and Text utilities
+brew "coreutils"
+# Bash Automated Testing System
+brew "bats-core"
+# Insanely fast image printing in your terminal
+brew "catimg"
+# Formatting tools for C, C++, Obj-C, Java, JavaScript, TypeScript
+brew "clang-format"
+# Command-line tool for Amazon Route 53
+brew "cli53"
+# Reimplementation of ctags(1)
+brew "ctags"
+# Maintained ctags implementation
+brew "universal-ctags", args: ["HEAD"], link: false
+# LSP implementation using universal-ctags as backend
+brew "ctags-lsp"
+# Miscellaneous utilities specific to Debian
+brew "debianutils"
+# Bash, Zsh and Fish completion for Docker
+brew "docker-completion"
+# Text processing system for reStructuredText
+brew "docutils"
+# OCR (Optical Character Recognition) engine
+brew "tesseract"
+# Interpreter for PostScript and PDF
+brew "ghostscript"
+# Play, record, convert, and stream select audio and video codecs
+brew "ffmpeg"
+# Image manipulation
+brew "netpbm"
+# Command-line fuzzy finder written in Go
+brew "fzf"
+# Fast, simple fuzzy text selector with an advanced scoring algorithm
+brew "fzy"
+# Graphics library to dynamically manipulate images
+brew "gh"
+# Distributed revision control system
+brew "git"
+# Syntax-highlighting pager for git and diff output
+brew "git-delta"
+# Small git utilities
+brew "git-extras"
+# Tcl/Tk UI for the git revision control system
+brew "git-gui"
+# Git Submodule Alternative
+brew "git-subrepo"
+# GNU Privacy Guard (OpenPGP)
+brew "gnupg"
+# Spell checker and morphological analyzer
+brew "hunspell"
+# Command-driven, interactive function plotting
+brew "gnuplot"
+# Open source programming language to build simple/reliable/efficient software
+brew "go"
+# Image processing tools collection
+brew "graphicsmagick"
+# Graph visualization software from AT&T and Bell Labs
+brew "graphviz"
+# Improved top (interactive process viewer)
+brew "htop"
+# Apache HTTP server
+brew "httpd"
+# Add GitHub support to git on the command-line
+brew "hub"
+# Database of common MIME types
+brew "shared-mime-info"
+# Tools and libraries to manipulate images in select formats
+brew "imagemagick"
+# Lightweight and flexible command-line JSON processor
+brew "jq"
+# Simple terminal UI for git commands
+brew "lazygit"
+# Let's Encrypt client and ACME library
+brew "lego"
+# Pager program similar to more
+brew "less"
+# Sophisticated file transfer program
+brew "lftp"
+# LZMA-based compression program similar to gzip or bzip2
+brew "lzip"
+# Text-to-HTML conversion tool
+brew "markdown"
+# UPnP IGD client library and daemon
+brew "miniupnpc"
+# Matroska media files manipulation tools
+brew "mkvtoolnix"
+# Collection of tools that nobody wrote when UNIX was young
+brew "moreutils"
+# Remote terminal application
+brew "mosh"
+# Mongrel of mail user agents (part elm, pine, mush, mh, etc.)
+brew "mutt"
+# Ambitious Vim-fork focused on extensibility and agility
+brew "neovim"
+# Utility for managing network connections
+brew "netcat"
+# Port scanning utility for large networks
+brew "nmap"
+# Open-source, cross-platform JavaScript runtime environment
+brew "node"
+# Convert PostScript and PDF files to editable vector graphics
+brew "pstoedit"
+# High-level interpreted language for numerical computing
+brew "octave"
+# Collection of macOS command-line utilities
+brew "osxutils"
+# 7-Zip (high compression file archiver) implementation
+brew "p7zip"
+# Parallel bzip2
+brew "pbzip2"
+# Fast, disk space efficient package manager
+brew "pnpm"
+# Framework for managing multi-language pre-commit hooks
+brew "pre-commit"
+# Show ps output as a tree
+brew "pstree"
+# Monitor data's progress through a pipe
+brew "pv"
+# Reattach process (e.g., tmux) to background
+brew "reattach-to-user-namespace"
+# Readline wrapper: adds readline support to tools that lack it
+brew "rlwrap"
+# Round Robin Database
+brew "rrdtool"
+# Utility that provides fast incremental file transfer
+brew "rsync"
+# Extremely fast Python linter, written in Rust
+brew "ruff"
+# Count lines of code in many languages
+brew "sloccount"
+# SOcket CAT: netcat on steroids
+brew "socat"
+# Terminal image and video viewer
+brew "timg"
+# Terminal multiplexer
+brew "tmux"
+# Lightweight BitTorrent client
+brew "transmission-cli"
+# Validating, recursive, caching DNS resolver
+brew "unbound"
+# Extraction utility for .zip compressed archives
+brew "unzip"
+# Extremely fast Python package installer and resolver, written in Rust
+brew "uv"
+# Vi 'workalike' with many additional features
+brew "vim"
+# Internet file retriever
+brew "wget"
+# Powerful interactive system for text processing
+brew "xml-coreutils"
+# XML command-line utilities
+brew "xmlstarlet"
+# Feature-rich command-line audio/video downloader
+brew "yt-dlp"
+# Optimal, opinionated, batteries-included TMUX — recommended extras
+brew "netj/tap/optmux"
+# a tool for controlling remote host's clones of local git work trees
+brew "netj/tap/remocon"
+# Tmux-based cron scheduler with visible, interactive job panes
+brew "netj/tap/tmux-cron"
+# Password manager that keeps all passwords secure behind one password
+cask "1password"
+# Tool to stream videos to Apple devices
+cask "air-video-server-hd"
+# Tool to customise input devices and automate computer systems
+cask "bettertouchtool"
+# Utility to create and modify archives
+cask "betterzip"
+# DjVu viewer and browser plugin
+cask "djview"
+# App to build and share containerised applications and microservices
+cask "docker-desktop"
+# Clipboard manager for developers
+cask "flycut"
+# Terminal emulator that uses platform-native UI and GPU acceleration
+cask "ghostty"
+# Web browser
+cask "google-chrome"
+# Desktop automation application
+cask "hammerspoon"
+# Vector graphics editor
+cask "inkscape"
+# System monitoring app
+cask "istat-menus"
+# Subtitle editor
+cask "jubler"
+# Keyboard customiser
+cask "karabiner-elements"
+# Blocks all Keyboard and TouchBar input
+cask "keyboardcleantool"
+# Cross platform presentation and productivity app
+cask "lynx-whiteboard"
+# File system integration
+cask "macfuse"
+# Text editor
+cask "macvim-app"
+# App to create and edit MKV videos
+cask "mkvtools"
+# Verify system files structure, run miscellaneous maintenance and more
+cask "onyx"
+# File system integration
+cask "osxfuse"
+# Utility to take screenshots of webpages
+cask "paparazzi"
+# Reference management software for researchers
+cask "papers"
+# Check your monitor for dead pixels
+cask "pixel-check"
+# Quick Look plugin for mobile apps and provisioning profiles
+cask "provisionql"
+# Quick Look plug-in that renders source code with syntax highlighting
+cask "qlcolorcode"
+# Quick Look generator for Markdown files
+cask "qlmarkdown"
+# Quick Look plugin to view patch files
+cask "qlprettypatch"
+# Quick Look plugin for CSV files
+cask "quicklook-csv"
+# Quick Look plugin for JSON files
+cask "quicklook-json"
+# Thumbnails, static previews, cover art and metadata for video files
+cask "quicklook-video"
+# PDF reader and note-taking application
+cask "skim"
+# Sound and audio controller
+cask "soundsource"
+cask "subtitles"
+# Helper-application for MP4tools, MKVtools, and AVItools
+cask "subtools"
+# Application for inspecting installer packages
+cask "suspicious-package"
+# Helper application for Things
+cask "thingsmacsandboxhelper"
+# Open-source BitTorrent client
+cask "transmission"
+# Quick Look plugin for webp files
+cask "webpquicklook"
+# View output from scripts in the menu bar
+cask "xbar"
+# Open-source version of the X.Org X Window System
+cask "xquartz"
+go "github.com/akiomik/vimeo-dl"
+uv "csvkit"
+uv "json2yaml"
