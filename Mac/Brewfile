@@ -1,8 +1,5 @@
-tap "homebrew/cask"
-tap "homebrew/core"
-tap "homebrew/services"
-tap "morantron/tmux-fingers"
 tap "netj/tap", trusted: true
+tap "morantron/tmux-fingers"
 tap "theseal/ssh-askpass"
 tap "universal-ctags/universal-ctags"
 # Extremely Fast Compression algorithm
@@ -217,19 +214,19 @@ cask "lynx-whiteboard"
 cask "macfuse"
 # Text editor
 cask "macvim-app"
-# App to create and edit MKV videos
-cask "mkvtools"
+# # App to create and edit MKV videos
+# cask "mkvtools"
 # Verify system files structure, run miscellaneous maintenance and more
 cask "onyx"
 # File system integration
 cask "osxfuse"
-# Utility to take screenshots of webpages
-cask "paparazzi"
+# # Utility to take screenshots of webpages
+# cask "paparazzi"
 # Reference management software for researchers
 cask "papers"
 # Check your monitor for dead pixels
-cask "pixel-check"
-# Quick Look plugin for mobile apps and provisioning profiles
+# cask "pixel-check"
+# # Quick Look plugin for mobile apps and provisioning profiles
 cask "provisionql"
 # Quick Look plug-in that renders source code with syntax highlighting
 cask "qlcolorcode"
@@ -247,7 +244,6 @@ cask "quicklook-video"
 cask "skim"
 # Sound and audio controller
 cask "soundsource"
-cask "subtitles"
 # Helper-application for MP4tools, MKVtools, and AVItools
 cask "subtools"
 # Application for inspecting installer packages
