@@ -18,6 +18,8 @@ if [[ $0 = -bash ]] && shopt -qp login_shell && [[ ${BASH_VERSINFO[0]} -lt 4 ]];
     #exec bash -$- "${@:-$BASH_EXECUTION_STRING}" # for non-interactive
 fi
 
+BASH=$(type -p bash)  # bash -l oddly resets BASH to /bin/zsh (user's actual shell) making the rest very confusing when coming from the .zprofile _switch_to_bash trick
+
 # use bash plugin manager (https://github.com/netj/bpm)
 . ~/.bash/plugins/bpm.sh
 ################################################################################

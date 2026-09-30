@@ -6,7 +6,7 @@
 
 source ~/.zshenv
 
-_switch_to_bash() { exec env SHELL=$(which bash) bash -il; }
+_switch_to_bash() { exec env SHELL=$(which bash) sh -c 'exec -l bash -il'; }
 [ "$-" = "${-//[il]/}" ] || # don't interfere when not a login or interactive shell
 case "${TERM_PROGRAM-${TERMINAL_EMULATOR-}}---${__CFBundleIdentifier-}" in
     # to switch to bash only for known terminals, uncomment below:
