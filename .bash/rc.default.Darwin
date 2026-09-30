@@ -19,6 +19,10 @@ if [[ $0 = -bash ]] && shopt -qp login_shell && [[ ${BASH_VERSINFO[0]} -lt 4 ]];
 fi
 
 BASH=$(type -p bash)  # bash -l oddly resets BASH to /bin/zsh (user's actual shell) making the rest very confusing when coming from the .zprofile _switch_to_bash trick
+case $SSH_AUTH_SOCK in
+  /var/run/com.apple.launchd.*)
+    SSH_AUTH_SOCK=  # using shared-ssh-agent bpm instead of macOS's
+esac
 
 # use bash plugin manager (https://github.com/netj/bpm)
 . ~/.bash/plugins/bpm.sh
