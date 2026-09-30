@@ -43,8 +43,13 @@ bash_plugin_login() {
         SSH_AUTH_SOCK=~/.ssh/auth.sock
         -shared-ssh-agent-launch "$SSH_AUTH_SOCK"
         if -shared-ssh-agent-alive "$SSH_AUTH_SOCK"; then
-            echo >&2 "shared-ssh-agent: $SSH_AUTH_SOCK"
             export SSH_AUTH_SOCK
+            if keys_lst=$(ssh-add -l); then
+                read keys_cnt < <(wc -l <<<"$keys_lst")
+            else
+                keys_cnt=0
+            fi
+            echo >&2 "shared-ssh-agent ($keys_cnt keys): $SSH_AUTH_SOCK"
             [[ -z "${TMUX:-}" ]] || tmux set-environment SSH_AUTH_SOCK "$SSH_AUTH_SOCK"
             unset SSH_AGENT_PID
         else
