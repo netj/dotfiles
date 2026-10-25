@@ -15,7 +15,7 @@
 #
 #     auto_optmux_attach_at_login=false
 #
-# Requires optmux with `optmux pick` (https://github.com/netj/optmux).
+# Requires optmux with `optmux pick --title` (https://github.com/netj/optmux).
 # Environment is kept fresh in existing panes by tmux-env-sync.
 #
 # Author: Jaeho Shin <netj@sparcs.org>
@@ -44,7 +44,7 @@ bash_plugin_login() {
             case $key in
                 [pP])
                     rc=0
-                    optmux pick || rc=$?  # returns after the project is detached/exited
+                    optmux pick --title auto-optmux || rc=$?  # returns after the project is detached/exited
                     # after a normal return (detach/exit) re-pick by default, quit when the picker was cancelled, and fall back to a shell when it failed (e.g., nothing to pick yet)
                     case $rc in
                         0) bash_getkey key "auto-optmux: [p]ick | [s*]hell | e[x]it? " 1 p || key=s ;;
