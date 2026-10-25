@@ -9,11 +9,6 @@ optmux:
       set -g history-limit 10000000
       set -g status-keys vi
       setw -g mode-keys vi
-      # GNU screen style splits: new pane *before* the current one, same working dir
-      unbind '"'; bind '"' split-window -v -b -c "#{pane_current_path}"
-      unbind  v ; bind  v  split-window -h -b -c "#{pane_current_path}"
-      # record the pane to a log
-      bind | pipe-pane -o 'cat >>~/tmux-#S.#I.#P.log'
 
   shortcuts:
     C-M-n: open -a Terminal .
