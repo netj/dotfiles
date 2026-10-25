@@ -1,37 +1,12 @@
 # for https://github.com/netj/optmux
+# (the extrakto plugin and C-M-x are bundled with optmux now, so they're no longer repeated here)
 optmux:
   tmux_config:
     # my TMUX config deviating from default
     massive-multi-tasking-pain-killers: |
       set -g renumber-windows on
 
-  plugins:
-    laktak/extrakto:
-      extrakto_key: X
-      extrakto_insert_key: enter
-      extrakto_copy_key: ctrl-y         # frees tab for fzf's own multi-select (extrakto has no option to rebind it)
-      extrakto_clip_mode: tmux_osc52
-      extrakto_filter_order: line all
-      extrakto_grab_area: full
-
   shortcuts:
-    # use extrakto to select the lines to paste into the claude ! shell mode
-    C-M-x:
-      tip: |
-        extrakto lines into claude's ! shell mode (tab multi-select, enter inserts)
-      tmux: |
-        {
-          if-shell "ps -t #{pane_tty} -o command= | grep -Eq '(^|/)claude( |$|/)'" {
-            # send-keys M-Enter Escape Escape  # reset claude's prompt to a clean slate: a M-Enter/Space makes Esc Esc always clear (never Rewind on empty),
-            # run-shell "sleep 0.1"  # delay needed or registers as M-BSpace.
-            send-keys C-c  # to avoid delays like above, we could use a single C-c instead but always a little risky keycombo
-            send-keys BSpace "!"  # Backspace leaves any ! shell mode, then ! enters it fresh
-          }
-          # start extrakto
-          switch-client -T prefix
-          send-keys -K X
-        }
-
     C-M-n: open -a Terminal .
 
     C-M-w:
