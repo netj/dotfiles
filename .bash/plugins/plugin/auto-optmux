@@ -6,7 +6,7 @@
 # project's session is detached or exited, it asks what to do next: re-pick
 # (the default), drop into a normal shell, or exit.  Cancelling the picker
 # (e.g., Esc) defaults to exit instead, so that the ssh/mosh connection ends
-# unless you hit r to re-pick or s for a shell.  If `optmux pick` fails (e.g.,
+# unless you hit p to pick again or s for a shell.  If `optmux pick` fails (e.g.,
 # no project to pick yet), a shell is the default so you can sort things out.
 #
 # If you don't want to automatically get the prompt on every login, but
@@ -39,17 +39,17 @@ bash_plugin_login() {
         # leave the prompt for the shell unless asked otherwise
         local default_key=p; ${auto_optmux_attach_at_login:-true} || default_key=s
         local key= rc=0
-        bash_getkey key "auto-optmux: [p]ick a project, or [s*]hell? " 1 $default_key || key=s
+        bash_getkey key "auto-optmux: [p]ick | [s*]hell | e[x]it? " 1 $default_key || key=s
         while true; do
             case $key in
-                [pPrR]) # r when re-picking, p at first
+                [pPrR]) # r is an unadvertised alias, from when it meant re-pick
                     rc=0
                     optmux pick || rc=$?  # returns after the project is detached/exited
                     # after a normal return (detach/exit) re-pick by default, quit when the picker was cancelled, and fall back to a shell when it failed (e.g., nothing to pick yet)
                     case $rc in
-                        0) bash_getkey key "auto-optmux: [r]e-pick | [s*]hell | e[x]it? " 1 r || key=s ;;
-                        130) bash_getkey key "auto-optmux: pick cancelled, [r]e-pick | [s*]hell | e[x]it? " 1 x || key=s ;;
-                        *) bash_getkey key "auto-optmux: 'optmux pick' failed ($rc), [r]e-pick | [s*]hell | e[x]it? " 1 s || key=s ;;
+                        0) bash_getkey key "auto-optmux: [p]ick | [s*]hell | e[x]it? " 1 p || key=s ;;
+                        130) bash_getkey key "auto-optmux: pick cancelled, [p]ick | [s*]hell | e[x]it? " 1 x || key=s ;;
+                        *) bash_getkey key "auto-optmux: 'optmux pick' failed ($rc), [p]ick | [s*]hell | e[x]it? " 1 s || key=s ;;
                     esac
                     ;;
                 [xX])
