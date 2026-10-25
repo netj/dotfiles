@@ -3,10 +3,10 @@
 #
 # On login, this plugin offers to run `optmux pick` (an fzf list of projects to
 # attach to) with a short timeout, like auto-tmux does.  When the picked
-# project's session is detached or exited, it asks what to do next: re-pick,
-# drop into a normal shell, or exit (the default, so that closing the last
-# project ends the ssh/mosh connection).  Cancelling the picker or a failing
-# `optmux pick` also defaults to exit, unless you hit r to re-pick.
+# project's session is detached or exited, it asks what to do next: re-pick
+# (the default), drop into a normal shell, or exit.  Cancelling the picker
+# (e.g., Esc) or a failing `optmux pick` defaults to exit instead, so that
+# the ssh/mosh connection ends unless you hit r to re-pick or s for a shell.
 #
 # If you don't want to automatically get the prompt on every login, but
 # explicitly do so with the `aoptmux' command, then add the following line to
@@ -44,9 +44,9 @@ bash_plugin_login() {
                 [pPrR]) # r when re-picking, p at first
                     rc=0
                     optmux pick || rc=$?  # returns after the project is detached/exited
-                    # cancelled or failed picks quit by default, as opposed to a normal return
+                    # after a normal return (detach/exit) re-pick by default, but quit by default when the picker was cancelled or failed
                     case $rc in
-                        0) bash_getkey key "auto-optmux: [r]e-pick | [s*]hell | e[x]it? " 1 x || key=s ;;
+                        0) bash_getkey key "auto-optmux: [r]e-pick | [s*]hell | e[x]it? " 1 r || key=s ;;
                         130) bash_getkey key "auto-optmux: pick cancelled, [r]e-pick | [s*]hell | e[x]it? " 1 x || key=s ;;
                         *) bash_getkey key "auto-optmux: 'optmux pick' failed ($rc), [r]e-pick | [s*]hell | e[x]it? " 1 x || key=s ;;
                     esac
