@@ -202,6 +202,22 @@ __bpm_list_enabled_by_deps() {
     )
 }
 
+# plugin hooks (bash_plugin_{load,interactive,login}) are not run as functions
+# but have their bodies pasted into one script that is sourced as a whole, so a
+# `return` outside of nested functions would silently skip all plugins after it
+__bpm_check_no_toplevel_return() {
+    local plugin=$1 hook=$2
+    type "$hook" &>/dev/null || return 0
+    local found=$(declare -f "$hook" | tail -n +3 | awk '
+        infn { if ($0 == close_ || $0 == close_ ";") infn = 0; next }
+        /^ *function .* \(\) *$/ { match($0, /^ */); close_ = sprintf("%" RLENGTH "s}", ""); infn = 1; next }
+        /(^|[^[:alnum:]_-])return([^[:alnum:]_-]|$)/ { sub(/^ +/, ""); print "    " $0 }
+    ')
+    [[ -z "$found" ]] || {
+        __bpm_error "$plugin: $hook must not use \`return\` at its top level (bpm inlines it, so it would skip all the plugins loaded after it); nest the code in if/else instead:"$'\n'"$found"
+    }
+}
+
 __bpm_compile() {
     local script=$1; shift
     {
@@ -222,6 +238,10 @@ __bpm_compile() {
             unset -f bash_plugin_load bash_plugin_login
             # load the plugin
             . "$src"
+            # and make sure it won't break others (set -e is off here as this subshell is on the left of ||)
+            __bpm_check_no_toplevel_return "$bash_plugin" bash_plugin_load || exit 1
+            __bpm_check_no_toplevel_return "$bash_plugin" bash_plugin_interactive || exit 1
+            __bpm_check_no_toplevel_return "$bash_plugin" bash_plugin_login || exit 1
             # and generate code
             {
                 printf 'bash_plugin=%q\n' "$bash_plugin"
@@ -279,7 +299,7 @@ __bpm_compile_enabled() {
 }
 
 __bpm_compiled=$(__bpm_compile_enabled)
-unset -f __bpm_compile __bpm_compile_enabled __bpm_list_enabled_by_deps
+unset -f __bpm_check_no_toplevel_return __bpm_compile __bpm_compile_enabled __bpm_list_enabled_by_deps
 
 # then source the plugins
 builtin source "$__bpm_compiled"
