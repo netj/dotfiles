@@ -59,9 +59,23 @@ bash_plugin_interactive() {
     # environment variables
     bash_default_env EDITOR vim
     bash_default_env PAGER less
-    bash_default_env LESS "-XRiMWSc --mouse" # --no-init --RAW-CONTROL-CHARS --ignore-case --LONG-PROMPT --HILITE_UNREAD --chop-long-lines --clear-screen --mouse
-    bash_default_env LESS_OSC8_file -  # disable default file:// handler to let _ANY handle it
-    bash_default_env LESS_OSC8_ANY "printf '\\\\020-'; ezurlopen '%o'"
+    # less options and the OSC 8 hyperlink handler depend on the less version:
+    #   551+  --mouse
+    #   661+  open OSC 8 links (^O^O or clicking one): the handler LESS_OSC8_xxx *prints* a command to run
+    #   702+  LESS_OSC8_OPEN_xxx replaced it: the handler *is* the command (a leading ^P- hides the echo)
+    # See less's NEWS: https://github.com/gwsw/less/blob/master/NEWS
+    less_version=$(less --version 2>/dev/null | sed -n '1s/^less \([0-9]*\).*/\1/p')
+    less_version=${less_version:-0}
+    less_options="-XRiMWSc" # --no-init --RAW-CONTROL-CHARS --ignore-case --LONG-PROMPT --HILITE_UNREAD --chop-long-lines --clear-screen
+    ((less_version >= 551)) && less_options+=" --mouse"
+    bash_default_env LESS "$less_options"
+    if ((less_version >= 702)); then
+        bash_default_env LESS_OSC8_OPEN_ANY $'\020-ezurlopen'
+    elif ((less_version >= 661)); then
+        bash_default_env LESS_OSC8_file -  # disable default file:// handler to let _ANY handle it
+        bash_default_env LESS_OSC8_ANY "echo \"ezurlopen '%o'\""  # prints the opener command; %o is the URI, never containing quotes
+    fi
+    unset less_version less_options
     env_names_ordered() {
         declare -p -x | sed 's/=.*//; s/^declare -x //' |
         LC_ALL=C sort --ignore-case

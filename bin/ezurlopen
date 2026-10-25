@@ -1,30 +1,57 @@
 #!/usr/bin/env bash
-# OSC 8 hyperlink handler for less
-# Receives a URI, outputs the command for less to execute
-# See: less(1) section on OSC 8 hyperlinks
-uri=$1
+# ezurlopen — open a URI from an OSC 8 hyperlink; used as less's LESS_OSC8_OPEN_ANY handler
+# (less 710+ runs it with the URI appended and shell-escaped; see less(1) section on OSC 8 hyperlinks):
+#   file:///path#L123  → $VISUAL/$EDITOR at that line (e.g., delta's file links)
+#   http(s)://...      → the browser
+#   anything else      → less-osc8-open, less's own default handler
+# Same as optmux's optmux-open-url: https://github.com/netj/optmux/blob/main/optmux/data/bin/optmux-open-url
+set -euo pipefail
+
+uri=${1:?usage: ezurlopen URI}
+
+urldecode() { local s=${1//+/ }; printf '%b' "${s//%/\\x}"; }
+
+edit_at() {  # edit_at PATH [LINE]
+    local path=$1 line=${2:-}
+    # shellcheck disable=SC2206  # word-split $VISUAL/$EDITOR like a shell would, e.g. "code --wait"
+    local editor=(${VISUAL:-${EDITOR:-vim}})
+    if [[ -z $line ]]; then
+        exec "${editor[@]}" "$path"
+    fi
+    case ${editor[0]##*/} in
+        code|code-insiders|cursor|codium|windsurf)
+            exec "${editor[@]}" --goto "$path:$line" ;;
+        hx|helix|zed|subl|mate)
+            exec "${editor[@]}" "$path:$line" ;;
+        *)  # vi, vim, nvim, emacs, nano, micro, kak, ...
+            exec "${editor[@]}" "+$line" "$path" ;;
+    esac
+}
+
 case $uri in
     file://*)
         path=${uri#file://}
-        # strip hostname from file://host/path (empty host in file:///path)
         case $path in
-            /*) ;; # no hostname (file:///path), path is already correct
-            *)  path=/${path#*/} ;; # strip hostname
+            /*) ;;                  # file:///path (empty hostname)
+            *)  path=/${path#*/} ;; # file://host/path → strip hostname
         esac
-        # extract #fragment (line number)
         frag=
         case $path in *"#"*) frag=${path##*#}; path=${path%%#*} ;; esac
-        frag=${frag#L}  # strip L prefix from GitHub-style #L123 fragments
-        if [[ -n "$frag" ]]; then
-            printf "vim '+%s' %q\\n" "$frag" "$path"
-        else
-            printf "vim %q\\n" "$path"
-        fi
+        frag=${frag#L}  # GitHub-style #L123 fragment, as delta's hyperlinks-file-link-format emits
+        [[ $frag =~ ^[0-9]+$ ]] || frag=
+        edit_at "$(urldecode "$path")" "$frag"
         ;;
     http://*|https://*)
         case $(uname) in
-            Darwin) printf "open %q\\n" "$uri" ;;
-            *)      printf "xdg-open %q\\n" "$uri" ;;
+            Darwin) exec open "$uri" ;;
+            *)      exec xdg-open "$uri" >/dev/null 2>&1 ;;
         esac
+        ;;
+    *)
+        if command -v less-osc8-open >/dev/null; then
+            exec less-osc8-open "$uri"
+        fi
+        echo >&2 "ezurlopen: don't know how to open: $uri"
+        exit 1
         ;;
 esac
