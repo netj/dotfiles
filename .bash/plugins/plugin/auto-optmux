@@ -42,7 +42,7 @@ bash_plugin_login() {
         bash_getkey key "auto-optmux: [p]ick | [s*]hell | e[x]it? " 1 $default_key || key=s
         while true; do
             case $key in
-                [pPrR]) # r is an unadvertised alias, from when it meant re-pick
+                [pP])
                     rc=0
                     optmux pick || rc=$?  # returns after the project is detached/exited
                     # after a normal return (detach/exit) re-pick by default, quit when the picker was cancelled, and fall back to a shell when it failed (e.g., nothing to pick yet)
