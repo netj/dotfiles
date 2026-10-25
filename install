@@ -215,6 +215,7 @@ bash_after() {
         prompt
         xtermtitle
         try+repeat
+        auto-optmux
         tmux-env-sync
         shared-ssh-agent
         git-helper

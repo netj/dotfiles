@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+# Automatically pick an optmux project at login (ssh/mosh), and again after each detach or exit
+#
+# On login, this plugin offers to run `optmux pick` (an fzf list of projects to
+# attach to) with a short timeout, like auto-tmux does.  When the picked
+# project's session is detached or exited, it asks what to do next: re-pick,
+# drop into a normal shell, or exit (the default, so that closing the last
+# project ends the ssh/mosh connection).  Cancelling the picker or a failing
+# `optmux pick` also defaults to exit, unless you hit r to re-pick.
+#
+# If you don't want to automatically get the prompt on every login, but
+# explicitly do so with the `aoptmux' command, then add the following line to
+# your ~/.bash_local file:
+#
+#     auto_optmux_attach_at_login=false
+#
+# Requires optmux with `optmux pick` (https://github.com/netj/optmux).
+# Environment is kept fresh in existing panes by tmux-env-sync.
+#
+# Author: Jaeho Shin <netj@sparcs.org>
+# Created: 2026-10-24
+# Requires: bpm.utils bpm.events bpm.interactive
+# Conflicts: auto-tmux screen
+################################################################################
+
+bash_plugin_login() {
+    # we can't do much without optmux, a terminal, or when already inside tmux
+    type optmux &>/dev/null || return 0
+    [[ -t 0 && -t 1 ]] || return 0
+    [[ -z "${TMUX:-}" ]] || return 0
+    # a local shell, unless auto-optmux was explicitly asked for, is left alone
+    [[ -n "${SSH_CONNECTION:-}" || -n "${auto_optmux_attach_at_login:-}" ]] || return 0
+    # a shorthand for entering auto-optmux
+    aoptmux() { auto_optmux_attach_at_login=true bash -l; }
+    # older optmux releases don't know how to pick
+    optmux help 2>&1 | grep -q 'pick' || {
+        echo "auto-optmux: this optmux has no 'pick' (upgrade optmux)" >&2
+        return 0
+    }
+
+    -auto-optmux-loop() {
+        # leave the prompt for the shell unless asked otherwise
+        local default_key=p; ${auto_optmux_attach_at_login:-true} || default_key=s
+        local key= rc=0
+        bash_getkey key "auto-optmux: [p]ick a project, or [s*]hell? " 1 $default_key || key=s
+        while true; do
+            case $key in
+                [pPrR]) # r when re-picking, p at first
+                    rc=0
+                    optmux pick || rc=$?  # returns after the project is detached/exited
+                    # cancelled or failed picks quit by default, as opposed to a normal return
+                    case $rc in
+                        0) bash_getkey key "auto-optmux: [r]e-pick | [s*]hell | e[x]it? " 1 x || key=s ;;
+                        130) bash_getkey key "auto-optmux: pick cancelled, [r]e-pick | [s*]hell | e[x]it? " 1 x || key=s ;;
+                        *) bash_getkey key "auto-optmux: 'optmux pick' failed ($rc), [r]e-pick | [s*]hell | e[x]it? " 1 x || key=s ;;
+                    esac
+                    ;;
+                [xX])
+                    exit
+                    ;;
+                *) # any other key (or ^C) is the escape hatch to the normal shell
+                    bash_remove_prompt -auto-optmux-loop
+                    unset -f -- -auto-optmux-loop
+                    return
+                    ;;
+            esac
+        done
+    }
+    # get into the loop after loading everything (hence, showing prompt)
+    bash_add_prompt -auto-optmux-loop
+}
