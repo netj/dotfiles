@@ -215,8 +215,6 @@ bash_after() {
         prompt
         xtermtitle
         try+repeat
-        auto-tmux
-        tmux-cwd-title
         tmux-env-sync
         shared-ssh-agent
         git-helper
@@ -237,12 +235,7 @@ bash_after() {
 install .bash
 install .inputrc
 
-tmux_conf_after() {
-    # install tpm (tmux plugin manager)
-    tmux -S ${TMPDIR:-/tmp}/tmux-%u-dotfiles new-session ~/.tmux/plugins/netj/tpm/bin/install_plugins
-}
-! has tmux ||
-install .tmux.conf
+# tmux config, plugins, and shortcuts come from optmux (brew install netj/tap/optmux, or uv tool install optmux)
 ! has optmux ||
 install .optmux.yaml
 

@@ -27,7 +27,7 @@ Notes
 
     * `.bash_local` for declaring aliases, adjusting `PATH`, or exporting environment variables.
     * `.vim_local` for any local Vim configuration customization.
-    * `.tmux_local` for any local TMUX tweaks, e.g., wrapping the default-command with `reattach-to-user-namespace` in OS X.
+    * `~/.optmux.yaml` (or a project's `.optmux.yaml`) for TMUX config, plugins, and shortcuts via [optmux](https://github.com/netj/optmux).
 
 * You can run following commands later to stay up-to-date:
 
