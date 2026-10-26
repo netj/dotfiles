@@ -240,10 +240,12 @@ bash_after() {
             sed -n "1,${n}s/^/    /p" .bashrc
             echo "${hl}# which ~/.bash/plugins/bashrc now takes care of.${rs}"
         } >&2
-        REPLY=
-        [ ! -t 0 ] || read -p "${hl}replace them with '. ~/.bash/plugins/bashrc' (keeping ~/.bashrc~)? [yN]${rs} " -n1 || true
-        [ -z "$REPLY" ] || echo
-        case $REPLY in
+        key=
+        [ ! -t 0 ] || {
+            . .bash/plugins/plugin/bpm.interactive && bash_plugin_interactive  # for bash_getkey
+            bash_getkey key "replace them with '. ~/.bash/plugins/bashrc' (keeping ~/.bashrc~), [y]es or [n]o? " "" n || true
+        }
+        case $key in
             [Yy])
                 cp -pv .bashrc .bashrc~
                 { echo '. ~/.bash/plugins/bashrc  # prepares the shell, then loads bpm (https://github.com/netj/bpm)'
