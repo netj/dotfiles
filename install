@@ -225,34 +225,36 @@ bash_after() {
     )
     [ -d .bash/plugins/enabled ] ||
     . .bash/plugins/bpm.sh enable "${plugins[@]}"
-    # have bpm load in every shell session
-    grep -q '^\. ~/\.bash/plugins/b' .bashrc || {
-        echo
-        echo '. ~/.bash/plugins/bashrc'
-    } >>.bashrc
-    # migrate an old bootstrap (everything up to loading bpm.sh) to the single line
+    # have bpm load in every shell session, migrating an old bootstrap
+    # (everything up to loading bpm.sh) to the single line at the top
     grep -q '^\. ~/\.bash/plugins/bashrc' .bashrc || {
-        n=$(grep -n -m1 '^\. ~/\.bash/plugins/bpm\.sh' .bashrc | cut -d: -f1)
+        n=$(grep -n -m1 '^\. ~/\.bash/plugins/bpm\.sh' .bashrc | cut -d: -f1); n=${n:-0}
         hl=$'\e[1;33m' rs=$'\e[0m'; [ -t 2 ] || hl= rs=
-        {
-            echo "${hl}################################################################################"
-            echo "# ~/.bashrc has an old bootstrap for bpm in its first $n lines:${rs}"
-            sed -n "1,${n}s/^/    /p" .bashrc
-            echo "${hl}# which ~/.bash/plugins/bashrc now takes care of.${rs}"
-        } >&2
+        if [ $n -gt 0 ]; then
+            {
+                echo "${hl}################################################################################"
+                echo "# ~/.bashrc has an old bootstrap for bpm in its first $n lines:${rs}"
+                sed -n "1,${n}s/^/    /p" .bashrc
+                echo "${hl}# which ~/.bash/plugins/bashrc now takes care of.${rs}"
+            } >&2
+            what="replace them with"
+        else
+            echo >&2 "${hl}# ~/.bashrc does not load bpm.${rs}"
+            what="insert at the top"
+        fi
         key=
         [ ! -t 0 ] || {
             . .bash/plugins/plugin/bpm.interactive && bash_plugin_interactive  # for bash_getkey
-            bash_getkey key "replace them with '. ~/.bash/plugins/bashrc' (keeping ~/.bashrc~), [y]es or [n]o? " "" n || true
+            bash_getkey key "$what '. ~/.bash/plugins/bashrc' (keeping ~/.bashrc~), [y]es or [n]o? " "" n || true
         }
         case $key in
             [Yy])
                 cp -pv .bashrc .bashrc~
                 { echo '. ~/.bash/plugins/bashrc  # prepares the shell, then loads bpm (https://github.com/netj/bpm)'
-                  sed "1,${n}d" .bashrc~
+                  tail -n +$((n+1)) .bashrc~
                 } >.bashrc
                 ;;
-            *) echo >&2 "${hl}# NOTE: ~/.bashrc unchanged; rerun install or edit it to migrate.${rs}" ;;
+            *) echo >&2 "${hl}# NOTE: ~/.bashrc unchanged; rerun install or edit it to load bpm with '. ~/.bash/plugins/bashrc'.${rs}" ;;
         esac
     }
     )
