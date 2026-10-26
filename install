@@ -480,35 +480,37 @@ case $(uname) in Darwin)
             eval "${n}_before() { compilescpt '${obj//\'/\'\\\'\'}' '${src//\'/\'\\\'\'}'; }" # TODO escape obj and src
         install "$dst" "$obj" true true
     }
-    Mac_Scripts_compiled_Applications_Finder_lselect_scpt_before() {
-        cd "$DotfilesRoot"
-        ! [ -e Mac/Scripts/Applications/Finder/lselect.applescript ] || return 0
-        curl -RLo Mac/Scripts/Applications/Finder/lselect.applescript http://anoved.net/files/lselect.applescript
-    }
-    Library_Scripts_Applications_iTunes_iTunes_SED_scpt_before() {
-        cd "$DotfilesRoot"
-        ! [ -e "$scptd"/Applications/iTunes/iTunes\ SED.scpt ] || return 0
-        curl -RLO http://aurelio.googlecode.com/files/iTunes_SED-1.1.zip
-        ditto -xk iTunes_SED-*.zip "$scptd"/Applications/iTunes/
-        rm -f iTunes_SED-*.zip
-    }
-    for s in Mac/Scripts/{*,Applications/{*/*,Finder/lselect,iTunes/iTunes\ SED}}.applescript; do
+    # XXX no longer used: per-application scripts (Finder/lselect, iTunes SED)
+    #Mac_Scripts_compiled_Applications_Finder_lselect_scpt_before() {
+    #    cd "$DotfilesRoot"
+    #    ! [ -e Mac/Scripts/Applications/Finder/lselect.applescript ] || return 0
+    #    curl -RLo Mac/Scripts/Applications/Finder/lselect.applescript http://anoved.net/files/lselect.applescript
+    #}
+    #Library_Scripts_Applications_iTunes_iTunes_SED_scpt_before() {
+    #    cd "$DotfilesRoot"
+    #    ! [ -e "$scptd"/Applications/iTunes/iTunes\ SED.scpt ] || return 0
+    #    curl -RLO http://aurelio.googlecode.com/files/iTunes_SED-1.1.zip
+    #    ditto -xk iTunes_SED-*.zip "$scptd"/Applications/iTunes/
+    #    rm -f iTunes_SED-*.zip
+    #}
+    for s in Mac/Scripts/*.applescript; do
         [ -e "$s" ] || continue
         installscpt "$s"
     done
-    if running-app "BetterTouchTool"; then
-        # install AppleScript wrapper for shell scripts (e.g., for Better Touch Tool)
-        for s in Mac/Scripts/*.sh; do
-            dst=Library/"${s#Mac/}"
-            [ -e ~/"$dst" ] || continue
-            wrpr="Mac/Scripts/Applications/BetterTouchTool${s#Mac/Scripts}.applescript"
-            [ -e "$wrpr" ] || {
-                mkdir -p "$(dirname "$wrpr")"
-                echo 'do shell script "~/'\'${dst//\'/\'\\\'\'}\''"' >"$wrpr"
-            }
-            installscpt "$wrpr"
-        done
-    fi
+    # XXX no longer used: AppleScript wrappers for shell scripts (for BetterTouchTool)
+    #if running-app "BetterTouchTool"; then
+    #    # install AppleScript wrapper for shell scripts (e.g., for Better Touch Tool)
+    #    for s in Mac/Scripts/*.sh; do
+    #        dst=Library/"${s#Mac/}"
+    #        [ -e ~/"$dst" ] || continue
+    #        wrpr="Mac/Scripts/Applications/BetterTouchTool${s#Mac/Scripts}.applescript"
+    #        [ -e "$wrpr" ] || {
+    #            mkdir -p "$(dirname "$wrpr")"
+    #            echo 'do shell script "~/'\'${dst//\'/\'\\\'\'}\''"' >"$wrpr"
+    #        }
+    #        installscpt "$wrpr"
+    #    done
+    #fi
     fi
 ;; esac
 
