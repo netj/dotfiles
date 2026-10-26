@@ -237,7 +237,7 @@ bash_after() {
                 sed -n "1,${n}s/^/    /p" .bashrc
                 echo "${hl}# which ~/.bash/plugins/bashrc now takes care of.${rs}"
             } >&2
-            what="comment them out and insert at the top"
+            what="comment them out and insert after them"
         else
             echo >&2 "${hl}# ~/.bashrc does not load bpm.${rs}"
             what="insert at the top"
@@ -255,11 +255,12 @@ bash_after() {
                 [ $h -le $n ] || n=$h
                 { head -n $h .bashrc~
                   [ $h -eq 0 ] || echo
-                  echo '. ~/.bash/plugins/bashrc  # prepares the shell, then loads bpm (https://github.com/netj/bpm)'
                   [ $n -le $h ] || {
                       echo "# old bootstrap for bpm, commented out by ~/.dotfiles/install on $(date +%F):"
                       sed -n "$((h+1)),${n}s/^/#/p" .bashrc~
+                      echo
                   }
+                  echo '. ~/.bash/plugins/bashrc  # prepares the shell, then loads bpm (https://github.com/netj/bpm)'
                   tail -n +$((n+1)) .bashrc~
                 } >.bashrc
                 ;;
