@@ -225,8 +225,8 @@ bash_after() {
     )
     [ -d .bash/plugins/enabled ] ||
     . .bash/plugins/bpm.sh enable "${plugins[@]}"
-    # have bpm load in every shell session, migrating an old bootstrap
-    # (everything up to loading bpm.sh) to the single line at the top
+    # have bpm load in every shell session with the single line at the top,
+    # commenting out an old bootstrap (everything up to loading bpm.sh)
     grep -q '^\. ~/\.bash/plugins/bashrc' .bashrc || {
         n=$(grep -n -m1 '^\. ~/\.bash/plugins/bpm\.sh' .bashrc | cut -d: -f1); n=${n:-0}
         hl=$'\e[1;33m' rs=$'\e[0m'; [ -t 2 ] || hl= rs=
@@ -237,7 +237,7 @@ bash_after() {
                 sed -n "1,${n}s/^/    /p" .bashrc
                 echo "${hl}# which ~/.bash/plugins/bashrc now takes care of.${rs}"
             } >&2
-            what="replace them with"
+            what="comment them out and insert at the top"
         else
             echo >&2 "${hl}# ~/.bashrc does not load bpm.${rs}"
             what="insert at the top"
@@ -251,7 +251,12 @@ bash_after() {
             [Yy])
                 cp -pv .bashrc .bashrc~
                 { echo '. ~/.bash/plugins/bashrc  # prepares the shell, then loads bpm (https://github.com/netj/bpm)'
-                  tail -n +$((n+1)) .bashrc~
+                  if [ $n -gt 0 ]; then
+                      echo "# old bootstrap for bpm, commented out by ~/.dotfiles/install on $(date +%F):"
+                      sed "1,${n}s/^/#/" .bashrc~
+                  else
+                      cat .bashrc~
+                  fi
                 } >.bashrc
                 ;;
             *) echo >&2 "${hl}# NOTE: ~/.bashrc unchanged; rerun install or edit it to load bpm with '. ~/.bash/plugins/bashrc'.${rs}" ;;
