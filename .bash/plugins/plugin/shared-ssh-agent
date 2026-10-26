@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # Provide a working ssh-agent at login if one isn't already available.
 #
-# - If $SSH_AUTH_SOCK already points at a responsive agent (e.g. macOS's
-#   launchd-managed agent, or a forwarded one from `ssh -A`), leave it alone.
+# - If $SSH_AUTH_SOCK already points at a responsive agent (e.g. a forwarded
+#   one from `ssh -A`), leave it alone, except macOS's launchd-managed agent,
+#   which is replaced by the shared one.
 # - Otherwise, start (or reuse) a per-host agent on a stable socket path
 #   ~/.ssh/auth.sock so every shell and tmux pane on the host can share it.
 #   Also makes sure tmux picks up the shared SSH_AUTH_SOCK, since
@@ -38,6 +39,8 @@ bash_plugin_login() {
             sleep 0.2
         done
     }
+    # prefer the shared agent over macOS's launchd-managed one
+    case ${SSH_AUTH_SOCK:-} in /var/run/com.apple.launchd.*|/private/tmp/com.apple.launchd.*) SSH_AUTH_SOCK= ;; esac
     # if the inherited SSH_AUTH_SOCK already works, don't override it
     if [[ -z "${SSH_AUTH_SOCK:-}" ]] || ! -shared-ssh-agent-alive "$SSH_AUTH_SOCK"; then
         SSH_AUTH_SOCK=~/.ssh/auth.sock

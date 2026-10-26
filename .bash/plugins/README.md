@@ -17,7 +17,12 @@ Installation
 
 2. Add following line to your `~/.bashrc` and `~/.bash_profile`:
 
-        . ~/.bpm/bpm.sh
+        . ~/.bpm/bashrc
+
+   It prepares the shell to work the same across platforms before loading
+   bpm, e.g., putting Homebrew on PATH and switching to a newer bash on macOS.
+   Keep any host-specific settings below the line.  To load only bpm without
+   any of that, use `. ~/.bpm/bpm.sh` instead.
 
 3. To use `bpm` command, run the line above with your current shell or start a
    new one.
