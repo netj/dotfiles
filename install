@@ -189,11 +189,11 @@ bash_after() {
         $(readlink .bashrc) = .bash/profile ]]; then
         rm -fv .bash{rc,_{profile,logout}} .bpmrc
     fi
-    # ensure .bashrc is there
-    [[ -e .bashrc ]] ||
-        cp -v .bash/rc.default.$(uname) .bashrc ||
-        cp -v .bash/rc.default          .bashrc ||
-        touch .bashrc
+    # ensure .bashrc is there, loading bpm first
+    [[ -e .bashrc ]] || {
+        echo '. ~/.bash/plugins/bashrc  # prepares the shell, then loads bpm (https://github.com/netj/bpm)'
+        echo '###############################################################################'
+    } >.bashrc
     # migrate .bash_local if exists
     if [[ -e .bash_local ]]; then
         {
@@ -225,12 +225,13 @@ bash_after() {
     )
     [ -d .bash/plugins/enabled ] ||
     . .bash/plugins/bpm.sh enable "${plugins[@]}"
-    # have bpm load in every interactive shell sessions
-    grep -q '^\. ~/\.bash/plugins/bpm\.sh' .bashrc || {
+    # have bpm load in every shell session
+    grep -q '^\. ~/\.bash/plugins/b' .bashrc || {
         echo
-        echo '. ~/.bash/plugins/bpm.sh'
-        echo '###############################################################################'
+        echo '. ~/.bash/plugins/bashrc'
     } >>.bashrc
+    grep -q '^\. ~/\.bash/plugins/bashrc' .bashrc ||
+        echo >&2 "# NOTE: Replace your ~/.bashrc's bootstrap with a single line '. ~/.bash/plugins/bashrc' to load bpm"
     )
 }
 install .bash
