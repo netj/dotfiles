@@ -250,13 +250,17 @@ bash_after() {
         case $key in
             [Yy])
                 cp -pv .bashrc .bashrc~
-                { echo '. ~/.bash/plugins/bashrc  # prepares the shell, then loads bpm (https://github.com/netj/bpm)'
-                  if [ $n -gt 0 ]; then
+                # keep the leading comment lines (e.g., #!/usr/bin/env bash) on top
+                h=$(awk '!/^#/ { exit } { h = NR } END { print h+0 }' .bashrc~)
+                [ $h -le $n ] || n=$h
+                { head -n $h .bashrc~
+                  [ $h -eq 0 ] || echo
+                  echo '. ~/.bash/plugins/bashrc  # prepares the shell, then loads bpm (https://github.com/netj/bpm)'
+                  [ $n -le $h ] || {
                       echo "# old bootstrap for bpm, commented out by ~/.dotfiles/install on $(date +%F):"
-                      sed "1,${n}s/^/#/" .bashrc~
-                  else
-                      cat .bashrc~
-                  fi
+                      sed -n "$((h+1)),${n}s/^/#/p" .bashrc~
+                  }
+                  tail -n +$((n+1)) .bashrc~
                 } >.bashrc
                 ;;
             *) echo >&2 "${hl}# NOTE: ~/.bashrc unchanged; rerun install or edit it to load bpm with '. ~/.bash/plugins/bashrc'.${rs}" ;;
