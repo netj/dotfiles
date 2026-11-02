@@ -497,6 +497,20 @@ if has("gui_running") && has("gui_gtk2")
   let &guifont = existing_font
 endif
 
+" Inside optmux (tmux panes of an optmux session), use the tags optmux Find keeps for the project.
+" `optmux-find --tags-path` prints that file (building it first if need be); nothing is added outside a project.
+if !empty($OPTMUX_DIR)
+  fun! OptmuxTags()
+    let finder = executable($OPTMUX_DIR.'/bin/optmux-find') ? $OPTMUX_DIR.'/bin/optmux-find' : 'optmux-find'
+    if !executable(finder) | return | endif
+    let path = substitute(system(shellescape(finder).' --tags-path 2>/dev/null'), '\n$', '', '')
+    if v:shell_error == 0 && !empty(path) && filereadable(path)
+      exec 'set tags+='.escape(path, ' ,\')
+    endif
+  endfun
+  autocmd VimEnter * call OptmuxTags()
+endif
+
 " Source a local configuration file at the very end if available.
 SourceOptional ~/.vim_local.after
 

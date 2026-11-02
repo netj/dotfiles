@@ -31,3 +31,7 @@ optmux:
         open -R .git; /Applications/BetterTouchTool.app/Contents/SharedSupport/bin/bttcli trigger_named ActivateStageByFinderWindow
       detached: true
       float_window: true
+
+  # icons: emoji
+  # icons: text
+  # icons: nerd
