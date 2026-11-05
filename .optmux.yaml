@@ -1,7 +1,7 @@
 # for https://github.com/netj/optmux
 # (the extrakto plugin and C-M-x are bundled with optmux now, so they're no longer repeated here)
-optmux:
-  tmux_config:
++optmux:
+  +tmux_config:
     # my TMUX config deviating from default
     massive-multi-tasking-pain-killers: |
       set -g renumber-windows on
@@ -10,13 +10,13 @@ optmux:
       set -g status-keys vi
       setw -g mode-keys vi
 
-  shortcuts:
+  +shortcuts:
     C-M-n: open -a Terminal .
 
     C-M-w:
-      command: ezgithubopen
-      detached: true
-      float_window: true
+      +command: ezgithubopen
+      +detached: true
+      +float_window: true
     C-M-k: ezgitprunegone
 
     # C-M-e:
@@ -25,13 +25,13 @@ optmux:
     #   detached: true
 
     C-M-a:
-      tip: |
+      +tip: |
         reveal the macOS Finder for the working directory so the Stage Manager group holding it can appear
-      command: |
+      +command: |
         open -R .git; /Applications/BetterTouchTool.app/Contents/SharedSupport/bin/bttcli trigger_named ActivateStageByFinderWindow
-      detached: true
-      float_window: true
+      +detached: true
+      +float_window: true
 
-  # icons: emoji
-  # icons: text
-  # icons: nerd
+  # +icons: emoji
+  # +icons: text
+  # +icons: nerd
