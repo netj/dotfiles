@@ -103,6 +103,13 @@ if &term =~ "^screen.*"
 elseif &term == "xterm-color" || &term == "xterm-256color"
   set t_Co=256
 endif
+" save/restore the original title via the xterm title stack (XTWINOPS 22/23),
+" so exiting doesn't leave "Thanks for flying Vim" behind (tmux >=3.x, most
+" modern terminals support it; vim only enables it for its builtin xterm term)
+if !has("gui_running") && &t_ST == ""
+  let &t_ST = "\e[22;2t"
+  let &t_RT = "\e[23;2t"
+endif
 
 " Some GUI options
 if has("gui_running")
