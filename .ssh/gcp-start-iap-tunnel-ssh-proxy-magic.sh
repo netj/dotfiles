@@ -109,6 +109,6 @@ gcloud --project="$project" compute ssh "$instance_name" --zone "$zone" --quiet 
 # hook up STDIO straight to the IAP tunnel
 CLOUDSDK_PYTHON_SITEPACKAGES=1 \
 exec gcloud compute start-iap-tunnel \
-  --quiet --iap-tunnel-disable-connection-check --listen-on-stdin \
+  --quiet --listen-on-stdin \
   --project="$project" "$instance_name" --zone="$zone" $sshport
 
